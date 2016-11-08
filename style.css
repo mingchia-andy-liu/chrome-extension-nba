@@ -1,0 +1,36 @@
+body {
+    width: 300px;
+}
+
+table {
+    font: 15px;
+    width: 100%;
+    border-collapse: collapse;
+    padding-bottom: 5px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 1px;
+}
+
+td.team_name {
+    width: 40%;
+}
+
+td.final_score {
+    text-align: right;
+    /*width: 15%;*/
+}
+
+tr.score_row {
+    background-color: #dddddd;
+}
+span.clock {
+    float: right;
+}
+
+span.game_status {
+    float: left;
+}
