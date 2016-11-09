@@ -1,36 +1,57 @@
 body {
-    width: 300px;
+    width: 400px;
+    min-height: 200px;
 }
 
-table {
-    font: 15px;
+/* card */
+.c-card {
+    display: flex;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.c-card > * {
+  flex: 1 100%;
+  border: 1px;
+}
+
+/* team info*/
+.c-team-info {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    
+    background: hotpink;
+}
+
+.c-team-logo {
     width: 100%;
-    border-collapse: collapse;
-    padding-bottom: 5px;
+    height: 100%;
 }
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 1px;
+/* match info */
+.c-match-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    text-align: center;
+    font-size: 15px;
+    
+    background: gold;
 }
 
-td.team_name {
-    width: 40%;
+.c-score-board {
+    display: flex;
+}
+.c-team-score {
+    flex-grow: 2;
 }
 
-td.final_score {
-    text-align: right;
-    /*width: 15%;*/
+.c-hyphen {
+    flex-grow: 1;
 }
 
-tr.score_row {
-    background-color: #dddddd;
-}
-span.clock {
-    float: right;
-}
-
-span.game_status {
-    float: left;
+.c-clock {
+    font-size: 12px;
 }
