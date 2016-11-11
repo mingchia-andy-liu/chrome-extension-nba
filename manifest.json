@@ -1,19 +1,26 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "NBA BOX SCORE",
-  "description": "This extension shows you the box score of NBA games.",
-  "version": "1.0",
+    "name": "NBA BOX SCORE",
+    "description": "This extension shows you the box score of NBA games.",
+    "version": "1.0",
 
 
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
+    "browser_action": {
+        "default_icon": "/src/assets/icon.png",
+        "default_popup": "/src/frontend/popup/popup.html"
+    },
 
-  "permissions": [
+    "background": {
+        "scripts": [
+            "/src/thirdparty/jquery-3.1.1.min.js",
+            "/src/background/background.js"
+        ]
+    },
+
+    "permissions": [
         "storage",
-        "http://stats.nba.com/",
+        "geolocation",
         "http://data.nba.com/"
     ]
 }
