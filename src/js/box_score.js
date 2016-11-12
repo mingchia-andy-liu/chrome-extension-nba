@@ -11,7 +11,6 @@ $(function(){
     //     }
     // });
 
-
     function fetchData() {
         // TODO: change the request object
         chrome.runtime.sendMessage({request : 'box_score'}, function (response) {
@@ -25,14 +24,12 @@ $(function(){
         });
     }
 
-    // fetchData();
-
     function refresh(){
         // best practice to use setTimeout instead of setInterval
         // TODO: USE chrome.runtime.alarm
         var d = new Date();
         var datetext = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-        $("#timer").text("Last modified: " + datetext);
+        $("#timer").text("Last updated: " + datetext);
         fetchData();
         setTimeout(refresh, 60000);
     }

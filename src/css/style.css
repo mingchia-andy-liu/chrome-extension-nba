@@ -7,15 +7,16 @@ h1, h2{
 }
 
 a{
-    color: #3366BB;
+    color: #67b6ef;
     text-decoration: none;
+    padding: 2px 2px 2px 2px;
+    font-weight:500;
 
     /* To change the default blue outline */
     outline: none;
 }
 a:hover{
-    color: #0645AD;
-    font-weight:500;
+    color: #167AC6;
 }
 
 /* === Pages === */
@@ -40,13 +41,19 @@ a:hover{
     width: 400px;
 }
 
+#no_game {
+    text-align: center;
+    font-size: 2em;
+    font-weight: 600;
+}
+
 /* === components === */
 /* card */
 .c-card {
     display: flex;
     height: 80px;
     width: 400px;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 5px 5px 5px;
     background-color: #fafafa;
     border-radius: 5px;
 }
@@ -65,14 +72,17 @@ a:hover{
 
 /* team info*/
 .c-team-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
 
 .c-team-logo {
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
 }
 
 /* match info */
@@ -83,6 +93,7 @@ a:hover{
 
     text-align: center;
     font-size: 15px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .c-score-board {
@@ -102,6 +113,10 @@ a:hover{
 
 
 /* === utility === */
+.u-text-bold{
+    font-weight: bolder;
+}
+
 .u-shadow {
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
@@ -109,7 +124,7 @@ a:hover{
 
 
 .u-shadow:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.25);
 }
 
 .u-sliding-l-r {
