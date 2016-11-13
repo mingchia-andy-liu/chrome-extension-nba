@@ -15,6 +15,12 @@ $(function () {
         return true;        // return true to tell google to use sendResponse asynchronously
     });
 
+
+    chrome.alarms.create('minuteAlarm', {
+        delayInMinutes : 1,
+        periodInMinutes : 1
+    });
+
     function fetchData(sendResponse) {
         $.ajax({
             type: 'GET',
@@ -112,11 +118,13 @@ $(function () {
 
             //team info
             var awayTeamName = formatTag(match.v.tn, 'div');
+            var awayTeamCity = formatTag(match.v.tc, 'div', [COMMON_UTIL.TEXT_ITALIC, COMMON_UTIL.TEAM_CITY, COMMON_UTIL.FONT_WEIGHT_NORMAL]);
             var awayTeamLogo = formatTag(LOGOS[match.v.ta], 'div', [COMMON_UTIL.TEAM_LOGO]);
-            var awayTeam = formatTag(awayTeamName + awayTeamLogo, 'div', [COMMON_UTIL.TEAM_INFO]);
+            var awayTeam = formatTag(awayTeamLogo + awayTeamCity + awayTeamName , 'div', [COMMON_UTIL.TEAM_INFO]);
             var homeTeamName = formatTag(match.h.tn, 'div');
+            var homeTeamCity = formatTag(match.h.tc, 'div', [COMMON_UTIL.TEXT_ITALIC, COMMON_UTIL.TEAM_CITY, COMMON_UTIL.FONT_WEIGHT_NORMAL]);
             var homeTeamLogo = formatTag(LOGOS[match.h.ta], 'div', [COMMON_UTIL.TEAM_LOGO]);
-            var homeTeam = formatTag(homeTeamName + homeTeamLogo, 'div', [COMMON_UTIL.TEAM_INFO]);
+            var homeTeam = formatTag(homeTeamLogo + homeTeamCity + homeTeamName, 'div', [COMMON_UTIL.TEAM_INFO]);
 
             //card
             var matchCard = formatTag(awayTeam + matchInfo + homeTeam, 'div', [COMMON_UTIL.CARD, COMMON_UTIL.SHADOW]);

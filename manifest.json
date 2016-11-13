@@ -5,9 +5,14 @@
     "description": "This extension shows you the box score of NBA games.",
     "version": "1.0",
 
+    "icons": {
+        "16": "/src/assets/icon-color-16.png",
+        "48": "/src/assets/icon-color-48.png",
+        "128": "/src/assets/icon-color-128.png"
+    },
+
 
     "browser_action": {
-        "default_icon": "/src/assets/icon.png",
         "default_popup": "/src/js/popup/popup.html"
     },
 
@@ -16,11 +21,13 @@
             "/src/thirdparty/jquery-3.1.1.min.js",
             "/src/common_utility/common_utility.json",
             "/src/background/background.js"
-        ]
+        ],
+        "persistent": false
     },
 
     "permissions": [
         "storage",
+        "alarms",
         "http://data.nba.com/"
     ]
 }

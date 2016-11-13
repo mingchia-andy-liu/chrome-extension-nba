@@ -15,6 +15,9 @@ $(function(){
         // TODO: change the request object
         chrome.runtime.sendMessage({request : 'box_score'}, function (response) {
             if (response) {
+                var d = new Date();
+                var datetext = d.getHours() + ":" + d.getMinutes();
+                $("#timer").text("Last updated: " + datetext);
                 $("div").remove("." + SHADOW);
                 for (var key in response.games) {
                     var obj = response.games[key];
@@ -24,14 +27,12 @@ $(function(){
         });
     }
 
-    function refresh(){
-        // best practice to use setTimeout instead of setInterval
-        // TODO: USE chrome.runtime.alarm
-        var d = new Date();
-        var datetext = d.getHours() + ":" + d.getMinutes();
-        $("#timer").text("Last updated: " + datetext);
-        fetchData();
-        setTimeout(refresh, 60000);
-    }
-    refresh();
+    // alarm better than timeout
+    chrome.alarms.onAlarm.addListener(function(alarm){
+        if (alarm.name === 'minuteAlarm') {
+            fetchData();
+        }
+    });
+
+    fetchData();    // inital fetch
 });

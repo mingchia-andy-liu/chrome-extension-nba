@@ -30,7 +30,7 @@ a:hover{
     flex-wrap: wrap;
 }
 
-@media screen and (min-width: 400px){
+@media screen and (min-width: 410px){
     #box_score {
         justify-content: center;
     }
@@ -50,7 +50,7 @@ a:hover{
 /* card */
 .c-card {
     display: flex;
-    height: 80px;
+    height: 90px;
     width: 400px;
     margin: 5px 5px 5px 5px;
     background-color: #fafafa;
@@ -64,7 +64,6 @@ a:hover{
 }
 
 .c-card > * {
-    flex: 1 400px;
     border: 1px;
     justify-content: center;
 }
@@ -73,21 +72,26 @@ a:hover{
 .c-team-info {
     display: flex;
     flex-direction: column;
+    flex-basis: 32%;
     align-items: center;
     font-size: 16px;
     font-weight: bold;
 }
 
 .c-team-logo {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
+}
+
+.c-team-city {
+    font-size: 11px;
 }
 
 /* match info */
 .c-match-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    flex-basis: 36%;
 
     text-align: center;
     font-size: 15px;
@@ -111,6 +115,10 @@ a:hover{
 
 
 /* === utility === */
+.u-font-weight-normal {
+    font-weight: normal;
+}
+
 .u-text-italic {
     font-style: italic;
 }
