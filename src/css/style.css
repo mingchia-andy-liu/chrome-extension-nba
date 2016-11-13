@@ -1,5 +1,5 @@
 body {
-    background-color: #f0f0f0;
+    background-color: #E9EBEE;
 }
 
 h1, h2{
@@ -22,7 +22,6 @@ a:hover{
 /* === Pages === */
 #full_screen_link {
     margin: 5px 5px 5px 5px;
-    text-align: center;
 }
 
 
@@ -60,7 +59,7 @@ a:hover{
 
 @media screen and (min-width: 420px) {
     .c-card {
-        margin-right: 10px;
+        margin-right: 5px;
     }
 }
 
@@ -75,14 +74,13 @@ a:hover{
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
     font-size: 16px;
     font-weight: bold;
 }
 
 .c-team-logo {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
 }
 
 /* match info */
@@ -113,6 +111,10 @@ a:hover{
 
 
 /* === utility === */
+.u-text-italic {
+    font-style: italic;
+}
+
 .u-text-bold{
     font-weight: bolder;
 }

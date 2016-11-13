@@ -4,11 +4,9 @@ $(function () {
     var COMMON_UTIL = {};
     var LOGOS = {};
     $.getJSON( '/src/common_utility/common_utility.json', function( data ) {
-        console.log(data);
         COMMON_UTIL = data;
         LOGOS = data.LOGOS;
     });
-
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.request === 'box_score') {
@@ -23,14 +21,18 @@ $(function () {
             contentType: 'application/json',
             url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2016/scores/00_todays_scores.json'
         }).done(function( data ) {
-            var games = {};
+            var games = [];
             var result = {
                 games : games
             };
             for (var i = 0; i < data.gs.g.length; i++){
                 var game = data.gs.g[i];
                 var card = formatCard(game);
-                games[i] = card;
+                if (validateLiveGame(game)) {
+                    games.unshift(card);
+                } else {
+                    games[i] = card;
+                }
              }
              if (result.games.length === 0) {
                 games[0] = formatTag('There is no game today. Try again tomorrow!', 'div', [COMMON_UTIL.CARD, COMMON_UTIL.SHADOW]);
@@ -41,6 +43,17 @@ $(function () {
             console.log(textStatus);
         });
     }
+
+    function validateLiveGame(match) {
+        if (match.cl && match.cl !== '00:00.0' && !match.stt.includes('Final')) {
+            // chrome.browserAction.setBadgeText({text: "live"});
+            // chrome.browserAction.setBadgeBackgroundColor({color:"#FF0000"});
+            return true;
+        }
+        // chrome.browserAction.setBadgeText({text: ""});
+        return false;
+    }
+
 
     function formatCard(match) {
             // score board
@@ -55,6 +68,7 @@ $(function () {
             var hyphen = formatTag(' - ', 'span', [COMMON_UTIL.HYPHEN]);
             var scoreBoard = formatTag( awayTeamScore + hyphen + homeTeamScore, 'div', [COMMON_UTIL.SCORE_BOARD]);
             var clock = '';
+            var showScore = true;
 
             // TODO: Normalize this logic
             if (match.cl === null || match.cl === '00:00.0'){
@@ -77,8 +91,11 @@ $(function () {
                     gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
 
                     clock = formatTag('Today at ' + gameTimezoneHour + ' ' + timeFormat, 'div', [COMMON_UTIL.CLOCK]);
+                    var at = formatTag('at', "div", [COMMON_UTIL.TEXT_ITALIC]);
+                    clock += at;
+                    showScore = false;
                 } else {
-                    clock = formatTag(match.stt , 'div', [COMMON_UTIL.CLOCK]);
+                    clock = formatTag(match.stt, 'div', [COMMON_UTIL.CLOCK]);
                 }
             } else {
                 clock = formatTag(match.stt + ' ' + match.cl, 'div', [COMMON_UTIL.CLOCK]);
@@ -87,10 +104,11 @@ $(function () {
             }
 
             var gameURL = 'https://watch.nba.com/game/' + match.gcode;
-            var gameLink = formatTag(gameURL, 'a', '','NBA game link');
+            var gameLink = formatTag(gameURL, 'a', '','BOX score');
 
             //match info
-            var matchInfo = formatTag(scoreBoard + clock + gameLink, 'div', [COMMON_UTIL.MATCH_INFO]);
+            var matchInfoDetails = showScore ? scoreBoard + clock + gameLink : clock;
+            var matchInfo = formatTag(matchInfoDetails, 'div', [COMMON_UTIL.MATCH_INFO]);
 
             //team info
             var awayTeamName = formatTag(match.v.tn, 'div');

@@ -21,7 +21,6 @@
 
     "permissions": [
         "storage",
-        "geolocation",
         "http://data.nba.com/"
     ]
 }

@@ -28,7 +28,7 @@ $(function(){
         // best practice to use setTimeout instead of setInterval
         // TODO: USE chrome.runtime.alarm
         var d = new Date();
-        var datetext = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        var datetext = d.getHours() + ":" + d.getMinutes();
         $("#timer").text("Last updated: " + datetext);
         fetchData();
         setTimeout(refresh, 60000);
