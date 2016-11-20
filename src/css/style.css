@@ -24,17 +24,18 @@ a:hover{
     margin: 5px 5px 5px 5px;
 }
 
-
-#box_score {
+#cards {
     display: flex;
     flex-wrap: wrap;
+    width: 400px;
+    height: 100%;
 }
 
-@media screen and (min-width: 410px){
+/*@media screen and (min-width: 410px){
     #box_score {
         justify-content: center;
     }
-}
+}*/
 
 #popup_page {
     width: 400px;
@@ -72,10 +73,10 @@ a:hover{
 .c-team-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 32%;
+    flex-basis: 40%;
+
     align-items: center;
-    font-size: 16px;
-    font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .c-team-logo {
@@ -91,30 +92,51 @@ a:hover{
 .c-match-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 36%;
+    flex-basis: 30%;
 
     text-align: center;
     font-size: 15px;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.c-score-board {
-    display: flex;
-}
 .c-team-score {
     flex-grow: 2;
-}
-
-.c-hyphen {
-    flex-grow: 1;
 }
 
 .c-clock {
     font-size: 15px;
 }
 
+.c-link {
+    height: 20px;
+    width: 20px;
+}
+
+.c-loader {
+    width: inherit;
+    overflow: hidden;
+}
+
+
+/* table */
+.c-table {
+    display: flex;
+    height: 590px;
+    width: 100%;
+    margin: 5px 5px 5px 5px;
+    background-color: #fafafa;
+    border-radius: 5px;
+}
 
 /* === utility === */
+.u-display-flex {
+    display: flex;
+}
+
+.u-justify-around {
+    justify-content: space-around;
+}
+/*text*/
 .u-font-weight-normal {
     font-weight: normal;
 }
@@ -123,34 +145,57 @@ a:hover{
     font-style: italic;
 }
 
-.u-text-bold{
+.u-text-bold {
     font-weight: bolder;
 }
 
+.u-text-size-large {
+    font-size: large;
+}
+
+.u-text-size-medium {
+    font-size: medium;
+}
+
+.u-text-size-small {
+    font-size: small;
+}
+
+
+/*shadow*/
 .u-shadow {
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
 }
 
-
 .u-shadow:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.25);
 }
 
-.u-sliding-l-r {
-    animation: 1.5s u-sliding-l-r ease infinite;
+
+/*animation*/
+.c-loader .u-sliding-bounce {
+    width: 100%;
+    position: relative;
+    height: 2px;
+    background-color: dodgerblue;
+    animation-name: u-sliding-bounce;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }
 
-@keyframes u-sliding-l-r {
+@keyframes u-sliding-bounce {
     0% {
-        border-top: 2px solid transparent;
-        width: 0%;
+        left: -95%;
     }
-    50% {
-        border-top: 2px solid green;
-        width: 100%;
+    49% {
+        left: 95%;
+    }
+    51% {
+        left: 95%;
     }
     100% {
-        border-top: 2px solid transparent;
+        left: -95%;
     }
 }

@@ -4,10 +4,14 @@ $(function(){
     var CARD = "c-card";
     // use to create new tab
     $('body').on('click', 'a', function(){
-        chrome.tabs.create({url: $(this).attr('href')});
+        chrome.tabs.create({url: $(this).attr('href')}, function(tab) {
+            console.log(tab.id);
+            chrome.runtime.sendMessage(tab.id, {gameID: '123'});
+        });
     });
 
     // chrome.storage.sync.clear(function (){});
+
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
@@ -15,14 +19,14 @@ $(function(){
         } else {
             var d = new Date();
             var diff = (d.getTime() - data.popupRefreshTime);
-            if (diff > 60000) {
+            if (diff > 5000) {
                 fetchData();
             } else {
                 $("#lastUpdate").text("Last fetched: " + diff + " seconds ago");
                 $("div").remove("." + CARD);
                 for (var key in data.cacheData) {
                     var obj = data.cacheData[key];
-                    $("#box_score").append(obj);
+                    $("#cards").append(obj);
                 }
             }
         }
@@ -43,7 +47,7 @@ $(function(){
                 $("div").remove("." + CARD);
                 for (var key in response.games) {
                     var obj = response.games[key];
-                    $("#box_score").append(obj);
+                    $("#cards").append(obj);
                 }
             }
         });

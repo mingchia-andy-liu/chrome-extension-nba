@@ -1,17 +1,23 @@
 {
 	"TEAM_SCORE" : "c-team-score",
     "TEAM_LOGO" : "c-team-logo",
-    "HYPHEN" : "c-hyphen",
-    "SCORE_BOARD" : "c-score_board",
     "CLOCK" : "c-clock",
     "MATCH_INFO" : "c-match-info",
     "TEAM_INFO" : "c-team-info",
     "TEAM_CITY" : "c-team-city",
     "CARD" : "c-card",
+    "LINK" : "c-link",
     "SHADOW" : "u-shadow",
-    "SLIDE_L_R" : "u-sliding-l-r",
+
+    "FLEX" : "u-display-flex",
+    "JUSTIFY_AROUND" : "u-justify-around",
+    "SLIDE_BOUNCE" : "u-sliding-bounce",
+    "SLIDER" : "c-loader",
     "TEXT_BOLD" : "u-text-bold",
     "TEXT_ITALIC" : "u-text-italic",
+    "TEXT_SIZE_LARGE" : "u-text-size-large",
+    "TEXT_SIZE_MEDIUM" : "u-text-size-medium",
+    "TEXT_SIZE_SMALL" : "u-text-size-small",
     "FONT_WEIGHT_NORMAL" : "u-font-weight-normal",
 
     "LOGOS" : {

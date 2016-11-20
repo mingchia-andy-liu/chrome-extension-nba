@@ -52,101 +52,120 @@ $(function () {
 
     function validateLiveGame(match) {
         if (match.cl && match.cl !== '00:00.0' && !match.stt.includes('Final')) {
-            // chrome.browserAction.setBadgeText({text: "live"});
-            // chrome.browserAction.setBadgeBackgroundColor({color:"#FF0000"});
             return true;
         }
-        // chrome.browserAction.setBadgeText({text: ""});
         return false;
     }
 
 
     function formatCard(match) {
-            // score board
-            var awayTeamScore = formatTag(match.v.s, 'span', [COMMON_UTIL.TEAM_SCORE]);
-            var homeTeamScore = formatTag(match.h.s, 'span', [COMMON_UTIL.TEAM_SCORE]);
-            if (match.stt === 'Final') {
-                if (match.v.s > match.h.s)
-                    awayTeamScore = formatTag(match.v.s, 'span', [COMMON_UTIL.TEAM_SCORE, COMMON_UTIL.TEXT_BOLD]);
-                else
-                    homeTeamScore = formatTag(match.h.s, 'span', [COMMON_UTIL.TEAM_SCORE, COMMON_UTIL.TEXT_BOLD]);
+        // score board
+        var awayTeamScore = formatTeamScore(match.v.s, match.v.s > match.h.s);
+        var homeTeamScore = formatTeamScore(match.h.s, match.v.s < match.h.s);
+        var hyphen = formatTag('-', 'div');
+        var scoreBoardText = awayTeamScore + hyphen + homeTeamScore;
+        var scoreBoard = formatTag( scoreBoardText, 'div', [COMMON_UTIL.FLEX]);
+        var matchInfoDetails = '';
+
+        if ((match.stt.includes('Qtr') && match.cl === '00:00.0')||
+            match.stt === 'Final' ||
+            match.stt === 'Halftime') {
+            matchInfoDetails += scoreBoard;
+            matchInfoDetails += formatClock(match.stt);
+        } else if (match.cl === null || match.cl === '00:00.0'){
+            var currDate = new Date();
+            // returns in minute of the diff to UTC
+            var timeZoneOffset = currDate.getTimezoneOffset();
+
+            var gameStatus = match.stt.split(' ');  // 12:00 pm ET
+            var gameTime = gameStatus[0].split(':');
+            var gameHour = gameTime[0];
+            if (gameStatus[1] === 'pm') {
+                gameHour = parseInt(gameHour) + 12;
             }
-            var hyphen = formatTag(' - ', 'span', [COMMON_UTIL.HYPHEN]);
-            var scoreBoard = formatTag( awayTeamScore + hyphen + homeTeamScore, 'div', [COMMON_UTIL.SCORE_BOARD]);
-            var clock = '';
-            var showScore = true;
-
-            // TODO: Normalize this logic
-            if (match.cl === null || match.cl === '00:00.0'){
-                if (!match.stt.includes('Qtr') && !match.stt.includes('Final') && !match.stt.includes('Halftime')){
-                    var currDate = new Date();
-                    var timeZoneOffset = currDate.getTimezoneOffset(); // returns in minute of the diff to UTC
-
-                    var gameStatus = match.stt.split(' ');
-                    var gameTime = gameStatus[0].split(':');
-                    var gameHour = gameStatus[0].split(':')[0];
-                    if (gameStatus[1] === 'pm') {
-                        gameHour = parseInt(gameHour) + 12;
-                    }
-                    var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;
-                    var timeFormat = 'am';
-                    if (gameTimezoneHour > 12) {
-                        timeFormat = 'pm';
-                        gameTimezoneHour -= 12;
-                    }
-                    gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
-
-                    clock = formatTag('Today at ' + gameTimezoneHour + ' ' + timeFormat, 'div', [COMMON_UTIL.CLOCK]);
-                    var at = formatTag('at', "div", [COMMON_UTIL.TEXT_ITALIC]);
-                    clock += at;
-                    showScore = false;
-                } else {
-                    clock = formatTag(match.stt, 'div', [COMMON_UTIL.CLOCK]);
-                }
-            } else {
-                clock = formatTag(match.stt + ' ' + match.cl, 'div', [COMMON_UTIL.CLOCK]);
-                var sliding_bar = formatTag('', 'div', [COMMON_UTIL.SLIDE_L_R]);
-                clock += sliding_bar;
+            var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;
+            var timeFormat = 'am';
+            if (gameTimezoneHour >= 12) {
+                timeFormat = 'pm';
             }
+            if (gameTimezoneHour > 12){
+                gameTimezoneHour -= 12;
+            }
+            // hour + minute
+            gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
 
-            var gameURL = 'https://watch.nba.com/game/' + match.gcode;
-            var gameLink = formatTag(gameURL, 'a', '','BOX score');
+            //  local game time
+            matchInfoDetails += formatClock(gameTimezoneHour + ' ' + timeFormat);
+        } else {
+            // clock + sliding bar while it's live
+            matchInfoDetails += scoreBoard;
+            var quarterStatus = match.stt.split(' ');
+            var statusText = 'Q' + quarterStatus[0].charAt(0) + ' ' + match.cl;
+            matchInfoDetails += formatClock(statusText);
+            var slideBounce = formatTag('', 'div', [COMMON_UTIL.SLIDE_BOUNCE]);
+            matchInfoDetails += formatTag(slideBounce, 'div', [COMMON_UTIL.SLIDER]);
+        }
 
-            //match info
-            var matchInfoDetails = showScore ? scoreBoard + clock + gameLink : clock;
-            var matchInfo = formatTag(matchInfoDetails, 'div', [COMMON_UTIL.MATCH_INFO]);
+        //match info
+        // var gameList = formatLinkTag('box-score.html', '', "/src/assets/vector/icon-list-black-48.svg");
+        // var gameListDiv = formatTag(gameList, 'div', [COMMON_UTIL.LINK]);
+        // var gameLink = formatLinkTag('https://watch.nba.com/game/' + match.gcode, '', "/src/assets/vector/icon-link-black-48.svg");
+        // var gameLinkDiv = formatTag(gameLink, 'div', [COMMON_UTIL.LINK]);
+        // var listDiv = formatTag(gameListDiv + gameLinkDiv, 'div', [COMMON_UTIL.FLEX, COMMON_UTIL.JUSTIFY_AROUND]);
+        // matchInfoDetails += listDiv;
+        var matchInfo = formatTag(matchInfoDetails, 'div', [COMMON_UTIL.MATCH_INFO]);
 
-            //team info
-            var awayTeamName = formatTag(match.v.tn, 'div');
-            var awayTeamCity = formatTag(match.v.tc, 'div', [COMMON_UTIL.TEXT_ITALIC, COMMON_UTIL.TEAM_CITY, COMMON_UTIL.FONT_WEIGHT_NORMAL]);
-            var awayTeamLogo = formatTag(LOGOS[match.v.ta], 'div', [COMMON_UTIL.TEAM_LOGO]);
-            var awayTeam = formatTag(awayTeamLogo + awayTeamCity + awayTeamName , 'div', [COMMON_UTIL.TEAM_INFO]);
-            var homeTeamName = formatTag(match.h.tn, 'div');
-            var homeTeamCity = formatTag(match.h.tc, 'div', [COMMON_UTIL.TEXT_ITALIC, COMMON_UTIL.TEAM_CITY, COMMON_UTIL.FONT_WEIGHT_NORMAL]);
-            var homeTeamLogo = formatTag(LOGOS[match.h.ta], 'div', [COMMON_UTIL.TEAM_LOGO]);
-            var homeTeam = formatTag(homeTeamLogo + homeTeamCity + homeTeamName, 'div', [COMMON_UTIL.TEAM_INFO]);
+        //team info
+        var awayTeam = formatTeamInfoTags(match.v.tn, match.v.tc + " (A)", LOGOS[match.v.ta]);
+        var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", LOGOS[match.h.ta]);
 
-            //card
-            var matchCard = formatTag(awayTeam + matchInfo + homeTeam, 'div', [COMMON_UTIL.CARD, COMMON_UTIL.SHADOW]);
-            return matchCard;
+        //card
+        var matchCard = formatTag(awayTeam + matchInfo + homeTeam, 'div', [COMMON_UTIL.CARD, COMMON_UTIL.SHADOW]);
+        return matchCard;
     }
 
-    function formatTag(content, tag, className, text) {
+    function formatTeamScore(score, winning) {
+        if (winning) {
+            return formatTag(score, 'span', [COMMON_UTIL.TEAM_SCORE, COMMON_UTIL.TEXT_SIZE_LARGE, COMMON_UTIL.TEXT_BOLD]);
+        } else {
+            return formatTag(score, 'span', [COMMON_UTIL.TEAM_SCORE]);
+        }
+    }
+
+    function formatClock(text) {
+        return formatTag(text, 'div', [COMMON_UTIL.CLOCK, COMMON_UTIL.TEXT_SIZE_SMALL]);
+    }
+
+    function formatTeamInfoTags(teamName, teamCity, teamLogo) {
+        var team = formatTag(teamLogo, 'div', [COMMON_UTIL.TEAM_LOGO]);
+        team += formatTag(teamCity, 'div', [COMMON_UTIL.TEXT_ITALIC, COMMON_UTIL.TEAM_CITY]);
+        team += formatTag(teamName, 'div', [COMMON_UTIL.TEXT_BOLD, COMMON_UTIL.TEXT_SIZE_MEDIUM]);
+        return formatTag(team, 'div', [COMMON_UTIL.TEAM_INFO]);
+    }
+
+    function formatLinkTag(url, text, image) {
+        if (image && text) {
+            return '<a href=' + url + '>' + '<img src="' + image +'">' + text + '</a>';
+        } else if (image) {
+            return '<a href=' + url + '>' + '<img src="' + image +'"></a>';
+        } else {
+            return '<a href=' + url + '>' + text + '</a>';
+        }
+    }
+
+    function formatTag(content, tag, classes, text) {
         switch (tag){
             case 'div':
             case 'span':
-                if(className && className.length > 0) {
-                    var classNames = className.join(' ');
+                if(classes && classes.length > 0) {
+                    var classNames = classes.join(' ');
                     return '<' + tag + " class='" + classNames + "''>" + content + '</' + tag + '>';
                 } else {
                     return '<' + tag + '>' + content + '</' + tag + '>';
                 }
                 break;
-            case 'a':
-                return   '<' + tag + " href='" + content + "'>" + text + '</a>';
             default:
                 return '<div>OOPS, TAG NAME NOT FOUND></div>';
         }
-
     }
 });
