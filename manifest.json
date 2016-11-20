@@ -6,9 +6,9 @@
     "version": "1.0",
 
     "icons": {
-        "16": "/src/assets/icon-color-16.png",
-        "48": "/src/assets/icon-color-48.png",
-        "128": "/src/assets/icon-color-128.png"
+        "16": "/src/assets/png/icon-color-16.png",
+        "48": "/src/assets/png/icon-color-48.png",
+        "128": "/src/assets/png/icon-color-128.png"
     },
 
 
