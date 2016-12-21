@@ -27,7 +27,7 @@ a:hover{
 #cards {
     display: flex;
     flex-wrap: wrap;
-    width: 400px;
+    width: 360px;
     height: 100%;
 }
 
@@ -38,7 +38,7 @@ a:hover{
 }*/
 
 #popup_page {
-    width: 400px;
+    width: 360px;
 }
 
 #no_game {
@@ -80,8 +80,8 @@ a:hover{
 }
 
 .c-team-logo {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
 }
 
 .c-team-city {
@@ -118,24 +118,123 @@ a:hover{
 }
 
 
-/* table */
+/* === table === */
 .c-table {
-    display: flex;
-    height: 590px;
+    /*display: flex;*/
     width: 100%;
-    margin: 5px 5px 5px 5px;
+    /*min-height: 400px;*/
+    min-width: 800px;
+    padding: 10px 10px 10px 10px;
     background-color: #fafafa;
     border-radius: 5px;
 }
+
+.c-table table {
+    border-collapse:collapse;
+    margin-bottom: 1em;
+}
+
+.c-table th {
+    height: 2em;
+}
+
+.c-table td {
+    height: 30px;
+}
+
+.team-table th, td {
+    min-width: 40px;
+    width: 4%;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.team-table th:first-child {
+    min-width: 70px;
+    width: 12%;
+}
+
+.team-table tr:not(:first-child):hover {
+    background-color:#e1e1e1;
+}
+
+/* Summary Table*/
+#box {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+#box_banner {
+    width: 100%;
+    font-size: 40px;
+    margin-bottom: 10px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#away_team_section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /*justify-content: flex-end;*/
+}
+
+#home_team_section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /*justify-content: flex-start;*/
+}
+
+#away_team_section > *, #home_team_section > *{
+    margin: 0px 10px 0px 10px;
+}
+
+#box_banner .c-team-logo {
+    width: 70px;
+    height: 70px;
+}
+
+#away_team_name, #home_team_name {
+    margin: 1em 0 0 0;
+}
+
+#summary_box_score {
+    width: 550px;
+    margin: 2px 1em 2px 2px;
+}
+
+#notes {
+    margin: 0.5em 2px 2px 2px;
+}
+
+/*'Roboto Condensed', "Helvetica", "Arial", sans-serif*/
 
 /* === utility === */
 .u-display-flex {
     display: flex;
 }
 
+.u-flex-column {
+    flex-direction: column;
+}
+
+.u-display-table-cell {
+    display: table-cell;
+}
+
 .u-justify-around {
     justify-content: space-around;
 }
+
+.u-justify-center {
+    justify-content: center;
+}
+
+.u-hide {
+    display: none;
+}
+
 /*text*/
 .u-font-weight-normal {
     font-weight: normal;
@@ -153,6 +252,10 @@ a:hover{
     font-size: large;
 }
 
+.u-text-size-larger {
+    font-size: larger;
+}
+
 .u-text-size-medium {
     font-size: medium;
 }
@@ -161,6 +264,33 @@ a:hover{
     font-size: small;
 }
 
+.u-text-align-center {
+    text-align: center;
+}
+
+.u-margin-bottom {
+    margin-bottom: 1em;
+}
+
+.u-color-green {
+    color : #30db71;
+}
+
+.u-color-purple {
+    color : #AF42F7;
+}
+
+.u-background-blue{
+    background-color: #c1dcf0;
+}
+
+.u-background-red{
+    background-color: #F7B125;
+}
+
+.u-color-red {
+    color: #A90B33;
+}
 
 /*shadow*/
 .u-shadow {
@@ -170,6 +300,10 @@ a:hover{
 
 .u-shadow:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.25);
+}
+
+.u-inner-shadow {
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 1);
 }
 
 

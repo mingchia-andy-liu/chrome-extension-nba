@@ -13,13 +13,12 @@
 
 
     "browser_action": {
-        "default_popup": "/src/js/popup/popup.html"
+        "default_popup": "/src/popup.html"
     },
 
     "background": {
         "scripts": [
             "/src/thirdparty/jquery-3.1.1.min.js",
-            "/src/common_utility/common_utility.json",
             "/src/background/background.js"
         ],
         "persistent": false
@@ -28,6 +27,6 @@
     "permissions": [
         "storage",
         "alarms",
-        "http://data.nba.com/"
+        "http://*.nba.com/"
     ]
 }
