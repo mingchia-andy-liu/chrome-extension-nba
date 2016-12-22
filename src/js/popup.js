@@ -32,7 +32,7 @@ $(function(){
             if (data) {
                 var games = [];
                 if (data.gs.g.length === 0) {
-                    games[0] = formatTag('There is no game today. Try again tomorrow!', 'div', [UTILS.CARD, UTILS.SHADOW]);
+                    games[0] = NO_GAME_CARD;
                 } else {
                     for (var i = 0; i < data.gs.g.length; i++){
                         var game = data.gs.g[i];
@@ -58,6 +58,8 @@ $(function(){
                     var obj = games[key];
                     $("#cards").append(obj);
                 }
+            } else {
+                console.log('data is empty');
             }
         });
     }

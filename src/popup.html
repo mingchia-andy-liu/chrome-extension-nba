@@ -11,11 +11,13 @@
     </head>
     <body>
         <div id="popup_page">
-            <h1>NBA SCORE</h1>
-            <h4 id="lastUpdate">0</h4>
-            <a id="full_screen_link" href="box-score.html">LINK</a>
+            <h1>NBA Box Scores</h1>
+            <div id='footer' class='u-display-flex u-color-gray'>
+                <div><a id="full_screen_link" href="box-score.html">LINK</a></div>
+                <div id="lastUpdate">Last fetched: - seconds ago</div>
+            </div>
             <div id="cards">
-                <div class="c-card u-shadow"></div>
+                <div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today</div>
             </div>
         </div>
     </body>

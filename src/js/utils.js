@@ -27,3 +27,4 @@ const UTILS = {
 
 const AWAY_TEXT = 'Away';
 const HOME_TEXT = 'Home';
+const NO_GAME_CARD = '<div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today</div>'

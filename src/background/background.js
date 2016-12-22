@@ -24,8 +24,7 @@ $(function () {
         }).done(function(data) {
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
-            console.log(xhr.responseText);
-            console.log(textStatus);
+            console.log('Failed to fetch data.');
             sendResponse(null);
         });
     }
@@ -39,8 +38,7 @@ $(function () {
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
-            console.log(xhr.responseText);
-            console.log(textStatus);
+            console.log('Failed to fetch data.');
             sendResponse(null);
         });
     }

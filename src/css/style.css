@@ -31,6 +31,11 @@ a:hover{
     height: 100%;
 }
 
+#footer {
+    width: 100%;
+    justify-content: space-around;
+}
+
 /*@media screen and (min-width: 410px){
     #box_score {
         justify-content: center;
@@ -52,7 +57,7 @@ a:hover{
 .c-card {
     display: flex;
     height: 90px;
-    width: 400px;
+    width: 350px;
     margin: 5px 5px 5px 5px;
     background-color: #fafafa;
     border-radius: 5px;
@@ -223,12 +228,21 @@ a:hover{
     display: table-cell;
 }
 
-.u-justify-around {
-    justify-content: space-around;
+.u-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.u-justify-between {
+    justify-content: space-between;
 }
 
 .u-justify-center {
     justify-content: center;
+}
+
+.u-align-center {
+    align-items: center;
 }
 
 .u-hide {
@@ -276,8 +290,12 @@ a:hover{
     color : #30db71;
 }
 
-.u-color-purple {
-    color : #AF42F7;
+.u-color-gray {
+    color : #999999;
+}
+
+.u-color-red {
+    color: #C60033;
 }
 
 .u-background-blue{
@@ -288,10 +306,6 @@ a:hover{
     background-color: #F7B125;
 }
 
-.u-color-red {
-    color: #A90B33;
-}
-
 /*shadow*/
 .u-shadow {
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
@@ -299,7 +313,7 @@ a:hover{
 }
 
 .u-shadow:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.25);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
 }
 
 .u-inner-shadow {
