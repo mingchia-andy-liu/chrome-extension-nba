@@ -149,7 +149,7 @@ a:hover{
 
 .team-table th, td {
     min-width: 40px;
-    width: 4%;
+    width: 5%;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
@@ -177,18 +177,29 @@ a:hover{
     align-items: center;
 }
 
+#away_box_score, #home_box_score {
+    width: 100%
+}
+
 #away_team_section {
     display: flex;
+    width: 40%;
     flex-direction: row;
     align-items: center;
-    /*justify-content: flex-end;*/
+    justify-content: flex-end;
 }
 
 #home_team_section {
     display: flex;
+    width: 40%;
     flex-direction: row;
     align-items: center;
-    /*justify-content: flex-start;*/
+}
+
+#clock {
+    width: 10%;
+    display: flex;
+    justify-content: center;
 }
 
 #away_team_section > *, #home_team_section > *{
@@ -212,8 +223,6 @@ a:hover{
 #notes {
     margin: 0.5em 2px 2px 2px;
 }
-
-/*'Roboto Condensed', "Helvetica", "Arial", sans-serif*/
 
 /* === utility === */
 .u-display-flex {

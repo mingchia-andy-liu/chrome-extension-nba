@@ -7,6 +7,8 @@ $(function(){
     var SHOWN_GAME = 0;
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
+        // console.log('local get: ');
+        // console.log(data);
         if (!data.popupRefreshTime) {
             fetchData();
         } else {
@@ -24,6 +26,8 @@ $(function(){
                 sec = sec.length === 1 ? '0' + sec : sec;
                 $("#lastUpdate").text('Last fetched: ' + hour + ':' + min + ':' + sec);
                 $("div").remove("." + UTILS.CARD);
+                // console.log('before local use cache insert, cache is ');
+                // console.log(data.cacheData);
                 for (var key in data.cacheData) {
                     var obj = data.cacheData[key];
                     $('#cards').append($(obj.card).attr('gid', obj.gid));
@@ -34,7 +38,6 @@ $(function(){
 
     $('#cards').on("click", '> *', function() {
         var gid = $(this).attr('gid');
-        // console.log(gid);
         SHOWN_GAME = gid;
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
@@ -59,8 +62,9 @@ $(function(){
 
     function fetchData() {
         chrome.runtime.sendMessage({request : 'summary'}, function (data) {
-            var games = [];
+            // console.log(data);
             if (data) {
+                var games = [];
                 if (data.gs.g.length === 0) {
                     games[0] = {
                         card : NO_GAME_CARD,
@@ -73,7 +77,7 @@ $(function(){
                         var card = formatCard(game);
                         gameObj.card = card;
                         gameObj.gid = game.gid;
-                        // gameObj.gid = i%2 ? game.gid : '0021600410';
+                        // gameObj.gid = i%2 ? game.gid : '0021600429';
                         if (validateLiveGame(game)) {
                             games.unshift(gameObj);
                         } else {
@@ -91,6 +95,8 @@ $(function(){
                 sec = sec.length === 1 ? '0' + sec : sec;
                 $("#lastUpdate").text('Last fetched: ' + hour + ':' + min + ':' + sec);
                 $("div").remove("." + UTILS.CARD);
+                // console.log('before fetchData insert, game is ');
+                // console.log(games);
                 for (var key in games) {
                     var obj = games[key];
                     $('#cards').append($(obj.card).attr('gid', obj.gid));
@@ -141,7 +147,6 @@ $(function(){
     }
 
     function showBox(g) {
-        // console.log(g);
         if ($.isEmptyObject(g)) {
             removeBox();
             return;
@@ -155,6 +160,8 @@ $(function(){
             tt : g.gsts.tt,
             an : g.an,
             at : g.at,
+            cl : g.cl,
+            stt : g.stt,
             atlg : $(formatTag(LOGOS[g.vls.ta], 'div', [UTILS.TEAM_LOGO])),
             htlg : $(formatTag(LOGOS[g.hls.ta], 'div', [UTILS.TEAM_LOGO])),
             atpts : g.vls.s,
@@ -220,6 +227,8 @@ $(function(){
             tt : 0,
             an : '-',
             at : 0,
+            cl : null,
+            stt : '',
             atlg : '',
             htlg : '',
             atpts : 0,

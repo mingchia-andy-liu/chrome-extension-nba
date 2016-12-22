@@ -25,6 +25,14 @@ const UTILS = {
     'FONT_WEIGHT_NORMAL' : 'u-font-weight-normal'
 };
 
+const COLOR = {
+    'RED' : 'u-color-red',
+    'GRAY' : 'u-color-gray',
+    'GREEN' : 'u-color-green',
+    'BG_RED' : 'u-background-red',
+    'BG_BLUE' : 'u-background-blue',
+};
+
 const AWAY_TEXT = 'Away';
 const HOME_TEXT = 'Home';
 const NO_GAME_CARD = '<div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today</div>'

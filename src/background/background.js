@@ -33,7 +33,6 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType:'application/json',
-            // url: 'http://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=10&EndRange=28800&RangeType=0&Season=2016-17&SeasonType=Regular+Season&StartPeriod=1&StartRange=0&GameID=' + gid //0021600412'
             url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/scores/gamedetail/' + gid + '_gamedetail.json'
         }).done(function(data){
             sendResponse(data);

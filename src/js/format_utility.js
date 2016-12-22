@@ -14,51 +14,61 @@ function formatCard(match) {
     var scoreBoard = formatTag( scoreBoardText, 'div', [UTILS.FLEX]);
     var matchInfoDetails = '';
 
-    if ((match.stt.includes('Qtr') && match.cl === '00:00.0')||
-        match.stt === 'Final' ||
-        match.stt === 'Halftime') {
+    if (validateLiveGame(match)) {
         matchInfoDetails += scoreBoard;
-        matchInfoDetails += formatClock(match.stt);
-    } else if (match.cl === null || match.cl === '00:00.0'){
-        var currDate = new Date();
-        // returns in minute of the diff to UTC
-        var timeZoneOffset = currDate.getTimezoneOffset();
-
-        var gameStatus = match.stt.split(' ');  // 12:00 pm ET
-        var gameTime = gameStatus[0].split(':');
-        var gameHour = gameTime[0];
-        if (gameStatus[1] === 'pm') {
-            gameHour = parseInt(gameHour) + 12;
-        }
-        var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;
-        var timeFormat = 'am';
-        if (gameTimezoneHour >= 12) {
-            timeFormat = 'pm';
-        }
-        if (gameTimezoneHour > 12){
-            gameTimezoneHour -= 12;
-        }
-        // hour + minute
-        gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
-
-        //  local game time
-        matchInfoDetails += formatClock(gameTimezoneHour + ' ' + timeFormat);
-    } else {
-        // clock + sliding bar while it's live
-        matchInfoDetails += scoreBoard;
-
-        var statusText = match.stt;
-        if (match.stt.includes('Qtr')) {
-            var quarterStatus = match.stt.split(' ');
-            statusText = 'Q' + quarterStatus[0].charAt(0) + ' ' + match.cl;
-        } else if (match.stt.includes('OT')) {
-            var otStatus = match.stt.split(' ');
-            statusText = 'OT' + otStatus[0].charAt(0) + ' ' + match.cl;
-        }
-        matchInfoDetails += formatClock(statusText);
+        var clock = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clock, 'div', [UTILS.CLOCK, UTILS.TEXT_SIZE_SMALL]);
         var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
         matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
+    } else {
+        matchInfoDetails += formatClock(match.cl, match.stt);
     }
+
+    // if ((match.stt.includes('Qtr') && (match.cl === '00:00.0' || match.cl === '12:00.0')) ||
+    //     match.stt === 'Final' ||
+    //     match.stt === 'Halftime') {
+    //     matchInfoDetails += scoreBoard;
+    //     matchInfoDetails += formatClock(match.stt);
+    // } else if (match.cl === null || match.cl === '00:00.0'){
+    //     var currDate = new Date();
+    //     // returns in minute of the diff to UTC
+    //     var timeZoneOffset = currDate.getTimezoneOffset();
+
+    //     var gameStatus = match.stt.split(' ');  // 12:00 pm ET
+    //     var gameTime = gameStatus[0].split(':');
+    //     var gameHour = gameTime[0];
+    //     if (gameStatus[1] === 'pm') {
+    //         gameHour = parseInt(gameHour) + 12;
+    //     }
+    //     var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;
+    //     var timeFormat = 'am';
+    //     if (gameTimezoneHour >= 12) {
+    //         timeFormat = 'pm';
+    //     }
+    //     if (gameTimezoneHour > 12){
+    //         gameTimezoneHour -= 12;
+    //     }
+    //     // hour + minute
+    //     gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
+
+    //     //  local game time
+    //     matchInfoDetails += formatClock(gameTimezoneHour + ' ' + timeFormat);
+    // } else {
+    //     // clock + sliding bar while it's live
+    //     matchInfoDetails += scoreBoard;
+
+    //     var statusText = match.stt;
+    //     var quarterStatus = match.stt.split(' ');
+    //     if (match.stt.includes('Qtr') && quarterStatus.length === 2) {
+    //         statusText = 'Q' + quarterStatus[0].charAt(0) + ' ' + match.cl;
+    //     } else if (match.stt.includes('OT')) {
+    //         var otStatus = match.stt.split(' ');
+    //         statusText = 'OT' + otStatus[0].charAt(0) + ' ' + match.cl;
+    //     }
+    //     matchInfoDetails += formatClock(statusText);
+    //     var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
+    //     matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
+    // }
 
     //match info
     // var gameList = formatLinkTag('box-score.html', '', "/src/assets/vector/icon-list-black-48.svg");
@@ -86,14 +96,55 @@ function formatTeamScore(score, winning) {
     }
 }
 
-function formatClock(text) {
-    return formatTag(text, 'div', [UTILS.CLOCK, UTILS.TEXT_SIZE_SMALL]);
+function getGameStartTime(status) {
+    var currDate = new Date();
+    // returns in minute of the diff to UTC
+    var timeZoneOffset = currDate.getTimezoneOffset();
+
+    var gameStatus = status.split(' ');      // 12:00 pm ET
+    var gameTime = gameStatus[0].split(':');    // 12 00
+    var gameHour = gameTime[0];                 // hour --> 12
+    if (gameStatus[1] === 'pm') {
+        gameHour = parseInt(gameHour) + 12;
+    }
+    var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;    // convert ET to UTC to local
+    var timeFormat = 'am';
+    if (gameTimezoneHour >= 12) {
+        timeFormat = 'pm';
+    }
+    if (gameTimezoneHour > 12){
+        gameTimezoneHour -= 12;
+    }
+    // hour + minute
+    gameTime = gameTimezoneHour.toString() + ':' + gameTime[1] + ' ' + timeFormat;
+
+    //  local game time
+    return gameTime;
+}
+
+function formatClock(clock, status) {
+    var text = '-';
+    if (!clock && status.includes('ET')) {   // game hasn't start, clock is null
+        text = getGameStartTime(status);
+    } else if (status.includes('Final') ||
+                status.includes('Halftime') ||
+                status.includes('Tipoff') ||
+                status.includes('Start') ||
+                status.includes('End')){    // game started, clock stopped
+        text = status;
+    } else if (status && status.includes('Qtr')) {  // game started being played over regular time
+        text = 'Q' + status.charAt(0) + ' ' + clock;
+    } else if (status && status.includes('OT')) {   // game start being played over over time
+        text = 'OT' + status.charAt(0) + ' ' + clock;
+    }
+
+    return text;
 }
 
 function formatTeamInfoTags(teamName, teamCity, teamLogo) {
-    var team = formatTag(teamLogo, 'div', [UTILS.TEAM_LOGO]);
+    // var team = formatTag(teamLogo, 'div', [UTILS.TEAM_LOGO]);
+    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLD, UTILS.TEXT_SIZE_MEDIUM]);
     team += formatTag(teamCity, 'div', [UTILS.TEXT_ITALIC, UTILS.TEAM_CITY]);
-    team += formatTag(teamName, 'div', [UTILS.TEXT_BOLD, UTILS.TEXT_SIZE_MEDIUM]);
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
 
@@ -215,12 +266,12 @@ function highlightSummaryTable(){
     for (let i = 1;i < 16; i++) {   // [1...15]
         var vpts = parseInt($('#summary_box_score tbody tr:nth-child(2) td').eq(i).html());
         var hpts = parseInt($('#summary_box_score tbody tr:nth-child(3) td').eq(i).html());
-        $('#summary_box_score tbody tr:nth-child(3) td').eq(i).removeClass('u-color-red');
-        $('#summary_box_score tbody tr:nth-child(2) td').eq(i).removeClass('u-color-red');
+        $('#summary_box_score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
+        $('#summary_box_score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
         if (vpts > hpts){
-            $('#summary_box_score tbody tr:nth-child(2) td').eq(i).addClass('u-color-red');
+            $('#summary_box_score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.RED);
         } else if (vpts < hpts) {
-            $('#summary_box_score tbody tr:nth-child(3) td').eq(i).addClass('u-color-red');
+            $('#summary_box_score tbody tr:nth-child(3) td').eq(i).addClass(COLOR.RED);
         }
     }
 }
@@ -237,7 +288,7 @@ function highlightPlayerTable(){
 
 function highlightPlayerRowHelper(index, el) {
     if (!$(el).children().eq(1).html().includes(':')) {
-       $(el).addClass('u-color-gray');
+       $(el).addClass(COLOR.GRAY);
        return;
     }
     var count = 0;
@@ -253,38 +304,38 @@ function highlightPlayerRowHelper(index, el) {
         count += parseInt(item.html()) >= 10 ? 1 : 0;
     });
     if (parseInt(result[0].html()) >= 10)
-        result[0].addClass('u-color-red');
+        result[0].addClass(COLOR.RED);
 
     if (parseInt(result[1].html()) >= 10)
-        result[1].addClass('u-color-red');
+        result[1].addClass(COLOR.RED);
 
     if (parseInt(result[2].html()) >= 5)
-        result[2].addClass('u-color-red');
+        result[2].addClass(COLOR.RED);
 
     if (parseInt(result[3].html()) >= 5)
-        result[3].addClass('u-color-red');
+        result[3].addClass(COLOR.RED);
 
     if (parseInt(result[4].html()) === 0)
-        result[4].addClass('u-color-red');
+        result[4].addClass(COLOR.RED);
     else if (parseInt(result[4].html()) >= 5)
-        result[4].addClass('u-color-green');
+        result[4].addClass(COLOR.GREEN);
 
     if (parseInt(result[5].html()) >= 10)
-        result[5].addClass('u-color-red');
+        result[5].addClass(COLOR.RED);
 
     if (parseInt($(el).children().eq(15).html()) === 6)
-        $(el).children().eq(15).addClass('u-color-green');
+        $(el).children().eq(15).addClass(COLOR.GREEN);
 
     if (count >= 3) {   // tri-db
-        $(el).addClass('u-background-red');
+        $(el).addClass(COLOR.BG_RED);
     } else if (count === 2) {   //db-db
-        $(el).addClass('u-background-blue');
+        $(el).addClass(COLOR.BG_BLUE);
     }
 }
 
 function insertEmptyRows(){
     let item = ['','','00:00','0-0','0%','0-0','0%','0-0','0%',0,0,0,0,0,0,0,0,0,0];
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 15; i++) {
         $('#home_box_score').append(formatTableRow(item));
         $('#away_box_score').append(formatTableRow(item));
     }
@@ -300,20 +351,21 @@ function formatSummary(summary){
     $('#times_tied').text(summary.tt);
     $('#arena').text(summary.an);
     $('#attendance').text(summary.at);
+    $('#clock').text(formatClock(summary.cl, summary.stt));
 
-    $('#away_team_logo').html(summary.atlg);
-    $('#home_team_logo').html(summary.htlg);
+    // $('#away_team_logo').html(summary.atlg);
+    // $('#home_team_logo').html(summary.htlg);
 
     if (summary.rm) {
-        $('#away_team_pts').text(summary.atpts).removeClass('u-color-red');
-        $('#home_team_pts').text(summary.htpts).removeClass('u-color-red');
+        $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);
+        $('#home_team_pts').text(summary.htpts).removeClass(COLOR.RED);
     } else {
-        var away = $('#away_team_pts').text(summary.atpts).removeClass('u-color-red');
-        var home = $('#home_team_pts').text(summary.htpts).removeClass('u-color-red');
+        var away = $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);
+        var home = $('#home_team_pts').text(summary.htpts).removeClass(COLOR.RED);
         if (summary.atpts > summary.htpts) {
-            away.addClass('u-color-red');
+            away.addClass(COLOR.RED);
         } else if (summary.atpts < summary.htpts) {
-            home.addClass('u-color-red');
+            home.addClass(COLOR.RED);
         }
     }
 }
