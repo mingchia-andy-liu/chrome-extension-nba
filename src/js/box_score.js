@@ -1,33 +1,19 @@
 $(function(){
     'use strict';
 
-    // chrome.storage.local.set({
-    //     boxScore : {}
-    // });
     var SHOWN_GAME = 0;
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
-        // console.log('local get: ');
-        // console.log(data);
         if (!data.popupRefreshTime) {
-            fetchData();
+            fetchData(updateBox, removeBox);
         } else {
             var d = new Date();
             var diff = (d.getTime() - data.popupRefreshTime);
             if (diff > 60000) { // cache expired
-                fetchData();
+                fetchData(updateBox, removeBox);
             } else {
-                d = new Date(data.popupRefreshTime);
-                var hour = d.getHours().toString();
-                hour = hour.length === 1 ? '0' + hour : hour;
-                var min = d.getMinutes().toString();
-                min = min.length === 1 ? '0' + min : min;
-                var sec = d.getSeconds().toString();
-                sec = sec.length === 1 ? '0' + sec : sec;
-                $("#lastUpdate").text('Last fetched: ' + hour + ':' + min + ':' + sec);
+                updateLastUpdate(data.popupRefreshTime);
                 $("div").remove("." + UTILS.CARD);
-                // console.log('before local use cache insert, cache is ');
-                // console.log(data.cacheData);
                 for (var key in data.cacheData) {
                     var obj = data.cacheData[key];
                     $('#cards').append($(obj.card).attr('gid', obj.gid));
@@ -42,92 +28,27 @@ $(function(){
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
-                if (gameData.boxScore[gid] &&
+                if (gameData && gameData.boxScore &&
+                    gameData.boxScore[gid] &&
                     !$.isEmptyObject(gameData.boxScore[gid].data) &&
                     (gameData.boxScore[gid].time - d) < 60000) {
                     showBox(gameData.boxScore[gid].data);
                 } else {
                     fetchBox(gid).done(function(boxScoreData){
                         showBox(boxScoreData);
-                        gameData.boxScore[gid] = {
+                        var cacheData = {
+                            boxScore : {}
+                        };
+                        cacheData.boxScore[gid] = {
                             data : boxScoreData,
                             time : d
                         };
-                        chrome.storage.local.set(gameData);
+                        chrome.storage.local.set(cacheData);
                     });
                 }
             });
         }
     });
-
-    function fetchData() {
-        chrome.runtime.sendMessage({request : 'summary'}, function (data) {
-            // console.log(data);
-            if (data) {
-                var games = [];
-                if (data.gs.g.length === 0) {
-                    games[0] = {
-                        card : NO_GAME_CARD,
-                        gid : 0
-                    };
-                } else {
-                    for (var i = 0; i < data.gs.g.length; i++){
-                        var game = data.gs.g[i];
-                        var gameObj = {};
-                        var card = formatCard(game);
-                        gameObj.card = card;
-                        gameObj.gid = game.gid;
-                        // gameObj.gid = i%2 ? game.gid : '0021600429';
-                        if (validateLiveGame(game)) {
-                            games.unshift(gameObj);
-                        } else {
-                            games[i] = gameObj;
-                        }
-                     }
-                }
-
-                var d = new Date();
-                var hour = d.getHours().toString();
-                hour = hour.length === 1 ? '0' + hour : hour;
-                var min = d.getMinutes().toString();
-                min = min.length === 1 ? '0' + min : min;
-                var sec = d.getSeconds().toString();
-                sec = sec.length === 1 ? '0' + sec : sec;
-                $("#lastUpdate").text('Last fetched: ' + hour + ':' + min + ':' + sec);
-                $("div").remove("." + UTILS.CARD);
-                // console.log('before fetchData insert, game is ');
-                // console.log(games);
-                for (var key in games) {
-                    var obj = games[key];
-                    $('#cards').append($(obj.card).attr('gid', obj.gid));
-                }
-
-                if (SHOWN_GAME !== 0) {
-                    fetchBox(SHOWN_GAME).done(function(boxScoreData){
-                        showBox(boxScoreData);
-                        var cacheData = {
-                            boxScore : {}
-                        };
-                        cacheData.boxScore[SHOWN_GAME] = {
-                            data : boxScoreData,
-                            time : d.getTime()
-                        };
-                        chrome.storage.local.set(cacheData);
-                    });
-                }
-
-                chrome.storage.local.set({
-                    'popupRefreshTime' : new Date().getTime(),
-                    'cacheData' : games
-                });
-            } else {
-                $("div").remove("." + UTILS.CARD);
-                $("#lastUpdate").text('Last fetched: --:--:--');
-                $('#cards').append($(NO_GAME_CARD));
-                removeBox();
-            }
-        });
-    }
 
     function fetchBox(gid) {
         var deferred = $.Deferred();
@@ -178,7 +99,7 @@ $(function(){
                 $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.HIDE);
                 $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.TABLE_CELL);
                 $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
-            } else if (index + 1 > 4){
+            } else if (index + 1 > 4 && index + 1 < 15){
                 $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.TABLE_CELL);
                 $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.TABLE_CELL);
                 $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.HIDE);
@@ -190,7 +111,7 @@ $(function(){
             if (item > 0 && index + 1 > 4) {
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.HIDE);
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
-            } else if (index + 1 > 4) {
+            } else if (index + 1 > 4 && index + 1 < 15) {
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.TABLE_CELL);
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.HIDE);
             }
@@ -201,12 +122,14 @@ $(function(){
         g.vls.pstsg.forEach(function(item){
             $('#away_box_score').append(formatBoxScoreData(item));
         });
+        $('#away_box_score').append(HEADER_ROW);
         $('#away_box_score').append(formatBoxScoreData(g.vls.tstsg));
 
         $('#home_box_score tbody').children('tr:not(:first)').remove();
         g.hls.pstsg.forEach(function(item) {
             $('#home_box_score').append(formatBoxScoreData(item));
         });
+        $('#home_box_score').append(HEADER_ROW);
         $('#home_box_score').append(formatBoxScoreData(g.hls.tstsg));
 
 
@@ -271,10 +194,26 @@ $(function(){
         insertEmptyRows();
     }
 
+    function updateBox(gids) {
+        if (SHOWN_GAME !== 0 && gids.indexOf(SHOWN_GAME) !== -1) {
+            fetchBox(SHOWN_GAME).done(function(boxScoreData){
+                showBox(boxScoreData);
+                var cacheData = {
+                    boxScore : {}
+                };
+                cacheData.boxScore[SHOWN_GAME] = {
+                    data : boxScoreData,
+                    time : new Date().getTime()
+                };
+                chrome.storage.local.set(cacheData);
+            });
+        }
+    }
+
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
         if (alarm.name === 'minuteAlarm') {
-            fetchData();
+            fetchData(updateBox, removeBox);
         }
     });
 });

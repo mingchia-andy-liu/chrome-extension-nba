@@ -2,11 +2,11 @@ body {
     background-color: #E9EBEE;
 }
 
-h1, h2{
+h1, h2 {
     text-align: center;
 }
 
-a{
+a {
     color: #67b6ef;
     text-decoration: none;
     padding: 2px 2px 2px 2px;
@@ -15,8 +15,14 @@ a{
     /* To change the default blue outline */
     outline: none;
 }
-a:hover{
+
+a:hover {
     color: #167AC6;
+}
+
+sup {
+    color: #888888;
+    font-size: xx-small;
 }
 
 /* === Pages === */
@@ -203,7 +209,7 @@ a:hover{
 }
 
 #away_team_section > *, #home_team_section > *{
-    margin: 0px 10px 0px 10px;
+    margin: 0px 5px 0px 5px;
 }
 
 #box_banner .c-team-logo {

@@ -14,69 +14,29 @@ function formatCard(match) {
     var scoreBoard = formatTag( scoreBoardText, 'div', [UTILS.FLEX]);
     var matchInfoDetails = '';
 
-    if (validateLiveGame(match)) {
+    if (match.stt === 'Final'){
+        matchInfoDetails += scoreBoard;
+        matchInfoDetails += formatClock(match.cl, match.stt);
+    } else if (validateLiveGame(match)) {
         matchInfoDetails += scoreBoard;
         var clock = formatClock(match.cl, match.stt);
         matchInfoDetails += formatTag(clock, 'div', [UTILS.CLOCK, UTILS.TEXT_SIZE_SMALL]);
-        var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
-        matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
+
+        if (match.cl && match.cl !== '00:00.0'){
+            var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
+            matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
+        }
     } else {
         matchInfoDetails += formatClock(match.cl, match.stt);
     }
-
-    // if ((match.stt.includes('Qtr') && (match.cl === '00:00.0' || match.cl === '12:00.0')) ||
-    //     match.stt === 'Final' ||
-    //     match.stt === 'Halftime') {
-    //     matchInfoDetails += scoreBoard;
-    //     matchInfoDetails += formatClock(match.stt);
-    // } else if (match.cl === null || match.cl === '00:00.0'){
-    //     var currDate = new Date();
-    //     // returns in minute of the diff to UTC
-    //     var timeZoneOffset = currDate.getTimezoneOffset();
-
-    //     var gameStatus = match.stt.split(' ');  // 12:00 pm ET
-    //     var gameTime = gameStatus[0].split(':');
-    //     var gameHour = gameTime[0];
-    //     if (gameStatus[1] === 'pm') {
-    //         gameHour = parseInt(gameHour) + 12;
-    //     }
-    //     var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;
-    //     var timeFormat = 'am';
-    //     if (gameTimezoneHour >= 12) {
-    //         timeFormat = 'pm';
-    //     }
-    //     if (gameTimezoneHour > 12){
-    //         gameTimezoneHour -= 12;
-    //     }
-    //     // hour + minute
-    //     gameTimezoneHour = gameTimezoneHour.toString() + ':' + gameTime[1];
-
-    //     //  local game time
-    //     matchInfoDetails += formatClock(gameTimezoneHour + ' ' + timeFormat);
-    // } else {
-    //     // clock + sliding bar while it's live
-    //     matchInfoDetails += scoreBoard;
-
-    //     var statusText = match.stt;
-    //     var quarterStatus = match.stt.split(' ');
-    //     if (match.stt.includes('Qtr') && quarterStatus.length === 2) {
-    //         statusText = 'Q' + quarterStatus[0].charAt(0) + ' ' + match.cl;
-    //     } else if (match.stt.includes('OT')) {
-    //         var otStatus = match.stt.split(' ');
-    //         statusText = 'OT' + otStatus[0].charAt(0) + ' ' + match.cl;
-    //     }
-    //     matchInfoDetails += formatClock(statusText);
-    //     var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
-    //     matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
-    // }
 
     //match info
     // var gameList = formatLinkTag('box-score.html', '', "/src/assets/vector/icon-list-black-48.svg");
     // var gameListDiv = formatTag(gameList, 'div', [UTILS.LINK]);
     // var gameLink = formatLinkTag('https://watch.nba.com/game/' + match.gcode, '', "/src/assets/vector/icon-link-black-48.svg");
-    // var gameLinkDiv = formatTag(gameLink, 'div', [UTILS.LINK]);
+    // var gameLinkDiv = formatTag(gameLink, 'div', [UTILS.LINK, 'u-center']);
     // var listDiv = formatTag(gameListDiv + gameLinkDiv, 'div', [UTILS.FLEX, UTILS.JUSTIFY_AROUND]);
-    // matchInfoDetails += listDiv;
+    // matchInfoDetails += gameLinkDiv;
     var matchInfo = formatTag(matchInfoDetails, 'div', [UTILS.MATCH_INFO]);
 
     //team info
@@ -124,14 +84,19 @@ function getGameStartTime(status) {
 
 function formatClock(clock, status) {
     var text = '-';
-    if (!clock && status.includes('ET')) {   // game hasn't start, clock is null
+    if ((!clock || clock === '00:00.0') && status.includes('ET')) {   // game hasn't start, clock is null
         text = getGameStartTime(status);
     } else if (status.includes('Final') ||
                 status.includes('Halftime') ||
-                status.includes('Tipoff') ||
-                status.includes('Start') ||
-                status.includes('End')){    // game started, clock stopped
+                status.includes('Tipoff')){    // game started, clock stopped
         text = status;
+    } else if (status.includes('Start') || status.includes('End')){
+        var statusArray = status.split(' ');
+        if (status.includes('Qtr')) {
+            text = statusArray[0] + ' of Q' + statusArray[2].charAt(0);
+        } else {
+            text = statusArray[0] + ' of OT' + statusArray[2].charAt(0);
+        }
     } else if (status && status.includes('Qtr')) {  // game started being played over regular time
         text = 'Q' + status.charAt(0) + ' ' + clock;
     } else if (status && status.includes('OT')) {   // game start being played over over time
@@ -178,13 +143,22 @@ function formatTag(content, tag, classes, text) {
 function formatTableRow(data) {
     var result = '';
     if (data && data.length) {
-        if (data[0] !== '' || data[1] !== '') {
-            result += '<td>' + data[0] + '<br>' + data[1] + '</td>';
+        if (data[0] !== '' && data[1] !== '' && !data[2].includes(':')) {
+            if (data[0] !== '' || data[1] !== '') {
+                result += '<td>' + data[0] + '<br>' + data[1] + '</td>';
+            } else {
+                result += '<td></td>';
+            }
+            result += "<td colspan='17'>" + data[2] + '</td>';
         } else {
-            result += '<td></td>';
-        }
-        for (let i = 2; i < data.length; i++) {
-            result += '<td>' + data[i] + '</td>';
+            if (data[0] !== '' || data[1] !== '') {
+                result += '<td>' + data[0] + '<br>' + data[1] + '</td>';
+            } else {
+                result += '<td></td>';
+            }
+            for (let i = 2; i < data.length; i++) {
+                result += '<td>' + data[i] + '</td>';
+            }
         }
     }
     result = '<tr>' + result + '</tr>';
@@ -194,7 +168,11 @@ function formatTableRow(data) {
 function formatBoxScoreData(player) {
     var playerRecord = ['','','00:00',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     playerRecord[0] = player.fn || playerRecord[0];
-    playerRecord[1] = player.ln || playerRecord[1];
+    if (player.pos) {
+        playerRecord[1] = player.ln + (' ' + player.pos).sup() || playerRecord[1];
+    } else {
+        playerRecord[1] = player.ln || playerRecord[1];
+    }
     playerRecord[2] = formatMinutes(player);
     playerRecord[3] = player.fgm.toString() + '-' + player.fga.toString();
     playerRecord[4] = toPercentage(player.fgm/player.fga);
@@ -218,7 +196,7 @@ function formatBoxScoreData(player) {
 
 function formatMinutes(player) {
     if (player.memo)
-        return player.memo.substring(0, 3);
+        return player.memo;
     else if (player.status && player.status === 'I') {
         return 'Inactive';
     }
@@ -237,7 +215,7 @@ function formatMinutes(player) {
 
 function toPercentage(decimal) {
     if (Number.isNaN(decimal))
-        return '0%';
+        return '-';
     else
         return (decimal * 100).toFixed().toString() + '%';
 }
@@ -287,18 +265,59 @@ function highlightPlayerTable(){
 }
 
 function highlightPlayerRowHelper(index, el) {
-    if (!$(el).children().eq(1).html().includes(':')) {
+    var children = $(el).children();
+    if (!$(children[1]).html().includes(':') &&
+         $(children[1]).html() !== 'Total') {
        $(el).addClass(COLOR.GRAY);
        return;
     }
+    var fg = $(children[2]).html().split('-');
+    var tp = $(children[4]).html().split('-');
+    var ft = $(children[6]).html().split('-');
+    if (parseInt(fg[1]) >= 5) {
+        let percentage = parseInt(fg[0])/parseInt(fg[1]);
+        if (percentage >= 0.6) {
+            $(children[2]).addClass(COLOR.RED);
+            $(children[3]).addClass(COLOR.RED);
+        }
+        else if (percentage <= 0.3) {
+            $(children[2]).addClass(COLOR.GREEN);
+            $(children[3]).addClass(COLOR.GREEN);
+        }
+    }
+
+    if (parseInt(tp[1]) >= 5) {
+        let percentage = parseInt(tp[0])/parseInt(tp[1]);
+        if (percentage >= 0.6) {
+            $(children[4]).addClass(COLOR.RED);
+            $(children[5]).addClass(COLOR.RED);
+        }
+        else if (percentage <= 0.3) {
+            $(children[4]).addClass(COLOR.GREEN);
+            $(children[5]).addClass(COLOR.GREEN);
+        }
+    }
+
+    if (parseInt(ft[1]) >= 5) {
+        let percentage = parseInt(ft[0])/parseInt(ft[1]);
+        if (percentage >= 0.85) {
+            $(children[6]).addClass(COLOR.RED);
+            $(children[7]).addClass(COLOR.RED);
+        }
+        else if (percentage <= 0.5) {
+            $(children[6]).addClass(COLOR.GREEN);
+            $(children[7]).addClass(COLOR.GREEN);
+        }
+    }
+
     var count = 0;
     var result = [];
-    result.push($(el).children().eq(10));
-    result.push($(el).children().eq(11));
-    result.push($(el).children().eq(12));
-    result.push($(el).children().eq(13));
-    result.push($(el).children().eq(14));
-    result.push($(el).children().eq(17));
+    result.push($(children[10]));
+    result.push($(children[11]));
+    result.push($(children[12]));
+    result.push($(children[13]));
+    result.push($(children[14]));
+    result.push($(children[17]));
 
     result.forEach(function(item, index){
         count += parseInt(item.html()) >= 10 ? 1 : 0;
@@ -323,8 +342,8 @@ function highlightPlayerRowHelper(index, el) {
     if (parseInt(result[5].html()) >= 10)
         result[5].addClass(COLOR.RED);
 
-    if (parseInt($(el).children().eq(15).html()) === 6)
-        $(el).children().eq(15).addClass(COLOR.GREEN);
+    if (parseInt($(children[15]).html()) === 6)
+        $(children[15]).addClass(COLOR.GREEN);
 
     if (count >= 3) {   // tri-db
         $(el).addClass(COLOR.BG_RED);
@@ -340,7 +359,6 @@ function insertEmptyRows(){
         $('#away_box_score').append(formatTableRow(item));
     }
 }
-
 
 function formatSummary(summary){
     $('#box .away-team-name').text(summary.atn);
@@ -370,3 +388,67 @@ function formatSummary(summary){
     }
 }
 
+// Fetch Data
+function updateLastUpdate(ms) {
+    var d;
+    if (ms) {
+        d = new Date(ms);
+    } else {
+        d = new Date();
+    }
+    var hour = d.getHours().toString();
+    hour = hour.length === 1 ? '0' + hour : hour;
+    var min = d.getMinutes().toString();
+    min = min.length === 1 ? '0' + min : min;
+    var sec = d.getSeconds().toString();
+    sec = sec.length === 1 ? '0' + sec : sec;
+    $("#lastUpdate").text('Last updated: ' + hour + ':' + min + ':' + sec);
+}
+
+function fetchData(fnSuccess, fnFail) {
+    chrome.runtime.sendMessage({request : 'summary'}, function (data) {
+        if (data && data.gs && data.gs.g && data.gs.g.length > 0) {
+            var games = [];
+            var gids = [];
+            for (let i = 0; i < data.gs.g.length; i++){
+                var game = data.gs.g[i];
+                var card = formatCard(game);
+                var gameObj = {
+                    card : card,
+                    gid : game.gid
+                };
+                gids.push(game.gid);
+                if (validateLiveGame(game)) {
+                    games.unshift(gameObj);
+                } else {
+                    games[i] = gameObj;
+                }
+             }
+
+            // too big for sync, it only allows 8 bytes per item
+            // sync also make the popup window weird
+            chrome.storage.local.set({
+                'popupRefreshTime' : new Date().getTime(),
+                'cacheData' : games
+            }, function(){
+                if ($.isFunction(fnSuccess)){
+                    fnSuccess(gids);
+                }
+            });
+
+            updateLastUpdate();
+            $("div").remove("." + UTILS.CARD);
+            for (let key in games) {
+                var obj = games[key];
+                $("#cards").append($(obj.card).attr('gid', obj.gid));
+            }
+        } else {
+            $("div").remove("." + UTILS.CARD);
+            updateLastUpdate();
+            $('#cards').append(NO_GAME_CARD);
+            if ($.isFunction(fnFail)) {
+                fnFail();
+            }
+        }
+    });
+}

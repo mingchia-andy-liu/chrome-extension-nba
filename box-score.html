@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>BOX SCORES</title>
+        <title>Box Scores</title>
         <script src="src/thirdparty/jquery-3.1.1.min.js"></script>
         <script src="src/js/utils.js"></script>
         <script src="src/js/logos.js"></script>
@@ -12,13 +12,12 @@
     </head>
     <body>
         <div id="box_score_page">
-            <!-- <h1>NBA BOX SCORES</h1> -->
             <div id="table" class="u-display-flex">
                 <div id="cards">
                     <div id='footer' class="u-display-flex u-justify-center u-color-gray">
-                        <div id='lastUpdate'>Last fetched: --:--:--</div>
+                        <div id='lastUpdate'>Last updated: --:--:--</div>
                     </div>
-                    <div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today</div>
+                    <div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today ¯\_(ツ)_/¯</div>
                 </div>
                 <div id="box" class='c-table u-inner-shadow u-text-size-small'>
                     <div id="box_banner" class="u-display-flex u-justify-center">
@@ -39,58 +38,13 @@
                         <table id="summary_box_score">
                             <tbody>
                                 <tr>
-                                    <th></th>
-                                    <th>Q1</th>
-                                    <th>Q2</th>
-                                    <th>Q3</th>
-                                    <th>Q4</th>
-                                    <th class="u-hide ot1">OT1</th>
-                                    <th class="u-hide ot2">OT2</th>
-                                    <th class="u-hide ot3">OT3</th>
-                                    <th class="u-hide ot4">OT4</th>
-                                    <th class="u-hide ot5">OT5</th>
-                                    <th class="u-hide ot6">OT6</th>
-                                    <th class="u-hide ot7">OT7</th>
-                                    <th class="u-hide ot8">OT8</th>
-                                    <th class="u-hide ot9">OT9</th>
-                                    <th class="u-hide ot10">OT10</th>
-                                    <th class="summary-final">Final</th>
+                                    <th></th> <th>Q1</th> <th>Q2</th> <th>Q3</th> <th>Q4</th> <th class="u-hide ot1">OT1</th> <th class="u-hide ot2">OT2</th> <th class="u-hide ot3">OT3</th> <th class="u-hide ot4">OT4</th> <th class="u-hide ot5">OT5</th> <th class="u-hide ot6">OT6</th> <th class="u-hide ot7">OT7</th> <th class="u-hide ot8">OT8</th> <th class="u-hide ot9">OT9</th> <th class="u-hide ot10">OT10</th> <th class="summary-final">Final</th>
                                 </tr>
                                 <tr>
-                                    <td class="summary-team-name">Away</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td class="u-hide ot1">0</td>
-                                    <td class="u-hide ot2">0</td>
-                                    <td class="u-hide ot3">0</td>
-                                    <td class="u-hide ot4">0</td>
-                                    <td class="u-hide ot5">0</td>
-                                    <td class="u-hide ot6">0</td>
-                                    <td class="u-hide ot7">0</td>
-                                    <td class="u-hide ot8">0</td>
-                                    <td class="u-hide ot9">0</td>
-                                    <td class="u-hide ot10">0</td>
-                                    <td>0</td>
+                                    <td class="summary-team-name">Away</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td>
                                 </tr>
                                 <tr>
-                                    <td class="summary-team-name">Home</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td class="u-hide ot1">0</td>
-                                    <td class="u-hide ot2">0</td>
-                                    <td class="u-hide ot3">0</td>
-                                    <td class="u-hide ot4">0</td>
-                                    <td class="u-hide ot5">0</td>
-                                    <td class="u-hide ot6">0</td>
-                                    <td class="u-hide ot7">0</td>
-                                    <td class="u-hide ot8">0</td>
-                                    <td class="u-hide ot9">0</td>
-                                    <td class="u-hide ot10">0</td>
-                                    <td>0</td>
+                                    <td class="summary-team-name">Home</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -118,24 +72,7 @@
                     <table id="away_box_score" class="team-table">
                         <tbody>
                             <tr>
-                                <th>Player</th>
-                                <th>MIN</th>
-                                <th>FGM-A</th>
-                                <th>FG%</th>
-                                <th>3PM-A</th>
-                                <th>3P%</th>
-                                <th>FTM-A</th>
-                                <th>FT%</th>
-                                <th>OREB</th>
-                                <th>DREB</th>
-                                <th>REB</th>
-                                <th>AST</th>
-                                <th>STL</th>
-                                <th>BLK</th>
-                                <th>TOV</th>
-                                <th>PF</th>
-                                <th>+/-</th>
-                                <th>PTS</th>
+                                <th>Player</th> <th>MIN</th> <th>FGM-A</th> <th>FG%</th> <th>3PM-A</th> <th>3P%</th> <th>FTM-A</th> <th>FT%</th> <th>OREB</th> <th>DREB</th> <th>REB</th> <th>AST</th> <th>STL</th> <th>BLK</th> <th>TOV</th> <th>PF</th> <th>+/-</th> <th>PTS</th>
                             </tr>
                             <tr> <td></td><td>00:00</td><td>0-0</td><td>0%</td><td>0-0</td><td>0%</td><td>0-0</td><td>0%</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
                             </tr>
@@ -173,24 +110,7 @@
                     <table id="home_box_score" class="team-table">
                         <tbody>
                             <tr>
-                                <th>Player</th>
-                                <th>MIN</th>
-                                <th>FGM-A</th>
-                                <th>FG%</th>
-                                <th>3PM-A</th>
-                                <th>3P%</th>
-                                <th>FTM-A</th>
-                                <th>FT%</th>
-                                <th>OREB</th>
-                                <th>DREB</th>
-                                <th>REB</th>
-                                <th>AST</th>
-                                <th>STL</th>
-                                <th>BLK</th>
-                                <th>TOV</th>
-                                <th>PF</th>
-                                <th>+/-</th>
-                                <th>PTS</th>
+                                <th>Player</th> <th>MIN</th> <th>FGM-A</th> <th>FG%</th> <th>3PM-A</th> <th>3P%</th> <th>FTM-A</th> <th>FT%</th> <th>OREB</th> <th>DREB</th> <th>REB</th> <th>AST</th> <th>STL</th> <th>BLK</th> <th>TOV</th> <th>PF</th> <th>+/-</th> <th>PTS</th>
                             </tr>
                             <tr> <td></td><td>00:00</td><td>0-0</td><td>0%</td><td>0-0</td><td>0%</td><td>0-0</td><td>0%</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
                             </tr>

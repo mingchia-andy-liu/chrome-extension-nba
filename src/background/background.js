@@ -3,7 +3,7 @@ $(function () {
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.request === 'summary') {
-            fetchData(sendResponse);
+            fetchGames(sendResponse);
         } else if (request.request === 'box_score') {
             fetchLiveGameBox(sendResponse, request.gid);
         }
@@ -11,12 +11,18 @@ $(function () {
         return true;        // return true to tell google to use sendResponse asynchronously
     });
 
+    // this will reload the background explicitly to trigger an update as soon as possible if available
+    chrome.runtime.onUpdateAvailable.addListener(function(details){
+        console.log("updating to version " + details.version);
+        chrome.runtime.reload();
+    });
+
     chrome.alarms.create('minuteAlarm', {
         delayInMinutes : 1,
         periodInMinutes : 1
     });
 
-    function fetchData(sendResponse) {
+    function fetchGames(sendResponse) {
         $.ajax({
             type: 'GET',
             contentType: 'application/json',

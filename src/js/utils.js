@@ -35,4 +35,5 @@ const COLOR = {
 
 const AWAY_TEXT = 'Away';
 const HOME_TEXT = 'Home';
-const NO_GAME_CARD = '<div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today</div>'
+const HEADER_ROW = '<tr> <th></th> <th>Total</th> <th>FGM-A</th> <th>FG%</th> <th>3PM-A</th> <th>3P%</th> <th>FTM-A</th> <th>FT%</th> <th>OREB</th> <th>DREB</th> <th>REB</th> <th>AST</th> <th>STL</th> <th>BLK</th> <th>TOV</th> <th>PF</th> <th></th> <th>PTS</th> </tr>';
+const NO_GAME_CARD = '<div class="c-card u-shadow u-text-size-larger u-justify-center u-align-center">No Games Today ¯\\_(ツ)_/¯</div>';
