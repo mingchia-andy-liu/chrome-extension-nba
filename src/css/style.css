@@ -1,5 +1,6 @@
 body {
     background-color: #E9EBEE;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 h1, h2 {
@@ -22,7 +23,7 @@ a:hover {
 
 sup {
     color: #888888;
-    font-size: xx-small;
+    font-size: 0.8vw;
 }
 
 /* === Pages === */
@@ -87,7 +88,6 @@ sup {
     flex-basis: 40%;
 
     align-items: center;
-    padding-bottom: 10px;
 }
 
 .c-team-logo {
@@ -96,7 +96,7 @@ sup {
 }
 
 .c-team-city {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 /* match info */
@@ -111,11 +111,11 @@ sup {
 }
 
 .c-team-score {
-    flex-grow: 2;
+    width: 40%;
 }
 
 .c-clock {
-    font-size: 15px;
+    font-size: calc(15px + 0.2vw);
 }
 
 .c-link {
@@ -172,11 +172,13 @@ sup {
 /* Summary Table*/
 #box {
     font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1vw;
+    background-color: #e9ebee;
 }
 
 #box_banner {
     width: 100%;
-    font-size: 40px;
+    font-size: 3vw;
     margin-bottom: 10px;
     flex-direction: row;
     justify-content: center;
@@ -273,7 +275,7 @@ sup {
     font-style: italic;
 }
 
-.u-text-bold {
+.u-text-bolder {
     font-weight: bolder;
 }
 
@@ -302,7 +304,7 @@ sup {
 }
 
 .u-color-green {
-    color : #30db71;
+    color : #1ac900;
 }
 
 .u-color-gray {

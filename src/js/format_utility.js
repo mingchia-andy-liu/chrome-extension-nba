@@ -11,23 +11,25 @@ function formatCard(match) {
     var homeTeamScore = formatTeamScore(match.h.s, match.v.s < match.h.s);
     var hyphen = formatTag('-', 'div');
     var scoreBoardText = awayTeamScore + hyphen + homeTeamScore;
-    var scoreBoard = formatTag( scoreBoardText, 'div', [UTILS.FLEX]);
+    var scoreBoard = formatTag(scoreBoardText, 'div', [UTILS.FLEX, UTILS.CENTER]);
     var matchInfoDetails = '';
 
     if (match.stt === 'Final'){
         matchInfoDetails += scoreBoard;
-        matchInfoDetails += formatClock(match.cl, match.stt);
+        let clockText = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
     } else if (validateLiveGame(match)) {
         matchInfoDetails += scoreBoard;
-        var clock = formatClock(match.cl, match.stt);
-        matchInfoDetails += formatTag(clock, 'div', [UTILS.CLOCK, UTILS.TEXT_SIZE_SMALL]);
+        let clockText = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
 
         if (match.cl && match.cl !== '00:00.0'){
             var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
             matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
         }
     } else {
-        matchInfoDetails += formatClock(match.cl, match.stt);
+        let clockText = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
     }
 
     //match info
@@ -50,7 +52,7 @@ function formatCard(match) {
 
 function formatTeamScore(score, winning) {
     if (winning) {
-        return formatTag(score, 'span', [UTILS.TEAM_SCORE, UTILS.TEXT_SIZE_LARGE, UTILS.TEXT_BOLD]);
+        return formatTag(score, 'span', [UTILS.TEAM_SCORE, COLOR.RED]);
     } else {
         return formatTag(score, 'span', [UTILS.TEAM_SCORE]);
     }
@@ -108,7 +110,7 @@ function formatClock(clock, status) {
 
 function formatTeamInfoTags(teamName, teamCity, teamLogo) {
     // var team = formatTag(teamLogo, 'div', [UTILS.TEAM_LOGO]);
-    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLD, UTILS.TEXT_SIZE_MEDIUM]);
+    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEXT_SIZE_MEDIUM]);
     team += formatTag(teamCity, 'div', [UTILS.TEXT_ITALIC, UTILS.TEAM_CITY]);
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
