@@ -27,6 +27,7 @@
     "permissions": [
         "storage",
         "alarms",
+        "tabs",
         "http://*.nba.com/"
     ]
 }

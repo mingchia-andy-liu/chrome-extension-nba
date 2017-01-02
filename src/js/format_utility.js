@@ -9,7 +9,7 @@ function formatCard(match) {
     // score board
     var awayTeamScore = formatTeamScore(match.v.s, match.v.s > match.h.s);
     var homeTeamScore = formatTeamScore(match.h.s, match.v.s < match.h.s);
-    var hyphen = formatTag('-', 'div');
+    var hyphen = formatTag('-', 'div', [UTILS.HYPHEN]);
     var scoreBoardText = awayTeamScore + hyphen + homeTeamScore;
     var scoreBoard = formatTag(scoreBoardText, 'div', [UTILS.FLEX, UTILS.CENTER]);
     var matchInfoDetails = '';
@@ -110,7 +110,7 @@ function formatClock(clock, status) {
 
 function formatTeamInfoTags(teamName, teamCity, teamLogo) {
     // var team = formatTag(teamLogo, 'div', [UTILS.TEAM_LOGO]);
-    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEXT_SIZE_MEDIUM]);
+    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEAM_NAME]);
     team += formatTag(teamCity, 'div', [UTILS.TEXT_ITALIC, UTILS.TEAM_CITY]);
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }

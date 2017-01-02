@@ -1,5 +1,5 @@
 body {
-    background-color: #E9EBEE;
+    background-color: #e0e1e2;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
@@ -34,7 +34,9 @@ sup {
 #cards {
     display: flex;
     flex-wrap: wrap;
-    width: 360px;
+    max-width: 400px;
+    min-width: 350px;
+    /*width: calc(350px + 5vw);*/
     height: 100%;
 }
 
@@ -64,10 +66,15 @@ sup {
 .c-card {
     display: flex;
     height: 90px;
-    width: 350px;
+    /*width: 350px;*/
+    width: 100%;
     margin: 5px 5px 5px 5px;
+
+    font-size: calc(15px + 0.2vw);
     background-color: #fafafa;
     border-radius: 5px;
+
+    border: 2px solid transparent;
 }
 
 @media screen and (min-width: 420px) {
@@ -96,7 +103,7 @@ sup {
 }
 
 .c-team-city {
-    font-size: 12px;
+    font-size: calc(12px + 0.1vw);
 }
 
 /* match info */
@@ -106,7 +113,7 @@ sup {
     flex-basis: 30%;
 
     text-align: center;
-    font-size: 15px;
+
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
@@ -115,7 +122,11 @@ sup {
 }
 
 .c-clock {
-    font-size: calc(15px + 0.2vw);
+    font-size: calc(15px + 0.08vw);
+}
+
+.c-hyphen {
+    width: 20%;
 }
 
 .c-link {
@@ -133,7 +144,6 @@ sup {
 .c-table {
     /*display: flex;*/
     width: 100%;
-    /*min-height: 400px;*/
     min-width: 800px;
     padding: 10px 10px 10px 10px;
     background-color: #fafafa;
@@ -157,7 +167,7 @@ sup {
     min-width: 40px;
     width: 5%;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #cecece;
 }
 
 .team-table th:first-child {
@@ -166,14 +176,48 @@ sup {
 }
 
 .team-table tr:not(:first-child):hover {
-    background-color:#e1e1e1;
+    background-color: #e1e1e1;
+}
+
+.team-name {
+    font-size: 1.7vw;
 }
 
 /* Summary Table*/
 #box {
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size: 1vw;
-    background-color: #e9ebee;
+    font-size: 1.1vw;
+    padding: 0 0 0 0;
+    margin-left: 1vw;
+    background-color: #E9EBEE;
+}
+
+#box p {
+    display: none;
+    opacity: 0;
+}
+
+#box #overlay {
+    padding: 10px 10px 10px 10px;
+}
+
+#box .u-overlay p{
+    position: absolute;
+    display: block;
+    opacity: 1;
+    color: white;
+}
+
+#box .u-overlay table, #box .u-overlay table tr td, #box .u-overlay table th{
+    border-style: none;
+}
+
+#box .u-overlay .team-table tr{
+    background-color: transparent !important;
+}
+
+#box .u-overlay {
+    background-color: rgba(0,0,0,0.8);
+    border-radius: 5px;
 }
 
 #box_banner {
@@ -264,6 +308,10 @@ sup {
 
 .u-hide {
     display: none;
+}
+
+.u-selected {
+    border: 2px solid #0E7FF9;
 }
 
 /*text*/

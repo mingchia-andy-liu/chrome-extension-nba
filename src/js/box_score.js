@@ -1,7 +1,8 @@
 $(function(){
     'use strict';
 
-    var SHOWN_GAME = 0;
+    var SELECTED_GAME_OBJ = {};
+
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
@@ -24,7 +25,10 @@ $(function(){
 
     $('#cards').on("click", '> *', function() {
         var gid = $(this).attr('gid');
-        SHOWN_GAME = gid;
+        if (SELECTED_GAME_OBJ.removeClass) {
+            SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
+        }
+        SELECTED_GAME_OBJ = $(this);
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
@@ -72,6 +76,15 @@ $(function(){
             removeBox();
             return;
         }
+        $('#overlay').removeClass(UTILS.OVERLAY);
+
+        $('#cards').children().each(function(index,el){
+            if ($(el).attr('gid') === g.gid){
+                $(el).addClass(UTILS.SELECTED);
+                SELECTED_GAME_OBJ = $(el);
+            }
+        });
+
         let summary = {
             atn : g.vls.tn,
             htn : g.hls.tn,
@@ -141,6 +154,7 @@ $(function(){
     }
 
     function removeBox() {
+        $('#overlay').addClass(UTILS.OVERLAY);
         let summary = {
             atn : AWAY_TEXT,
             htn : HOME_TEXT,
@@ -195,13 +209,14 @@ $(function(){
     }
 
     function updateBox(gids) {
-        if (SHOWN_GAME !== 0 && gids.indexOf(SHOWN_GAME) !== -1) {
-            fetchBox(SHOWN_GAME).done(function(boxScoreData){
+        var gameID = 0 || (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid'));
+        if (gameID !== 0 && gids.indexOf(gameID) !== -1) {
+            fetchBox(gameID).done(function(boxScoreData){
                 showBox(boxScoreData);
                 var cacheData = {
                     boxScore : {}
                 };
-                cacheData.boxScore[SHOWN_GAME] = {
+                cacheData.boxScore[gameID] = {
                     data : boxScoreData,
                     time : new Date().getTime()
                 };

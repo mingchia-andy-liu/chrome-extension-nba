@@ -1,12 +1,24 @@
 $(function(){
     'use strict';
 
-    // use to create new tab
+    var extId = chrome.runtime.id;
     $('body').on('click', 'a', function(){
-        chrome.tabs.create({url: $(this).attr('href')});
+        chrome.tabs.query({currentWindow: true}, function(tabs) {
+            var notOpened = true;
+            for (let index in tabs) {
+                if (tabs[index].url === "chrome-extension://" + extId + "/box-score.html") {
+                    //your popup is alive
+                    notOpened = false;
+                    chrome.tabs.update(tabs[index].id, {active: true}); //focus it
+                    break;
+                }
+            }
+            if (notOpened) { //it didn't found anything, so create it
+                chrome.tabs.create({url: 'box-score.html'});
+            }
+            window.close();
+        });
     });
-
-    // chrome.storage.sync.clear(function (){});
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
