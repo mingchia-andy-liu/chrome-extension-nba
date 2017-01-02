@@ -369,8 +369,6 @@ function formatSummary(summary){
     $('#summary_box_score tbody tr:nth-child(3) td').eq(0).text(summary.hta);
     $('#lead_changes').text(summary.lc);
     $('#times_tied').text(summary.tt);
-    $('#arena').text(summary.an);
-    $('#attendance').text(summary.at);
     $('#clock').text(formatClock(summary.cl, summary.stt));
 
     // $('#away_team_logo').html(summary.atlg);
