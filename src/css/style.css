@@ -27,17 +27,16 @@ sup {
 }
 
 /* === Pages === */
-#full_screen_link {
-    margin: 5px 5px 5px 5px;
-}
-
 #cards {
     display: flex;
     flex-wrap: wrap;
-    max-width: 400px;
-    min-width: 350px;
-    /*width: calc(350px + 5vw);*/
+    width: 100%;
     height: 100%;
+}
+
+#table #cards {
+    width: calc(360px + 10vw);
+    min-width: 300px;
 }
 
 #footer {
@@ -52,7 +51,7 @@ sup {
 }*/
 
 #popup_page {
-    width: 360px;
+    width: 350px;
 }
 
 #no_game {
@@ -127,11 +126,6 @@ sup {
 
 .c-hyphen {
     width: 20%;
-}
-
-.c-link {
-    height: 20px;
-    width: 20px;
 }
 
 .c-loader {
@@ -209,6 +203,12 @@ sup {
 
 #box .u-overlay table, #box .u-overlay table tr td, #box .u-overlay table th{
     border-style: none;
+    color: black;
+}
+
+#box .u-overlay #home_team_pts, #box .u-overlay #away_team_pts,
+#box .u-overlay sup {
+    color: black;
 }
 
 #box .u-overlay .team-table tr{
@@ -294,10 +294,6 @@ sup {
     justify-content: center;
 }
 
-.u-justify-between {
-    justify-content: space-between;
-}
-
 .u-justify-center {
     justify-content: center;
 }
@@ -325,22 +321,6 @@ sup {
 
 .u-text-bolder {
     font-weight: bolder;
-}
-
-.u-text-size-large {
-    font-size: large;
-}
-
-.u-text-size-larger {
-    font-size: larger;
-}
-
-.u-text-size-medium {
-    font-size: medium;
-}
-
-.u-text-size-small {
-    font-size: small;
 }
 
 .u-text-align-center {

@@ -3,7 +3,6 @@ $(function(){
 
     var SELECTED_GAME_OBJ = {};
 
-
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
             fetchData(updateBox, removeBox);
@@ -23,12 +22,16 @@ $(function(){
         }
     });
 
-    $('#cards').on("click", '> *', function() {
+    $('#cards').on("click", '.c-card', function() {
         var gid = $(this).attr('gid');
+        if (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid') === gid)
+            return;
         if (SELECTED_GAME_OBJ.removeClass) {
             SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
         }
         SELECTED_GAME_OBJ = $(this);
+        $('#overlay').addClass(UTILS.OVERLAY);
+        $('#overlay p').text(LOADING);
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
@@ -106,25 +109,25 @@ $(function(){
         getScores(g.vls).forEach(function(item, index){
             $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).text(item);
             if (item > 0 && index + 1 > 4) {
-                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.HIDE);
-                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.HIDE);
-                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.TABLE_CELL);
-                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
+                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
+                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
+                // $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.TABLE_CELL);
+                // $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
             } else if (index + 1 > 4 && index + 1 < 15){
-                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.TABLE_CELL);
-                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.TABLE_CELL);
-                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.HIDE);
-                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.HIDE);
+                $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
+                $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
+                // $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.HIDE);
+                // $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.HIDE);
             }
         });
         getScores(g.hls).forEach(function(item, index){
             $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).text(item);
             if (item > 0 && index + 1 > 4) {
-                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.HIDE);
-                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
+                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
+                // $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
             } else if (index + 1 > 4 && index + 1 < 15) {
-                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.TABLE_CELL);
-                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.HIDE);
+                $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
+                // $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.HIDE);
             }
         });
 
@@ -133,15 +136,15 @@ $(function(){
         g.vls.pstsg.forEach(function(item){
             $('#away_box_score').append(formatBoxScoreData(item));
         });
-        $('#away_box_score').append(HEADER_ROW);
-        $('#away_box_score').append(formatBoxScoreData(g.vls.tstsg));
+        $('#away_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.vls.tstsg));
+        // $('#away_box_score').append(formatBoxScoreData(g.vls.tstsg));
 
         $('#home_box_score tbody').children('tr:not(:first)').remove();
         g.hls.pstsg.forEach(function(item) {
             $('#home_box_score').append(formatBoxScoreData(item));
         });
-        $('#home_box_score').append(HEADER_ROW);
-        $('#home_box_score').append(formatBoxScoreData(g.hls.tstsg));
+        $('#home_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.hls.tstsg));
+        // $('#home_box_score').append(formatBoxScoreData(g.hls.tstsg));
 
 
         // Highlight Summary Box Score for the winning qtrs
@@ -153,6 +156,7 @@ $(function(){
 
     function removeBox() {
         $('#overlay').addClass(UTILS.OVERLAY);
+        $('#overlay p').text(NO_BOX_SCORE_TEXT);
         let summary = {
             atn : AWAY_TEXT,
             htn : HOME_TEXT,
@@ -178,7 +182,7 @@ $(function(){
             }
         });
         $('#summary_box_score tbody tr:nth-child(2)').children().each(function(index, el){
-            $(el).removeClass('u-color-red');
+            $(el).removeClass(COLOR.RED);
             if (index > 4 && index < 14){
                 $(el).removeClass(UTILS.TABLE_CELL);
                 $(el).addClass(UTILS.HIDE);
@@ -188,7 +192,7 @@ $(function(){
             }
         });
         $('#summary_box_score tbody tr:nth-child(3)').children().each(function(index, el){
-            $(el).removeClass('u-color-red');
+            $(el).removeClass(COLOR.RED);
             if (index > 4 && index < 14){
                 $(el).removeClass(UTILS.TABLE_CELL);
                 $(el).addClass(UTILS.HIDE);
@@ -218,6 +222,8 @@ $(function(){
                 };
                 chrome.storage.local.set(cacheData);
             });
+        } else {
+            removeBox();
         }
     }
 

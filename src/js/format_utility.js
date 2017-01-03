@@ -33,12 +33,6 @@ function formatCard(match) {
     }
 
     //match info
-    // var gameList = formatLinkTag('box-score.html', '', "/src/assets/vector/icon-list-black-48.svg");
-    // var gameListDiv = formatTag(gameList, 'div', [UTILS.LINK]);
-    // var gameLink = formatLinkTag('https://watch.nba.com/game/' + match.gcode, '', "/src/assets/vector/icon-link-black-48.svg");
-    // var gameLinkDiv = formatTag(gameLink, 'div', [UTILS.LINK, 'u-center']);
-    // var listDiv = formatTag(gameListDiv + gameLinkDiv, 'div', [UTILS.FLEX, UTILS.JUSTIFY_AROUND]);
-    // matchInfoDetails += gameLinkDiv;
     var matchInfo = formatTag(matchInfoDetails, 'div', [UTILS.MATCH_INFO]);
 
     //team info
@@ -59,17 +53,27 @@ function formatTeamScore(score, winning) {
 }
 
 function getGameStartTime(status) {
-    var currDate = new Date();
     // returns in minute of the diff to UTC
-    var timeZoneOffset = currDate.getTimezoneOffset();
+    var timeZoneOffset = new Date().getTimezoneOffset();
 
-    var gameStatus = status.split(' ');      // 12:00 pm ET
-    var gameTime = gameStatus[0].split(':');    // 12 00
-    var gameHour = gameTime[0];                 // hour --> 12
+    var gameStatus = status.split(' ');      // 12:30 pm ET
+    var gameTime = gameStatus[0].split(':');    // [12,30]
+    var gameHour = Number.parseInt(gameTime[0]);                 // hour --> 12
+    var gameMinute = Number.parseInt(gameTime[1]);               // minute --> 30
     if (gameStatus[1] === 'pm') {
-        gameHour = parseInt(gameHour) + 12;
+        gameHour = gameHour + 12;
     }
+    var gameTimezoneMinute = gameMinute + (timeZoneOffset/60) % 1 * 60;
     var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;    // convert ET to UTC to local
+    if (gameTimezoneMinute >= 60) {
+        gameTimezoneHour++;
+        gameTimezoneMinute -= 60;
+    }
+    if (gameTimezoneMinute < 10) {
+        gameTimezoneMinute = '0' + gameTimezoneMinute.toString();
+    } else {
+        gameTimezoneMinute = gameTimezoneMinute.toString();
+    }
     var timeFormat = 'am';
     if (gameTimezoneHour >= 12) {
         timeFormat = 'pm';
@@ -77,11 +81,8 @@ function getGameStartTime(status) {
     if (gameTimezoneHour > 12){
         gameTimezoneHour -= 12;
     }
-    // hour + minute
-    gameTime = gameTimezoneHour.toString() + ':' + gameTime[1] + ' ' + timeFormat;
-
-    //  local game time
-    return gameTime;
+    // hour + minute + am/pm
+    return gameTimezoneHour.toString() + ':' + gameTimezoneMinute + ' ' + timeFormat;
 }
 
 function formatClock(clock, status) {
@@ -115,16 +116,6 @@ function formatTeamInfoTags(teamName, teamCity, teamLogo) {
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
 
-function formatLinkTag(url, text, image) {
-    if (image && text) {
-        return '<a href=' + url + '>' + '<img src="' + image +'">' + text + '</a>';
-    } else if (image) {
-        return '<a href=' + url + '>' + '<img src="' + image +'"></a>';
-    } else {
-        return '<a href=' + url + '>' + text + '</a>';
-    }
-}
-
 function formatTag(content, tag, classes, text) {
     switch (tag){
         case 'div':
@@ -145,16 +136,16 @@ function formatTag(content, tag, classes, text) {
 function formatTableRow(data) {
     var result = '';
     if (data && data.length) {
-        if (data[0] !== '' && data[1] !== '' && !data[2].includes(':')) {
+        if (data[2] !== '' && !data[2].includes(':')) {
             if (data[0] !== '' || data[1] !== '') {
-                result += '<td>' + data[0] + '<br>' + data[1] + '</td>';
+                result += '<td>' + data[0].charAt(0) + '.' + data[1] + '</td>';
             } else {
                 result += '<td></td>';
             }
             result += "<td colspan='17'>" + data[2] + '</td>';
         } else {
             if (data[0] !== '' || data[1] !== '') {
-                result += '<td>' + data[0] + '<br>' + data[1] + '</td>';
+                result += '<td>' + data[0].charAt(0) + '.' + data[1] + '</td>';
             } else {
                 result += '<td></td>';
             }
@@ -246,8 +237,8 @@ function highlightSummaryTable(){
     for (let i = 1;i < 16; i++) {   // [1...15]
         var vpts = parseInt($('#summary_box_score tbody tr:nth-child(2) td').eq(i).html());
         var hpts = parseInt($('#summary_box_score tbody tr:nth-child(3) td').eq(i).html());
-        $('#summary_box_score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
         $('#summary_box_score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
+        $('#summary_box_score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
         if (vpts > hpts){
             $('#summary_box_score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.RED);
         } else if (vpts < hpts) {
@@ -347,10 +338,12 @@ function highlightPlayerRowHelper(index, el) {
     if (parseInt($(children[15]).html()) === 6)
         $(children[15]).addClass(COLOR.GREEN);
 
-    if (count >= 3) {   // tri-db
-        $(el).addClass(COLOR.BG_RED);
+    if (count === 3) {   // tri-db
+        $(el).addClass(COLOR.BG_RED).attr('title', 'Triple Double!');
+    } else if (count === 4) {
+        $(el).addClass(COLOR.BG_RED).attr('title', 'Quadruple Double!');
     } else if (count === 2) {   //db-db
-        $(el).addClass(COLOR.BG_BLUE);
+        $(el).addClass(COLOR.BG_BLUE).attr('title', 'Double Double!');
     }
 }
 
