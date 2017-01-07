@@ -146,23 +146,17 @@ $(function(){
             if (item > 0 && index + 1 > 4) {
                 $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
                 $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
-                // $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.TABLE_CELL);
-                // $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
             } else if (index + 1 > 4 && index + 1 < 15){
                 $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
                 $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
-                // $('#summary_box_score tbody tr:nth-child(1) th').eq(index + 1).addClass(UTILS.HIDE);
-                // $('#summary_box_score tbody tr:nth-child(2) td').eq(index + 1).addClass(UTILS.HIDE);
             }
         });
         getScores(g.hls).forEach(function(item, index){
             $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).text(item);
             if (item > 0 && index + 1 > 4) {
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
-                // $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.TABLE_CELL);
             } else if (index + 1 > 4 && index + 1 < 15) {
                 $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
-                // $('#summary_box_score tbody tr:nth-child(3) td').eq(index + 1).addClass(UTILS.HIDE);
             }
         });
 
@@ -172,14 +166,12 @@ $(function(){
             $('#away_box_score').append(formatBoxScoreData(item));
         });
         $('#away_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.vls.tstsg));
-        // $('#away_box_score').append(formatBoxScoreData(g.vls.tstsg));
 
         $('#home_box_score tbody').children('tr:not(:first)').remove();
         g.hls.pstsg.forEach(function(item) {
             $('#home_box_score').append(formatBoxScoreData(item));
         });
         $('#home_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.hls.tstsg));
-        // $('#home_box_score').append(formatBoxScoreData(g.hls.tstsg));
 
 
         // Highlight Summary Box Score for the winning qtrs

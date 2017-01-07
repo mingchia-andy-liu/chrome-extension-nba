@@ -45,14 +45,8 @@ sup {
 
 #footer {
     width: 100%;
-    justify-content: space-around;
+    justify-content: center;
 }
-
-/*@media screen and (min-width: 410px){
-    #box_score {
-        justify-content: center;
-    }
-}*/
 
 #popup_page {
     width: 350px;
