@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #e0e1e2;
     font-family: 'Roboto Condensed', sans-serif;
@@ -54,6 +58,25 @@ sup {
     width: 350px;
 }
 
+#popup_page #cards .c-card:not(.no-game):hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+#popup_page #cards .c-card p,
+#box_score_page #cards .c-card p {
+    display: none;
+    opacity: 0;
+}
+
+#popup_page #cards .c-card:hover p {
+    position: absolute;
+    left: 100px;
+    margin-top: 33px;
+    display: block;
+    opacity: 1;
+    color: white;
+}
+
 #no_game {
     text-align: center;
     font-size: 2em;
@@ -65,7 +88,6 @@ sup {
 .c-card {
     display: flex;
     height: 90px;
-    /*width: 350px;*/
     width: 100%;
     margin: 5px 5px 5px 5px;
 
@@ -74,6 +96,14 @@ sup {
     border-radius: 5px;
 
     border: 2px solid transparent;
+}
+
+.c-card:hover {
+    cursor: pointer;
+}
+
+.no-game:hover {
+    cursor: auto;
 }
 
 @media screen and (min-width: 420px) {
@@ -166,7 +196,7 @@ sup {
 
 .team-table th:first-child {
     min-width: 70px;
-    width: 12%;
+    width: 14%;
 }
 
 .team-table tr:not(:first-child):hover {

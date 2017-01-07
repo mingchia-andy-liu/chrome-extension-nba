@@ -20,6 +20,11 @@ $(function(){
         });
     });
 
+    $('body').on('click', '.' + UTILS.CARD, function(){
+        let hashedUrl = 'box-score.html#' + $(this).attr('gid');
+        chrome.tabs.create({url: hashedUrl});
+    });
+
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
             fetchData();
@@ -33,7 +38,7 @@ $(function(){
                 $("div").remove("." + UTILS.CARD);
                 for (var key in data.cacheData) {
                     var obj = data.cacheData[key];
-                    $("#cards").append(obj.card);
+                    $("#cards").append($(obj.card).attr('gid', obj.gid));
                 }
             }
         }

@@ -40,7 +40,9 @@ function formatCard(match) {
     var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", LOGOS[match.h.ta]);
 
     //card
-    var matchCard = formatTag(awayTeam + matchInfo + homeTeam, 'div', [UTILS.CARD, UTILS.SHADOW]);
+    var viewBoxText = formatTag(VIEW_DETAILS, 'p', [UTILS.CENTER]);
+
+    var matchCard = formatTag(viewBoxText + awayTeam + matchInfo + homeTeam, 'div', [UTILS.CARD, UTILS.SHADOW, UTILS.OVERLAY]);
     return matchCard;
 }
 
@@ -64,21 +66,26 @@ function getGameStartTime(status) {
         gameHour = gameHour + 12;
     }
     var gameTimezoneMinute = gameMinute + (timeZoneOffset/60) % 1 * 60;
-    var gameTimezoneHour = gameHour + 5 - timeZoneOffset/60;    // convert ET to UTC to local
+    var gameTimezoneHour = gameHour + 5 - Math.floor(timeZoneOffset/60);    // convert ET to UTC to local
     if (gameTimezoneMinute >= 60) {
         gameTimezoneHour++;
         gameTimezoneMinute -= 60;
+    } else if (gameTimezoneMinute < 0) {
+        gameTimezoneHour--;
+        gameTimezoneMinute += 60;
     }
-    if (gameTimezoneMinute < 10) {
+    if (gameTimezoneMinute >= 0 && gameTimezoneMinute < 10) {
         gameTimezoneMinute = '0' + gameTimezoneMinute.toString();
     } else {
         gameTimezoneMinute = gameTimezoneMinute.toString();
     }
-    var timeFormat = 'am';
-    if (gameTimezoneHour >= 12) {
-        timeFormat = 'pm';
+    var timeFormat = 'AM';
+    if (gameTimezoneHour < 24 && gameTimezoneHour >= 12) {
+        timeFormat = 'PM';
     }
-    if (gameTimezoneHour > 12){
+    if (gameTimezoneHour >= 24){    // a new day
+        gameTimezoneHour -= 24;
+    } else if (gameTimezoneHour > 12){
         gameTimezoneHour -= 12;
     }
     // hour + minute + am/pm
@@ -116,19 +123,20 @@ function formatTeamInfoTags(teamName, teamCity, teamLogo) {
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
 
-function formatTag(content, tag, classes, text) {
+function formatTag(content, tag, classes) {
     switch (tag){
         case 'div':
         case 'span':
+        case 'p':
             if(classes && classes.length > 0) {
                 var classNames = classes.join(' ');
-                return '<' + tag + " class='" + classNames + "''>" + content + '</' + tag + '>';
+                return '<' + tag + " class='" + classNames + "'>" + content + '</' + tag + '>';
             } else {
                 return '<' + tag + '>' + content + '</' + tag + '>';
             }
             break;
         default:
-            return '<div>OOPS, TAG NAME NOT FOUND></div>';
+            return '<div>OOPS, TAG NAME NOT FOUND</div>';
     }
 }
 

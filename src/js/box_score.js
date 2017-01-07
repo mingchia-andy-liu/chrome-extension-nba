@@ -5,12 +5,18 @@ $(function(){
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
         if (!data.popupRefreshTime) {
-            fetchData(updateBox, removeBox);
+            fetchData(function(gids){
+                updateBox(gids);
+                checkHash();
+            }, removeBox);
         } else {
             var d = new Date();
             var diff = (d.getTime() - data.popupRefreshTime);
             if (diff > 60000) { // cache expired
-                fetchData(updateBox, removeBox);
+                fetchData(function(gids){
+                updateBox(gids);
+                checkHash();
+            }, removeBox);
             } else {
                 updateLastUpdate(data.popupRefreshTime);
                 $("div").remove("." + UTILS.CARD);
@@ -22,14 +28,44 @@ $(function(){
         }
     });
 
+    function checkHash() {
+        if (window.location.hash) {
+            let gid = window.location.hash.substring(1);
+            fetchBox(gid).done(function(boxScoreData){
+                showBox(boxScoreData);
+                var cacheData = {
+                    boxScore : {}
+                };
+                cacheData.boxScore[gid] = {
+                    data : boxScoreData,
+                    time : new Date().getTime()
+                };
+                chrome.storage.local.set(cacheData);
+
+                $('#cards').children().each(function(index,el){
+                    if ($(el).attr('gid') === gid){
+                        $(el).addClass(UTILS.SELECTED);
+                        SELECTED_GAME_OBJ = $(el);
+                    }
+                });
+                $('#overlay p').text(NON_LIVE_GAME);
+            });
+        }
+    }
+
     $('#cards').on("click", '.c-card', function() {
         var gid = $(this).attr('gid');
-        if (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid') === gid)
+        if (!!!gid)
             return;
+        window.location.hash = '#' + gid;
+        if (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid') === gid){
+            SELECTED_GAME_OBJ.addClass(UTILS.SELECTED);
+            return;
+        }
         if (SELECTED_GAME_OBJ.removeClass) {
             SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
         }
-        SELECTED_GAME_OBJ = $(this);
+        SELECTED_GAME_OBJ = $(this).addClass(UTILS.SELECTED);
         $('#overlay').addClass(UTILS.OVERLAY);
         $('#overlay p').text(LOADING);
         if (gid !== 0) {
@@ -80,7 +116,6 @@ $(function(){
             return;
         }
         $('#overlay').removeClass(UTILS.OVERLAY);
-
         $('#cards').children().each(function(index,el){
             if ($(el).attr('gid') === g.gid){
                 $(el).addClass(UTILS.SELECTED);
@@ -156,7 +191,11 @@ $(function(){
 
     function removeBox() {
         $('#overlay').addClass(UTILS.OVERLAY);
-        $('#overlay p').text(NO_BOX_SCORE_TEXT);
+        if ($.isEmptyObject(SELECTED_GAME_OBJ)){
+            $('#overlay p').text(NO_BOX_SCORE_TEXT);
+        } else {
+            $('#overlay p').text(NON_LIVE_GAME);
+        }
         let summary = {
             atn : AWAY_TEXT,
             htn : HOME_TEXT,
@@ -209,18 +248,25 @@ $(function(){
     }
 
     function updateBox(gids) {
-        var gameID = 0 || (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid'));
-        if (gameID !== 0 && gids.indexOf(gameID) !== -1) {
-            fetchBox(gameID).done(function(boxScoreData){
+        var gid = 0 || (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid'));
+        if (gid !== 0 && gids.indexOf(gid) !== -1) {
+            fetchBox(gid).done(function(boxScoreData){
                 showBox(boxScoreData);
                 var cacheData = {
                     boxScore : {}
                 };
-                cacheData.boxScore[gameID] = {
+                cacheData.boxScore[gid] = {
                     data : boxScoreData,
                     time : new Date().getTime()
                 };
                 chrome.storage.local.set(cacheData);
+
+                $('#cards').children().each(function(index,el){
+                    if ($(el).attr('gid') === gid){
+                        $(el).addClass(UTILS.SELECTED);
+                        SELECTED_GAME_OBJ = $(el);
+                    }
+                });
             });
         } else {
             removeBox();
@@ -233,4 +279,5 @@ $(function(){
             fetchData(updateBox, removeBox);
         }
     });
+    checkHash();
 });
