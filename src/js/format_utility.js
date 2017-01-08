@@ -373,6 +373,8 @@ function insertEmptyRows(){
 }
 
 function formatSummary(summary){
+    $('#away_team_logo').html(summary.atlg).css('background-color', LOGO_COLORS[summary.atlg]);
+    $('#home_team_logo').html(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
     $('#box .away-team-name').text(summary.atn);
     $('#box .home-team-name').text(summary.htn);
     $('#summary_box_score tbody tr:nth-child(2) td').eq(0).text(summary.ata);
@@ -381,8 +383,6 @@ function formatSummary(summary){
     $('#times_tied').text(summary.tt);
     $('#clock').text(formatClock(summary.cl, summary.stt).text);
 
-    $('#away_team_logo').html(summary.atlg).css('background-color', LOGO_COLORS[summary.atlg]);
-    $('#home_team_logo').html(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
 
     if (summary.rm) {
         $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);

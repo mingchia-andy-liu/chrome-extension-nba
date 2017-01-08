@@ -31,4 +31,4 @@ const LOGO_COLORS = {
     "TOR" : "#CE1141",
     "UTA" : "#002B5C",
     "WAS" : "#002566"
-}
+};

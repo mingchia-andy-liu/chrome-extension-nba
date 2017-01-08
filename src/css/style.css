@@ -56,12 +56,14 @@ sup {
     background-color: rgba(0,0,0,0.8);
 }
 
-#popup_page #cards .c-card:not(.no-game):hover .c-match-info .c-team-score {
+#popup_page #cards .c-card:not(.no-game):hover .c-match-info .c-team-score,
+#popup_page #cards .c-card:not(.no-game):hover .c-team-info .c-team-logo {
     color:black;
 }
 
-#popup_page #cards .c-card:not(.no-game):hover .c-match-info .u-sliding-bounce {
-    background-color: black;
+#popup_page #cards .c-card:not(.no-game):hover .c-match-info .u-sliding-bounce,
+#popup_page #cards .c-card:not(.no-game):hover .c-team-info .c-team-logo {
+    background-color: transparent !important;
 }
 
 #popup_page #cards .c-card p,
@@ -139,7 +141,6 @@ sup {
     justify-content: center;
     align-items: center;
 
-    /*border: 1px solid black;*/
     border-radius: 50%;
 }
 
@@ -253,8 +254,9 @@ sup {
 }
 
 #box .u-overlay #home_team_pts, #box .u-overlay #away_team_pts,
-#box .u-overlay sup {
-    color: black;
+#box .u-overlay sup,
+#box .u-overlay #away_team_logo, #box .u-overlay #home_team_logo {
+    color: black !important;
 }
 
 #box .u-overlay .team-table tr,
