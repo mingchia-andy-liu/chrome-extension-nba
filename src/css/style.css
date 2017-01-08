@@ -93,7 +93,7 @@ sup {
     width: 100%;
     margin: 5px 5px 5px 5px;
 
-    font-size: calc(16px + 0.2vw);
+    font-size: calc(15px + 0.2vw);
     background-color: #fafafa;
     border-radius: 5px;
 
@@ -129,8 +129,18 @@ sup {
 }
 
 .c-team-logo {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
+    font-size: calc(12px + 0.15vw);
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /*border: 1px solid black;*/
+    border-radius: 50%;
 }
 
 .c-team-city {
@@ -247,7 +257,9 @@ sup {
     color: black;
 }
 
-#box .u-overlay .team-table tr{
+#box .u-overlay .team-table tr,
+#box .u-overlay #away_team_logo,
+#box .u-overlay #home_team_logo{
     background-color: transparent !important;
 }
 
@@ -295,8 +307,9 @@ sup {
 }
 
 #box_banner .c-team-logo {
-    width: 70px;
-    height: 70px;
+    width: 55px;
+    height: 55px;
+    font-size: 2vw;
 }
 
 #away_team_name, #home_team_name {

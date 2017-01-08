@@ -137,8 +137,8 @@ $(function(){
             tt : g.gsts.tt,
             cl : g.cl,
             stt : g.stt,
-            atlg : $(formatTag(LOGOS[g.vls.ta], 'div', [UTILS.TEAM_LOGO])),
-            htlg : $(formatTag(LOGOS[g.hls.ta], 'div', [UTILS.TEAM_LOGO])),
+            atlg : g.vls.ta,// $(formatTag(LOGOS[g.vls.ta], 'div', [UTILS.TEAM_LOGO])),
+            htlg : g.hls.ta,// $(formatTag(LOGOS[g.hls.ta], 'div', [UTILS.TEAM_LOGO])),
             atpts : g.vls.s,
             htpts : g.hls.s,
             rm : false
@@ -257,13 +257,6 @@ $(function(){
                     time : new Date().getTime()
                 };
                 chrome.storage.local.set(cacheData);
-
-                // $('#cards').children().each(function(index,el){
-                //     if ($(el).attr('gid') === gid){
-                //         $(el).addClass(UTILS.SELECTED);
-                //         SELECTED_GAME_OBJ = $(el);
-                //     }
-                // });
                 checkExistGame(gid);
             });
         } else {

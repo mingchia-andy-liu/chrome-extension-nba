@@ -36,8 +36,8 @@ function formatCard(match) {
     var matchInfo = formatTag(matchInfoDetails, 'div', [UTILS.MATCH_INFO]);
 
     //team info
-    var awayTeam = formatTeamInfoTags(match.v.tn, match.v.tc + " (A)", LOGOS[match.v.ta]);
-    var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", LOGOS[match.h.ta]);
+    var awayTeam = formatTeamInfoTags(match.v.tn, match.v.tc + " (A)", match.v.ta);
+    var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", match.h.ta);
 
     //card
     var viewBoxText = formatTag(VIEW_DETAILS, 'p', [UTILS.CENTER]);
@@ -121,9 +121,13 @@ function formatClock(clock, status) {
     };
 }
 
-function formatTeamInfoTags(teamName, teamCity, teamLogo) {
-    // var team = formatTag(teamLogo, 'div', [UTILS.TEAM_LOGO]);
-    var team = formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEAM_NAME]);
+function formatTeamLogo (teamAbbr) {
+    return '<div class="c-team-logo" style="background-color: ' + LOGO_COLORS[teamAbbr] + '">' + teamAbbr + '</div>';
+}
+
+function formatTeamInfoTags(teamName, teamCity, teamAbbr) {
+    var team = formatTeamLogo(teamAbbr);
+    team += formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEAM_NAME]);
     team += formatTag(teamCity, 'div', [UTILS.TEXT_ITALIC, UTILS.TEAM_CITY]);
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
@@ -377,8 +381,8 @@ function formatSummary(summary){
     $('#times_tied').text(summary.tt);
     $('#clock').text(formatClock(summary.cl, summary.stt).text);
 
-    // $('#away_team_logo').html(summary.atlg);
-    // $('#home_team_logo').html(summary.htlg);
+    $('#away_team_logo').html(summary.atlg).css('background-color', LOGO_COLORS[summary.atlg]);
+    $('#home_team_logo').html(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
 
     if (summary.rm) {
         $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);
