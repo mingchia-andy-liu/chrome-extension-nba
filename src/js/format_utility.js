@@ -16,20 +16,20 @@ function formatCard(match) {
 
     if (match.stt === 'Final'){
         matchInfoDetails += scoreBoard;
-        let clockText = formatClock(match.cl, match.stt);
-        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
+        let clock = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clock.text, 'div', clock.classes);
     } else if (validateLiveGame(match)) {
         matchInfoDetails += scoreBoard;
-        let clockText = formatClock(match.cl, match.stt);
-        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
+        let clock = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clock.text, 'div', clock.classes);
 
         if (match.cl && match.cl !== '00:00.0'){
             var slideBounce = formatTag('', 'div', [UTILS.SLIDE_BOUNCE]);
             matchInfoDetails += formatTag(slideBounce, 'div', [UTILS.SLIDER]);
         }
     } else {
-        let clockText = formatClock(match.cl, match.stt);
-        matchInfoDetails += formatTag(clockText, 'div', [UTILS.CLOCK]);
+        let clock = formatClock(match.cl, match.stt);
+        matchInfoDetails += formatTag(clock.text, 'div', clock.classes);
     }
 
     //match info
@@ -94,8 +94,10 @@ function getGameStartTime(status) {
 
 function formatClock(clock, status) {
     var text = '-';
+    var classes = [UTILS.CLOCK];
     if ((!clock || clock === '00:00.0') && status.includes('ET')) {   // game hasn't start, clock is null
         text = getGameStartTime(status);
+        classes = [UTILS.TIME];
     } else if (status.includes('Final') ||
                 status.includes('Halftime') ||
                 status.includes('Tipoff')){    // game started, clock stopped
@@ -113,7 +115,10 @@ function formatClock(clock, status) {
         text = 'OT' + status.charAt(0) + ' ' + clock;
     }
 
-    return text;
+    return {
+        text: text,
+        classes: classes
+    };
 }
 
 function formatTeamInfoTags(teamName, teamCity, teamLogo) {
@@ -370,7 +375,7 @@ function formatSummary(summary){
     $('#summary_box_score tbody tr:nth-child(3) td').eq(0).text(summary.hta);
     $('#lead_changes').text(summary.lc);
     $('#times_tied').text(summary.tt);
-    $('#clock').text(formatClock(summary.cl, summary.stt));
+    $('#clock').text(formatClock(summary.cl, summary.stt).text);
 
     // $('#away_team_logo').html(summary.atlg);
     // $('#home_team_logo').html(summary.htlg);

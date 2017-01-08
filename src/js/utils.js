@@ -4,6 +4,7 @@ const UTILS = {
     'TEAM_SCORE' : 'c-team-score',
     'TEAM_LOGO' : 'c-team-logo',
     'CLOCK' : 'c-clock',
+    'TIME' : 'c-time',
     'MATCH_INFO' : 'c-match-info',
     'TEAM_INFO' : 'c-team-info',
     'TEAM_CITY' : 'c-team-city',

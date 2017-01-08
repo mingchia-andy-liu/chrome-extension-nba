@@ -31,26 +31,36 @@ $(function(){
     function checkHash() {
         if (window.location.hash) {
             let gid = window.location.hash.substring(1);
-            fetchBox(gid).done(function(boxScoreData){
-                showBox(boxScoreData);
-                var cacheData = {
-                    boxScore : {}
-                };
-                cacheData.boxScore[gid] = {
-                    data : boxScoreData,
-                    time : new Date().getTime()
-                };
-                chrome.storage.local.set(cacheData);
-
-                $('#cards').children().each(function(index,el){
-                    if ($(el).attr('gid') === gid){
-                        $(el).addClass(UTILS.SELECTED);
-                        SELECTED_GAME_OBJ = $(el);
-                    }
+            if (checkExistGame(gid)) {
+                fetchBox(gid).done(function(boxScoreData){
+                    showBox(boxScoreData);
+                    var cacheData = {
+                        boxScore : {}
+                    };
+                    cacheData.boxScore[gid] = {
+                        data : boxScoreData,
+                        time : new Date().getTime()
+                    };
+                    chrome.storage.local.set(cacheData);
                 });
-                $('#overlay p').text(NON_LIVE_GAME);
-            });
+            }
         }
+    }
+
+    function checkExistGame(gid) {
+        let exist = false;
+        $('#cards').children().each(function(index,el){
+            if ($(el).attr('gid') === gid){
+                $(el).addClass(UTILS.SELECTED);
+                SELECTED_GAME_OBJ = $(el);
+                exist = true;
+            }
+        });
+        if (!exist) {
+            window.location.hash = '';
+            $('#overlay p').text(NO_BOX_SCORE_TEXT);
+        }
+        return exist;
     }
 
     $('#cards').on("click", '.c-card', function() {
@@ -115,13 +125,8 @@ $(function(){
             removeBox();
             return;
         }
+        checkExistGame(g.gid);
         $('#overlay').removeClass(UTILS.OVERLAY);
-        $('#cards').children().each(function(index,el){
-            if ($(el).attr('gid') === g.gid){
-                $(el).addClass(UTILS.SELECTED);
-                SELECTED_GAME_OBJ = $(el);
-            }
-        });
 
         let summary = {
             atn : g.vls.tn,
@@ -253,12 +258,13 @@ $(function(){
                 };
                 chrome.storage.local.set(cacheData);
 
-                $('#cards').children().each(function(index,el){
-                    if ($(el).attr('gid') === gid){
-                        $(el).addClass(UTILS.SELECTED);
-                        SELECTED_GAME_OBJ = $(el);
-                    }
-                });
+                // $('#cards').children().each(function(index,el){
+                //     if ($(el).attr('gid') === gid){
+                //         $(el).addClass(UTILS.SELECTED);
+                //         SELECTED_GAME_OBJ = $(el);
+                //     }
+                // });
+                checkExistGame(gid);
             });
         } else {
             removeBox();
@@ -268,7 +274,10 @@ $(function(){
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
         if (alarm.name === 'minuteAlarm') {
-            fetchData(updateBox, removeBox);
+            fetchData(function(gids){
+                updateBox(gids);
+                checkHash();
+            }, removeBox);
         }
     });
     checkHash();

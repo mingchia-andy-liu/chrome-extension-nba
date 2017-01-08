@@ -93,7 +93,7 @@ sup {
     width: 100%;
     margin: 5px 5px 5px 5px;
 
-    font-size: calc(15px + 0.2vw);
+    font-size: calc(16px + 0.2vw);
     background-color: #fafafa;
     border-radius: 5px;
 
@@ -153,7 +153,11 @@ sup {
 }
 
 .c-clock {
-    font-size: calc(15px + 0.08vw);
+    font-size: calc(12px + 0.1vw);
+}
+
+.c-time {
+    font-size: calc(16px + 0.1vw);
 }
 
 .c-hyphen {
