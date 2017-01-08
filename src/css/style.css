@@ -56,6 +56,14 @@ sup {
     background-color: rgba(0,0,0,0.8);
 }
 
+#popup_page #cards .c-card:not(.no-game):hover .c-match-info .c-team-score {
+    color:black;
+}
+
+#popup_page #cards .c-card:not(.no-game):hover .c-match-info .u-sliding-bounce {
+    background-color: black;
+}
+
 #popup_page #cards .c-card p,
 #box_score_page #cards .c-card p {
     display: none;
