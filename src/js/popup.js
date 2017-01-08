@@ -1,6 +1,8 @@
 $(function(){
     'use strict';
 
+    setTimeout(function() {}, 1000);
+
     $('body').on('click', '.' + UTILS.CARD, function(){
         let hashedUrl = 'box-score.html#' + $(this).attr('gid');
         chrome.tabs.create({url: hashedUrl});

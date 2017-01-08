@@ -226,7 +226,7 @@ sup {
 
 /* Summary Table*/
 #box {
-    font-size: 1.1vw;
+    font-size: calc(12px + 0.2vw);
     padding: 0 0 0 0;
     margin-left: 1vw;
     background-color: #E9EBEE;
