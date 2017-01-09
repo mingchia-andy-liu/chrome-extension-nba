@@ -16,8 +16,11 @@ function formatCard(match) {
 
     if (match.stt === 'Final'){
         matchInfoDetails += scoreBoard;
-        let clock = formatClock(match.cl, match.stt);
-        matchInfoDetails += formatTag(clock.text, 'div', clock.classes);
+        if (match.h.ot1 !== 0 || match.v.ot1 !== 0) {
+            matchInfoDetails += formatTag('Final/OT', 'div', [UTILS.CLOCK]);
+        } else {
+            matchInfoDetails += formatTag('Final', 'div', [UTILS.CLOCK]);
+        }
     } else if (validateLiveGame(match)) {
         matchInfoDetails += scoreBoard;
         let clock = formatClock(match.cl, match.stt);
@@ -39,10 +42,12 @@ function formatCard(match) {
     var awayTeam = formatTeamInfoTags(match.v.tn, match.v.tc + " (A)", match.v.ta);
     var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", match.h.ta);
 
-    //card
+    //overlay
     var viewBoxText = formatTag(VIEW_DETAILS, 'p', [UTILS.CENTER]);
+    var overlay = formatTag(viewBoxText, 'div', ['over']);
 
-    var matchCard = formatTag(viewBoxText + awayTeam + matchInfo + homeTeam, 'div', [UTILS.CARD, UTILS.SHADOW, UTILS.OVERLAY]);
+    //card
+    var matchCard = formatTag(awayTeam + matchInfo + homeTeam + overlay, 'div', [UTILS.CARD, UTILS.SHADOW]);
     return matchCard;
 }
 
@@ -155,14 +160,22 @@ function formatTableRow(data) {
     if (data && data.length) {
         if (data[2] !== '' && !data[2].includes(':')) {
             if (data[0] !== '' || data[1] !== '') {
-                result += '<td>' + data[0].charAt(0) + '.' + data[1] + '</td>';
+                result += '<td>' + data[0].charAt(0) + '. ' + data[1] + '</td>';
+            } else if (data[0] === '' && data[1] !== '') {
+                result += '<td>' + data[1] + '</td>';
+            } else if (data[0] !== '' && data[1] === '') {
+                result += '<td>' + data[0].charAt(0) + '.</td>';
             } else {
                 result += '<td></td>';
             }
             result += "<td colspan='17'>" + data[2] + '</td>';
         } else {
-            if (data[0] !== '' || data[1] !== '') {
-                result += '<td>' + data[0].charAt(0) + '.' + data[1] + '</td>';
+            if (data[0] !== '' && data[1] !== '') {
+                result += '<td>' + data[0].charAt(0) + '. ' + data[1] + '</td>';
+            } else if (data[0] === '' && data[1] !== '') {
+                result += '<td>' + data[1] + '</td>';
+            } else if (data[0] !== '' && data[1] === '') {
+                result += '<td>' + data[0].charAt(0) + '.</td>';
             } else {
                 result += '<td></td>';
             }
@@ -252,14 +265,14 @@ function getScores(teamStats) {
 
 function highlightSummaryTable(){
     for (let i = 1;i < 16; i++) {   // [1...15]
-        var vpts = parseInt($('#summary_box_score tbody tr:nth-child(2) td').eq(i).html());
-        var hpts = parseInt($('#summary_box_score tbody tr:nth-child(3) td').eq(i).html());
-        $('#summary_box_score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
-        $('#summary_box_score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
+        var vpts = parseInt($('.summary-box-score tbody tr:nth-child(2) td').eq(i).html());
+        var hpts = parseInt($('.summary-box-score tbody tr:nth-child(3) td').eq(i).html());
+        $('.summary-box-score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
+        $('.summary-box-score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
         if (vpts > hpts){
-            $('#summary_box_score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.RED);
+            $('.summary-box-score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.RED);
         } else if (vpts < hpts) {
-            $('#summary_box_score tbody tr:nth-child(3) td').eq(i).addClass(COLOR.RED);
+            $('.summary-box-score tbody tr:nth-child(3) td').eq(i).addClass(COLOR.RED);
         }
     }
 }
@@ -330,7 +343,7 @@ function highlightPlayerRowHelper(index, el) {
     result.push($(children[17]));
 
     result.forEach(function(item, index){
-        count += parseInt(item.html()) >= 10 ? 1 : 0;
+        count += index !== 4 && parseInt(item.html()) >= 10 ? 1 : 0;
     });
     if (parseInt(result[0].html()) >= 10)
         result[0].addClass(COLOR.RED);
@@ -356,11 +369,13 @@ function highlightPlayerRowHelper(index, el) {
         $(children[15]).addClass(COLOR.GREEN);
 
     if (count === 3) {   // tri-db
-        $(el).addClass(COLOR.BG_RED).attr('title', 'Triple Double!');
+        $(el).addClass(COLOR.BG_ORANGE).attr('title', 'Triple Double!');
     } else if (count === 4) {
-        $(el).addClass(COLOR.BG_RED).attr('title', 'Quadruple Double!');
+        $(el).addClass(COLOR.BG_PURPLE).attr('title', 'Quadruple Double!');
     } else if (count === 2) {   //db-db
         $(el).addClass(COLOR.BG_BLUE).attr('title', 'Double Double!');
+    } else if (count === 5) {
+        $(el).addClass(COLOR.BG_GREEN).attr('title', 'Quintuple Double!');
     }
 }
 
@@ -375,13 +390,21 @@ function insertEmptyRows(){
 function formatSummary(summary){
     $('#away_team_logo').html(summary.atlg).css('background-color', LOGO_COLORS[summary.atlg]);
     $('#home_team_logo').html(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
-    $('#box .away-team-name').text(summary.atn);
-    $('#box .home-team-name').text(summary.htn);
-    $('#summary_box_score tbody tr:nth-child(2) td').eq(0).text(summary.ata);
-    $('#summary_box_score tbody tr:nth-child(3) td').eq(0).text(summary.hta);
+    $('.away-team-name').text(summary.atn);
+    $('.home-team-name').text(summary.htn);
+    $('.summary-box-score tbody tr:nth-child(2) td').eq(0).text(summary.ata);
+    $('.summary-box-score tbody tr:nth-child(3) td').eq(0).text(summary.hta);
     $('#lead_changes').text(summary.lc);
     $('#times_tied').text(summary.tt);
-    $('#clock').text(formatClock(summary.cl, summary.stt).text);
+    if (summary.stt === 'Final') {
+        if (summary.aot1 > 0 || summary.hot1 > 0) {
+            $('.box-banner .c-time').text(formatClock(summary.cl, summary.stt).text + '/OT');
+        } else {
+            $('.box-banner .c-time').text(formatClock(summary.cl, summary.stt).text);
+        }
+    } else {
+        $('.box-banner .c-time').text(formatClock(summary.cl, summary.stt).text);
+    }
 
 
     if (summary.rm) {
