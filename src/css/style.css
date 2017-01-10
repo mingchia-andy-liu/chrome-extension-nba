@@ -48,6 +48,10 @@ sup {
     z-index: 10s;
 }
 
+.over p {
+    font-size: calc(15px + 1vw);
+}
+
 #popup_page #cards .c-card:hover .over {
     display: block;
 }
@@ -138,7 +142,6 @@ sup {
 .c-table {
     width: 100%;
     min-width: 800px;
-    background-color: #fafafa;
     border-radius: 5px;
     position: relative;
     font-size: calc(12px + 0.2vw);
@@ -182,6 +185,14 @@ sup {
 .team-name {
     font-size: 1.7vw;
     margin-bottom: 0;
+}
+
+.c-team-name {
+    font-size: calc(15px + 0.1vw);
+}
+
+.summary-team-name {
+    font-weight: 700;
 }
 
 /* Summary Table*/
@@ -343,4 +354,14 @@ sup {
     100% {
         left: -95%;
     }
+}
+
+/*overriding jquer ui*/
+.ui-tooltip-content {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: calc(12px + 0.1vw);
+}
+
+.ui-tooltip {
+    background-color: #E9EBEE;
 }

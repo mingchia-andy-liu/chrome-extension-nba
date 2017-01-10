@@ -187,7 +187,6 @@ $(function(){
         });
         $('#home_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.hls.tstsg));
 
-
         // Highlight Summary Box Score for the winning qtrs
         highlightSummaryTable();
 
@@ -283,5 +282,11 @@ $(function(){
                 checkHash();
             }, removeBox);
         }
+    });
+
+    $('.team-table').each(function(){
+        $(this).tooltip({
+          track: true
+        });
     });
 });
