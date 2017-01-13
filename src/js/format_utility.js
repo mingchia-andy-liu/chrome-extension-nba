@@ -39,8 +39,8 @@ function formatCard(match) {
     var matchInfo = formatTag(matchInfoDetails, 'div', [UTILS.MATCH_INFO]);
 
     //team info
-    var awayTeam = formatTeamInfoTags(match.v.tn, match.v.tc + " (A)", match.v.ta);
-    var homeTeam = formatTeamInfoTags(match.h.tn, match.h.tc + " (H)", match.h.ta);
+    var awayTeam = formatTeamInfoTags(match.v.tn, match.v.ta);
+    var homeTeam = formatTeamInfoTags(match.h.tn, match.h.ta);
 
     //overlay
     var viewBoxText = formatTag(VIEW_DETAILS, 'p', [UTILS.CENTER]);
@@ -130,10 +130,9 @@ function formatTeamLogo (teamAbbr) {
     return '<div class="c-team-logo" style="background-color: ' + LOGO_COLORS[teamAbbr] + '">' + teamAbbr + '</div>';
 }
 
-function formatTeamInfoTags(teamName, teamCity, teamAbbr) {
+function formatTeamInfoTags(teamName, teamAbbr) {
     var team = formatTeamLogo(teamAbbr);
     team += formatTag(teamName, 'div', [UTILS.TEXT_BOLDER, UTILS.TEAM_NAME]);
-    team += formatTag(teamCity, 'div', [UTILS.TEXT_ITALIC, UTILS.TEAM_CITY]);
     return formatTag(team, 'div', [UTILS.TEAM_INFO]);
 }
 
@@ -307,6 +306,9 @@ function highlightPlayerRowHelper(index, el) {
             $(children[2]).addClass(COLOR.GREEN);
             $(children[3]).addClass(COLOR.GREEN);
         }
+    } else if (parseInt(fg[1]) > 0 && parseInt(fg[0]) === 0){
+            $(children[2]).addClass(COLOR.GREEN);
+            $(children[3]).addClass(COLOR.GREEN);
     }
 
     if (parseInt(tp[1]) >= 5) {
@@ -319,6 +321,9 @@ function highlightPlayerRowHelper(index, el) {
             $(children[4]).addClass(COLOR.GREEN);
             $(children[5]).addClass(COLOR.GREEN);
         }
+    } else if (parseInt(tp[1]) > 0 && parseInt(tp[0]) === 0){
+            $(children[4]).addClass(COLOR.GREEN);
+            $(children[5]).addClass(COLOR.GREEN);
     }
 
     if (parseInt(ft[1]) >= 5) {
@@ -331,6 +336,9 @@ function highlightPlayerRowHelper(index, el) {
             $(children[6]).addClass(COLOR.GREEN);
             $(children[7]).addClass(COLOR.GREEN);
         }
+    } else if (parseInt(ft[1]) > 0 && parseInt(ft[0]) === 0){
+            $(children[6]).addClass(COLOR.GREEN);
+            $(children[7]).addClass(COLOR.GREEN);
     }
 
     var count = 0;
@@ -440,7 +448,15 @@ function updateLastUpdate(ms) {
 
 function fetchData(fnSuccess, fnFail) {
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
-        if (data && data.gs && data.gs.g && data.gs.g.length > 0) {
+        if (!data) {
+            console.log('something went horriably wrong');
+        } else if (data.failed) {
+            console.log('unable to fetch data');
+            $("div").remove("." + UTILS.CARD);
+            updateLastUpdate();
+            $('#cards').append(FETCH_DATA_FAILED);
+        } else if (data.gs && data.gs.g && data.gs.g.length > 0) {
+            console.log('everything is good');
             var games = [];
             var gids = [];
             for (let i = 0; i < data.gs.g.length; i++){
@@ -476,6 +492,8 @@ function fetchData(fnSuccess, fnFail) {
                 $("#cards").append($(obj.card).attr('gid', obj.gid));
             }
         } else {
+            console.log('no games');
+            console.log(data);
             $("div").remove("." + UTILS.CARD);
             updateLastUpdate();
             $('#cards').append(NO_GAME_CARD);

@@ -17,12 +17,12 @@ $(function(){
             var diff = (d.getTime() - data.popupRefreshTime);
             if (diff > 60000) { // cache expired
                 fetchData(function(gids){
-                updateBox(gids);
-                checkHash();
-            }, function(){
-                removeBox();
-                checkHash();
-            });
+                    updateBox(gids);
+                    checkHash();
+                }, function(){
+                    removeBox();
+                    checkHash();
+                });
             } else {
                 updateLastUpdate(data.popupRefreshTime);
                 $("div").remove("." + UTILS.CARD);
@@ -70,7 +70,7 @@ $(function(){
         return exist;
     }
 
-    $('#cards').on("click", '.c-card', function() {
+    $('#cards:not(.no-game)').on("click", '.c-card', function() {
         var gid = $(this).attr('gid');
         if (!!!gid)
             return;
@@ -276,11 +276,15 @@ $(function(){
 
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
+        console.log(alarm.name);
         if (alarm.name === 'minuteAlarm') {
             fetchData(function(gids){
                 updateBox(gids);
                 checkHash();
-            }, removeBox);
+            }, function(){
+                removeBox();
+                checkHash();
+            });
         }
     });
 

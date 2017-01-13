@@ -31,7 +31,7 @@ $(function () {
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
             console.log('Failed to fetch data.');
-            sendResponse(null);
+            sendResponse({failed :true});
         });
     }
 

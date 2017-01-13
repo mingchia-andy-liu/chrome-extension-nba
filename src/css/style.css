@@ -98,13 +98,10 @@ sup {
     align-items: center;
     width: 40px;
     height: 40px;
-    font-size: calc(12px + 0.15vw);
+    font-size: calc(15px + 0.1vw);
+    margin-bottom: 8px;
     color: white;
     border-radius: 50%;
-}
-
-.c-team-city {
-    font-size: calc(10px + 0.15vw);
 }
 
 /* match info */
@@ -137,6 +134,9 @@ sup {
     overflow: hidden;
 }
 
+.no-game:hover {
+    cursor: auto;
+}
 
 /* === table === */
 .c-table {
@@ -230,9 +230,9 @@ sup {
 }
 
 .box-banner .c-team-logo {
-    width: 55px;
-    height: 55px;
-    font-size: 2vw;
+    width: calc(40px + 1vw);
+    height: calc(40px + 1vw);
+    font-size: calc(15px + 0.5vw);
 }
 
 .summary-box-score {
@@ -279,10 +279,6 @@ sup {
 }
 
 /*text*/
-.u-text-italic {
-    font-style: italic;
-}
-
 .u-text-align-center {
     text-align: center;
 }
