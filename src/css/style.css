@@ -3,13 +3,21 @@
 }
 
 body {
-    background-color: #e0e1e2;
+    color: hsl(0, 0%, 25%);
+    background-color: #F0F0F0;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
 sup {
     color: #888888;
     font-size: 0.8vw;
+}
+
+th, td {
+    min-width: 40px;
+    width: 5%;
+    text-align: center;
+    border-bottom: 1px solid #cecece;
 }
 
 /* === Pages === */
@@ -58,7 +66,7 @@ sup {
 
 #popup_page #cards .c-card:not(.no-game):hover {
     border: 2px solid rgb(30, 90, 250);
-    background-color: rgb(180, 220, 250);
+    background-color: #c9defc;
 }
 
 .c-table .over {
@@ -76,7 +84,7 @@ sup {
     width: 100%;
     margin: 5px 0px 5px 0px;
     font-size: calc(15px + 0.2vw);
-    background-color: #fafafa;
+    background-color: #fff;
     border-radius: 5px;
     border: 2px solid transparent;
 }
@@ -144,7 +152,7 @@ sup {
     position: relative;
     font-size: calc(12px + 0.2vw);
     margin-left: calc(0.5vw + 10px);
-    background-color: #E9EBEE;
+    background-color: #f0f0f0;
     padding: 10px 10px 10px 10px;
 }
 
@@ -160,19 +168,12 @@ sup {
     height: 2em;
 }
 
-.team-table, .team-stats-table {
+.team-table, .team-stats-table, .team-table tbody, .team-stats-table tbody {
     width: 100%
 }
 
 .team-table th:hover, .team-stats-table th:hover {
     cursor: help;
-}
-
-.team-table th, td, .team-stats-table th, td {
-    min-width: 40px;
-    width: 5%;
-    text-align: center;
-    border-bottom: 1px solid #cecece;
 }
 
 .team-table th:first-child, .team-stats-table th:first-child {
@@ -244,6 +245,67 @@ sup {
 
 .notes {
     margin: 0.5em 2px 2px 2px;
+}
+
+.summary-box-score tbody tr th:first-child {
+    width: 10%;
+}
+
+.summary-box-score tbody tr:first-child {
+    background-color: #046fdb;
+    color:#fff;
+}
+
+/* Detail Box Score*/
+.detail-box-score {
+    width: 300px;
+}
+
+
+/* tabs */
+.tab-content th {
+    background-color: #046fdb;
+    color: white;
+}
+
+.tab {
+    display: flex;
+    justify-content: center;
+    color: #046fdb;
+    margin-bottom: 0.7em;
+}
+
+.tab div {
+    width: 20%;
+
+    background-color: #f1f1f1;
+    border:2px solid #046fdb;
+}
+
+#away_tab {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: 0px;
+}
+
+#home_tab {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 0px;
+}
+
+.tab div:hover {
+    background-color: #c9defc;
+    cursor: pointer;
+}
+
+.tab div.active  {
+    color: white;
+    background-color: #046fdb;
+}
+
+#home_tab_content {
+    display: none;
 }
 
 /* === utility === */
@@ -325,7 +387,7 @@ sup {
 }
 
 .u-shadow:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 10px 16px 0 rgba(0,0,0,0.3);
 }
 
 .u-inner-shadow {

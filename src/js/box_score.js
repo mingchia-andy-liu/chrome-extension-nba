@@ -7,9 +7,11 @@ $(function(){
         var cacheDate = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var d = new Date();
         if (d.getTime() - cacheDate > 60000) {
-            fetchData(function(games){
+            fetchData()
+            .done(function(games){
                 updateBox(getHash());
-            }, function(){
+            })
+            .fail(function(){
                 removeBox();
                 window.location.hash = '';
                 $('.c-card:not(no-game)').each(function(index, el){
@@ -348,10 +350,11 @@ $(function(){
     chrome.alarms.onAlarm.addListener(function(alarm){
         // console.log(alarm.name);
         if (alarm.name === 'minuteAlarm') {
-            fetchData(function(gids){
-                let gid = getHash();
-                updateBox(gid);
-            }, function(){
+            fetchData()
+            .done(function(gids){
+                updateBox(getHash());
+            })
+            .fail(function(){
                 removeBox();
                 window.location.hash = '';
                 $('.c-card:not(no-game)').each(function(index, el){
@@ -368,5 +371,22 @@ $(function(){
           // /* work around https://bugs.jqueryui.com/ticket/10689 */
           create: function () { $(".ui-helper-hidden-accessible").remove(); }
         });
+    });
+
+    $('.tab').on('click', 'div', function(){
+
+        if (this.id === 'away_tab') {
+            $(this).addClass('active');
+            $('#home_tab').removeClass('active');
+
+            $('#away_tab_content').show();
+            $('#home_tab_content').hide();
+        } else {
+            $(this).addClass('active');
+            $('#away_tab').removeClass('active');
+
+            $('#home_tab_content').show();
+            $('#away_tab_content').hide();
+        }
     });
 });

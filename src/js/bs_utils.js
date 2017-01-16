@@ -7,8 +7,8 @@ function formatSummary(summary){
     $('#home_team_logo').text(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
     $('.away-team-name').text(summary.atn);
     $('.home-team-name').text(summary.htn);
-    $('.summary-box-score tbody tr:nth-child(2) td').eq(0).text(summary.ata);
-    $('.summary-box-score tbody tr:nth-child(3) td').eq(0).text(summary.hta);
+    $('.summary-box-score tbody tr:nth-child(2) th').eq(0).text(summary.ata);
+    $('.summary-box-score tbody tr:nth-child(3) th').eq(0).text(summary.hta);
     $('#lead_changes').text(summary.lc);
     $('#times_tied').text(summary.tt);
     if (summary.stt === 'Final') {

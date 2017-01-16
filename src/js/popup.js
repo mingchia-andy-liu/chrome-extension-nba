@@ -6,17 +6,14 @@ $(function(){
         chrome.tabs.create({url: hashedUrl});
     });
 
-    chrome.alarms.create('initAlarm', {
-        when : new Date().getTime() + 100
-    });
-
     chrome.alarms.onAlarm.addListener(function(alarm){
         if (alarm.name === 'initAlarm') {
             chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
                 var cacheDate = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
                 var d = new Date();
                 if (d.getTime() - cacheDate > 60000) {
-                    fetchData(function(){}, function(){
+                    fetchData()
+                    .fail(function(){
                         updateLastUpdate(data.popupRefreshTime);
                         $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
                     });
@@ -34,5 +31,9 @@ $(function(){
           // /* work around https://bugs.jqueryui.com/ticket/10689 */
           create: function () { $(".ui-helper-hidden-accessible").remove(); }
         });
+    });
+
+    chrome.alarms.create('initAlarm', {
+        when : new Date().getTime() + 100
     });
 });

@@ -134,6 +134,8 @@ function updateLastUpdate(ms) {
 }
 
 function fetchData(fnSuccess, fnFail) {
+    var deferred = $.Deferred();
+
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
         if (data && !data.failed) {
             updateLastUpdate();
@@ -142,18 +144,24 @@ function fetchData(fnSuccess, fnFail) {
                 'popupRefreshTime' : new Date().getTime(),
                 'cacheData' : data.gs.g
             });
-            if ($.isFunction(fnSuccess)){
-                fnSuccess(data.gs.g);
-            }
+            deferred.resolve(data.gs.g);
+            // if ($.isFunction(fnSuccess)){
+            //     fnSuccess(data.gs.g);
+            // }
         } else if (data && data.failed) {
-            if ($.isFunction(fnFail)){
-                fnFail();
-            }
+            deferred.reject();
+
+            // if ($.isFunction(fnFail)){
+            //     fnFail();
+            // }
         } else {
             console.log('something went wrong');
-            if ($.isFunction(fnFail)){
-                fnFail();
-            }
+            deferred.reject();
+
+            // if ($.isFunction(fnFail)){
+            //     fnFail();
+            // }
         }
     });
+    return deferred.promise();
 }
