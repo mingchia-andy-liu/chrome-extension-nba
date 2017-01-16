@@ -7,30 +7,32 @@ $(function(){
     });
 
     chrome.alarms.create('initAlarm', {
-        when : new Date().getTime() + 200
+        when : new Date().getTime() + 100
     });
 
     chrome.alarms.onAlarm.addListener(function(alarm){
-        console.log(alarm.name);
         if (alarm.name === 'initAlarm') {
             chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
-                if (!data.popupRefreshTime) {
-                    fetchData();
-                } else {
-                    var d = new Date();
-                    var diff = (d.getTime() - data.popupRefreshTime);
-                    if (diff > 60000) {
-                        fetchData();
-                    } else {
+                var cacheDate = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
+                var d = new Date();
+                if (d.getTime() - cacheDate > 60000) {
+                    fetchData(function(){}, function(){
                         updateLastUpdate(data.popupRefreshTime);
-                        $("div").remove("." + UTILS.CARD);
-                        for (var key in data.cacheData) {
-                            var obj = data.cacheData[key];
-                            $("#cards").append($(obj.card).attr('gid', obj.gid));
-                        }
-                    }
+                        $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                    });
+                } else {
+                    updateLastUpdate(data.popupRefreshTime);
+                    updateCards(data.cacheData);
                 }
             });
         }
+    });
+
+    $('.c-card').each(function(){
+        $(this).tooltip({
+          track: true,
+          // /* work around https://bugs.jqueryui.com/ticket/10689 */
+          create: function () { $(".ui-helper-hidden-accessible").remove(); }
+        });
     });
 });

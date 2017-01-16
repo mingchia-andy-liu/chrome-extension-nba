@@ -28,6 +28,7 @@ $(function () {
             contentType: 'application/json',
             url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2016/scores/00_todays_scores.json'
         }).done(function(data) {
+            console.log(data);
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
             console.log('Failed to fetch data.');

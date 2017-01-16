@@ -4,59 +4,40 @@ $(function(){
     var SELECTED_GAME_OBJ = {};
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
-        if (!data.popupRefreshTime) {
-            fetchData(function(gids){
-                updateBox(gids);
-                checkHash();
+        var cacheDate = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
+        var d = new Date();
+        if (d.getTime() - cacheDate > 60000) {
+            fetchData(function(games){
+                updateBox(getHash());
             }, function(){
                 removeBox();
-                checkHash();
+                window.location.hash = '';
+                $('.c-card:not(no-game)').each(function(index, el){
+                    $(el).addClass('u-hide');
+                });
+                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
             });
         } else {
-            var d = new Date();
-            var diff = (d.getTime() - data.popupRefreshTime);
-            if (diff > 60000) { // cache expired
-                fetchData(function(gids){
-                    updateBox(gids);
-                    checkHash();
-                }, function(){
-                    removeBox();
-                    checkHash();
-                });
-            } else {
-                updateLastUpdate(data.popupRefreshTime);
-                $("div").remove("." + UTILS.CARD);
-                for (var key in data.cacheData) {
-                    var obj = data.cacheData[key];
-                    $('#cards').append($(obj.card).attr('gid', obj.gid));
-                }
-                checkHash();
-            }
+            updateLastUpdate(data.popupRefreshTime);
+            updateCards(data.cacheData);
+            updateBox(getHash());
         }
     });
 
-    function checkHash() {
+    function getHash() {
         if (window.location.hash) {
             let gid = window.location.hash.substring(1);
             if (checkExistGame(gid)) {
-                fetchBox(gid).done(function(boxScoreData){
-                    showBox(boxScoreData);
-                    var cacheData = {
-                        boxScore : {}
-                    };
-                    cacheData.boxScore[gid] = {
-                        data : boxScoreData,
-                        time : new Date().getTime()
-                    };
-                    chrome.storage.local.set(cacheData);
-                });
+                return gid;
+            } else {
+                return '';
             }
         }
     }
 
     function checkExistGame(gid) {
         let exist = false;
-        $('#cards').children().each(function(index,el){
+        $('#cards:not(.no-game)').children().each(function(index,el){
             if ($(el).attr('gid') === gid){
                 $(el).addClass(UTILS.SELECTED);
                 SELECTED_GAME_OBJ = $(el);
@@ -65,26 +46,23 @@ $(function(){
         });
         if (!exist) {
             window.location.hash = '';
-            $('.over p').text(NO_BOX_SCORE_TEXT);
+            $('.c-table .over p').text(NO_BOX_SCORE_TEXT);
         }
         return exist;
     }
 
     $('#cards:not(.no-game)').on("click", '.c-card', function() {
-        var gid = $(this).attr('gid');
-        if (!!!gid)
-            return;
-        window.location.hash = '#' + gid;
-        if (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid') === gid){
-            SELECTED_GAME_OBJ.addClass(UTILS.SELECTED);
+        if ($(this).is(SELECTED_GAME_OBJ)){
             return;
         }
+        var gid = $(this).attr('gid');
+        window.location.hash = '#' + gid;
         if (SELECTED_GAME_OBJ.removeClass) {
             SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
         }
         SELECTED_GAME_OBJ = $(this).addClass(UTILS.SELECTED);
-        $('.over').removeClass(UTILS.HIDE);
-        $('.over p').text(LOADING);
+        $('.c-table .over').removeClass(UTILS.HIDE);
+        $('.c-table .over p').text(LOADING);
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
@@ -133,7 +111,7 @@ $(function(){
             return;
         }
         checkExistGame(g.gid);
-        $('.over').addClass(UTILS.HIDE);
+        $('.c-table .over').addClass(UTILS.HIDE);
 
         let summary = {
             atn : g.vls.tn,
@@ -155,37 +133,108 @@ $(function(){
         formatSummary(summary);
 
         // Update quarter scores in Summary Box Score
-        getScores(g.vls).forEach(function(item, index){
-            $('.summary-box-score tbody tr:nth-child(2) td').eq(index + 1).text(item);
-            if (item > 0 && index + 1 > 4) {
-                $('.summary-box-score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
-                $('.summary-box-score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
-            } else if (index + 1 > 4 && index + 1 < 15){
-                $('.summary-box-score tbody tr:nth-child(1) th').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
-                $('.summary-box-score tbody tr:nth-child(2) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
+        $('.summary-box-score tbody tr:nth-child(2) >').each(function(index, el){
+            if (index === 0)
+                return;
+            if (index === 15) {
+                $(el).text(g.vls.s);
+                return;
+            }
+            let pts = g.vls['q' + index.toString()];
+            let otpts = g.vls['ot' + index.toString()];
+            if (pts) {
+                $(el).text(pts);
+            }
+            if (otpts) {
+                $(el).text(otpts);
             }
         });
-        getScores(g.hls).forEach(function(item, index){
-            $('.summary-box-score tbody tr:nth-child(3) td').eq(index + 1).text(item);
-            if (item > 0 && index + 1 > 4) {
-                $('.summary-box-score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.HIDE).addClass(UTILS.TABLE_CELL);
-            } else if (index + 1 > 4 && index + 1 < 15) {
-                $('.summary-box-score tbody tr:nth-child(3) td').eq(index + 1).removeClass(UTILS.TABLE_CELL).addClass(UTILS.HIDE);
+
+        $('.summary-box-score tbody tr:nth-child(3) >').each(function(index, el){
+            if (index === 0)
+                return;
+            if (index === 15)
+                $(el).text(g.hls.s);
+            let pts = g.hls['q' + index.toString()];
+            let otpts = g.hls['ot' + index.toString()];
+            if (pts) {
+                $(el).text(pts);
+            }
+            if (otpts) {
+                $(el).text(otpts);
             }
         });
 
         // Insert players to Player Box Score
-        $('#away_box_score tbody').children('tr:not(:first)').remove();
-        g.vls.pstsg.forEach(function(item){
-            $('#away_box_score').append(formatBoxScoreData(item));
+        $('#away_box_score tbody tr:not(:first-child)').each(function(rowNum, el){
+            sanitizeTableRow(el);
+            if (g.vls.pstsg[rowNum]) {
+                let rowData = formatBoxScoreData(g.vls.pstsg[rowNum]);
+                $(el).show().children().each(function(col, cell){
+                    $(cell).html(rowData[col]);
+                });
+            } else {
+                $(el).hide();       // extra player row
+            }
         });
-        $('#away_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.vls.tstsg));
 
-        $('#home_box_score tbody').children('tr:not(:first)').remove();
-        g.hls.pstsg.forEach(function(item) {
-            $('#home_box_score').append(formatBoxScoreData(item));
+       $('#away_box_score tbody tr:not(:first-child) :nth-child(2)').each(function(index, el){
+            if ($(el).text().includes(':')){
+                $(el).attr('colspan', 1).nextAll().each(function(index, next){
+                    $(next).show(); //show upon switching games
+                });
+            } else {
+                $(el).attr('colspan', 17);
+                $(el).nextAll().each(function(index, next){
+                    $(next).hide();
+                });
+            }
         });
-        $('#home_box_score').append(HEADER_ROW).append(formatBoxScoreData(g.hls.tstsg));
+
+       $('#home_box_score tbody tr:not(:first-child)').each(function(rowNum, el){
+            sanitizeTableRow(el);
+            if (g.hls.pstsg[rowNum]) {
+                let rowData = formatBoxScoreData(g.hls.pstsg[rowNum]);
+                $(el).show().children().each(function(col, cell){
+                    $(cell).html(rowData[col]);
+                });
+            } else {
+                $(el).hide();
+            }
+        });
+
+       $('#home_box_score tbody tr:not(:first-child) :nth-child(2)').each(function(index, el){
+            if ($(el).text().includes(':')){
+                $(el).attr('colspan', 1).nextAll().each(function(index, next){
+                    $(next).show();
+                });
+            } else {
+                $(el).attr('colspan', 17);
+                $(el).nextAll().each(function(index, next){
+                    $(next).hide();
+                });
+            }
+        });
+
+        let cloned = $.extend({
+            s:g.hls.s,
+            out : g.hls.ftout + g.hls.stout
+        }, g.hls.tstsg);
+
+        var teamStatsRow = formatTeamStatsData(cloned);
+        $('#away_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
+            $(el).text(teamStatsRow[1][index]);
+        });
+
+        cloned = $.extend({
+            s:g.vls.s,
+            out : g.vls.ftout + g.vls.stout
+        }, g.vls.tstsg);
+
+        teamStatsRow = formatTeamStatsData(cloned);
+        $('#home_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
+            $(el).text(teamStatsRow[1][index]);
+        });
 
         // Highlight Summary Box Score for the winning qtrs
         highlightSummaryTable();
@@ -195,11 +244,11 @@ $(function(){
     }
 
     function removeBox() {
-        $('.over').removeClass(UTILS.HIDE);
-        if ($.isEmptyObject(SELECTED_GAME_OBJ)){
-            $('.over p').text(NO_BOX_SCORE_TEXT);
-        } else {
-            $('.over p').text(NON_LIVE_GAME);
+        $('.c-table .over').removeClass(UTILS.HIDE);
+        if (!$.isEmptyObject(SELECTED_GAME_OBJ)){
+            // $('.c-table .over p').text(NO_BOX_SCORE_TEXT);
+        // } else {
+            $('.c-table .over p').text(NON_LIVE_GAME);
         }
         let summary = {
             atn : AWAY_TEXT,
@@ -249,14 +298,35 @@ $(function(){
         });
 
         // Insert empty rows so the table don't look too empty
-        $('#home_box_score tbody').children('tr:not(:first)').remove();
-        $('#away_box_score tbody').children('tr:not(:first)').remove();
-        insertEmptyRows();
+        $('#away_box_score tbody tr:not(:first-child)').each(function(rowNum, row){
+            sanitizeTableRow(row);
+            $(row).attr('title', '').children().each(function(colNum, cell){
+                $(cell).text(EMPTY_PLAYER_ROW[colNum]).show().attr('colspan', 1);
+            });
+        });
+
+        $('#away_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
+            $(el).text(EMPTY_TEAM_ROW[index]);
+        });
+
+        $('#home_box_score tbody tr:not(:first-child)').each(function(rowNum, row){
+            sanitizeTableRow(row);
+            $(row).attr('title', '').children().each(function(colNum, cell){
+                $(cell).text(EMPTY_PLAYER_ROW[colNum]).show().attr('colspan', 1);
+            });
+        });
+
+        $('#home_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
+            $(el).text(EMPTY_TEAM_ROW[index]);
+        });
+
+        $('#away_team_logo').css('background-color','');
+        $('#home_team_logo').css('background-color','');
+
     }
 
-    function updateBox(gids) {
-        var gid = 0 || (SELECTED_GAME_OBJ.attr && SELECTED_GAME_OBJ.attr('gid'));
-        if (gid !== 0 && gids.indexOf(gid) !== -1) {
+    function updateBox(gid) {
+        if (gid) {
             fetchBox(gid).done(function(boxScoreData){
                 showBox(boxScoreData);
                 var cacheData = {
@@ -276,21 +346,27 @@ $(function(){
 
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
-        console.log(alarm.name);
+        // console.log(alarm.name);
         if (alarm.name === 'minuteAlarm') {
             fetchData(function(gids){
-                updateBox(gids);
-                checkHash();
+                let gid = getHash();
+                updateBox(gid);
             }, function(){
                 removeBox();
-                checkHash();
+                window.location.hash = '';
+                $('.c-card:not(no-game)').each(function(index, el){
+                    $(el).addClass('u-hide');
+                });
+                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
             });
         }
     });
 
-    $('.team-table').each(function(){
+    $('table').each(function(){
         $(this).tooltip({
-          track: true
+          track: true,
+          // /* work around https://bugs.jqueryui.com/ticket/10689 */
+          create: function () { $(".ui-helper-hidden-accessible").remove(); }
         });
     });
 });
