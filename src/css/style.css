@@ -257,8 +257,22 @@ th, td {
 }
 
 /* Detail Box Score*/
+#extra_box_score {
+    width: 100%;
+}
 .detail-box-score {
-    width: 300px;
+    width: 75%;
+    margin-right: 0.25em;
+}
+
+.game-box-score {
+    width: 20%;
+    margin-left: 0.25em;
+}
+
+.detail-box-score th, .game-box-score th {
+    background-color: #046fdb;
+    color: white;
 }
 
 
