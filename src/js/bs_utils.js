@@ -9,8 +9,6 @@ function formatSummary(summary){
     $('.home-team-name').text(summary.htn);
     $('.summary-box-score tbody tr:nth-child(2) th').eq(0).text(summary.ata);
     $('.summary-box-score tbody tr:nth-child(3) th').eq(0).text(summary.hta);
-    $('#lead_changes').text(summary.lc);
-    $('#times_tied').text(summary.tt);
     if (summary.stt === 'Final') {
         if (summary.aot1 > 0 || summary.hot1 > 0) {
             $('.box-banner .c-time').text('Final/OT');
@@ -126,12 +124,24 @@ function formatTeamStatsData(teamStats) {
             '',
             teamStats.s.toString(),
         ],
-        // 2 : ['', teamStats.tmreb, teamStats.ble, teamStats.fbpts, teamStats.tmtov, teamStats.tov, teamStats.potov, teamStats.out, teamStats.pip, teamStats.scp, teamStats.bpts ]
+        2 : [
+            '',
+            teamStats.fbpts,
+            teamStats.bpts,
+            teamStats.scp,
+            teamStats.ble,
+            teamStats.pip,
+            teamStats.potov,
+            // teamStats.tmreb,
+            // teamStats.tmtov,
+            // teamStats.tov,
+            // teamStats.out,
+        ]
     };
 }
 
 function highlightSummaryTable(){
-    for (let i = 1;i < 16; i++) {   // [1...15]
+    for (let i = 0;i < 16; i++) {   // [0...15]
         var vpts = parseInt($('.summary-box-score tbody tr:nth-child(2) td').eq(i).text());
         var hpts = parseInt($('.summary-box-score tbody tr:nth-child(3) td').eq(i).text());
         $('.summary-box-score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
@@ -166,46 +176,46 @@ function highlightPlayerRowHelper(index, el) {
     if (parseInt(fg[1]) >= 5) {
         let percentage = parseInt(fg[0])/parseInt(fg[1]);
         if (percentage >= 0.6) {
+            $(children[2]).addClass(COLOR.GREEN);
+            $(children[3]).addClass(COLOR.GREEN);
+        }
+        else if (percentage <= 0.3) {
             $(children[2]).addClass(COLOR.RED);
             $(children[3]).addClass(COLOR.RED);
         }
-        else if (percentage <= 0.3) {
-            $(children[2]).addClass(COLOR.GREEN);
-            $(children[3]).addClass(COLOR.GREEN);
-        }
     } else if (parseInt(fg[1]) > 0 && parseInt(fg[0]) === 0){
-            $(children[2]).addClass(COLOR.GREEN);
-            $(children[3]).addClass(COLOR.GREEN);
+            $(children[2]).addClass(COLOR.RED);
+            $(children[3]).addClass(COLOR.RED);
     }
 
     if (parseInt(tp[1]) >= 5) {
         let percentage = parseInt(tp[0])/parseInt(tp[1]);
         if (percentage >= 0.6) {
+            $(children[4]).addClass(COLOR.GREEN);
+            $(children[5]).addClass(COLOR.GREEN);
+        }
+        else if (percentage <= 0.3) {
             $(children[4]).addClass(COLOR.RED);
             $(children[5]).addClass(COLOR.RED);
         }
-        else if (percentage <= 0.3) {
-            $(children[4]).addClass(COLOR.GREEN);
-            $(children[5]).addClass(COLOR.GREEN);
-        }
     } else if (parseInt(tp[1]) > 0 && parseInt(tp[0]) === 0){
-            $(children[4]).addClass(COLOR.GREEN);
-            $(children[5]).addClass(COLOR.GREEN);
+            $(children[4]).addClass(COLOR.RED);
+            $(children[5]).addClass(COLOR.RED);
     }
 
     if (parseInt(ft[1]) >= 5) {
         let percentage = parseInt(ft[0])/parseInt(ft[1]);
         if (percentage >= 0.9) {
+            $(children[6]).addClass(COLOR.GREEN);
+            $(children[7]).addClass(COLOR.GREEN);
+        }
+        else if (percentage <= 0.5) {
             $(children[6]).addClass(COLOR.RED);
             $(children[7]).addClass(COLOR.RED);
         }
-        else if (percentage <= 0.5) {
-            $(children[6]).addClass(COLOR.GREEN);
-            $(children[7]).addClass(COLOR.GREEN);
-        }
     } else if (parseInt(ft[1]) > 0 && parseInt(ft[0]) === 0){
-            $(children[6]).addClass(COLOR.GREEN);
-            $(children[7]).addClass(COLOR.GREEN);
+            $(children[6]).addClass(COLOR.RED);
+            $(children[7]).addClass(COLOR.RED);
     }
 
     var count = 0;
@@ -221,27 +231,27 @@ function highlightPlayerRowHelper(index, el) {
         count += index !== 4 && parseInt(item.text()) >= 10 ? 1 : 0;
     });
     if (parseInt(result[0].text()) >= 10)
-        result[0].addClass(COLOR.RED);
+        result[0].addClass(COLOR.GREEN);
 
     if (parseInt(result[1].text()) >= 10)
-        result[1].addClass(COLOR.RED);
+        result[1].addClass(COLOR.GREEN);
 
     if (parseInt(result[2].text()) >= 5)
-        result[2].addClass(COLOR.RED);
+        result[2].addClass(COLOR.GREEN);
 
     if (parseInt(result[3].text()) >= 5)
-        result[3].addClass(COLOR.RED);
+        result[3].addClass(COLOR.GREEN);
 
     if (parseInt(result[4].text()) === 0)
-        result[4].addClass(COLOR.RED);
-    else if (parseInt(result[4].text()) >= 5)
         result[4].addClass(COLOR.GREEN);
+    else if (parseInt(result[4].text()) >= 5)
+        result[4].addClass(COLOR.RED);
 
     if (parseInt(result[5].text()) >= 10)
-        result[5].addClass(COLOR.RED);
+        result[5].addClass(COLOR.GREEN);
 
     if (parseInt($(children[15]).text()) === 6)
-        $(children[15]).addClass(COLOR.GREEN);
+        $(children[15]).addClass(COLOR.RED);
 
     if (count === 3) {   // tri-db
         $(el).addClass(BG_COLOR.BG_ORANGE).attr('title', 'Triple Double!');

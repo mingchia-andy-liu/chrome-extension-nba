@@ -4,7 +4,7 @@
 
 body {
     color: hsl(0, 0%, 25%);
-    background-color: #F0F0F0;
+    background-color: #e0e0e0;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
@@ -24,13 +24,15 @@ th, td {
 #cards {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
 }
 
-#box_score_page #games {
-    width: calc(360px + 10vw);
-    min-width: 360px;
+#box_score_page #cards {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    margin-bottom: 1em;
+    padding: 5px 5px 5px 5px;
 }
 
 #footer {
@@ -81,10 +83,10 @@ th, td {
     align-items: center;
     position: relative;
     height: 90px;
-    width: 100%;
-    margin: 5px 0px 5px 0px;
-    font-size: calc(15px + 0.2vw);
-    background-color: #fff;
+    min-width: 25%;
+    margin: 5px 5px 5px 5px;
+    font-size: calc(20px + 0.2vw);
+    background-color: #f9f9f9;
     border-radius: 5px;
     border: 2px solid transparent;
 }
@@ -97,7 +99,7 @@ th, td {
 .c-team-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 40%;
+    flex-basis: 33%;
     align-items: center;
 }
 
@@ -106,9 +108,9 @@ th, td {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
-    font-size: calc(15px + 0.1vw);
+    width: 45px;
+    height: 45px;
+    font-size: calc(17px + 0.1vw);
     margin-bottom: 8px;
     color: white;
     border-radius: 50%;
@@ -118,7 +120,7 @@ th, td {
 .c-match-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 30%;
+    flex-basis: 34%;
     text-align: center;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
@@ -128,11 +130,11 @@ th, td {
 }
 
 .c-clock {
-    font-size: calc(13px + 0.15vw);
+    font-size: calc(15px + 0.1vw);
 }
 
 .c-time {
-    font-size: calc(16px + 0.1vw);
+    font-size: calc(17px + 0.1vw);
 }
 
 .c-hyphen {
@@ -150,8 +152,7 @@ th, td {
     min-width: 800px;
     border-radius: 5px;
     position: relative;
-    font-size: calc(12px + 0.2vw);
-    margin-left: calc(0.5vw + 10px);
+    font-size: calc(15px + 0.2vw);
     background-color: #f0f0f0;
     padding: 10px 10px 10px 10px;
 }
@@ -172,7 +173,7 @@ th, td {
     width: 100%
 }
 
-.team-table th:hover, .team-stats-table th:hover {
+.team-table th:hover, .team-stats-table th:hover, .detail-box-score th:hover {
     cursor: help;
 }
 
@@ -235,16 +236,12 @@ th, td {
 .box-banner .c-team-logo {
     width: calc(40px + 1vw);
     height: calc(40px + 1vw);
-    font-size: calc(15px + 0.5vw);
+    font-size: calc(20px + 0.5vw);
 }
 
 .summary-box-score {
     width: 550px;
-    margin: 2px 1em 2px 2px;
-}
-
-.notes {
-    margin: 0.5em 2px 2px 2px;
+    margin: 0px 5px 0px 0px;
 }
 
 .summary-box-score tbody tr th:first-child {

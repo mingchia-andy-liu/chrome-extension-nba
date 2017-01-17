@@ -122,8 +122,6 @@ $(function(){
             hta : g.hls.ta,
             aot1 : g.vls.ot1,
             hot1 : g.hls.ot1,
-            lc : g.gsts.lc,
-            tt : g.gsts.tt,
             cl : g.cl,
             stt : g.stt,
             atlg : g.vls.ta,
@@ -136,34 +134,32 @@ $(function(){
 
         // Update quarter scores in Summary Box Score
         $('.summary-box-score tbody tr:nth-child(2) >').each(function(index, el){
-            if (index === 0)
+            if (index > 0 && index < 5) {
+                let pts = g.vls['q' + index.toString()];
+                $(el).text(pts);
+            } else if (index > 4 && index < 15) {
+                let otpts = g.vls['ot' + index.toString()];
+                $(el).text(otpts);
+            } else if (index === 0) {
                 return;
-            if (index === 15) {
+            } else if (index === 15) {
                 $(el).text(g.vls.s);
                 return;
-            }
-            let pts = g.vls['q' + index.toString()];
-            let otpts = g.vls['ot' + index.toString()];
-            if (pts) {
-                $(el).text(pts);
-            }
-            if (otpts) {
-                $(el).text(otpts);
             }
         });
 
         $('.summary-box-score tbody tr:nth-child(3) >').each(function(index, el){
-            if (index === 0)
-                return;
-            if (index === 15)
-                $(el).text(g.hls.s);
-            let pts = g.hls['q' + index.toString()];
-            let otpts = g.hls['ot' + index.toString()];
-            if (pts) {
+            if (index > 0 && index < 5) {
+                let pts = g.hls['q' + index.toString()];
                 $(el).text(pts);
-            }
-            if (otpts) {
+            } else if (index > 4 && index < 15) {
+                let otpts = g.hls['ot' + index.toString()];
                 $(el).text(otpts);
+            } else if (index === 0) {
+                return;
+            } else if (index === 15) {
+                $(el).text(g.hls.s);
+                return;
             }
         });
 
@@ -219,24 +215,43 @@ $(function(){
         });
 
         let cloned = $.extend({
-            s:g.hls.s,
-            out : g.hls.ftout + g.hls.stout
-        }, g.hls.tstsg);
+            s:g.vls.s,
+            out : g.vls.ftout + g.vls.stout
+        }, g.vls.tstsg);
 
         var teamStatsRow = formatTeamStatsData(cloned);
         $('#away_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
             $(el).text(teamStatsRow[1][index]);
         });
 
+        $('.detail-box-score tbody tr:nth-child(2)').children().each(function(index, el){
+            if (index === 0) {
+                $(el).text(g.vls.ta);
+            } else {
+                $(el).text(teamStatsRow[2][index]);
+            }
+        });
+
         cloned = $.extend({
-            s:g.vls.s,
-            out : g.vls.ftout + g.vls.stout
-        }, g.vls.tstsg);
+            s:g.hls.s,
+            out : g.hls.ftout + g.hls.stout
+        }, g.hls.tstsg);
 
         teamStatsRow = formatTeamStatsData(cloned);
         $('#home_team_stats tbody tr:nth-child(2)').children().each(function(index, el){
             $(el).text(teamStatsRow[1][index]);
         });
+        $('.detail-box-score tbody tr:nth-child(3)').children().each(function(index, el){
+            if (index === 0) {
+                $(el).text(g.hls.ta);
+            } else {
+                $(el).text(teamStatsRow[2][index]);
+            }
+        });
+
+        $('#lead_changes').text(g.gsts.lc);
+        $('#times_tied').text(g.gsts.tt);
+
 
         // Highlight Summary Box Score for the winning qtrs
         highlightSummaryTable();

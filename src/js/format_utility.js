@@ -59,6 +59,19 @@ function formatClock(clock, status) {
     }
 }
 
+function gameReording(games) {
+    // re-ordering: live --> finished --> haven't started
+    var orderedGames = [];
+    for (let i = 0; i < games.length; i++) {
+        if (validateLiveGame(games[i])) {
+            orderedGames.unshift(games[i]);
+        } else {
+            orderedGames.push(games[i]);
+        }
+    }
+    return orderedGames;
+}
+
 // Fetch Data
 function updateCards(games) {
     $(".c-card.no-game").addClass('u-hide');
@@ -133,34 +146,24 @@ function updateLastUpdate(ms) {
     $("#lastUpdate").text('Last updated: ' + hour + ':' + min + ':' + sec);
 }
 
-function fetchData(fnSuccess, fnFail) {
+function fetchData() {
     var deferred = $.Deferred();
 
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
         if (data && !data.failed) {
             updateLastUpdate();
-            updateCards(data.gs.g);
+            let newGames = gameReording(data.gs.g);
+            updateCards(newGames);
             chrome.storage.local.set({
                 'popupRefreshTime' : new Date().getTime(),
-                'cacheData' : data.gs.g
+                'cacheData' : newGames
             });
-            deferred.resolve(data.gs.g);
-            // if ($.isFunction(fnSuccess)){
-            //     fnSuccess(data.gs.g);
-            // }
+            deferred.resolve(newGames);
         } else if (data && data.failed) {
             deferred.reject();
-
-            // if ($.isFunction(fnFail)){
-            //     fnFail();
-            // }
         } else {
             console.log('something went wrong');
             deferred.reject();
-
-            // if ($.isFunction(fnFail)){
-            //     fnFail();
-            // }
         }
     });
     return deferred.promise();

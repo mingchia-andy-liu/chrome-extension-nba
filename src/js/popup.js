@@ -34,6 +34,6 @@ $(function(){
     });
 
     chrome.alarms.create('initAlarm', {
-        when : new Date().getTime() + 100
+        when : new Date().getTime() + 200
     });
 });
