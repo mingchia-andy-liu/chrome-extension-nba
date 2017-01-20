@@ -3,14 +3,17 @@
 }
 
 body {
-    color: hsl(0, 0%, 25%);
+    color: hsl(0, 0%, 30%);
     background-color: #e0e0e0;
     font-family: 'Roboto Condensed', sans-serif;
+    /*remove browser padding and margin*/
+    padding: 0;
+    margin:0;
 }
 
 sup {
     color: #888888;
-    font-size: 0.8vw;
+    font-size: 1vw;
 }
 
 th, td {
@@ -20,19 +23,35 @@ th, td {
     border-bottom: 1px solid #cecece;
 }
 
+table tr:first-child th:first-child {
+    border-top-left-radius: 5px;
+}
+
+table tr:first-child th:last-child {
+    border-top-right-radius: 5px;
+}
+
 /* === Pages === */
 #cards {
     display: flex;
     flex-direction: column;
 }
 
-#box_score_page #cards {
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-    margin-bottom: 1em;
+#box_score_page {
+    height: 100vh;
     padding: 5px 5px 5px 5px;
+}
+
+#box_score_page #games {
+    min-width: 26%;
+    margin: 0 5px 0 5px;
+    overflow-y: scroll;
+}
+
+#box_score_page .c-table {
+    min-width: 65%;
+    margin: 0 5px 0 5px;
+    overflow-y: scroll;
 }
 
 #footer {
@@ -42,6 +61,9 @@ th, td {
 
 #popup_page {
     width: 350px;
+    max-height: 470px;
+    overflow: scroll;
+    padding: 0 5px 0 5px;
 }
 
 .over {
@@ -66,9 +88,8 @@ th, td {
     display: block;
 }
 
-#popup_page #cards .c-card:not(.no-game):hover {
+#cards .c-card:not(.no-game):hover {
     border: 2px solid rgb(30, 90, 250);
-    background-color: #c9defc;
 }
 
 .c-table .over {
@@ -82,8 +103,7 @@ th, td {
     display: flex;
     align-items: center;
     position: relative;
-    height: 90px;
-    min-width: 25%;
+    min-height: 85px;
     margin: 5px 5px 5px 5px;
     font-size: calc(20px + 0.2vw);
     background-color: #f9f9f9;
@@ -149,16 +169,17 @@ th, td {
 .c-table {
     width: 100%;
     height: 100%;
+    max-height: 870px;
     min-width: 800px;
     border-radius: 5px;
     position: relative;
-    font-size: calc(15px + 0.2vw);
+    font-size: calc(13px + 0.1vw);
     background-color: #f0f0f0;
     padding: 10px 10px 10px 10px;
 }
 
 .c-table > * {
-    margin-bottom: 1vw;
+    margin-bottom: 0.8vw;
 }
 
 .c-table table {
@@ -218,9 +239,9 @@ th, td {
 
 .home-team-section {
     display: flex;
-    width: 40%;
     flex-direction: row;
     align-items: center;
+    width: 40%;
 }
 
 .box-banner .c-time {
@@ -236,16 +257,12 @@ th, td {
 .box-banner .c-team-logo {
     width: calc(40px + 1vw);
     height: calc(40px + 1vw);
-    font-size: calc(20px + 0.5vw);
+    font-size: calc(17px + 0.5vw);
 }
 
 .summary-box-score {
     width: 550px;
     margin: 0px 5px 0px 0px;
-}
-
-.summary-box-score tbody tr th:first-child {
-    width: 10%;
 }
 
 .summary-box-score tbody tr:first-child {
@@ -272,45 +289,28 @@ th, td {
     color: white;
 }
 
-
 /* tabs */
 .tab-content th {
     background-color: #046fdb;
     color: white;
 }
 
-.tab {
-    display: flex;
-    justify-content: center;
+.tab .tab-button {
+    width: 50%;
     color: #046fdb;
-    margin-bottom: 0.7em;
-}
-
-.tab div {
-    width: 20%;
-
-    background-color: #f1f1f1;
     border:2px solid #046fdb;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    font-size: calc(13px + 1vw);
+    text-align: center;
 }
 
-#away_tab {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-right: 0px;
-}
-
-#home_tab {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-left: 0px;
-}
-
-.tab div:hover {
+.tab .tab-button:hover {
     background-color: #c9defc;
     cursor: pointer;
 }
 
-.tab div.active  {
+.tab .tab-button.active  {
     color: white;
     background-color: #046fdb;
 }
@@ -351,7 +351,7 @@ th, td {
 }
 
 .u-selected {
-    border: 2px solid #0E7FF9 !important;
+    border: 2px solid rgb(30, 90, 250) !important;
 }
 
 /*text*/
@@ -360,11 +360,11 @@ th, td {
 }
 
 .u-color-green {
-    color : #1ac900;
+    color : #009900;
 }
 
 .u-color-gray {
-    color : #999999;
+    color : #b2b2b2;
 }
 
 .u-color-red {
@@ -402,7 +402,7 @@ th, td {
 }
 
 .u-inner-shadow {
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 1);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
 }
 
 /*overriding jquer ui*/
@@ -414,3 +414,19 @@ th, td {
 .ui-tooltip {
     background-color: #E9EBEE;
 }
+
+
+/* === Responsive === */
+@media only screen and (max-width: 700px) {
+
+    #box_score_page #games {
+        min-width: 300px;
+    }
+
+    #box_score_page .c-table {
+        min-width: 750px;
+        max-width: 750px;
+    }
+    .c-card {
+        min-width: 270px;
+    }

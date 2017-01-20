@@ -6,6 +6,8 @@ $(function(){
         chrome.tabs.create({url: hashedUrl});
     });
 
+    chrome.runtime.sendMessage({request : 'wakeup'});
+
     chrome.alarms.onAlarm.addListener(function(alarm){
         if (alarm.name === 'initAlarm') {
             chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {

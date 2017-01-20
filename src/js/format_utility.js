@@ -96,14 +96,14 @@ function updateCardWithGame(card, game) {
     var awayTeamEl = $(teams[0]);
     var homeTeamEl = $(teams[1]);
 
+    $(scores[0]).text(game.v.s).removeClass(COLOR.GREEN);
+    $(scores[1]).text(game.h.s).removeClass(COLOR.GREEN);
     if (game.stt === 'Final'){
         matchinfoEl.find('.c-hyphen').text('-');
-        $(scores[0]).text(game.v.s).removeClass(COLOR.RED);
-        $(scores[1]).text(game.h.s).removeClass(COLOR.RED);
         if (game.v.s > game.h.s)
-            $(scores[0]).addClass(COLOR.RED);
+            $(scores[0]).addClass(COLOR.GREEN);
         else
-            $(scores[1]).addClass(COLOR.RED);
+            $(scores[1]).addClass(COLOR.GREEN);
         if (game.h.ot1 !== 0 || game.v.ot1 !== 0) {
             matchinfoEl.find('.c-clock').text('Final/OT').addClass(UTILS.CLOCK);
         } else {
@@ -113,15 +113,17 @@ function updateCardWithGame(card, game) {
         $(scores[0]).text(game.v.s);
         $(scores[1]).text(game.h.s);
         if (game.v.s > game.h.s)
-            $(scores[0]).addClass(COLOR.RED);
-        else
-            $(scores[1]).addClass(COLOR.RED);
+            $(scores[0]).addClass(COLOR.GREEN);
+        else if (game.v.s < game.h.s)
+            $(scores[1]).addClass(COLOR.GREEN);
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
-    } else if (game.stt.includes('ET')){
+    } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am')){
         let time = getGameStartTime(game.stt);
         matchinfoEl.find('.c-hyphen').text('');
+        $(scores[0]).text('').removeClass(COLOR.GREEN);
+        $(scores[1]).text('').removeClass(COLOR.GREEN);
         matchinfoEl.find('.c-clock').text(time).addClass(UTILS.TIME);
     } else {
         let clock = formatClock(game.cl, game.stt);
@@ -160,6 +162,7 @@ function fetchData() {
             });
             deferred.resolve(newGames);
         } else if (data && data.failed) {
+            console.log('failed');
             deferred.reject();
         } else {
             console.log('something went wrong');

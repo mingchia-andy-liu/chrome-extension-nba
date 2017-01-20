@@ -6,6 +6,8 @@ $(function () {
             fetchGames(sendResponse);
         } else if (request.request === 'box_score') {
             fetchLiveGameBox(sendResponse, request.gid);
+        } else if (request.request === 'wakeup') {
+            sendResponse('woken');
         }
 
         return true;        // return true to tell google to use sendResponse asynchronously

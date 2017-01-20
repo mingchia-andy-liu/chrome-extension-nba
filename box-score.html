@@ -7,13 +7,13 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
     </head>
     <body>
-        <div id="box_score_page" class="u-flex-column">
+        <div id="box_score_page" class="u-display-flex">
             <div id='games' class='u-flex-column'>
                 <div id='footer' class="u-display-flex u-justify-center u-color-gray">
                     <div id='lastUpdate'>Last updated: --:--:--</div>
                 </div>
                 <div id="cards" >
-                    <div class="c-card u-shadow u-justify-center u-align-center no-game">Lodaing...</div>
+                    <div class="c-card u-shadow u-justify-center u-align-center no-game">Loading...</div>
                     <div id="card_1" class="c-card u-shadow u-hide">
                         <div class="c-team-info">
                             <div class="c-team-logo"></div>
@@ -305,16 +305,16 @@
                     <p>☜(ﾟヮﾟ☜) CLICK ON A GAME TO SEE THE BOX SCORE</p>
                 </div>
                 <div class="box-banner u-display-flex u-justify-center">
-                    <div class="away-team-section">
-                        <div class="away-team-name">Away</div>
-                        <div id="away_team_logo" class="c-team-logo"></div>
+                    <div class="away-team-section tab">
                         <div id="away_team_pts">0</div>
+                        <div id="away_team_logo" class="c-team-logo"></div>
+                        <div id='away_tab' class="away-team-name tab-button active">Away</div>
                     </div>
                     <div class='c-time'>-</div>
-                    <div class="home-team-section">
-                        <div id="home_team_pts">0</div>
+                    <div class="home-team-section tab">
+                        <div id='home_tab' class="home-team-name tab-button">Home</div>
                         <div id="home_team_logo" class="c-team-logo"></div>
-                        <div class="home-team-name">Home</div>
+                        <div id="home_team_pts">0</div>
                     </div>
                 </div>
 
@@ -324,18 +324,6 @@
                             <tr> <th>Team</th> <th>Q1</th> <th>Q2</th> <th>Q3</th> <th>Q4</th> <th class="u-hide ot1">OT1</th> <th class="u-hide ot2">OT2</th> <th class="u-hide ot3">OT3</th> <th class="u-hide ot4">OT4</th> <th class="u-hide ot5">OT5</th> <th class="u-hide ot6">OT6</th> <th class="u-hide ot7">OT7</th> <th class="u-hide ot8">OT8</th> <th class="u-hide ot9">OT9</th> <th class="u-hide ot10">OT10</th> <th class="summary-final">Final</th> </tr>
                             <tr> <th class="summary-team-name">Away</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td> </tr>
                             <tr> <th class="summary-team-name">Home</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td> </tr>
-                        </tbody>
-                    </table>
-                                       <table class='game-box-score'>
-                        <tbody>
-                            <tr>
-                                <th>Lead Change</th>
-                                <th>Times Tied</th>
-                            </tr>
-                            <tr>
-                                <td id='lead_changes'>0</td>
-                                <td id='times_tied'>0</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -372,12 +360,20 @@
                             </tr>
                         </tbody>
                     </table>
+                    <table class='game-box-score'>
+                        <tbody>
+                            <tr>
+                                <th>Lead Change</th>
+                                <th>Times Tied</th>
+                            </tr>
+                            <tr>
+                                <td id='lead_changes'>0</td>
+                                <td id='times_tied'>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="team-name u-text-align-center tab">
-                    <div id="away_tab" class='away-team-name active'>Away</div>
-                    <div id="home_tab" class='home-team-name'>Home</div>
-                </div>
                 <div id='away_tab_content' class='tab-content'>
                     <table id="away_box_score" class="team-table">
                         <tbody>
@@ -446,69 +442,69 @@
                     </table>
                 </div>
                 <div id='home_tab_content' class='tab-content'>
-                <table id="home_box_score" class="team-table">
-                    <tbody>
-                        <tr>
-                            <th title='Player Name (Starter Position)'>Player</th>
-                            <th title='Minutes Played'>MIN</th>
-                            <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                            <th title='Field Goal Percentage'>FG%</th>
-                            <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                            <th title='Three Point Percentage'>3P%</th>
-                            <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                            <th title='Free Throw Percentage'>FT%</th>
-                            <th title='Offensive Rebounds'>OREB</th>
-                            <th title='Defensive Rebounds'>DREB</th>
-                            <th title='Rebounds'>REB</th>
-                            <th title='Assists'>AST</th>
-                            <th title='Steals'>STL</th>
-                            <th title='Blocked Shots'>BLK</th>
-                            <th title='Turnovers'>TOV</th>
-                            <th title='Personal Fouls'>PF</th>
-                            <th title='Plus-Minus'>+/-</th>
-                            <th title='Points'>PTS</th>
-                        </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                        <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                    </tbody>
-                </table>
-                <table id='home_team_stats' class='team-stats-table'>
-                    <tbody>
-                        <tr>
-                            <th class='u-cursor-default'>Total</th>
-                            <th class='u-cursor-default'></th>
-                            <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                            <th title='Field Goal Percentage'>FG%</th>
-                            <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                            <th title='Three Point Percentage'>3P%</th>
-                            <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                            <th title='Free Throw Percentage'>FT%</th>
-                            <th title='Offensive Rebounds'>OREB</th>
-                            <th title='Defensive Rebounds'>DREB</th>
-                            <th title='Rebounds'>REB</th>
-                            <th title='Assists'>AST</th>
-                            <th title='Steals'>STL</th>
-                            <th title='Blocked Shots'>BLK</th>
-                            <th title='Turnovers'>TOV</th>
-                            <th title='Personal Fouls'>PF</th>
-                            <th class='u-cursor-default'></th>
-                            <th title='Points'>PTS</th>
-                        </tr>
-                        <tr><td></td><td></td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td></tr>
-                    </tbody>
-                </table>
+                    <table id="home_box_score" class="team-table">
+                        <tbody>
+                            <tr>
+                                <th title='Player Name (Starter Position)'>Player</th>
+                                <th title='Minutes Played'>MIN</th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th title='Plus-Minus'>+/-</th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                            <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
+                        </tbody>
+                    </table>
+                    <table id='home_team_stats' class='team-stats-table'>
+                        <tbody>
+                            <tr>
+                                <th class='u-cursor-default'>Total</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+                            <tr><td></td><td></td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

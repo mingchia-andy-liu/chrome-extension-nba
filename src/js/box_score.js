@@ -18,6 +18,7 @@ $(function(){
                     $(el).addClass('u-hide');
                 });
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         } else {
             updateLastUpdate(data.popupRefreshTime);
@@ -47,8 +48,12 @@ $(function(){
             }
         });
         if (!exist) {
+            if (!$.isEmptyObject(SELECTED_GAME_OBJ)) {
+                SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
+                SELECTED_GAME_OBJ = {};
+            }
             window.location.hash = '';
-            $('.c-table .over p').text(NO_BOX_SCORE_TEXT);
+            $('.c-table .over p').html(NO_BOX_SCORE_TEXT);
         }
         return exist;
     }
@@ -267,6 +272,7 @@ $(function(){
         // } else {
             $('.c-table .over p').text(NON_LIVE_GAME);
         }
+
         let summary = {
             atn : AWAY_TEXT,
             htn : HOME_TEXT,
@@ -317,7 +323,7 @@ $(function(){
         // Insert empty rows so the table don't look too empty
         $('#away_box_score tbody tr:not(:first-child)').each(function(rowNum, row){
             sanitizeTableRow(row);
-            $(row).attr('title', '').children().each(function(colNum, cell){
+            $(row).children().each(function(colNum, cell){
                 $(cell).text(EMPTY_PLAYER_ROW[colNum]).show().attr('colspan', 1);
             });
         });
@@ -328,7 +334,7 @@ $(function(){
 
         $('#home_box_score tbody tr:not(:first-child)').each(function(rowNum, row){
             sanitizeTableRow(row);
-            $(row).attr('title', '').children().each(function(colNum, cell){
+            $(row).children().each(function(colNum, cell){
                 $(cell).text(EMPTY_PLAYER_ROW[colNum]).show().attr('colspan', 1);
             });
         });
@@ -376,6 +382,8 @@ $(function(){
                     $(el).addClass('u-hide');
                 });
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                debugger;
+                $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         }
     });
@@ -404,4 +412,6 @@ $(function(){
             $('#away_tab_content').hide();
         }
     });
+
+    $('.over').css('height', $('.c-table')[0].scrollHeight);
 });

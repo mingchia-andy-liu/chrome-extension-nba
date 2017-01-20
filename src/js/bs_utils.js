@@ -21,15 +21,15 @@ function formatSummary(summary){
 
 
     if (summary.rm) {
-        $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);
-        $('#home_team_pts').text(summary.htpts).removeClass(COLOR.RED);
+        $('#away_team_pts').text(summary.atpts).removeClass(COLOR.GREEN);
+        $('#home_team_pts').text(summary.htpts).removeClass(COLOR.GREEN);
     } else {
-        var away = $('#away_team_pts').text(summary.atpts).removeClass(COLOR.RED);
-        var home = $('#home_team_pts').text(summary.htpts).removeClass(COLOR.RED);
+        var away = $('#away_team_pts').text(summary.atpts).removeClass(COLOR.GREEN);
+        var home = $('#home_team_pts').text(summary.htpts).removeClass(COLOR.GREEN);
         if (summary.atpts > summary.htpts) {
-            away.addClass(COLOR.RED);
+            away.addClass(COLOR.GREEN);
         } else if (summary.atpts < summary.htpts) {
-            home.addClass(COLOR.RED);
+            home.addClass(COLOR.GREEN);
         }
     }
 }
@@ -63,6 +63,7 @@ function toPercentage(decimal) {
 
 function sanitizeTableRow(row){
     let rowEl = $(row);
+    rowEl.attr('title', '');
     for (let color in BG_COLOR) {
         rowEl.removeClass(BG_COLOR[color]);
     }
@@ -144,12 +145,12 @@ function highlightSummaryTable(){
     for (let i = 0;i < 16; i++) {   // [0...15]
         var vpts = parseInt($('.summary-box-score tbody tr:nth-child(2) td').eq(i).text());
         var hpts = parseInt($('.summary-box-score tbody tr:nth-child(3) td').eq(i).text());
-        $('.summary-box-score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.RED);
-        $('.summary-box-score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.RED);
+        $('.summary-box-score tbody tr:nth-child(2) td').eq(i).removeClass(COLOR.GREEN);
+        $('.summary-box-score tbody tr:nth-child(3) td').eq(i).removeClass(COLOR.GREEN);
         if (vpts > hpts){
-            $('.summary-box-score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.RED);
+            $('.summary-box-score tbody tr:nth-child(2) td').eq(i).addClass(COLOR.GREEN);
         } else if (vpts < hpts) {
-            $('.summary-box-score tbody tr:nth-child(3) td').eq(i).addClass(COLOR.RED);
+            $('.summary-box-score tbody tr:nth-child(3) td').eq(i).addClass(COLOR.GREEN);
         }
     }
 }
@@ -230,15 +231,24 @@ function highlightPlayerRowHelper(index, el) {
     result.forEach(function(item, index){
         count += index !== 4 && parseInt(item.text()) >= 10 ? 1 : 0;
     });
-    if (parseInt(result[0].text()) >= 10)
+    var doubles = '(';
+    if (parseInt(result[0].text()) >= 10) {
         result[0].addClass(COLOR.GREEN);
+        doubles += 'Rebounds + ';
+    }
 
-    if (parseInt(result[1].text()) >= 10)
+    if (parseInt(result[1].text()) >= 10) {
         result[1].addClass(COLOR.GREEN);
+        doubles += 'Assists + ';
+    }
 
+    if (parseInt(result[2].text()) >= 10)
+        doubles += 'Steals + ';
     if (parseInt(result[2].text()) >= 5)
         result[2].addClass(COLOR.GREEN);
 
+    if (parseInt(result[3].text()) >= 10)
+        doubles += 'Blocked Shots + ';
     if (parseInt(result[3].text()) >= 5)
         result[3].addClass(COLOR.GREEN);
 
@@ -247,19 +257,22 @@ function highlightPlayerRowHelper(index, el) {
     else if (parseInt(result[4].text()) >= 5)
         result[4].addClass(COLOR.RED);
 
-    if (parseInt(result[5].text()) >= 10)
+    if (parseInt(result[5].text()) >= 10) {
         result[5].addClass(COLOR.GREEN);
+        doubles += 'Points';
+    }
 
+    doubles += ')';
     if (parseInt($(children[15]).text()) === 6)
         $(children[15]).addClass(COLOR.RED);
 
     if (count === 3) {   // tri-db
-        $(el).addClass(BG_COLOR.BG_ORANGE).attr('title', 'Triple Double!');
+        $(el).addClass(BG_COLOR.BG_ORANGE).attr('title', 'Triple Double! ' + doubles);
     } else if (count === 4) {
-        $(el).addClass(BG_COLOR.BG_PURPLE).attr('title', 'Quadruple Double!');
+        $(el).addClass(BG_COLOR.BG_PURPLE).attr('title', 'Quadruple Double! ' + doubles);
     } else if (count === 2) {   //db-db
-        $(el).addClass(BG_COLOR.BG_BLUE).attr('title', 'Double Double!');
+        $(el).addClass(BG_COLOR.BG_BLUE).attr('title', 'Double Double! ' + doubles);
     } else if (count === 5) {
-        $(el).addClass(BG_COLOR.BG_GREEN).attr('title', 'Quintuple Double!');
+        $(el).addClass(BG_COLOR.BG_GREEN).attr('title', 'Quintuple Double! ' + doubles);
     }
 }
