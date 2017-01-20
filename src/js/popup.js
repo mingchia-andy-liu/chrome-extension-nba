@@ -27,14 +27,6 @@ $(function(){
         }
     });
 
-    $('.c-card').each(function(){
-        $(this).tooltip({
-          track: true,
-          // /* work around https://bugs.jqueryui.com/ticket/10689 */
-          create: function () { $(".ui-helper-hidden-accessible").remove(); }
-        });
-    });
-
     chrome.alarms.create('initAlarm', {
         when : new Date().getTime() + 200
     });
