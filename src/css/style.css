@@ -94,7 +94,6 @@ table tr:first-child th:last-child {
 
 .c-table .over {
     display: block;
-    margin: -10px -10px -10px -10px;
 }
 
 /* === components === */
