@@ -382,7 +382,6 @@ $(function(){
                     $(el).addClass('u-hide');
                 });
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
-                debugger;
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         }
@@ -397,14 +396,13 @@ $(function(){
     });
 
     $('.tab').on('click', 'div', function(){
-
         if (this.id === 'away_tab') {
             $(this).addClass('active');
             $('#home_tab').removeClass('active');
 
             $('#away_tab_content').show();
             $('#home_tab_content').hide();
-        } else {
+        } else if (this.id === 'home_tab') {
             $(this).addClass('active');
             $('#away_tab').removeClass('active');
 
