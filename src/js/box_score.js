@@ -412,4 +412,5 @@ $(function(){
     });
 
     $('.over').css('height', $('.c-table')[0].scrollHeight);
+    $('#home_tab_content').css('display', 'none');
 });

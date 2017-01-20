@@ -18,7 +18,7 @@ sup {
 
 th, td {
     min-width: 43px;
-    width: 5%;
+    width: 5vw;
     text-align: center;
     border-bottom: 1px solid #cecece;
 }
@@ -276,10 +276,6 @@ table tr:first-child th:last-child {
     margin-right: 1em;
 }
 
-#home_tab_content {
-    display: none;
-}
-
 /* tab content*/
 .tab-content {
     border-top: 2px solid #f9f9f9;
@@ -291,6 +287,7 @@ table tr:first-child th:last-child {
 
 .tab-content > * {
     margin-bottom: 1em;
+    width: 100%;
 }
 
 .tab-content th {
