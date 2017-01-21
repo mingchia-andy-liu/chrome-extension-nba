@@ -45,11 +45,12 @@ $(function(){
                 $(el).addClass(UTILS.SELECTED);
                 SELECTED_GAME_OBJ = $(el);
                 exist = true;
+            } else {
+                $(el).removeClass(UTILS.SELECTED);
             }
         });
         if (!exist) {
             if (!$.isEmptyObject(SELECTED_GAME_OBJ)) {
-                SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
                 SELECTED_GAME_OBJ = {};
             }
             window.location.hash = '';

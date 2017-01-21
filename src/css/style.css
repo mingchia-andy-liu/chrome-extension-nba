@@ -60,10 +60,14 @@ table tr:first-child th:last-child {
 }
 
 #popup_page {
-    width: 350px;
-    max-height: 470px;
+    width: 330px;
+    max-height: 400px;
     overflow: scroll;
     padding: 0 5px 0 5px;
+}
+
+#lastUpdate {
+    color: #8f8f8f;
 }
 
 .over {
@@ -152,6 +156,10 @@ table tr:first-child th:last-child {
     font-size: calc(15px + 0.1vw);
 }
 
+.c-time {
+    font-size: calc(17px + 0.1vw);
+}
+
 .no-game:hover {
     cursor: auto;
 }
@@ -212,7 +220,7 @@ table tr:first-child th:last-child {
 
 .team-section {
     display: flex;
-    width: 33%;
+    width: 26%;
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -255,6 +263,7 @@ table tr:first-child th:last-child {
 .tab .tab-button {
     text-align: center;
     margin-top: 0.2em;
+    background-color: #cfcfcf;
 }
 
 .tab .tab-button:not(.active):hover {
@@ -273,6 +282,11 @@ table tr:first-child th:last-child {
 
 #home_tab {
     margin-right: 1em;
+}
+
+.c-table .c-time {
+    font-size: calc(20px + 0.2vw);
+    align-self: center;
 }
 
 /* tab content*/
