@@ -178,15 +178,7 @@ $(function(){
         });
 
         $('.summary-box-score tbody tr:nth-child(1) >').each(function(index, el){
-            if (index > 0 && index < 5) {
-                let hpts = g.hls['q' + index.toString()];
-                let vpts = g.vls['q' + index.toString()];
-                if (hpts || vpts){
-                    $(el).removeClass('u-hide');
-                } else{
-                    $(el).addClass('u-hide');
-                }
-            } else if (index > 4 && index < 15) {
+            if (index > 4 && index < 15) {
                 let hotpts = g.hls['ot' + (index-4).toString()];
                 let votpts = g.vls['ot' + (index-4).toString()];
                 if (hotpts || votpts){
