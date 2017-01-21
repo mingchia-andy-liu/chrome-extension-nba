@@ -144,8 +144,12 @@ $(function(){
                 let pts = g.vls['q' + index.toString()];
                 $(el).text(pts);
             } else if (index > 4 && index < 15) {
-                let otpts = g.vls['ot' + index.toString()];
-                $(el).text(otpts);
+                let otpts = g.vls['ot' + (index-4).toString()];
+                if (otpts > 0){
+                    $(el).text(otpts).removeClass('u-hide');
+                } else {
+                    $(el).text(0).addClass('u-hide');
+                }
             } else if (index === 0) {
                 return;
             } else if (index === 15) {
@@ -159,13 +163,37 @@ $(function(){
                 let pts = g.hls['q' + index.toString()];
                 $(el).text(pts);
             } else if (index > 4 && index < 15) {
-                let otpts = g.hls['ot' + index.toString()];
-                $(el).text(otpts);
+                let otpts = g.hls['ot' + (index-4).toString()];
+                if (otpts > 0){
+                    $(el).text(otpts).removeClass('u-hide');
+                } else {
+                    $(el).text(0).addClass('u-hide');
+                }
             } else if (index === 0) {
                 return;
             } else if (index === 15) {
                 $(el).text(g.hls.s);
                 return;
+            }
+        });
+
+        $('.summary-box-score tbody tr:nth-child(1) >').each(function(index, el){
+            if (index > 0 && index < 5) {
+                let hpts = g.hls['q' + index.toString()];
+                let vpts = g.vls['q' + index.toString()];
+                if (hpts || vpts){
+                    $(el).removeClass('u-hide');
+                } else{
+                    $(el).addClass('u-hide');
+                }
+            } else if (index > 4 && index < 15) {
+                let hotpts = g.hls['ot' + (index-4).toString()];
+                let votpts = g.vls['ot' + (index-4).toString()];
+                if (hotpts || votpts){
+                    $(el).removeClass('u-hide');
+                } else{
+                    $(el).addClass('u-hide');
+                }
             }
         });
 
