@@ -3,7 +3,7 @@
 
     "name": "Box Scores",
     "description": "This extension shows you the daily box score of NBA games.",
-    "version": "1.0.0.5",
+    "version": "1.0.0.10",
 
     "icons": {
         "16": "/src/assets/png/icon-color-16.png",
