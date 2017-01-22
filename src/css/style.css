@@ -13,7 +13,7 @@ body {
 
 sup {
     color: #888888;
-    font-size: 1vw;
+    font-size: 13px;
 }
 
 th, td {
@@ -56,7 +56,7 @@ table tr:first-child th:last-child {
 
 #popup_page {
     width: 330px;
-    max-height: 400px;
+    max-height: 460px;
     overflow-y: scroll;
     padding: 0 5px 0 5px;
 }
@@ -286,6 +286,10 @@ table tr:first-child th:last-child {
     align-self: center;
 }
 
+.c-team-pts {
+    align-self: center;
+}
+
 /* tab content*/
 .tab-content {
     border-top: 2px solid #f9f9f9;
@@ -346,7 +350,7 @@ table tr:first-child th:last-child {
 }
 
 .u-color-green {
-    color : #009900;
+    color : #00aa55;
 }
 
 .u-color-gray {

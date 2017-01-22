@@ -165,6 +165,14 @@ function highlightPlayerTable(){
     });
 }
 
+function highlightPlayerShootingStats(el, percentage, high, low) {
+    if (percentage >= high) {
+        $(el).addClass(COLOR.GREEN);
+    } else if (percentage <= low) {
+        $(el).addClass(COLOR.RED);
+    }
+}
+
 function highlightPlayerRowHelper(index, el) {
     var children = $(el).children();
     if (!$(children[1]).text().includes(':')) {
@@ -174,49 +182,22 @@ function highlightPlayerRowHelper(index, el) {
     var fg = $(children[2]).text().split('-');
     var tp = $(children[4]).text().split('-');
     var ft = $(children[6]).text().split('-');
+
     if (parseInt(fg[1]) >= 5) {
         let percentage = parseInt(fg[0])/parseInt(fg[1]);
-        if (percentage >= 0.6) {
-            $(children[2]).addClass(COLOR.GREEN);
-            $(children[3]).addClass(COLOR.GREEN);
-        }
-        else if (percentage <= 0.3) {
-            $(children[2]).addClass(COLOR.RED);
-            $(children[3]).addClass(COLOR.RED);
-        }
-    } else if (parseInt(fg[1]) > 0 && parseInt(fg[0]) === 0){
-            $(children[2]).addClass(COLOR.RED);
-            $(children[3]).addClass(COLOR.RED);
+        highlightPlayerShootingStats(children[2], percentage, 0.6, 0.3);
+        highlightPlayerShootingStats(children[3], percentage, 0.6, 0.3);
     }
 
     if (parseInt(tp[1]) >= 5) {
-        let percentage = parseInt(tp[0])/parseInt(tp[1]);
-        if (percentage >= 0.6) {
-            $(children[4]).addClass(COLOR.GREEN);
-            $(children[5]).addClass(COLOR.GREEN);
-        }
-        else if (percentage <= 0.3) {
-            $(children[4]).addClass(COLOR.RED);
-            $(children[5]).addClass(COLOR.RED);
-        }
-    } else if (parseInt(tp[1]) > 0 && parseInt(tp[0]) === 0){
-            $(children[4]).addClass(COLOR.RED);
-            $(children[5]).addClass(COLOR.RED);
+        percentage = parseInt(tp[0])/parseInt(tp[1]);
+        highlightPlayerShootingStats(children[4], percentage, 0.6, 0.3);
+        highlightPlayerShootingStats(children[5], percentage, 0.6, 0.3);
     }
-
     if (parseInt(ft[1]) >= 5) {
-        let percentage = parseInt(ft[0])/parseInt(ft[1]);
-        if (percentage >= 0.9) {
-            $(children[6]).addClass(COLOR.GREEN);
-            $(children[7]).addClass(COLOR.GREEN);
-        }
-        else if (percentage <= 0.5) {
-            $(children[6]).addClass(COLOR.RED);
-            $(children[7]).addClass(COLOR.RED);
-        }
-    } else if (parseInt(ft[1]) > 0 && parseInt(ft[0]) === 0){
-            $(children[6]).addClass(COLOR.RED);
-            $(children[7]).addClass(COLOR.RED);
+        percentage = parseInt(ft[0])/parseInt(ft[1]);
+        highlightPlayerShootingStats(children[6], percentage, 0.9, 0.5);
+        highlightPlayerShootingStats(children[7], percentage, 0.9, 0.5);
     }
 
     var count = 0;

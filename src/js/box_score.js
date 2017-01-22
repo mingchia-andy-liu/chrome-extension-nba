@@ -197,6 +197,9 @@ $(function(){
                 $(el).show().children().each(function(col, cell){
                     $(cell).html(rowData[col]);
                 });
+                // if (g.vls.pstsg[rowNum].court) {
+                //     $(el).find(">:first-child").css('background-color', '#fcd399');
+                // }
             } else {
                 $(el).hide();       // extra player row
             }
@@ -222,6 +225,9 @@ $(function(){
                 $(el).show().children().each(function(col, cell){
                     $(cell).html(rowData[col]);
                 });
+                // if (g.vls.pstsg[rowNum].court) {
+                //     $(el).find(">:first-child").css('background-color', '#fcd399');
+                // }
             } else {
                 $(el).hide();
             }
