@@ -45,7 +45,7 @@ table tr:first-child th:last-child {
 #box_score_page #games {
     min-width: 26%;
     margin: 0 5px 0 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #footer {
@@ -57,7 +57,7 @@ table tr:first-child th:last-child {
 #popup_page {
     width: 330px;
     max-height: 460px;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 0 5px 0 5px;
 }
 
@@ -83,12 +83,8 @@ table tr:first-child th:last-child {
     font-size: calc(15px + 1vw);
 }
 
-#popup_page #cards .c-card:hover .over {
-    display: block;
-}
-
 #cards .c-card:not(.no-game):hover {
-    border: 2px solid rgb(30, 90, 250);
+    border: 2px solid rgb(30, 150, 250);
 }
 
 .c-table .over {
@@ -170,7 +166,7 @@ table tr:first-child th:last-child {
     font-size: calc(13px + 0.1vw);
     padding: 10px 10px 10px 10px;
     margin: 0 5px 0 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .c-table table {

@@ -190,12 +190,12 @@ function highlightPlayerRowHelper(index, el) {
     }
 
     if (parseInt(tp[1]) >= 5) {
-        percentage = parseInt(tp[0])/parseInt(tp[1]);
+        let percentage = parseInt(tp[0])/parseInt(tp[1]);
         highlightPlayerShootingStats(children[4], percentage, 0.6, 0.3);
         highlightPlayerShootingStats(children[5], percentage, 0.6, 0.3);
     }
     if (parseInt(ft[1]) >= 5) {
-        percentage = parseInt(ft[0])/parseInt(ft[1]);
+        let percentage = parseInt(ft[0])/parseInt(ft[1]);
         highlightPlayerShootingStats(children[6], percentage, 0.9, 0.5);
         highlightPlayerShootingStats(children[7], percentage, 0.9, 0.5);
     }
