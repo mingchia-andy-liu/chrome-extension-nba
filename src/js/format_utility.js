@@ -12,7 +12,7 @@ function getGameStartTime(status) {
     var gameTime = gameStatus[0].split(':');    // [12,30]
     var gameHour = Number.parseInt(gameTime[0]);                 // hour --> 12
     var gameMinute = Number.parseInt(gameTime[1]);               // minute --> 30
-    if (gameStatus[1] === 'pm') {
+    if (gameStatus[1] === 'pm' && gameHour !== 12) {
         gameHour = gameHour + 12;
     }
     var gameTimezoneMinute = gameMinute + (timeZoneOffset/60) % 1 * 60;
