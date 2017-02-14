@@ -65,6 +65,10 @@ table tr:first-child th:last-child {
     color: #8f8f8f;
 }
 
+#optionsPage {
+    cursor: pointer;
+}
+
 .over {
     display: none;
     /*parent needs to relative in order to float*/

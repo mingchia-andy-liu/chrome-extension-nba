@@ -6,6 +6,10 @@ $(function(){
         chrome.tabs.create({url: hashedUrl});
     });
 
+    $('#optionsPage').on('click', function() {
+        chrome.tabs.create({'url': "/options.html" } )
+    });
+
     chrome.runtime.sendMessage({request : 'wakeup'});
 
     chrome.alarms.onAlarm.addListener(function(alarm){
