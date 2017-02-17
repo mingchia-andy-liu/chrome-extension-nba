@@ -74,7 +74,11 @@ function gameReording(games) {
 
 // Fetch Data
 function updateCards(games) {
-    $(".c-card.no-game").addClass('u-hide');
+    if (games && games.length === 0) {
+        $(".c-card.no-game").removeClass('u-hide');
+    } else {
+        $(".c-card.no-game").addClass('u-hide');
+    }
     $('.c-card:not(.no-game)').each(function(index, el){
         if (index >= games.length) {
             $(el).addClass('u-hide');
@@ -84,7 +88,7 @@ function updateCards(games) {
         }
     });
     if (games.length === 0) {
-        $(".c-card.no-game").text(NO_GAME_TEXT);
+        $(".c-card.no-game").html(NO_GAME_TEXT);
     }
 }
 
@@ -152,6 +156,7 @@ function fetchData() {
     var deferred = $.Deferred();
 
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
+            debugger;
         if (data && !data.failed) {
             updateLastUpdate();
             let newGames = gameReording(data.gs.g);

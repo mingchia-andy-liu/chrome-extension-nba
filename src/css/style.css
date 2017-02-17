@@ -66,6 +66,8 @@ table tr:first-child th:last-child {
 }
 
 #optionsPage {
+    color: blue;
+    margin: 5px 5px 5px 5px;
     cursor: pointer;
 }
 
@@ -102,7 +104,7 @@ table tr:first-child th:last-child {
     align-items: center;
     position: relative;
     min-height: 85px;
-    margin: 5px 5px 5px 5px;
+    margin: 2px 5px 10px 5px;
     font-size: calc(17px + 0.2vw);
     background-color: #f9f9f9;
     border-radius: 5px;
@@ -389,7 +391,7 @@ table tr:first-child th:last-child {
 }
 
 .u-shadow:hover {
-    box-shadow: 0 10px 16px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 6px 9px 0 rgba(0,0,0,0.3);
 }
 
 .u-inner-shadow {

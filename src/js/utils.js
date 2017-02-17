@@ -35,8 +35,8 @@ const BG_COLOR = {
 
 const AWAY_TEXT = 'Away';
 const HOME_TEXT = 'Home';
-const NO_GAME_TEXT = 'No Games Today ¯\\_(ツ)_/¯';
-const NO_BOX_SCORE_TEXT = '&#9756;(&#65439;&#12526;&#65439;&#9756;) CLICK ON A GAME TO SEE THE BOX SCORE';
+const NO_GAME_TEXT = 'No Games Today &macr;\\_(&#12484;)_/&macr;';  //¯\_(ツ)_/¯
+const NO_BOX_SCORE_TEXT = '&#9756;(&#65439;&#12526;&#65439;&#9756;) CLICK ON A GAME TO SEE THE BOX SCORE'; //☜(ﾟヮﾟ☜)
 const FETCH_DATA_FAILED = 'Unable to fetch data';
 const NON_LIVE_GAME = 'GAME HAS NOT STARTED YET';
 const LOADING = 'LOADING...';
