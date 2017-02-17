@@ -156,7 +156,6 @@ function fetchData() {
     var deferred = $.Deferred();
 
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
-            debugger;
         if (data && !data.failed) {
             updateLastUpdate();
             let newGames = gameReording(data.gs.g);

@@ -166,7 +166,7 @@ table tr:first-child th:last-child {
     width: 100%;
     height: 100%;
     max-height: 1000px;
-    min-width: 850px;
+    min-width: 900px;
     border-radius: 5px;
     position: relative;
     font-size: calc(13px + 0.1vw);
@@ -241,7 +241,7 @@ table tr:first-child th:last-child {
 }
 
 .summary-box-score {
-    width: 600px;
+    width: 650px;
 }
 
 /* Detail Box Score*/
