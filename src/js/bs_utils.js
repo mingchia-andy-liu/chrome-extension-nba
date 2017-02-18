@@ -3,8 +3,16 @@ const EMPTY_TEAM_ROW = ['', '','0-0', '-', '0-0', '-', '0-0', '-', '0', '0', '0'
 
 // Summary table
 function formatSummary(summary){
-    $('#away_team_logo').text(summary.atlg).css('background-color', LOGO_COLORS[summary.atlg]);
-    $('#home_team_logo').text(summary.htlg).css('background-color', LOGO_COLORS[summary.htlg]);
+    var vColor = '#000000';
+    var aColor = '#000000';
+    if (LOGO_COLORS[summary.htlg]) {
+        vColor = LOGO_COLORS[summary.htlg];
+    }
+    if (LOGO_COLORS[summary.atlg]) {
+        aColor = LOGO_COLORS[summary.atlg]
+    }
+    $('#away_team_logo').text(summary.atlg).css('background-color', aColor);
+    $('#home_team_logo').text(summary.htlg).css('background-color', vColor);
     $('.away-team-name').text(summary.atn);
     $('.home-team-name').text(summary.htn);
     $('.summary-box-score tbody tr:nth-child(2) th').eq(0).text(summary.ata);
