@@ -134,18 +134,18 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     }
+    var hColor = '#000000';
     var vColor = '#000000';
-    var aColor = '#000000';
     if (LOGO_COLORS[game.h.ta]) {
-        vColor = LOGO_COLORS[game.h.ta];
+        hColor = LOGO_COLORS[game.h.ta];
     }
     if (LOGO_COLORS[game.v.ta]) {
-        aColor = LOGO_COLORS[game.v.ta];
+        vColor = LOGO_COLORS[game.v.ta];
     }
     awayTeamEl.find('.c-team-name').text(game.v.tn);
     awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);
-    homeTeamEl.find('.c-team-logo').text(game.h.ta).css('background-color', aColor);
+    homeTeamEl.find('.c-team-logo').text(game.h.ta).css('background-color', hColor);
 }
 
 function updateLastUpdate(ms) {
