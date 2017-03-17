@@ -6,7 +6,8 @@ function validateLiveGame(match) {
 
 function getGameStartTime(status) {
     // returns in minute of the diff to UTC
-    var timeZoneOffset = new Date().getTimezoneOffset();
+    var today = new Date();
+    var timeZoneOffset = today.getTimezoneOffset();
 
     var gameStatus = status.split(' ');      // 12:30 pm ET
     var gameTime = gameStatus[0].split(':');    // [12,30]
@@ -16,7 +17,8 @@ function getGameStartTime(status) {
         gameHour = gameHour + 12;
     }
     var gameTimezoneMinute = gameMinute + (timeZoneOffset/60) % 1 * 60;
-    var gameTimezoneHour = gameHour + 5 - Math.floor(timeZoneOffset/60);    // convert ET to UTC to local
+    var timeDiff = 4;
+    var gameTimezoneHour = gameHour + timeDiff - Math.floor(timeZoneOffset/60);    // convert ET to UTC to local
     if (gameTimezoneMinute >= 60) {
         gameTimezoneHour++;
         gameTimezoneMinute -= 60;
@@ -45,6 +47,8 @@ function getGameStartTime(status) {
 function formatClock(clock, status) {
     if (status.includes('Halftime') || status.includes('Tipoff')){    // game started, clock stopped
         return status;
+    } else if (status === 'PPD') {  //PPD mean postponed
+        return 'Postponed';
     } else if (status.includes('Start') || status.includes('End')){
         var statusArray = status.split(' ');
         if (status.includes('Qtr')) {
@@ -123,7 +127,7 @@ function updateCardWithGame(card, game) {
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
-    } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am')){
+    } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
         let time = getGameStartTime(game.stt);
         matchinfoEl.find('.c-hyphen').text('');
         $(scores[0]).text('').removeClass(COLOR.GREEN);
