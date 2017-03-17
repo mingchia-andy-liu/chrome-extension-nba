@@ -223,21 +223,21 @@ function highlightPlayerRowHelper(index, el) {
     var doubles = '(';
     if (parseInt(result[0].text()) >= 10) {
         result[0].addClass(COLOR.GREEN);
-        doubles += 'Rebounds + ';
+        doubles += 'Rebounds';
     }
 
     if (parseInt(result[1].text()) >= 10) {
         result[1].addClass(COLOR.GREEN);
-        doubles += 'Assists + ';
+        doubles += ' + Assists';
     }
 
     if (parseInt(result[2].text()) >= 10)
-        doubles += 'Steals + ';
+        doubles += ' + Steals';
     if (parseInt(result[2].text()) >= 5)
         result[2].addClass(COLOR.GREEN);
 
     if (parseInt(result[3].text()) >= 10)
-        doubles += 'Blocked Shots + ';
+        doubles += ' + Blocked Shots';
     if (parseInt(result[3].text()) >= 5)
         result[3].addClass(COLOR.GREEN);
 
@@ -248,7 +248,7 @@ function highlightPlayerRowHelper(index, el) {
 
     if (parseInt(result[5].text()) >= 10) {
         result[5].addClass(COLOR.GREEN);
-        doubles += 'Points';
+        doubles += ' + Points';
     }
 
     doubles += ')';
