@@ -1,14 +1,14 @@
 var DATE_UTILS = {}
 
 DATE_UTILS.newDate = new Date()
+DATE_UTILS.fetchDataDate = new Date()
 DATE_UTILS.maxDate = new Date('2017-06-18')
 DATE_UTILS.minDate = new Date('2016-10-25')
 
 DATE_UTILS.schedule = []
 
 DATE_UTILS.onArrowClick = function(offset) {
-    const selectedDate = this.newDate.fp_incr(offset)
-    // debugger
+    let selectedDate = this.newDate.fp_incr(offset)
     if (selectedDate.getUTCFullYear() <= this.minDate.getUTCFullYear() &&
         selectedDate.getUTCMonth() <= this.minDate.getUTCMonth() &&
         selectedDate.getUTCDate() < this.minDate.getUTCDate()) {
@@ -27,7 +27,6 @@ DATE_UTILS.onSelectChange = function(date) {
 }
 
 DATE_UTILS.searchGames = function(date) {
-
     var selectedDate = new Date(date.selectedDates[0])
     // console.log(selectedDate)
     // console.log(this.schedule)
@@ -62,7 +61,16 @@ DATE_UTILS.checkSelectToday = function(newDate) {
         this.newDate = newDate
     }
     const today = new Date()
+    if (this.newDate.getDay() !== this.fetchDataDate.getDay()) {
+        return false
+    }
     return (today.getFullYear() === this.newDate.getFullYear() &&
             today.getMonth() === this.newDate.getMonth() &&
             today.getDate() === this.newDate.getDate())
+}
+
+DATE_UTILS.parseDate = function(date) {
+    var parts = date.split('-');
+    // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
+    return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
 }

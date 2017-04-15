@@ -9,7 +9,6 @@ $(function(){
         minDate: '2016-10-25',
         maxDate: '2017-06-18',
         onChange: function(selectedDate, dateStr, instance) {
-            // debugger
             if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
                 updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
                 updateCards(SELECTED_SCHEDULE.cacheData);
@@ -26,7 +25,9 @@ $(function(){
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
         var d = new Date();
-
+        DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
+        DATE_UTILS.newDate = DATE_UTILS.parseDate(data.fetchDataDate)
+        calendar.setDate([data.fetchDataDate])
         if (d.getTime() - scheduleTime > 86400) {
             fetchFullSchedule()
             .done(function(data){
@@ -55,13 +56,10 @@ $(function(){
             updateBox(getHash());
             SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
             SELECTED_SCHEDULE.cacheData = data.cacheData
-            // debugger
-            calendar.setDate([data.fetchDataDate])
         }
     });
 
     function onArrowClick() {
-        // debugger
         calendar.setDate([DATE_UTILS.newDate])
         if (DATE_UTILS.checkSelectToday()) {
             updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
