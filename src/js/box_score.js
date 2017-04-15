@@ -1,15 +1,44 @@
 $(function(){
     'use strict';
 
-    var SELECTED_GAME_OBJ = {};
+    var SELECTED_GAME_OBJ = {}
+    var SELECTED_SCHEDULE = {}
 
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData'], function(data) {
-        var cacheDate = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
-        var d = new Date();
-        if (d.getTime() - cacheDate > 60000) {
-            fetchData()
-            .done(function(games){
+    var calendar = flatpickr("#schedule", {
+        defaultDate: new Date(),
+        minDate: '2016-10-25',
+        maxDate: '2017-06-18',
+        onChange: function(selectedDate, dateStr, instance) {
+            // debugger
+            if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
+                updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
+                updateCards(SELECTED_SCHEDULE.cacheData);
                 updateBox(getHash());
+            } else {
+                updateCards(DATE_UTILS.searchGames(calendar))
+                DATE_UTILS.onSelectChange(selectedDate[0])
+                resetPage()
+            }
+        }
+    })
+
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefeshTime', 'schedule', 'fetchDataDate'], function(data) {
+        var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
+        var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
+        var d = new Date();
+
+        if (d.getTime() - scheduleTime > 86400) {
+            fetchFullSchedule()
+            .done(function(data){
+                DATE_UTILS.schedule = data.lscd
+            })
+        }
+
+        if (d.getTime() - popupTIme > 60000) {
+            fetchData()
+            .done(function(games, gdte){
+                updateBox(getHash());
+                calendar.setDate([gdte])
             })
             .fail(function(){
                 removeBox();
@@ -24,8 +53,38 @@ $(function(){
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());
+            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
+            SELECTED_SCHEDULE.cacheData = data.cacheData
+            debugger
+            calendar.setDate([data.fetchDataDate])
         }
     });
+
+    function onArrowClick() {
+        // debugger
+        calendar.setDate([DATE_UTILS.newDate])
+        if (DATE_UTILS.checkSelectToday()) {
+            updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
+            updateCards(SELECTED_SCHEDULE.cacheData);
+            updateBox(getHash());
+        } else {
+            updateCards(DATE_UTILS.searchGames(calendar))
+            resetPage()
+        }
+    }
+
+    $('#prevArrow').click(function(event){
+        if (DATE_UTILS.onArrowClick(-1)) {
+            onArrowClick()
+        }
+    })
+
+    $('#nextArrow').click(function(event){
+        if (DATE_UTILS.onArrowClick(1)) {
+            onArrowClick()
+        }
+    })
+
 
     function getHash() {
         if (window.location.hash) {
@@ -294,9 +353,9 @@ $(function(){
 
     function removeBox() {
         $('.c-table .over').removeClass(UTILS.HIDE);
-        if (!$.isEmptyObject(SELECTED_GAME_OBJ)){
-            // $('.c-table .over p').text(NO_BOX_SCORE_TEXT);
-        // } else {
+        if ($.isEmptyObject(SELECTED_GAME_OBJ)){
+            $('.c-table .over p').html(NO_BOX_SCORE_TEXT);
+        } else {
             $('.c-table .over p').text(NON_LIVE_GAME);
         }
 
@@ -372,7 +431,6 @@ $(function(){
 
         $('#away_team_logo').css('background-color','');
         $('#home_team_logo').css('background-color','');
-
     }
 
     function updateBox(gid) {
@@ -394,23 +452,43 @@ $(function(){
         }
     }
 
+    function resetPage() {
+        if (SELECTED_GAME_OBJ.removeClass) {
+            SELECTED_GAME_OBJ.removeClass(UTILS.SELECTED);
+        }
+        SELECTED_GAME_OBJ = {}
+        removeBox()
+        window.location.hash = ''
+    }
+
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
         // console.log(alarm.name);
+        if (!DATE_UTILS.checkSelectToday()) {
+            return
+        }
         if (alarm.name === 'minuteAlarm') {
             fetchData()
-            .done(function(gids){
+            .done(function(gids, gdte){
                 updateBox(getHash());
+                SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
+                SELECTED_SCHEDULE.cacheData = gids
+                calendar.setDate([gdte])
             })
             .fail(function(){
                 removeBox();
-                window.location.hash = '';
+                winfetchDatadow.location.hash = '';
                 $('.c-card:not(no-game)').each(function(index, el){
                     $(el).addClass('u-hide');
                 });
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
+        } else if (alarm.name === 'scheduleAlarm') {
+            fetchFullSchedule()
+            .done(function(data){
+                DATE_UTILS.schedule = data.lscd
+            })
         }
     });
 

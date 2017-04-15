@@ -106,13 +106,18 @@ function updateCardWithGame(card, game) {
 
     $(scores[0]).text(game.v.s).removeClass(COLOR.GREEN);
     $(scores[1]).text(game.h.s).removeClass(COLOR.GREEN);
-    if (game.stt === 'Final'){
+
+    if (game.stt === 'TBD') {   // playoff
+        matchinfoEl.find('.c-hyphen').text(game.seri)   // series info
+        matchinfoEl.find('.c-clock').text('TBA')
+    } else if (game.stt === 'Final'){
         matchinfoEl.find('.c-hyphen').text('-');
-        if (game.v.s > game.h.s)
+        if (parseInt(game.v.s) > parseInt(game.h.s)) {
             $(scores[0]).addClass(COLOR.GREEN);
-        else
+        } else {
             $(scores[1]).addClass(COLOR.GREEN);
-        if (game.h.ot1 !== 0 || game.v.ot1 !== 0) {
+        }
+        if ( (game.h.ot1 && game.h.ot1 !== 0) || (game.v.ot1 && game.v.ot1 !== 0)) {
             matchinfoEl.find('.c-clock').text('Final/OT').addClass(UTILS.CLOCK);
         } else {
             matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK);
@@ -120,16 +125,20 @@ function updateCardWithGame(card, game) {
     } else if (validateLiveGame(game)) {
         $(scores[0]).text(game.v.s);
         $(scores[1]).text(game.h.s);
-        if (game.v.s > game.h.s)
+        if (parseInt(game.v.s) > parseInt(game.h.s))
             $(scores[0]).addClass(COLOR.GREEN);
-        else if (game.v.s < game.h.s)
+        else if (parseInt(game.v.s) < parseInt(game.h.s))
             $(scores[1]).addClass(COLOR.GREEN);
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
         let time = getGameStartTime(game.stt);
-        matchinfoEl.find('.c-hyphen').text('');
+        if (game.seri != '') {
+            matchinfoEl.find('.c-hyphen').text(game.seri)
+        } else {
+            matchinfoEl.find('.c-hyphen').text('')
+        }
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);
         matchinfoEl.find('.c-clock').text(time).addClass(UTILS.TIME);
@@ -173,9 +182,10 @@ function fetchData() {
             updateCards(newGames);
             chrome.storage.local.set({
                 'popupRefreshTime' : new Date().getTime(),
-                'cacheData' : newGames
+                'cacheData' : newGames,
+                'fetchDataDate' : data.gs.gdte
             });
-            deferred.resolve(newGames);
+            deferred.resolve(newGames, '2017-06-07');
         } else if (data && data.failed) {
             console.log('failed');
             deferred.reject();
@@ -185,4 +195,26 @@ function fetchData() {
         }
     });
     return deferred.promise();
+}
+
+function fetchFullSchedule() {
+    var deferred = $.Deferred()
+
+    chrome.runtime.sendMessage({request : 'schedule'}, function (data) {
+        if (data && !data.failed) {
+            chrome.storage.local.set({
+                'schedule' : data,
+                'scheduleRefeshTime' : new Date().getTime()
+            })
+            deferred.resolve(data)
+        } else if (data && data.failed) {
+            console.log('failed')
+            deferred.reject()
+        } else {
+            console.log('something went wrong')
+            deferred.reject()
+        }
+    })
+
+    return deferred.promise()
 }

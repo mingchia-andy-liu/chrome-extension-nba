@@ -6,6 +6,8 @@ $(function () {
             fetchGames(sendResponse);
         } else if (request.request === 'box_score') {
             fetchLiveGameBox(sendResponse, request.gid);
+        } else if (request.request === 'schedule') {
+            fetchFullSchedule(sendResponse)
         } else if (request.request === 'wakeup') {
             sendResponse('woken');
         }
@@ -23,6 +25,11 @@ $(function () {
         delayInMinutes : 1,
         periodInMinutes : 1
     });
+
+    chrome.alarms.create('scheduleAlarm', {
+        delayInMinutes : 2,
+        periodInMinutes : 2
+    })
 
     function fetchGames(sendResponse) {
         $.ajax({
@@ -48,6 +55,19 @@ $(function () {
         }).fail(function(xhr, textStatus, errorThrown) {
             console.log('Failed to fetch data.');
             sendResponse(null);
+        });
+    }
+
+    function fetchFullSchedule(sendResponse) {
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/league/00_full_schedule.json'
+        }).done(function(data){
+            sendResponse(data);
+        }).fail(function(xhr, textStatus, errorThrown) {
+            console.log('Failed to fetch data.');
+            sendResponse({failed: true});
         });
     }
 });

@@ -9,7 +9,16 @@
     </head>
     <body>
         <div id="box_score_page" class="u-display-flex">
-            <div id='games' class='u-flex-column'>
+            <div class='u-flex-column c-card-list'>
+                <div id='picker' class='c-calendar-picker u-display-flex'>
+                    <button id='prevArrow' class='c-arrow'>
+                    <img src="/src/assets/svg/arrow-left.svg"/>
+                    </button>
+                    <input id='schedule' data-defaultDate=today class='u-full-width'></input>
+                    <button id='nextArrow' class='c-arrow'>
+                    <img src="/src/assets/svg/arrow-right.svg"/>
+                    </button>
+                </div>
                 <div id='footer' class="u-display-flex u-justify-center">
                     <div id='lastUpdate'>Last updated: --:--:--</div>
                 </div>
@@ -522,6 +531,13 @@
         <script src="src/js/logos.js"></script>
         <script src="src/js/format_utility.js"></script>
         <script src="src/js/bs_utils.js"></script>
+        <script src="src/js/date_utils.js"></script>
         <script src="src/js/box_score.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="src/thirdparty/flatpickr/dist/flatpickr.min.css">
+        <script src="src/thirdparty/flatpickr/dist/flatpickr.min.js"></script>
+
+<!--         <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+        <script src="https://unpkg.com/flatpickr"></script> -->
     </body>
 </html>

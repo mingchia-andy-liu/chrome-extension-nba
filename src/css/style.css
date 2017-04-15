@@ -38,11 +38,17 @@ table tr:first-child th:last-child {
 }
 
 #box_score_page {
-    height: 100vh;
+    /*height: 100vh;*/
     padding: 5px 5px 5px 5px;
 }
-
+/*
 #box_score_page #games {
+    min-width: 26%;
+    margin: 0 5px 0 5px;
+    overflow-y: auto;
+}*/
+
+.c-card-list {
     min-width: 26%;
     margin: 0 5px 0 5px;
     overflow-y: auto;
@@ -65,7 +71,7 @@ table tr:first-child th:last-child {
     color: #8f8f8f;
 }
 
-#optionsPage {
+#optionsPage, #boxScorePage {
     color: blue;
     margin: 5px 5px 5px 5px;
     cursor: pointer;
@@ -105,7 +111,7 @@ table tr:first-child th:last-child {
     position: relative;
     min-height: 85px;
     margin: 2px 5px 10px 5px;
-    font-size: calc(17px + 0.2vw);
+    font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 2px solid transparent;
@@ -119,7 +125,7 @@ table tr:first-child th:last-child {
 .c-team-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 33%;
+    flex-basis: 30%;
     align-items: center;
 }
 
@@ -140,7 +146,7 @@ table tr:first-child th:last-child {
 .c-match-info {
     display: flex;
     flex-direction: column;
-    flex-basis: 34%;
+    flex-basis: 40%;
     text-align: center;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
@@ -150,6 +156,11 @@ table tr:first-child th:last-child {
 }
 
 .c-clock {
+    margin-top: 8px;
+    font-size: calc(15px + 0.1vw);
+}
+
+.c-hyphen {
     font-size: calc(15px + 0.1vw);
 }
 
@@ -161,19 +172,43 @@ table tr:first-child th:last-child {
     cursor: auto;
 }
 
+/* === calendar === */
+.c-calendar-picker {
+    padding: 10px 10px 10px 10px;
+    height: 5em;
+}
+
+.c-calendar-picker input {
+    text-align: center;
+    border-radius: 5px;
+    font-size: calc(17px + 0.2vw);
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 2px solid transparent;
+
+}
+
+.c-arrow {
+    width: 10%;
+    border:none;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
 /* === table === */
 .c-table {
     width: 100%;
     height: 100%;
-    max-height: 1000px;
+    /*max-height: 1000px;*/
     min-width: 900px;
     border-radius: 5px;
     position: relative;
     font-size: calc(13px + 0.1vw);
     padding: 10px 10px 10px 10px;
     margin: 0 5px 0 5px;
-    overflow-y: auto;
-    overflow-x: hidden;
+/*    overflow-y: auto;
+    overflow-x: hidden;*/
 }
 
 .c-table table {
@@ -347,6 +382,10 @@ table tr:first-child th:last-child {
     border: 2px solid rgb(30, 90, 250) !important;
 }
 
+.u-full-width {
+    width: 100%
+}
+
 /*text*/
 .u-text-align-center {
     text-align: center;
@@ -412,7 +451,11 @@ table tr:first-child th:last-child {
 /* === Responsive === */
 @media only screen and (max-width: 700px) {
 
-    #box_score_page #games {
+/*    #box_score_page #games {
+        min-width: 300px;
+    }
+*/
+    .c-card-list {
         min-width: 300px;
     }
 
