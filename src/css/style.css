@@ -169,7 +169,7 @@ table tr:first-child th:last-child {
 }
 
 .c-series {
-    font-size: calc(17px + 0.1vw);
+    font-size: calc(16px + 0.1vw);
 }
 
 .no-game:hover {
