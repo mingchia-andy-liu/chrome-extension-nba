@@ -107,8 +107,10 @@ function updateCardWithGame(card, game) {
     $(scores[0]).text(game.v.s).removeClass(COLOR.GREEN);
     $(scores[1]).text(game.h.s).removeClass(COLOR.GREEN);
 
+    matchinfoEl.find('.c-series').text('')   // series info
     if (game.stt === 'TBD') {   // playoff
-        matchinfoEl.find('.c-hyphen').text(game.seri)   // series info
+        matchinfoEl.find('.c-series').text(game.seri)   // series info
+        matchinfoEl.find('.c-hyphen').text('');
         matchinfoEl.find('.c-clock').text('TBA')
     } else if (game.stt === 'Final'){
         matchinfoEl.find('.c-hyphen').text('-');
@@ -135,9 +137,8 @@ function updateCardWithGame(card, game) {
     } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
         let time = getGameStartTime(game.stt);
         if (game.seri != '') {
-            matchinfoEl.find('.c-hyphen').text(game.seri)
-        } else {
-            matchinfoEl.find('.c-hyphen').text('')
+            matchinfoEl.find('.c-series').text(game.seri)
+            matchinfoEl.find('.c-hyphen').text('');
         }
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);

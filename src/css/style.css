@@ -111,7 +111,7 @@ table tr:first-child th:last-child {
     position: relative;
     min-height: 85px;
     margin: 2px 5px 10px 5px;
-    font-size: calc(17px + 0.1vw);
+    font-size: calc(16px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 2px solid transparent;
