@@ -55,7 +55,7 @@ $(function(){
             updateBox(getHash());
             SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
             SELECTED_SCHEDULE.cacheData = data.cacheData
-            debugger
+            // debugger
             calendar.setDate([data.fetchDataDate])
         }
     });
@@ -99,7 +99,7 @@ $(function(){
 
     function checkExistGame(gid) {
         let exist = false;
-        $('#cards:not(.no-game)').children().each(function(index,el){
+        $('#cards >:not(.no-game)').each(function(index,el){
             if ($(el).attr('gid') === gid){
                 $(el).addClass(UTILS.SELECTED);
                 SELECTED_GAME_OBJ = $(el);
@@ -118,7 +118,7 @@ $(function(){
         return exist;
     }
 
-    $('#cards:not(.no-game)').on("click", '.c-card', function() {
+    $('#cards').on("click", '.c-card:not(.no-game)', function() {
         if ($(this).is(SELECTED_GAME_OBJ)){
             return;
         }
@@ -129,7 +129,7 @@ $(function(){
         }
         SELECTED_GAME_OBJ = $(this).addClass(UTILS.SELECTED);
         $('.c-table .over').removeClass(UTILS.HIDE);
-        $('.c-table .over p').text(LOADING);
+        $('.c-table .over p').html(LOADING);
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
@@ -356,7 +356,7 @@ $(function(){
         if ($.isEmptyObject(SELECTED_GAME_OBJ)){
             $('.c-table .over p').html(NO_BOX_SCORE_TEXT);
         } else {
-            $('.c-table .over p').text(NON_LIVE_GAME);
+            $('.c-table .over p').html(NON_LIVE_GAME);
         }
 
         let summary = {

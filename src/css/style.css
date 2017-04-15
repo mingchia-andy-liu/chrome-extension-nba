@@ -463,3 +463,38 @@ table tr:first-child th:last-child {
         min-width: 270px;
     }
 }
+
+@media only screen and (min-width: 1600px) {
+
+    /*.c-card-list {
+        min-width: 33%;
+    }*/
+    #footer {
+        font-size: calc(15px + 0.1vw);
+    }
+
+    .c-calendar-picker input{
+        font-size: calc(20px + 0.1vw);
+    }
+
+    .c-card {
+        min-width: 330px;
+        min-height: 100px;
+    }
+
+    .c-hyphen {
+        font-size: calc(17px + 0.1vw);
+    }
+
+    .c-card, .c-time, .c-clock {
+        font-size: calc(20px + 0.1vw);
+    }
+
+    .c-table {
+        font-size: calc(17px + 0.1vw);
+    }
+
+    .box-banner {
+        font-size: calc(24px + 0.8vw);
+    }
+}

@@ -185,7 +185,7 @@ function fetchData() {
                 'cacheData' : newGames,
                 'fetchDataDate' : data.gs.gdte
             });
-            deferred.resolve(newGames, '2017-06-07');
+            deferred.resolve(newGames, fetchDataDate);
         } else if (data && data.failed) {
             console.log('failed');
             deferred.reject();

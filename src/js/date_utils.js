@@ -36,7 +36,7 @@ DATE_UTILS.searchGames = function(date) {
     var date = selectedDate.getUTCDate()
     var dateStr = date >= 10 ? date.toString() : `0${date}`
     var gameDateStr = `${selectedDate.getUTCFullYear()}-${monthStr}-${dateStr}`
-    console.log(gameDateStr)
+    // console.log(gameDateStr)
     var monthIndex = month > 7 ? month-10 : month+2
     if (!!!this.schedule[monthIndex]) {
         return []
