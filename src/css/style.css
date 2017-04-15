@@ -111,7 +111,7 @@ table tr:first-child th:last-child {
     position: relative;
     min-height: 85px;
     margin: 2px 5px 10px 5px;
-    font-size: calc(16px + 0.1vw);
+    font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 2px solid transparent;
@@ -165,6 +165,10 @@ table tr:first-child th:last-child {
 }
 
 .c-time {
+    font-size: calc(17px + 0.1vw);
+}
+
+.c-series {
     font-size: calc(17px + 0.1vw);
 }
 
@@ -486,7 +490,7 @@ table tr:first-child th:last-child {
         font-size: calc(17px + 0.1vw);
     }
 
-    .c-card, .c-time, .c-clock {
+    .c-card, .c-time, .c-clock, .c-series {
         font-size: calc(20px + 0.1vw);
     }
 
