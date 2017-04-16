@@ -228,16 +228,30 @@ function highlightPlayerRowHelper(index, el) {
 
     if (parseInt(result[1].text()) >= 10) {
         result[1].addClass(COLOR.GREEN);
-        doubles += ' + Assists';
+        if (doubles.length > 1) {
+            doubles += ' + Assists';
+        } else {
+            doubles += 'Assists'
+        }
     }
 
-    if (parseInt(result[2].text()) >= 10)
-        doubles += ' + Steals';
+    if (parseInt(result[2].text()) >= 10) {
+        if (doubles.length > 1) {
+            doubles += ' + Steals';
+        } else {
+            doubles += 'Steals'
+        }
+    }
     if (parseInt(result[2].text()) >= 5)
         result[2].addClass(COLOR.GREEN);
 
-    if (parseInt(result[3].text()) >= 10)
-        doubles += ' + Blocked Shots';
+    if (parseInt(result[3].text()) >= 10) {
+        if (doubles.length > 1) {
+            doubles += ' + Blocked Shots';
+        } else {
+            doubles += 'Blocked Shots'
+        }
+    }
     if (parseInt(result[3].text()) >= 5)
         result[3].addClass(COLOR.GREEN);
 

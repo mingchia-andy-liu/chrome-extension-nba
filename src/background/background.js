@@ -27,8 +27,8 @@ $(function () {
     });
 
     chrome.alarms.create('scheduleAlarm', {
-        delayInMinutes : 2,
-        periodInMinutes : 2
+        delayInMinutes : 120,
+        periodInMinutes : 120
     })
 
     function fetchGames(sendResponse) {
