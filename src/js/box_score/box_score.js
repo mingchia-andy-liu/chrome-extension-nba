@@ -6,8 +6,6 @@ $(function(){
 
     var calendar = flatpickr("#schedule", {
         defaultDate: new Date(),
-        minDate: '2016-10-25',
-        maxDate: '2017-06-18',
         onChange: function(selectedDate, dateStr, instance) {
             if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
                 updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
@@ -432,7 +430,7 @@ $(function(){
     }
 
     function updateBox(gid) {
-        if (gid) {
+        if (true || gid) {
             fetchBox(gid).done(function(boxScoreData){
                 showBox(boxScoreData);
                 var cacheData = {
@@ -461,7 +459,6 @@ $(function(){
 
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
-        // console.log(alarm.name);
         if (!DATE_UTILS.checkSelectToday()) {
             return
         }

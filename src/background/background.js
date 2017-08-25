@@ -49,7 +49,8 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType:'application/json',
-            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/scores/gamedetail/' + gid + '_gamedetail.json'
+            // url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/scores/gamedetail/' + gid + '_gamedetail.json'
+            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/scores/gamedetail/0021600140_gamedetail.json'
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
@@ -62,7 +63,7 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType: 'application/json',
-            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/league/00_full_schedule.json'
+            url: 'http://stats.nba.com/js/data/league/2017/00_full_schedule_week.json'
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
