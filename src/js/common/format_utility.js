@@ -208,7 +208,7 @@ function fetchFullSchedule() {
         if (data && !data.failed) {
             chrome.storage.local.set({
                 'schedule' : data,
-                'scheduleRefeshTime' : new Date().getTime()
+                'scheduleRefreshTime' : new Date().getTime()
             })
             deferred.resolve(data)
         } else if (data && data.failed) {

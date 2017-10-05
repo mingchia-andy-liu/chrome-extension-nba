@@ -19,7 +19,7 @@ $(function(){
         }
     })
 
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefeshTime', 'schedule', 'fetchDataDate'], function(data) {
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
         var d = new Date();
@@ -33,7 +33,7 @@ $(function(){
             })
         }
 
-        if (d.getTime() - popupTIme > 60000) {
+        if (d.getTime() - popupTIme > 1) {
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash());
