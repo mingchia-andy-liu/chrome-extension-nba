@@ -28,15 +28,12 @@ DATE_UTILS.onSelectChange = function(date) {
 
 DATE_UTILS.searchGames = function(date) {
     var selectedDate = new Date(date.selectedDates[0])
-    // console.log(selectedDate)
-    // console.log(this.schedule)
     var month = selectedDate.getUTCMonth()+1
     var monthStr = month >= 10 ? month.toString() : `0${month}`
     var date = selectedDate.getUTCDate()
     var dateStr = date >= 10 ? date.toString() : `0${date}`
     var gameDateStr = `${selectedDate.getUTCFullYear()}-${monthStr}-${dateStr}`
-    // console.log(gameDateStr)
-    var monthIndex = month > 9 ? month-9 : month
+    var monthIndex = month > 9 ? month - 9 : month + 3
     if (!!!this.schedule[monthIndex]) {
         return []
     }
