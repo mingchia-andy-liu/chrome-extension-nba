@@ -137,7 +137,6 @@ function updateCardWithGame(card, game) {
     } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
         let time = getGameStartTime(game.stt);
         if (game.lm && game.lm.seri != '') {
-            // debugger
             matchinfoEl.find('.c-series').text(game.lm.seri)
         } else if (game.seri != '') {
             matchinfoEl.find('.c-series').text(game.seri)

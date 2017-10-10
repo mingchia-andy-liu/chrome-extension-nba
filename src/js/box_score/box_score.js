@@ -430,7 +430,7 @@ $(function(){
     }
 
     function updateBox(gid) {
-        if (true || gid) {
+        if (gid) {
             fetchBox(gid).done(function(boxScoreData){
                 showBox(boxScoreData);
                 var cacheData = {
@@ -472,7 +472,7 @@ $(function(){
             })
             .fail(function(){
                 removeBox();
-                winfetchDatadow.location.hash = '';
+                window.location.hash = '';
                 $('.c-card:not(no-game)').each(function(index, el){
                     $(el).addClass('u-hide');
                 });

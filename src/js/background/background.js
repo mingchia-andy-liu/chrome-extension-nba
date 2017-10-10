@@ -62,7 +62,7 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType: 'application/json',
-            url: 'http://stats.nba.com/js/data/league/2017/00_full_schedule_week.json'
+            url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {

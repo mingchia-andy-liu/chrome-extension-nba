@@ -2,8 +2,8 @@ var DATE_UTILS = {}
 
 DATE_UTILS.newDate = new Date()
 DATE_UTILS.fetchDataDate = new Date()
-DATE_UTILS.maxDate = new Date('2017-06-18')
-DATE_UTILS.minDate = new Date('2016-10-25')
+DATE_UTILS.maxDate = new Date('2018-06-17')
+DATE_UTILS.minDate = new Date('2017-10-01')
 
 DATE_UTILS.schedule = []
 
@@ -36,7 +36,7 @@ DATE_UTILS.searchGames = function(date) {
     var dateStr = date >= 10 ? date.toString() : `0${date}`
     var gameDateStr = `${selectedDate.getUTCFullYear()}-${monthStr}-${dateStr}`
     // console.log(gameDateStr)
-    var monthIndex = month > 7 ? month-10 : month+2
+    var monthIndex = month > 9 ? month-9 : month
     if (!!!this.schedule[monthIndex]) {
         return []
     }
@@ -52,7 +52,6 @@ DATE_UTILS.searchGames = function(date) {
     // console.log(gameArray)
     // console.log(startIndex)
     // console.log(lastIndex)
-
     return gameArray.slice(startIndex, lastIndex + 1)
 }
 
