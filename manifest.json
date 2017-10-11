@@ -19,7 +19,7 @@
     "background": {
         "scripts": [
             "/src/thirdparty/jquery/jquery-3.1.1.min.js",
-            "/src/js/background/background.js"
+            "/src/dist/bg.js"
         ],
         "persistent": false
     },
