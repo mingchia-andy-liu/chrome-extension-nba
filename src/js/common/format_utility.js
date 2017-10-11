@@ -1,5 +1,4 @@
 function validateLiveGame(match) {
-    debugger
     if (match && !match.cl) {
         // haven't started
         return 'prepare'
@@ -80,7 +79,6 @@ function gameReording(games) {
     var finished = []
     var prepare = []
     for (let i = 0; i < games.length; i++) {
-        console.log(games[i].gcode)
         switch (validateLiveGame(games[i])) {
             case 'prepare':
                 prepare.push(games[i]);
