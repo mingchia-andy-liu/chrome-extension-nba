@@ -21,6 +21,16 @@ $(function () {
         chrome.runtime.reload();
     });
 
+    chrome.runtime.onInstalled.addListener(function(details) {
+        if (details.reason === 'update') {
+            var currentVersion = chrome.runtime.getManifest().version
+            var previousVersion = details.previousVersion
+            if (previousVersion !== currentVersion) {
+                chrome.runtime.openOptionsPage()
+            }
+        }
+    });
+
     chrome.alarms.create('minuteAlarm', {
         delayInMinutes : 1,
         periodInMinutes : 1
@@ -29,7 +39,7 @@ $(function () {
     chrome.alarms.create('scheduleAlarm', {
         delayInMinutes : 120,
         periodInMinutes : 120
-    })
+    });
 
     function fetchGames(sendResponse) {
         $.ajax({

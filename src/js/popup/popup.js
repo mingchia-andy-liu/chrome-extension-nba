@@ -7,11 +7,11 @@ $(function(){
     });
 
     $('#boxScorePage').on('click', function() {
-        chrome.tabs.create({'url': "/box-score.html" } )
+        chrome.tabs.create({'url': "/box-score.html" })
     });
 
     $('#optionsPage').on('click', function() {
-        chrome.tabs.create({'url': "/options.html" } )
+        chrome.runtime.openOptionsPage()
     });
 
     chrome.runtime.sendMessage({request : 'wakeup'});
@@ -34,7 +34,7 @@ $(function(){
                 }
 
                 if (d.getTime() - scheduleTime > 86400) {
-                        fetchFullSchedule()
+                    fetchFullSchedule()
                 }
             });
         }

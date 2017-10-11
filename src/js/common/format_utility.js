@@ -1,7 +1,18 @@
 function validateLiveGame(match) {
-    return match.cl &&
-            ((match.cl !== '00:00.0' && match.stt !=='Final') ||
-             (match.cl === '00:00.0' && (match.stt === 'Halftime' || match.stt.includes('End'))));
+    debugger
+    if (match && !match.cl) {
+        // haven't started
+        return 'prepare'
+    } else if (match.cl === '00:00.0') {
+        if (match.stt === 'Halftime' || match.stt.includes('ENd')) {
+            // live
+            return 'live'
+        } else if (match.stt === 'Final') {
+            //finished
+            return 'finished'
+        }
+    }
+    return 'live'
 }
 
 function getGameStartTime(status) {
@@ -65,15 +76,26 @@ function formatClock(clock, status) {
 
 function gameReording(games) {
     // re-ordering: live --> finished --> haven't started
-    var orderedGames = [];
+    var live = []
+    var finished = []
+    var prepare = []
     for (let i = 0; i < games.length; i++) {
-        if (validateLiveGame(games[i])) {
-            orderedGames.unshift(games[i]);
-        } else {
-            orderedGames.push(games[i]);
+        console.log(games[i].gcode)
+        switch (validateLiveGame(games[i])) {
+            case 'prepare':
+                prepare.push(games[i]);
+                break;
+            case 'live':
+                live.push(games[i]);
+                break;
+            case 'finished':
+                finished.push(games[i])
+                break;
+            default:
+                finished.push(games[i])
         }
     }
-    return orderedGames;
+    return live.concat(prepare.concat(finished));
 }
 
 // Fetch Data
@@ -124,7 +146,7 @@ function updateCardWithGame(card, game) {
         } else {
             matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK);
         }
-    } else if (validateLiveGame(game)) {
+    } else if (validateLiveGame(game) === 'live') {
         $(scores[0]).text(game.v.s);
         $(scores[1]).text(game.h.s);
         if (parseInt(game.v.s) > parseInt(game.h.s))

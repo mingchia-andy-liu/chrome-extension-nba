@@ -33,7 +33,7 @@ $(function(){
             })
         }
 
-        if (d.getTime() - popupTIme > 1) {
+        if (d.getTime() - popupTIme > 60000) {
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash());
