@@ -6,8 +6,6 @@ $(function(){
 
     var calendar = flatpickr("#schedule", {
         defaultDate: new Date(),
-        minDate: '2016-10-25',
-        maxDate: '2017-06-18',
         onChange: function(selectedDate, dateStr, instance) {
             if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
                 updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
@@ -21,7 +19,7 @@ $(function(){
         }
     })
 
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefeshTime', 'schedule', 'fetchDataDate'], function(data) {
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
         var d = new Date();
@@ -461,7 +459,6 @@ $(function(){
 
     // alarm better than timeout
     chrome.alarms.onAlarm.addListener(function(alarm){
-        // console.log(alarm.name);
         if (!DATE_UTILS.checkSelectToday()) {
             return
         }
@@ -475,7 +472,7 @@ $(function(){
             })
             .fail(function(){
                 removeBox();
-                winfetchDatadow.location.hash = '';
+                window.location.hash = '';
                 $('.c-card:not(no-game)').each(function(index, el){
                     $(el).addClass('u-hide');
                 });

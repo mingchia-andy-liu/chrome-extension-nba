@@ -21,6 +21,11 @@ $(function () {
         chrome.runtime.reload();
     });
 
+    chrome.runtime.onInstalled.addListener(function(details) {
+        console.log('installed')
+        chrome.runtime.openOptionsPage()
+    });
+
     chrome.alarms.create('minuteAlarm', {
         delayInMinutes : 1,
         periodInMinutes : 1
@@ -29,13 +34,13 @@ $(function () {
     chrome.alarms.create('scheduleAlarm', {
         delayInMinutes : 120,
         periodInMinutes : 120
-    })
+    });
 
     function fetchGames(sendResponse) {
         $.ajax({
             type: 'GET',
             contentType: 'application/json',
-            url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2016/scores/00_todays_scores.json'
+            url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
         }).done(function(data) {
             console.log(data);
             sendResponse(data);
@@ -49,7 +54,7 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType:'application/json',
-            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/scores/gamedetail/' + gid + '_gamedetail.json'
+            url: `http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/gamedetail/${gid}_gamedetail.json`
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
@@ -62,7 +67,7 @@ $(function () {
         $.ajax({
             type: 'GET',
             contentType: 'application/json',
-            url: 'http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2016/league/00_full_schedule.json'
+            url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
         }).done(function(data){
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {

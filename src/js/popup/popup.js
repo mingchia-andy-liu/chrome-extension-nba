@@ -7,18 +7,18 @@ $(function(){
     });
 
     $('#boxScorePage').on('click', function() {
-        chrome.tabs.create({'url': "/box-score.html" } )
+        chrome.tabs.create({'url': "/box-score.html" })
     });
 
     $('#optionsPage').on('click', function() {
-        chrome.tabs.create({'url': "/options.html" } )
+        chrome.runtime.openOptionsPage()
     });
 
     chrome.runtime.sendMessage({request : 'wakeup'});
 
     chrome.alarms.onAlarm.addListener(function(alarm){
         if (alarm.name === 'initAlarm') {
-            chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefeshTime', 'schedule'], function(data) {
+            chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule'], function(data) {
                 var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
                 var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
                 var d = new Date();
@@ -34,7 +34,7 @@ $(function(){
                 }
 
                 if (d.getTime() - scheduleTime > 86400) {
-                        fetchFullSchedule()
+                    fetchFullSchedule()
                 }
             });
         }

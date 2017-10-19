@@ -1,7 +1,21 @@
 function validateLiveGame(match) {
-    return match.cl &&
-            ((match.cl !== '00:00.0' && match.stt !=='Final') ||
-             (match.cl === '00:00.0' && (match.stt === 'Halftime' || match.stt.includes('End'))));
+    if (match && !match.cl) {
+        // haven't started
+        return 'prepare'
+    } else if (match.cl === '00:00.0') {
+        if (match.stt === 'Halftime' || match.stt.includes('End')) {
+            // live
+            return 'live'
+        } else if (match.stt === 'Final') {
+            //finished
+            return 'finished'
+        } else if (match.stt.includes('ET')) {
+            return 'prepare'
+        }
+    } else if (match.cl !== '00:00.0') {
+        return 'live'
+    }
+    return 'prepare'
 }
 
 function getGameStartTime(status) {
@@ -61,19 +75,30 @@ function formatClock(clock, status) {
     } else if (status && status.includes('OT')) {   // game start being played over over time
         return 'OT' + status.charAt(0) + ' ' + clock;
     }
+    return clock
 }
 
 function gameReording(games) {
     // re-ordering: live --> finished --> haven't started
-    var orderedGames = [];
+    var live = []
+    var finished = []
+    var prepare = []
     for (let i = 0; i < games.length; i++) {
-        if (validateLiveGame(games[i])) {
-            orderedGames.unshift(games[i]);
-        } else {
-            orderedGames.push(games[i]);
+        switch (validateLiveGame(games[i])) {
+            case 'prepare':
+                prepare.push(games[i]);
+                break;
+            case 'live':
+                live.push(games[i]);
+                break;
+            case 'finished':
+                finished.push(games[i])
+                break;
+            default:
+                finished.push(games[i])
         }
     }
-    return orderedGames;
+    return live.concat(prepare.concat(finished));
 }
 
 // Fetch Data
@@ -124,20 +149,19 @@ function updateCardWithGame(card, game) {
         } else {
             matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK);
         }
-    } else if (validateLiveGame(game)) {
+    } else if (validateLiveGame(game) === 'live') {
         $(scores[0]).text(game.v.s);
         $(scores[1]).text(game.h.s);
         if (parseInt(game.v.s) > parseInt(game.h.s))
             $(scores[0]).addClass(COLOR.GREEN);
         else if (parseInt(game.v.s) < parseInt(game.h.s))
-            $(scores[1]).addClass(COLOR.GREEN);
+        $(scores[1]).addClass(COLOR.GREEN);
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
         let time = getGameStartTime(game.stt);
         if (game.lm && game.lm.seri != '') {
-            // debugger
             matchinfoEl.find('.c-series').text(game.lm.seri)
         } else if (game.seri != '') {
             matchinfoEl.find('.c-series').text(game.seri)
@@ -208,7 +232,7 @@ function fetchFullSchedule() {
         if (data && !data.failed) {
             chrome.storage.local.set({
                 'schedule' : data,
-                'scheduleRefeshTime' : new Date().getTime()
+                'scheduleRefreshTime' : new Date().getTime()
             })
             deferred.resolve(data)
         } else if (data && data.failed) {
