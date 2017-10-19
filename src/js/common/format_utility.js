@@ -3,15 +3,19 @@ function validateLiveGame(match) {
         // haven't started
         return 'prepare'
     } else if (match.cl === '00:00.0') {
-        if (match.stt === 'Halftime' || match.stt.includes('ENd')) {
+        if (match.stt === 'Halftime' || match.stt.includes('End')) {
             // live
             return 'live'
         } else if (match.stt === 'Final') {
             //finished
             return 'finished'
+        } else if (match.stt.includes('ET')) {
+            return 'prepare'
         }
+    } else if (match.cl !== '00:00.0') {
+        return 'live'
     }
-    return 'live'
+    return 'prepare'
 }
 
 function getGameStartTime(status) {
@@ -71,6 +75,7 @@ function formatClock(clock, status) {
     } else if (status && status.includes('OT')) {   // game start being played over over time
         return 'OT' + status.charAt(0) + ' ' + clock;
     }
+    return clock
 }
 
 function gameReording(games) {
@@ -150,7 +155,7 @@ function updateCardWithGame(card, game) {
         if (parseInt(game.v.s) > parseInt(game.h.s))
             $(scores[0]).addClass(COLOR.GREEN);
         else if (parseInt(game.v.s) < parseInt(game.h.s))
-            $(scores[1]).addClass(COLOR.GREEN);
+        $(scores[1]).addClass(COLOR.GREEN);
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);

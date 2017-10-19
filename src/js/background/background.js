@@ -22,13 +22,8 @@ $(function () {
     });
 
     chrome.runtime.onInstalled.addListener(function(details) {
-        if (details.reason === 'update') {
-            var currentVersion = chrome.runtime.getManifest().version
-            var previousVersion = details.previousVersion
-            if (previousVersion !== currentVersion) {
-                chrome.runtime.openOptionsPage()
-            }
-        }
+        console.log('installed')
+        chrome.runtime.openOptionsPage()
     });
 
     chrome.alarms.create('minuteAlarm', {
