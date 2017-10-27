@@ -6,6 +6,8 @@ $(function(){
 
     var calendar = flatpickr("#schedule", {
         defaultDate: new Date(),
+        maxDate: '2018-06-18',
+        minDate: '2017-10-01',
         onChange: function(selectedDate, dateStr, instance) {
             if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
                 updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
@@ -20,7 +22,6 @@ $(function(){
     })
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
-        debugger
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
@@ -29,9 +30,11 @@ $(function(){
         calendar.setDate([data.fetchDataDate])
         if (d.getTime() - scheduleRefreshTime > 86400) {
             fetchFullSchedule()
-            .done(function(data){
-                DATE_UTILS.schedule = data.lscd
+            .done(function(schedule){
+                DATE_UTILS.schedule = schedule
             })
+        } else {
+            DATE_UTILS.schedule = data.schedule
         }
 
         if (d.getTime() - popupTIme > 1000) {
@@ -483,7 +486,7 @@ $(function(){
         } else if (alarm.name === 'scheduleAlarm') {
             fetchFullSchedule()
             .done(function(data){
-                DATE_UTILS.schedule = data.lscd
+                DATE_UTILS.schedule = data
             })
         }
     });

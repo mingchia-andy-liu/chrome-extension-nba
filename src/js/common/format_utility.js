@@ -32,17 +32,16 @@ function preprocessData(games) {
     games.forEach(function(game, index) {
         switch (validateLiveGame(game)) {
             case 'prepare':
-            game._localTime = getGameStartTime(game.stt, game.gcode)
-            if (prepare.length === 0) {
-                prepare.push(game);
-                break
-            }
-            const start = moment(game._localTime, ["h:mm A"])
-            for(let i = 0; i < prepare.length; i++) {
-                // prepare items should have localTime because
-                // they were just inserted
-                const end = moment(prepare[i]._localTime, ["h:mm A"])
-                if (start.isBefore(end)) {
+                game._localTime = getGameStartTime(game.stt, game.gcode)
+                if (prepare.length === 0) {
+                    prepare.push(game);
+                    break
+                }
+                const start = moment(game._localTime, ["h:mm A"])
+                for(let i = 0; i < prepare.length; i++) {
+                    // prepare items should have localTime because they were just inserted
+                    const end = moment(prepare[i]._localTime, ["h:mm A"])
+                    if (start.isBefore(end)) {
                         prepare.splice(i, 0, game)
                         break
                     } else if (i === prepare.length - 1) {
@@ -73,6 +72,7 @@ function getGameStartTime(status, gcode) {
     var zone = "America/New_York";
     var input = `${today} ${gameTime}`
     var result = moment.tz(input, zone).local().format("hh:mm A");
+    debugger
     return result
 }
 
@@ -156,7 +156,7 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     } else if (game._status === 'prepare'){
-        let time = getGameStartTime(game.stt, game.gcode);
+        const time = game._localTime || getGameStartTime(game.stt, game.gcode);
         if (game.lm && game.lm.seri != '') {
             matchinfoEl.find('.c-series').text(game.lm.seri)
         } else if (game.seri != '') {
@@ -171,14 +171,8 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     }
-    var hColor = '#000000';
-    var vColor = '#000000';
-    if (LOGO_COLORS[game.h.ta]) {
-        hColor = LOGO_COLORS[game.h.ta];
-    }
-    if (LOGO_COLORS[game.v.ta]) {
-        vColor = LOGO_COLORS[game.v.ta];
-    }
+    var hColor = LOGO_COLORS[game.h.ta] || '#000000';
+    var vColor = LOGO_COLORS[game.v.ta] || '#000000';
     awayTeamEl.find('.c-team-name').text(game.v.tn);
     awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);

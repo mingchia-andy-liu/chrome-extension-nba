@@ -29,7 +29,7 @@ DATE_UTILS.searchGames = function(date) {
     var dateStr = date >= 10 ? date.toString() : `0${date}`
     var gameDateStr = `${selectedDate.getUTCFullYear()}-${monthStr}-${dateStr}`
     var monthIndex = month > 9 ? month - 9 : month + 3
-    if (!!!this.schedule[monthIndex]) {
+    if (this.schedule.length < monthIndex) {
         return []
     }
 
@@ -44,7 +44,6 @@ DATE_UTILS.searchGames = function(date) {
     // console.log(gameArray)
     // console.log(startIndex)
     // console.log(lastIndex)
-    debugger
     return gameArray.slice(startIndex, lastIndex + 1)
 }
 
