@@ -1,61 +1,79 @@
 function validateLiveGame(match) {
-    if (match && !match.cl) {
+    if (match.stt === 'Final') {
+        //finished
+        match._status = 'finished'
+        return 'finished'
+    } else if (match && !match.cl) {
         // haven't started
+        match._status = 'prepare'
         return 'prepare'
     } else if (match.cl === '00:00.0') {
         if (match.stt === 'Halftime' || match.stt.includes('End')) {
             // live
+            match._status = 'live'
             return 'live'
-        } else if (match.stt === 'Final') {
-            //finished
-            return 'finished'
-        } else if (match.stt.includes('ET')) {
+        } else if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
+            match._status = 'prepare'
             return 'prepare'
         }
     } else if (match.cl !== '00:00.0') {
+        match._status = 'live'
         return 'live'
     }
+    match._status = 'prepare'
     return 'prepare'
 }
 
-function getGameStartTime(status) {
-    // returns in minute of the diff to UTC
-    var today = new Date();
-    var timeZoneOffset = today.getTimezoneOffset();
+function preprocessData(games) {
+    // preprocess the data before anything
+    var live = []
+    var finished = []
+    var prepare = []
+    games.forEach(function(game, index) {
+        switch (validateLiveGame(game)) {
+            case 'prepare':
+            game._localTime = getGameStartTime(game.stt, game.gcode)
+            if (prepare.length === 0) {
+                prepare.push(game);
+                break
+            }
+            const start = moment(game._localTime, ["h:mm A"])
+            for(let i = 0; i < prepare.length; i++) {
+                // prepare items should have localTime because
+                // they were just inserted
+                const end = moment(prepare[i]._localTime, ["h:mm A"])
+                if (start.isBefore(end)) {
+                        prepare.splice(i, 0, game)
+                        break
+                    } else if (i === prepare.length - 1) {
+                        // latest
+                        prepare.push(game)
+                        break
+                    }
+                }
+                break;
+            case 'live':
+                live.push(game);
+                break;
+            case 'finished':
+                finished.push(game)
+                break;
+            default:
+                finished.push(game)
+        }
+    })
+    return live.concat(prepare.concat(finished))
+}
 
-    var gameStatus = status.split(' ');      // 12:30 pm ET
-    var gameTime = gameStatus[0].split(':');    // [12,30]
-    var gameHour = Number.parseInt(gameTime[0]);                 // hour --> 12
-    var gameMinute = Number.parseInt(gameTime[1]);               // minute --> 30
-    if (gameStatus[1] === 'pm' && gameHour !== 12) {
-        gameHour = gameHour + 12;
-    }
-    var gameTimezoneMinute = gameMinute + (timeZoneOffset/60) % 1 * 60;
-    var timeDiff = 4;
-    var gameTimezoneHour = gameHour + timeDiff - Math.floor(timeZoneOffset/60);    // convert ET to UTC to local
-    if (gameTimezoneMinute >= 60) {
-        gameTimezoneHour++;
-        gameTimezoneMinute -= 60;
-    } else if (gameTimezoneMinute < 0) {
-        gameTimezoneHour--;
-        gameTimezoneMinute += 60;
-    }
-    if (gameTimezoneMinute < 10) {
-        gameTimezoneMinute = '0' + gameTimezoneMinute.toString();
-    } else {
-        gameTimezoneMinute = gameTimezoneMinute.toString();
-    }
-    var timeFormat = 'AM';
-    if (gameTimezoneHour < 24 && gameTimezoneHour >= 12) {
-        timeFormat = 'PM';
-    }
-    if (gameTimezoneHour >= 24){    // a new day
-        gameTimezoneHour -= 24;
-    } else if (gameTimezoneHour > 12){
-        gameTimezoneHour -= 12;
-    }
-    // hour + minute + am/pm
-    return gameTimezoneHour.toString() + ':' + gameTimezoneMinute + ' ' + timeFormat;
+function getGameStartTime(status, gcode) {
+    // returns in minute of the diff to UTC
+    var date = gcode.split('/')[0]
+    var today = moment(date, ["YYYYMMDD"]).format("YYYY-MM-DD")
+    var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
+    var zone = "America/New_York";
+    var input = `${today} ${gameTime}`
+    var result = moment.tz(input, zone).local().format("hh:mm A");
+    return result
 }
 
 function formatClock(clock, status) {
@@ -76,29 +94,6 @@ function formatClock(clock, status) {
         return 'OT' + status.charAt(0) + ' ' + clock;
     }
     return clock
-}
-
-function gameReording(games) {
-    // re-ordering: live --> finished --> haven't started
-    var live = []
-    var finished = []
-    var prepare = []
-    for (let i = 0; i < games.length; i++) {
-        switch (validateLiveGame(games[i])) {
-            case 'prepare':
-                prepare.push(games[i]);
-                break;
-            case 'live':
-                live.push(games[i]);
-                break;
-            case 'finished':
-                finished.push(games[i])
-                break;
-            default:
-                finished.push(games[i])
-        }
-    }
-    return live.concat(prepare.concat(finished));
 }
 
 // Fetch Data
@@ -128,6 +123,7 @@ function updateCardWithGame(card, game) {
     var scores = matchinfoEl.find('.c-team-score');
     var awayTeamEl = $(teams[0]);
     var homeTeamEl = $(teams[1]);
+    validateLiveGame(game)
 
     $(scores[0]).text(game.v.s).removeClass(COLOR.GREEN);
     $(scores[1]).text(game.h.s).removeClass(COLOR.GREEN);
@@ -137,7 +133,7 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-series').text(game.seri)   // series info
         matchinfoEl.find('.c-hyphen').text('');
         matchinfoEl.find('.c-clock').text('TBA')
-    } else if (game.stt === 'Final'){
+    } else if (game._status === 'finished'){
         matchinfoEl.find('.c-hyphen').text('-');
         if (parseInt(game.v.s) > parseInt(game.h.s)) {
             $(scores[0]).addClass(COLOR.GREEN);
@@ -149,7 +145,7 @@ function updateCardWithGame(card, game) {
         } else {
             matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK);
         }
-    } else if (validateLiveGame(game) === 'live') {
+    } else if (game._status === 'live') {
         $(scores[0]).text(game.v.s);
         $(scores[1]).text(game.h.s);
         if (parseInt(game.v.s) > parseInt(game.h.s))
@@ -159,8 +155,8 @@ function updateCardWithGame(card, game) {
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
-    } else if (game.stt.includes('ET') || game.stt.includes('pm') || game.stt.includes('am') || game.stt === 'PPD'){
-        let time = getGameStartTime(game.stt);
+    } else if (game._status === 'prepare'){
+        let time = getGameStartTime(game.stt, game.gcode);
         if (game.lm && game.lm.seri != '') {
             matchinfoEl.find('.c-series').text(game.lm.seri)
         } else if (game.seri != '') {
@@ -206,7 +202,7 @@ function fetchData() {
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
         if (data && !data.failed) {
             updateLastUpdate();
-            let newGames = gameReording(data.gs.g);
+            let newGames = preprocessData(data.gs.g);
             updateCards(newGames);
             chrome.storage.local.set({
                 'popupRefreshTime' : new Date().getTime(),

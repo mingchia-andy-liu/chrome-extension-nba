@@ -20,23 +20,25 @@ $(function(){
     })
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
+        debugger
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
-        var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
+        var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
         DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
-        DATE_UTILS.newDate = DATE_UTILS.parseDate(data.fetchDataDate)
+        DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
         calendar.setDate([data.fetchDataDate])
-        if (d.getTime() - scheduleTime > 86400) {
+        if (d.getTime() - scheduleRefreshTime > 86400) {
             fetchFullSchedule()
             .done(function(data){
                 DATE_UTILS.schedule = data.lscd
             })
         }
 
-        if (d.getTime() - popupTIme > 60000) {
+        if (d.getTime() - popupTIme > 1000) {
             fetchData()
             .done(function(games, gdte){
-                updateBox(getHash());
+                updateBox(getHash())
+                SELECTED_SCHEDULE.cacheData = games
                 calendar.setDate([gdte])
             })
             .fail(function(){
@@ -58,7 +60,7 @@ $(function(){
     });
 
     function onArrowClick() {
-        calendar.setDate([DATE_UTILS.newDate])
+        calendar.setDate([DATE_UTILS.selectedDate])
         if (DATE_UTILS.checkSelectToday()) {
             updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
             updateCards(SELECTED_SCHEDULE.cacheData);
@@ -80,7 +82,6 @@ $(function(){
             onArrowClick()
         }
     })
-
 
     function getHash() {
         if (window.location.hash) {

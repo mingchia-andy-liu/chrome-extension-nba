@@ -1,29 +1,24 @@
 var DATE_UTILS = {}
 
-DATE_UTILS.newDate = new Date()
+DATE_UTILS.selectedDate = new Date()
 DATE_UTILS.fetchDataDate = new Date()
 DATE_UTILS.maxDate = new Date('2018-06-17')
-DATE_UTILS.minDate = new Date('2017-10-01')
+DATE_UTILS.minDate = new Date('2017-09-31')
 
 DATE_UTILS.schedule = []
 
 DATE_UTILS.onArrowClick = function(offset) {
-    let selectedDate = this.newDate.fp_incr(offset)
-    if (selectedDate.getUTCFullYear() <= this.minDate.getUTCFullYear() &&
-        selectedDate.getUTCMonth() <= this.minDate.getUTCMonth() &&
-        selectedDate.getUTCDate() < this.minDate.getUTCDate()) {
-        return false
-    } else if (selectedDate.getUTCFullYear() >= this.maxDate.getUTCFullYear() &&
-        selectedDate.getUTCMonth() >= this.maxDate.getUTCMonth() &&
-        selectedDate.getUTCDate() > this.maxDate.getUTCDate()) {
+    const newDate = moment(this.selectedDate).add(offset, 'days')
+    if (newDate.isBefore(DATE_UTILS.minDate) ||
+        newDate.isAfter(DATE_UTILS.maxDate)) {
         return false
     }
-    this.newDate = selectedDate
+    this.selectedDate = newDate.toDate()
     return true
 }
 
 DATE_UTILS.onSelectChange = function(date) {
-    this.newDate = new Date(date)
+    this.selectedDate = new Date(date)
 }
 
 DATE_UTILS.searchGames = function(date) {
@@ -49,20 +44,17 @@ DATE_UTILS.searchGames = function(date) {
     // console.log(gameArray)
     // console.log(startIndex)
     // console.log(lastIndex)
+    debugger
     return gameArray.slice(startIndex, lastIndex + 1)
 }
 
 DATE_UTILS.checkSelectToday = function(newDate) {
     if (newDate) {
-        this.newDate = newDate
+        this.selectedDate = newDate
+        return moment(this.newDate).isSame(this.fetchDataDate, "day")
+    } else {
+        return moment(this.selectedDate).isSame(this.fetchDataDate, "day")
     }
-    const today = new Date()
-    if (this.newDate.getDay() !== this.fetchDataDate.getDay()) {
-        return false
-    }
-    return (today.getFullYear() === this.newDate.getFullYear() &&
-            today.getMonth() === this.newDate.getMonth() &&
-            today.getDate() === this.newDate.getDate())
 }
 
 DATE_UTILS.parseDate = function(date) {

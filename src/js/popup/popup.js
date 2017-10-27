@@ -16,13 +16,13 @@ $(function(){
 
     chrome.runtime.sendMessage({request : 'wakeup'});
 
-    chrome.alarms.onAlarm.addListener(function(alarm){
+    chrome.alarms.onAlarm.addListener(function(alarm) {
         if (alarm.name === 'initAlarm') {
             chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule'], function(data) {
                 var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
                 var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
                 var d = new Date();
-                if (d.getTime() - popupTime > 60000) {
+                if (d.getTime() - popupTime > 1) {
                     fetchData()
                     .fail(function(){
                         updateLastUpdate(data.popupRefreshTime);
