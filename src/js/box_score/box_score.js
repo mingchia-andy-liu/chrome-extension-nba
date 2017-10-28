@@ -478,7 +478,7 @@ $(function(){
             } else {
                 fetchData()
                 .done(function(gids, gdte){
-                    DATE_UTILS.dailyAPIDate = gdte
+                    DATE_UTILS.fetchDataDate = gdte
                     updateBox(getHash());
                     SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
                     SELECTED_SCHEDULE.cacheData = gids

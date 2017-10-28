@@ -31,8 +31,8 @@ chrome.alarms.create('minuteAlarm', {
 });
 
 chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 120,
-    periodInMinutes : 120
+    delayInMinutes : 1, // start time
+    periodInMinutes : 720   // periodical time
 });
 
 function fetchGames(sendResponse) {
@@ -52,7 +52,7 @@ function fetchGames(sendResponse) {
 function fetchLiveGameBox(sendResponse, gid) {
     $.ajax({
         type: 'GET',
-        contentType:'application/json',
+        contentType: 'application/json',
         url: `http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/gamedetail/${gid}_gamedetail.json`
     }).done(function(data){
         sendResponse(data);
@@ -81,7 +81,6 @@ function fetchFullSchedule(sendResponse) {
         contentType: 'application/json',
         url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
     }).done(function(data) {
-        // console.log(data);
         chrome.storage.local.set({
             'popupRefreshTime' : 0,
             'cacheData' : data.gs.g,

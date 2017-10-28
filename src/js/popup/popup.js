@@ -30,7 +30,7 @@ $(function(){
                 } else if (d.getTime() - popupTime > 60000) {
                     fetchData()
                     .done(function(games, date) {
-                        DATE_UTILS.dailyAPIDate = date
+                        DATE_UTILS.fetchDataDate = date
                     })
                     .fail(function(){
                         updateLastUpdate(data.popupRefreshTime);

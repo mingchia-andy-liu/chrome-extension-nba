@@ -19,7 +19,6 @@
     "background": {
         "scripts": [
             "/src/vendor/jquery/jquery-3.1.1.min.js",
-            // "/src/dist/bg.js"
             "/src/js/background/background.js"
         ],
         "persistent": false

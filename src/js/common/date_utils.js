@@ -1,7 +1,6 @@
 var DATE_UTILS = {}
 
 DATE_UTILS.selectedDate = new Date()
-DATE_UTILS.dailyAPIDate= new Date()
 /**
  * String
  */
