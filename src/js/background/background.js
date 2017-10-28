@@ -42,7 +42,7 @@ $(function () {
             contentType: 'application/json',
             url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
         }).done(function(data) {
-            console.log(data);
+            // console.log(data);
             sendResponse(data);
         }).fail(function(xhr, textStatus, errorThrown) {
             console.log('Failed to fetch data.');
@@ -82,12 +82,12 @@ $(function () {
             contentType: 'application/json',
             url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
         }).done(function(data) {
-            console.log(data);
+            // console.log(data);
             chrome.storage.local.set({
                 'popupRefreshTime' : 0,
                 'cacheData' : data.gs.g,
                 'fetchDataDate' : data.gs.gdte
-            });
+            })
         }).fail(function(xhr, textStatus, errorThrown) {
             console.log('Failed to fetch data.');
         })

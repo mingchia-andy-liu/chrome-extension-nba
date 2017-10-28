@@ -3,14 +3,8 @@ const EMPTY_TEAM_ROW = ['', '','0-0', '-', '0-0', '-', '0-0', '-', '0', '0', '0'
 
 // Summary table
 function formatSummary(summary){
-    var vColor = '#000000';
-    var aColor = '#000000';
-    if (LOGO_COLORS[summary.htlg]) {
-        vColor = LOGO_COLORS[summary.htlg];
-    }
-    if (LOGO_COLORS[summary.atlg]) {
-        aColor = LOGO_COLORS[summary.atlg]
-    }
+    var vColor = LOGO_COLORS[summary.htlg] || '#000000';
+    var aColor = LOGO_COLORS[summary.atlg] || '#000000';
     $('#away_team_logo').text(summary.atlg).css('background-color', aColor);
     $('#home_team_logo').text(summary.htlg).css('background-color', vColor);
     $('.away-team-name').text(summary.atn);
@@ -69,6 +63,11 @@ function toPercentage(decimal) {
         return (decimal * 100).toFixed().toString() + '%';
 }
 
+
+/**
+ * remove text/background color
+ * @param {table row element} row
+ */
 function sanitizeTableRow(row){
     let rowEl = $(row);
     rowEl.attr('title', '');
@@ -87,7 +86,7 @@ function sanitizeTableRow(row){
 function formatBoxScoreData(player) {
     var playerRecord = [];
     var playerName = '';
-    var fn = player && player.fn ? player.fn.charAt(0) + '.' : '';
+    var fn = player && player.fn.trim() ? player.fn.charAt(0) + '.' : '';
     var ln = player.pos ? player.ln + (' ' + player.pos).sup() : player.ln;
     playerRecord.push(fn + ' ' + ln);
     playerRecord.push(formatMinutes(player));
@@ -112,6 +111,7 @@ function formatBoxScoreData(player) {
 }
 
 function formatTeamStatsData(teamStats) {
+    console.log(teamStats)
     return {
         1 : [
             '',

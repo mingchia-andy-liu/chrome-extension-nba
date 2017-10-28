@@ -61,7 +61,7 @@ function preprocessData(games) {
                 finished.push(game)
         }
     })
-    return live.concat(prepare.concat(finished))
+    return live.concat(finished.concat(prepare))
 }
 
 function getGameStartTime(status, gcode) {
@@ -72,7 +72,6 @@ function getGameStartTime(status, gcode) {
     var zone = "America/New_York";
     var input = `${today} ${gameTime}`
     var result = moment.tz(input, zone).local().format("hh:mm A");
-    debugger
     return result
 }
 
@@ -157,11 +156,11 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     } else if (game._status === 'prepare'){
         const time = game._localTime || getGameStartTime(game.stt, game.gcode);
-        if (game.lm && game.lm.seri != '') {
-            matchinfoEl.find('.c-series').text(game.lm.seri)
-        } else if (game.seri != '') {
-            matchinfoEl.find('.c-series').text(game.seri)
-        }
+        // if (game.lm && game.lm.seri != '') {
+        //     matchinfoEl.find('.c-series').text(game.lm.seri)
+        // } else if (game.seri != '') {
+        //     matchinfoEl.find('.c-series').text(game.seri)
+        // }
         matchinfoEl.find('.c-hyphen').text('');
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);

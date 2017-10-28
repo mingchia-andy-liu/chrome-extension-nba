@@ -246,6 +246,8 @@ table tr:first-child th:last-child {
 
 .summary-team-name {
     font-weight: 700;
+    background-color: #046fdb;
+    color: white;
 }
 
 /* Summary Table*/

@@ -1,10 +1,15 @@
 var DATE_UTILS = {}
 
 DATE_UTILS.selectedDate = new Date()
-DATE_UTILS.fetchDataDate = new Date()
+DATE_UTILS.dailyAPIDate= new Date()
+/**
+ * String
+ */
+DATE_UTILS.fetchDataDate = '1960-01-01'
 DATE_UTILS.maxDate = new Date('2018-06-17')
 DATE_UTILS.minDate = new Date('2017-09-31')
 
+DATE_UTILS.dailyAPISchedule = []
 DATE_UTILS.schedule = []
 
 DATE_UTILS.onArrowClick = function(offset) {
@@ -22,7 +27,10 @@ DATE_UTILS.onSelectChange = function(date) {
 }
 
 DATE_UTILS.searchGames = function(date) {
-    var selectedDate = new Date(date.selectedDates[0])
+    if (moment(date).isSame(moment(DATE_UTILS.fetchDataDate), 'day')){
+        return DATE_UTILS.dailyAPISchedule
+    }
+    var selectedDate = new Date(date)
     var month = selectedDate.getUTCMonth()+1
     var monthStr = month >= 10 ? month.toString() : `0${month}`
     var date = selectedDate.getUTCDate()
@@ -60,4 +68,12 @@ DATE_UTILS.parseDate = function(date) {
     var parts = date.split('-');
     // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
     return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+}
+
+/**
+ * This is needed when the daily API endpoint doesn't update
+ * But the date has passed. Use the full schedule's schedule
+ */
+DATE_UTILS.needNewSchedule = function(cacheData, d) {
+    return cacheData.length > 0 && moment(cacheData[0].gcode.split('/')[0]).isBefore(d, 'day')
 }

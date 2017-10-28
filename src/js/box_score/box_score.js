@@ -14,7 +14,7 @@ $(function(){
                 updateCards(SELECTED_SCHEDULE.cacheData);
                 updateBox(getHash());
             } else {
-                updateCards(DATE_UTILS.searchGames(calendar))
+                updateCards(DATE_UTILS.searchGames(selectedDate[0]))
                 DATE_UTILS.onSelectChange(selectedDate[0])
                 resetPage()
             }
@@ -25,9 +25,7 @@ $(function(){
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
-        DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
-        DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
-        calendar.setDate([data.fetchDataDate])
+        // calendar.setDate([data.fetchDataDate])
         if (d.getTime() - scheduleRefreshTime > 86400) {
             fetchFullSchedule()
             .done(function(schedule){
@@ -37,7 +35,14 @@ $(function(){
             DATE_UTILS.schedule = data.schedule
         }
 
-        if (d.getTime() - popupTIme > 1000) {
+        if (DATE_UTILS.needNewSchedule(data.cacheData, d)) {
+            updateLastUpdate(d)
+            DATE_UTILS.schedule = data.schedule
+            updateCards(DATE_UTILS.searchGames(d))
+            SELECTED_SCHEDULE.cacheData = data.cacheData
+        } else if (d.getTime() - popupTIme > 1000) {
+            DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
+            DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash())
@@ -54,6 +59,8 @@ $(function(){
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         } else {
+            DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
+            DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());
@@ -69,7 +76,7 @@ $(function(){
             updateCards(SELECTED_SCHEDULE.cacheData);
             updateBox(getHash());
         } else {
-            updateCards(DATE_UTILS.searchGames(calendar))
+            updateCards(DATE_UTILS.searchGames(DATE_UTILS.selectedDate))
             resetPage()
         }
     }
@@ -284,9 +291,6 @@ $(function(){
                 $(el).show().children().each(function(col, cell){
                     $(cell).html(rowData[col]);
                 });
-                // if (g.vls.pstsg[rowNum].court) {
-                //     $(el).find(">:first-child").css('background-color', '#fcd399');
-                // }
             } else {
                 $(el).hide();
             }
@@ -467,22 +471,29 @@ $(function(){
             return
         }
         if (alarm.name === 'minuteAlarm') {
-            fetchData()
-            .done(function(gids, gdte){
-                updateBox(getHash());
-                SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
-                SELECTED_SCHEDULE.cacheData = gids
-                calendar.setDate([gdte])
-            })
-            .fail(function(){
-                removeBox();
-                window.location.hash = '';
-                $('.c-card:not(no-game)').each(function(index, el){
-                    $(el).addClass('u-hide');
+            const d = new Date()
+            if (DATE_UTILS.needNewSchedule(SELECTED_SCHEDULE.cacheData, d)) {
+                updateLastUpdate(d)
+                updateCards(DATE_UTILS.searchGames(d))
+            } else {
+                fetchData()
+                .done(function(gids, gdte){
+                    DATE_UTILS.dailyAPIDate = gdte
+                    updateBox(getHash());
+                    SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
+                    SELECTED_SCHEDULE.cacheData = gids
+                    calendar.setDate([gdte])
+                })
+                .fail(function(){
+                    removeBox();
+                    window.location.hash = '';
+                    $('.c-card:not(no-game)').each(function(index, el){
+                        $(el).addClass('u-hide');
+                    });
+                    $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                    $('.c-table .over p').html(FETCH_DATA_FAILED);
                 });
-                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
-                $('.c-table .over p').html(FETCH_DATA_FAILED);
-            });
+            }
         } else if (alarm.name === 'scheduleAlarm') {
             fetchFullSchedule()
             .done(function(data){
