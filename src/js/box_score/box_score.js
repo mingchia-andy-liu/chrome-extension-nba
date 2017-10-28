@@ -40,7 +40,7 @@ $(function(){
             DATE_UTILS.schedule = data.schedule
             updateCards(DATE_UTILS.searchGames(d))
             SELECTED_SCHEDULE.cacheData = data.cacheData
-        } else if (d.getTime() - popupTIme > 1000) {
+        } else if (d.getTime() - popupTIme > 60000) {
             DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
             DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             fetchData()

@@ -179,14 +179,9 @@ function updateCardWithGame(card, game) {
 }
 
 function updateLastUpdate(ms) {
-    var d = ms ? new Date(ms) : new Date();
-    var hour = d.getHours().toString();
-    hour = hour.length === 1 ? '0' + hour : hour;
-    var min = d.getMinutes().toString();
-    min = min.length === 1 ? '0' + min : min;
-    var sec = d.getSeconds().toString();
-    sec = sec.length === 1 ? '0' + sec : sec;
-    $("#lastUpdate").text('Last updated: ' + hour + ':' + min + ':' + sec);
+    const d = ms ? new Date(ms) : new Date();
+    const exactSeconds = moment(new Date()).diff(d, 'second')
+    $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} seconds ago`);
 }
 
 function fetchData() {

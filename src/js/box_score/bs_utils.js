@@ -111,7 +111,6 @@ function formatBoxScoreData(player) {
 }
 
 function formatTeamStatsData(teamStats) {
-    console.log(teamStats)
     return {
         1 : [
             '',
