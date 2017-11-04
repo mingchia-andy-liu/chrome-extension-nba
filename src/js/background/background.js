@@ -41,7 +41,6 @@ chrome.alarms.create('liveAlarm', {
 });
 
 function validateLiveGame(match) {
-    debugger
     if (match.stt === 'Final') {
         //finish
         match._status = 'finish'
@@ -72,9 +71,7 @@ chrome.alarms.onAlarm.addListener(function(alarm){
     if (alarm.name === 'liveAlarm') {
         console.log('sdfsdf')
         const callBack = function(data) {
-            debugger
             if (data && !data.failed) {
-                debugger
                 const isLive = data.gs.g.find(function(match){
                     return validateLiveGame(match) === 'live'
                 })
