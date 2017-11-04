@@ -36,7 +36,16 @@ function formatSummary(summary){
     }
 }
 
-// Team table
+
+/**
+ * Format Box score table's player minutes.
+ * @param {row object} player
+ *  @property {string} memo is the player status memo (injury)
+ *  @property {string} status is the playing status. I for inactive. active otherwise
+ *  @property {string} min is the minutes the player has played
+ *
+ * @returns {string} mm:ss format minutes OR status of the player
+ */
 function formatMinutes(player) {
     if (player.memo)
         return player.memo;
@@ -56,6 +65,13 @@ function formatMinutes(player) {
     return min + ':' + sec;
 }
 
+
+/**
+ * convert numerical decimal to percentage
+ * @param {*} decimal
+ *
+ * @returns {string} 2 decimal percentage
+ */
 function toPercentage(decimal) {
     if (Number.isNaN(decimal))
         return '-';

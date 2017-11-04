@@ -1,22 +1,33 @@
+/**
+ * Check if there is any live games going one right now
+ * @param {array} games
+ * @returns {bool} true if there is one or more live game, false otherwise
+ */
+function anyLiveGames(games) {
+    return !!games.find(function(match){
+        return validateLiveGame(match) === 'live'
+    })
+}
+
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
-        //finished
-        match._status = 'finished'
-        return 'finished'
+        //finish
+        match._status = 'finish'
+        return 'finish'
     } else if (match && !match.cl) {
         // haven't started
         match._status = 'prepare'
         return 'prepare'
+    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+        // live
+        match._status = 'live'
+        return 'live'
     } else if (match.cl === '00:00.0') {
-        if (match.stt === 'Halftime' || match.stt.includes('End')) {
-            // live
-            match._status = 'live'
-            return 'live'
-        } else if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
+        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
             match._status = 'prepare'
             return 'prepare'
         }
-    } else if (match.cl !== '00:00.0') {
+    } else if (match.cl !== '' && match.cl !== '00:00.0') {
         match._status = 'live'
         return 'live'
     }
@@ -27,7 +38,7 @@ function validateLiveGame(match) {
 function preprocessData(games) {
     // preprocess the data before anything
     var live = []
-    var finished = []
+    var finish = []
     var prepare = []
     games.forEach(function(game, index) {
         switch (validateLiveGame(game)) {
@@ -54,14 +65,14 @@ function preprocessData(games) {
             case 'live':
                 live.push(game);
                 break;
-            case 'finished':
-                finished.push(game)
+            case 'finish':
+                finish.push(game)
                 break;
             default:
-                finished.push(game)
+                finish.push(game)
         }
     })
-    return live.concat(finished.concat(prepare))
+    return live.concat(finish.concat(prepare))
 }
 
 function getGameStartTime(status, gcode) {
@@ -132,7 +143,7 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-series').text(game.seri)   // series info
         matchinfoEl.find('.c-hyphen').text('');
         matchinfoEl.find('.c-clock').text('TBA')
-    } else if (game._status === 'finished'){
+    } else if (game._status === 'finish'){
         matchinfoEl.find('.c-hyphen').text('-');
         if (parseInt(game.v.s) > parseInt(game.h.s)) {
             $(scores[0]).addClass(COLOR.GREEN);
@@ -189,15 +200,33 @@ function fetchData() {
 
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
         if (data && !data.failed) {
-            updateLastUpdate();
+            const d = new Date()
             let newGames = preprocessData(data.gs.g);
-            updateCards(newGames);
-            chrome.storage.local.set({
-                'popupRefreshTime' : new Date().getTime(),
-                'cacheData' : newGames,
-                'fetchDataDate' : data.gs.gdte
-            });
-            deferred.resolve(newGames, data.gs.gdte);
+            const isAnyGameLive = anyLiveGames(newGames)
+
+            if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
+                // API is in different DATE then the timezone date
+                // use the correct games in the schedule
+                const correctGames = DATE_UTILS.searchGames(d)
+
+                updateLastUpdate(d)
+                updateCards(correctGames)
+                chrome.storage.local.set({
+                    'popupRefreshTime' : d.getTime(),
+                    'cacheData' : correctGames,
+                    'fetchDataDate' : data.gs.gdte
+                });
+                deferred.resolve(correctGames, data.gs.gdte);
+            } else {
+                updateLastUpdate(d);
+                updateCards(newGames);
+                chrome.storage.local.set({
+                    'popupRefreshTime' : d.getTime(),
+                    'cacheData' : newGames,
+                    'fetchDataDate' : data.gs.gdte
+                });
+                deferred.resolve(newGames, data.gs.gdte);
+            }
         } else if (data && data.failed) {
             console.log('failed');
             deferred.reject();
