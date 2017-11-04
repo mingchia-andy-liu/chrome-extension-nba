@@ -468,28 +468,24 @@ $(function(){
         }
         if (alarm.name === 'minuteAlarm') {
             const d = new Date()
-            if (DATE_UTILS.needNewSchedule(SELECTED_SCHEDULE.cacheData, d)) {
-                updateLastUpdate(d)
-                updateCards(DATE_UTILS.searchGames(d))
-            } else {
-                fetchData()
-                .done(function(gids, gdte){
-                    DATE_UTILS.fetchDataDate = gdte
-                    updateBox(getHash());
-                    SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
-                    SELECTED_SCHEDULE.cacheData = gids
-                    calendar.setDate([gdte])
-                })
-                .fail(function(){
-                    removeBox();
-                    window.location.hash = '';
-                    $('.c-card:not(no-game)').each(function(index, el){
-                        $(el).addClass('u-hide');
-                    });
-                    $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
-                    $('.c-table .over p').html(FETCH_DATA_FAILED);
+            fetchData()
+            .done(function(gids, gdte){
+                DATE_UTILS.fetchDataDate = gdte
+                updateBox(getHash());
+                SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
+                SELECTED_SCHEDULE.cacheData = gids
+                calendar.setDate([gdte])
+            })
+            .fail(function(){
+                removeBox();
+                window.location.hash = '';
+                $('.c-card:not(no-game)').each(function(index, el){
+                    $(el).addClass('u-hide');
                 });
-            }
+                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                $('.c-table .over p').html(FETCH_DATA_FAILED);
+            });
+
         } else if (alarm.name === 'scheduleAlarm') {
             fetchFullSchedule()
             .done(function(data){

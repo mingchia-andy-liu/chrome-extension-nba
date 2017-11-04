@@ -202,24 +202,31 @@ function fetchData() {
         if (data && !data.failed) {
             const d = new Date()
             let newGames = preprocessData(data.gs.g);
-
             const isAnyGameLive = anyLiveGames(newGames)
+
             if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
+                const correctGames = DATE_UTILS.searchGames(d)
 
-                updateCards(DATE_UTILS.searchGames(d))
-                updateLastUpdate()
+                updateLastUpdate(d)
+                updateCards(correctGames)
+                chrome.storage.local.set({
+                    'popupRefreshTime' : d.getTime(),
+                    'cacheData' : correctGames,
+                    'fetchDataDate' : data.gs.gdte
+                });
+                deferred.resolve(correctGames, data.gs.gdte);
             } else {
-                updateLastUpdate();
+                updateLastUpdate(d);
                 updateCards(newGames);
+                chrome.storage.local.set({
+                    'popupRefreshTime' : d.getTime(),
+                    'cacheData' : newGames,
+                    'fetchDataDate' : data.gs.gdte
+                });
+                deferred.resolve(newGames, data.gs.gdte);
             }
-            chrome.storage.local.set({
-                'popupRefreshTime' : new Date().getTime(),
-                'cacheData' : newGames,
-                'fetchDataDate' : data.gs.gdte
-            });
-            deferred.resolve(newGames, data.gs.gdte);
         } else if (data && data.failed) {
             console.log('failed');
             deferred.reject();
