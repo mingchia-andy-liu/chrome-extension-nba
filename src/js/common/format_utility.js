@@ -208,15 +208,16 @@ function fetchData() {
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
                 const correctGames = DATE_UTILS.searchGames(d)
+                const newCacheDate = moment(new Date).format('YYYY-MM-DD')
 
                 updateLastUpdate(d)
                 updateCards(correctGames)
                 chrome.storage.local.set({
                     'popupRefreshTime' : d.getTime(),
                     'cacheData' : correctGames,
-                    'fetchDataDate' : data.gs.gdte
+                    'fetchDataDate' : newCacheDate
                 });
-                deferred.resolve(correctGames, data.gs.gdte);
+                deferred.resolve(correctGames, newCacheDate);
             } else {
                 updateLastUpdate(d);
                 updateCards(newGames);

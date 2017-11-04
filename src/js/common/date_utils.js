@@ -8,7 +8,6 @@ DATE_UTILS.fetchDataDate = '1960-01-01'
 DATE_UTILS.maxDate = new Date('2018-06-17')
 DATE_UTILS.minDate = new Date('2017-09-31')
 
-DATE_UTILS.dailyAPISchedule = []
 DATE_UTILS.schedule = []
 
 DATE_UTILS.onArrowClick = function(offset) {
@@ -26,9 +25,6 @@ DATE_UTILS.onSelectChange = function(date) {
 }
 
 DATE_UTILS.searchGames = function(date) {
-    if (moment(date).isSame(moment(DATE_UTILS.fetchDataDate), 'day')){
-        return DATE_UTILS.dailyAPISchedule
-    }
     var selectedDate = new Date(date)
     var month = selectedDate.getUTCMonth()+1
     var monthStr = month >= 10 ? month.toString() : `0${month}`
