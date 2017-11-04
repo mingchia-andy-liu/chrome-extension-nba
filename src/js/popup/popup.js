@@ -1,6 +1,7 @@
-$(function(){
-    'use strict';
+'use strict';
+chrome.runtime.sendMessage({request : 'wakeup'});
 
+$(function(){
     $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function(){
         let hashedUrl = 'box-score.html#' + $(this).attr('gid');
         chrome.tabs.create({url: hashedUrl});
@@ -14,8 +15,6 @@ $(function(){
         chrome.runtime.openOptionsPage()
     });
 
-    chrome.runtime.sendMessage({request : 'wakeup'});
-
     chrome.alarms.onAlarm.addListener(function(alarm) {
         if (alarm.name === 'initAlarm') {
             chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'scheduleRefreshTime', 'schedule'], function(data) {
@@ -23,11 +22,10 @@ $(function(){
                 var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
                 var d = new Date()
                 DATE_UTILS.fetchDataDate = data.fetchDataDate
-                if (DATE_UTILS.needNewSchedule(data.cacheData, d)) {
-                    updateLastUpdate(d)
-                    DATE_UTILS.schedule = data.schedule
-                    updateCards(DATE_UTILS.searchGames(d))
-                } else if (d.getTime() - popupTime > 60000) {
+                // probably hasn't change much assign it first
+                DATE_UTILS.schedule = data.schedule
+
+                if (d.getTime() - popupTime > 60000) {
                     fetchData()
                     .done(function(games, date) {
                         DATE_UTILS.fetchDataDate = date
@@ -41,8 +39,12 @@ $(function(){
                     updateCards(data.cacheData)
                 }
 
+                // 24 hours
                 if (d.getTime() - scheduleTime > 86400) {
                     fetchFullSchedule()
+                    .done(function(schedule) {
+                        DATE_UTILS.schedule = schedule
+                    })
                 }
             });
         }

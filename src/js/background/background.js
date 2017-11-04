@@ -35,13 +35,66 @@ chrome.alarms.create('scheduleAlarm', {
     periodInMinutes : 720   // periodical time
 });
 
+chrome.alarms.create('liveAlarm', {
+    delayInMinutes : 1, // start time
+    periodInMinutes : 30   // periodical time
+});
+
+function validateLiveGame(match) {
+    debugger
+    if (match.stt === 'Final') {
+        //finished
+        match._status = 'finished'
+        return 'finished'
+    } else if (match && !match.cl) {
+        // haven't started
+        match._status = 'prepare'
+        return 'prepare'
+    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+        // live
+        match._status = 'live'
+        return 'live'
+    } else if (match.cl === '00:00.0') {
+        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
+            match._status = 'prepare'
+            return 'prepare'
+        }
+    } else if (match.cl !== '' && match.cl !== '00:00.0') {
+        match._status = 'live'
+        return 'live'
+    }
+    match._status = 'prepare'
+    return 'prepare'
+}
+
+// Config the live game badge
+chrome.alarms.onAlarm.addListener(function(alarm){
+    if (alarm.name === 'liveAlarm') {
+        console.log('sdfsdf')
+        const callBack = function(data) {
+            debugger
+            if (data && !data.failed) {
+                debugger
+                const isLive = data.gs.g.find(function(match){
+                    return validateLiveGame(match) === 'live'
+                })
+                const badgetText = isLive ? 'live' : ''
+                chrome.browserAction.setBadgeText({text: badgetText})
+                chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+            } else {
+                chrome.browserAction.setBadgeText({text: ''})
+            }
+        }
+        fetchGames(callBack)
+    }
+});
+
 function fetchGames(sendResponse) {
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
         url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
     }).done(function(data) {
-        // console.log(data);
         sendResponse(data);
     }).fail(function(xhr, textStatus, errorThrown) {
         console.log('Failed to fetch data.');

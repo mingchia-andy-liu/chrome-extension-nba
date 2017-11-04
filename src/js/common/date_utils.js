@@ -72,7 +72,9 @@ DATE_UTILS.parseDate = function(date) {
 /**
  * This is needed when the daily API endpoint doesn't update
  * But the date has passed. Use the full schedule's schedule
+ * @param {string} dataDate the API's return date
+ * @param {Date} today current date
  */
-DATE_UTILS.needNewSchedule = function(cacheData, d) {
-    return cacheData.length > 0 && moment(cacheData[0].gcode.split('/')[0]).isBefore(d, 'day')
+DATE_UTILS.needNewSchedule = function(dataDate, today) {
+    return moment(dataDate).isBefore(today, 'day')
 }

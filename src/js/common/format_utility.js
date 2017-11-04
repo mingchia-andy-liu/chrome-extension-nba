@@ -1,3 +1,14 @@
+/**
+ * Check if there is any live games going one right now
+ * @param {array} games
+ * @returns {bool} true if there is one or more live game, false otherwise
+ */
+function anyLiveGames(games) {
+    return !!games.find(function(match){
+        return validateLiveGame(match) === 'live'
+    })
+}
+
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
         //finished
@@ -7,16 +18,16 @@ function validateLiveGame(match) {
         // haven't started
         match._status = 'prepare'
         return 'prepare'
+    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+        // live
+        match._status = 'live'
+        return 'live'
     } else if (match.cl === '00:00.0') {
-        if (match.stt === 'Halftime' || match.stt.includes('End')) {
-            // live
-            match._status = 'live'
-            return 'live'
-        } else if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
+        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
             match._status = 'prepare'
             return 'prepare'
         }
-    } else if (match.cl !== '00:00.0') {
+    } else if (match.cl !== '' && match.cl !== '00:00.0') {
         match._status = 'live'
         return 'live'
     }
@@ -189,9 +200,20 @@ function fetchData() {
 
     chrome.runtime.sendMessage({request : 'summary'}, function (data) {
         if (data && !data.failed) {
-            updateLastUpdate();
+            const d = new Date()
             let newGames = preprocessData(data.gs.g);
-            updateCards(newGames);
+
+            const isAnyGameLive = anyLiveGames(newGames)
+            if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
+                // API is in different DATE then the timezone date
+                // use the correct games in the schedule
+
+                updateCards(DATE_UTILS.searchGames(d))
+                updateLastUpdate()
+            } else {
+                updateLastUpdate();
+                updateCards(newGames);
+            }
             chrome.storage.local.set({
                 'popupRefreshTime' : new Date().getTime(),
                 'cacheData' : newGames,

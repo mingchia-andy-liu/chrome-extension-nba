@@ -25,22 +25,18 @@ $(function(){
         var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
-        // calendar.setDate([data.fetchDataDate])
+
+
+        // probably hasn't change much assign it first
+        DATE_UTILS.schedule = data.schedule
         if (d.getTime() - scheduleRefreshTime > 86400) {
             fetchFullSchedule()
             .done(function(schedule){
                 DATE_UTILS.schedule = schedule
             })
-        } else {
-            DATE_UTILS.schedule = data.schedule
         }
 
-        if (DATE_UTILS.needNewSchedule(data.cacheData, d)) {
-            updateLastUpdate(d)
-            DATE_UTILS.schedule = data.schedule
-            updateCards(DATE_UTILS.searchGames(d))
-            SELECTED_SCHEDULE.cacheData = data.cacheData
-        } else if (d.getTime() - popupTIme > 60000) {
+        if (d.getTime() - popupTIme > 60000) {
             DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
             DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             fetchData()
