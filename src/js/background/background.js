@@ -43,9 +43,9 @@ chrome.alarms.create('liveAlarm', {
 function validateLiveGame(match) {
     debugger
     if (match.stt === 'Final') {
-        //finished
-        match._status = 'finished'
-        return 'finished'
+        //finish
+        match._status = 'finish'
+        return 'finish'
     } else if (match && !match.cl) {
         // haven't started
         match._status = 'prepare'

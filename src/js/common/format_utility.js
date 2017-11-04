@@ -11,9 +11,9 @@ function anyLiveGames(games) {
 
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
-        //finished
-        match._status = 'finished'
-        return 'finished'
+        //finish
+        match._status = 'finish'
+        return 'finish'
     } else if (match && !match.cl) {
         // haven't started
         match._status = 'prepare'
@@ -38,7 +38,7 @@ function validateLiveGame(match) {
 function preprocessData(games) {
     // preprocess the data before anything
     var live = []
-    var finished = []
+    var finish = []
     var prepare = []
     games.forEach(function(game, index) {
         switch (validateLiveGame(game)) {
@@ -65,14 +65,14 @@ function preprocessData(games) {
             case 'live':
                 live.push(game);
                 break;
-            case 'finished':
-                finished.push(game)
+            case 'finish':
+                finish.push(game)
                 break;
             default:
-                finished.push(game)
+                finish.push(game)
         }
     })
-    return live.concat(finished.concat(prepare))
+    return live.concat(finish.concat(prepare))
 }
 
 function getGameStartTime(status, gcode) {
@@ -143,7 +143,7 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-series').text(game.seri)   // series info
         matchinfoEl.find('.c-hyphen').text('');
         matchinfoEl.find('.c-clock').text('TBA')
-    } else if (game._status === 'finished'){
+    } else if (game._status === 'finish'){
         matchinfoEl.find('.c-hyphen').text('-');
         if (parseInt(game.v.s) > parseInt(game.h.s)) {
             $(scores[0]).addClass(COLOR.GREEN);
