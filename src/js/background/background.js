@@ -40,7 +40,7 @@ chrome.alarms.create('minuteAlarm', {
 // TODO: alarm won't get fired after like 5 seconds of inactive
 // because background page gets unloaded
 chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 1, // start time rigth away
+    delayInMinutes : 0.1, // start time rigth away
     periodInMinutes : 60   // periodical time
 });
 

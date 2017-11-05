@@ -211,11 +211,13 @@ function fetchData() {
             chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
 
             if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
+                DATE_UTILS.selectedDate = moment(d).toDate()
+
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
                 const correctGames = DATE_UTILS.searchGames(d)
                 DATE_UTILS.updateSchedule(d, newGames)
-                const newCacheDate = moment(new Date).format('YYYY-MM-DD')
+                const newCacheDate = moment(d).format('YYYY-MM-DD')
 
                 updateLastUpdate(d)
                 updateCards(correctGames)
@@ -226,6 +228,7 @@ function fetchData() {
                 });
                 deferred.resolve(correctGames, newCacheDate);
             } else {
+                DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);
                 updateCards(newGames);
                 chrome.storage.local.set({
