@@ -78,7 +78,6 @@ function preprocessData(games) {
 }
 
 function getGameStartTime(status, gcode) {
-    // returns in minute of the diff to UTC
     var date = gcode.split('/')[0]
     var today = moment(date, ["YYYYMMDD"]).format("YYYY-MM-DD")
     var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
@@ -194,7 +193,7 @@ function updateCardWithGame(card, game) {
 function updateLastUpdate(ms) {
     const d = ms ? new Date(ms) : new Date();
     const exactSeconds = moment(new Date()).diff(d, 'second')
-    $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} seconds ago`);
+    $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} second(s) ago`);
 }
 
 function fetchData() {
@@ -207,8 +206,8 @@ function fetchData() {
             const isAnyGameLive = anyLiveGames(newGames)
 
             // Set the badge text when the alarm hasn't go off but the extension is opened
-            const badgetText = isAnyGameLive ? 'live' : ''
-            chrome.browserAction.setBadgeText({text: badgetText})
+            const badgeText = isAnyGameLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
             chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
 
             if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
