@@ -22,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     const currentVersion = chrome.runtime.getManifest().version
     const previousVersion = details.previousVersion
     if (details.reason === 'update') {
+        // only open the options page iff it's major and minor updates
         const currentSplit = currentVersion.split('.')
         const previousSplit = previousVersion.split('.')
         if (currentSplit[0] !== previousSplit[0] ||
@@ -36,23 +37,21 @@ chrome.alarms.create('minuteAlarm', {
     periodInMinutes : 1
 });
 
+// TODO: alarm won't get fired after like 5 seconds of inactive
+// because background page gets unloaded
 chrome.alarms.create('scheduleAlarm', {
     delayInMinutes : 1, // start time rigth away
-    periodInMinutes : 1   // periodical time
+    periodInMinutes : 60   // periodical time
 });
 
-// chrome.alarms.create('liveAlarm', {
-//     delayInMinutes : 0.1, // start time right away
-//     periodInMinutes : 30   // periodical time
-// });
 const liveCallBack = function() {
     const callBack = function(data) {
         if (data && !data.failed) {
             const isLive = data.gs.g.find(function(match){
                 return validateLiveGame(match) === 'live'
             })
-            const badgetText = isLive ? 'live' : ''
-            chrome.browserAction.setBadgeText({text: badgetText})
+            const badgeText = isLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
             chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
         } else {
             chrome.browserAction.setBadgeText({text: ''})
@@ -61,7 +60,6 @@ const liveCallBack = function() {
     fetchGames(callBack)
 }
 const liveAlarmId = setInterval(liveCallBack, 30 * 60 * 1000)
-liveCallBack()
 
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
@@ -158,6 +156,13 @@ function fetchFullSchedule(sendResponse) {
 (function initFetch() {
     const callBack = function(data) {
         if (data && !data.failed) {
+            const isLive = data.gs.g.find(function(match){
+                return validateLiveGame(match) === 'live'
+            })
+            const badgeText = isLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
+            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+
             chrome.storage.local.set({
                 'popupRefreshTime' : 0,
                 'cacheData' : data.gs.g,
