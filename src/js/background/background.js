@@ -5,8 +5,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchGames(sendResponse);
     } else if (request.request === 'box_score') {
         fetchLiveGameBox(sendResponse, request.gid);
-    } else if (request.request === 'schedule') {
-        fetchFullSchedule(sendResponse)
     } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
@@ -24,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     const currentVersion = chrome.runtime.getManifest().version
     const previousVersion = details.previousVersion
     if (details.reason === 'update') {
+        // only open the options page iff it's major and minor updates
         const currentSplit = currentVersion.split('.')
         const previousSplit = previousVersion.split('.')
         if (currentSplit[0] !== previousSplit[0] ||
@@ -38,59 +37,74 @@ chrome.alarms.create('minuteAlarm', {
     periodInMinutes : 1
 });
 
+// TODO: alarm won't get fired after like 5 seconds of inactive
+// because background page gets unloaded
 chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 1, // start time
-    periodInMinutes : 720   // periodical time
+    delayInMinutes : 0.1, // start time rigth away
+    periodInMinutes : 60   // periodical time
 });
 
-chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 1, // start time
-    periodInMinutes : 30   // periodical time
-});
+const liveCallBack = function() {
+    const callBack = function(data) {
+        if (data && !data.failed) {
+            const isLive = data.gs.g.find(function(match){
+                return validateLiveGame(match) === 'live'
+            })
+            const badgeText = isLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
+            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+        } else {
+            chrome.browserAction.setBadgeText({text: ''})
+        }
+    }
+    fetchGames(callBack)
+}
+const liveAlarmId = setInterval(liveCallBack, 30 * 60 * 1000)
 
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
         //finish
-        match._status = 'finish'
         return 'finish'
     } else if (match && !match.cl) {
         // haven't started
-        match._status = 'prepare'
         return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
         // live
-        match._status = 'live'
         return 'live'
     } else if (match.cl === '00:00.0') {
         if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
-            match._status = 'prepare'
             return 'prepare'
         }
     } else if (match.cl !== '' && match.cl !== '00:00.0') {
-        match._status = 'live'
         return 'live'
     }
-    match._status = 'prepare'
     return 'prepare'
 }
 
 // Config the live game badge
 chrome.alarms.onAlarm.addListener(function(alarm){
     if (alarm.name === 'liveAlarm') {
-        console.log('sdfsdf')
         const callBack = function(data) {
             if (data && !data.failed) {
                 const isLive = data.gs.g.find(function(match){
                     return validateLiveGame(match) === 'live'
                 })
-                const badgetText = isLive ? 'live' : ''
-                chrome.browserAction.setBadgeText({text: badgetText})
+                const badgeText = isLive ? 'live' : ''
+                chrome.browserAction.setBadgeText({text: badgeText})
                 chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
-            } else {
-                chrome.browserAction.setBadgeText({text: ''})
             }
         }
         fetchGames(callBack)
+    } else if (alarm.name === 'scheduleAlarm') {
+        const callBack = function(data) {
+            if (data && !data.failed) {
+                chrome.storage.local.set({
+                    'schedule' : data,
+                    'scheduleRefreshTime' : new Date().getTime()
+                })
+            }
+        }
+        fetchFullSchedule(callBack)
     }
 });
 
@@ -134,29 +148,21 @@ function fetchFullSchedule(sendResponse) {
 }
 
 (function initFetch() {
-    $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
-    }).done(function(data) {
-        chrome.storage.local.set({
-            'popupRefreshTime' : 0,
-            'cacheData' : data.gs.g,
-            'fetchDataDate' : data.gs.gdte
-        })
-    }).fail(function(xhr, textStatus, errorThrown) {
-        console.log('Failed to fetch data.');
-    })
-    $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
-    }).done(function(data){
-        chrome.storage.local.set({
-            'schedule' : data.lscd,
-            'scheduleRefreshTime' : 0
-        })
-    }).fail(function(xhr, textStatus, errorThrown) {
-        console.log('Failed to fetch data.');
-    });
+    const callBack = function(data) {
+        if (data && !data.failed) {
+            const isLive = data.gs.g.find(function(match){
+                return validateLiveGame(match) === 'live'
+            })
+            const badgeText = isLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
+            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+
+            chrome.storage.local.set({
+                'popupRefreshTime' : 0,
+                'cacheData' : data.gs.g,
+                'fetchDataDate' : data.gs.gdte
+            })
+        }
+    }
+    fetchGames(callBack)
 })()

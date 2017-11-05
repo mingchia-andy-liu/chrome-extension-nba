@@ -18,7 +18,7 @@ function validateLiveGame(match) {
         // haven't started
         match._status = 'prepare'
         return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
         // live
         match._status = 'live'
         return 'live'
@@ -41,6 +41,8 @@ function preprocessData(games) {
     var finish = []
     var prepare = []
     games.forEach(function(game, index) {
+        // adding property so the schedule in DATE_UTILS can be found
+        game.gdte = moment(game.gcode.split('/')[0]).format('YYYY-MM-DD')
         switch (validateLiveGame(game)) {
             case 'prepare':
                 game._localTime = getGameStartTime(game.stt, game.gcode)
@@ -76,7 +78,6 @@ function preprocessData(games) {
 }
 
 function getGameStartTime(status, gcode) {
-    // returns in minute of the diff to UTC
     var date = gcode.split('/')[0]
     var today = moment(date, ["YYYYMMDD"]).format("YYYY-MM-DD")
     var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
@@ -192,7 +193,7 @@ function updateCardWithGame(card, game) {
 function updateLastUpdate(ms) {
     const d = ms ? new Date(ms) : new Date();
     const exactSeconds = moment(new Date()).diff(d, 'second')
-    $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} seconds ago`);
+    $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} second(s) ago`);
 }
 
 function fetchData() {
@@ -204,11 +205,19 @@ function fetchData() {
             let newGames = preprocessData(data.gs.g);
             const isAnyGameLive = anyLiveGames(newGames)
 
+            // Set the badge text when the alarm hasn't go off but the extension is opened
+            const badgeText = isAnyGameLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgeText})
+            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+
             if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
+                DATE_UTILS.selectedDate = moment(d).toDate()
+
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
                 const correctGames = DATE_UTILS.searchGames(d)
-                const newCacheDate = moment(new Date).format('YYYY-MM-DD')
+                DATE_UTILS.updateSchedule(d, newGames)
+                const newCacheDate = moment(d).format('YYYY-MM-DD')
 
                 updateLastUpdate(d)
                 updateCards(correctGames)
@@ -219,6 +228,7 @@ function fetchData() {
                 });
                 deferred.resolve(correctGames, newCacheDate);
             } else {
+                DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);
                 updateCards(newGames);
                 chrome.storage.local.set({
@@ -237,26 +247,4 @@ function fetchData() {
         }
     });
     return deferred.promise();
-}
-
-function fetchFullSchedule() {
-    var deferred = $.Deferred()
-
-    chrome.runtime.sendMessage({request : 'schedule'}, function (data) {
-        if (data && !data.failed) {
-            chrome.storage.local.set({
-                'schedule' : data,
-                'scheduleRefreshTime' : new Date().getTime()
-            })
-            deferred.resolve(data)
-        } else if (data && data.failed) {
-            console.log('failed')
-            deferred.reject()
-        } else {
-            console.log('something went wrong')
-            deferred.reject()
-        }
-    })
-
-    return deferred.promise()
 }

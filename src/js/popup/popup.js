@@ -21,9 +21,11 @@ $(function(){
                 var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
                 var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
                 var d = new Date()
-                DATE_UTILS.fetchDataDate = data.fetchDataDate
                 // probably hasn't change much assign it first
-                DATE_UTILS.schedule = data.schedule
+                DATE_UTILS.setSchedule(data.schedule)
+                // set up the fetch data date and selectedDate for calendar
+                DATE_UTILS.fetchDataDate = data.fetchDataDate
+                DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
 
                 if (d.getTime() - popupTime > 60000) {
                     fetchData()
@@ -37,14 +39,6 @@ $(function(){
                 } else {
                     updateLastUpdate(data.popupRefreshTime)
                     updateCards(data.cacheData)
-                }
-
-                // 24 hours
-                if (d.getTime() - scheduleTime > 86400) {
-                    fetchFullSchedule()
-                    .done(function(schedule) {
-                        DATE_UTILS.schedule = schedule
-                    })
                 }
             });
         }

@@ -26,19 +26,13 @@ $(function(){
         var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
 
-
         // probably hasn't change much assign it first
-        DATE_UTILS.schedule = data.schedule
-        if (d.getTime() - scheduleRefreshTime > 86400) {
-            fetchFullSchedule()
-            .done(function(schedule){
-                DATE_UTILS.schedule = schedule
-            })
-        }
+        DATE_UTILS.setSchedule(data.schedule)
+        // set up the fetch data date and selectedDate for calendar
+        DATE_UTILS.fetchDataDate = data.fetchDataDate
+        DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
 
         if (d.getTime() - popupTIme > 60000) {
-            DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
-            DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash())
@@ -55,8 +49,6 @@ $(function(){
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         } else {
-            DATE_UTILS.fetchDataDate = DATE_UTILS.parseDate(data.fetchDataDate)
-            DATE_UTILS.selectedDate = DATE_UTILS.parseDate(data.fetchDataDate)
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());
@@ -485,12 +477,6 @@ $(function(){
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
-
-        } else if (alarm.name === 'scheduleAlarm') {
-            fetchFullSchedule()
-            .done(function(data){
-                DATE_UTILS.schedule = data
-            })
         }
     });
 
