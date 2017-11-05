@@ -89,18 +89,10 @@ DATE_UTILS.searchGames = function(date) {
 DATE_UTILS.checkSelectToday = function(newDate) {
     if (newDate) {
         this.selectedDate = newDate
-        return moment(this.newDate).isSame(this.fetchDataDate, "day")
+        return moment(newDate).isSame(this.fetchDataDate, "day")
     } else {
         return moment(this.selectedDate).isSame(this.fetchDataDate, "day")
     }
-}
-
-DATE_UTILS.parseDate = function(date) {
-    debugger
-    console.log(`[parseDate] ${date}`)
-    var parts = date.split('-');
-    // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
-    return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
 }
 
 /**
