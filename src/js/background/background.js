@@ -5,8 +5,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchGames(sendResponse);
     } else if (request.request === 'box_score') {
         fetchLiveGameBox(sendResponse, request.gid);
-    } else if (request.request === 'schedule') {
-        fetchFullSchedule(sendResponse)
     } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
@@ -39,14 +37,31 @@ chrome.alarms.create('minuteAlarm', {
 });
 
 chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 1, // start time
-    periodInMinutes : 720   // periodical time
+    delayInMinutes : 1, // start time rigth away
+    periodInMinutes : 1   // periodical time
 });
 
-chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 1, // start time
-    periodInMinutes : 30   // periodical time
-});
+// chrome.alarms.create('liveAlarm', {
+//     delayInMinutes : 0.1, // start time right away
+//     periodInMinutes : 30   // periodical time
+// });
+const liveCallBack = function() {
+    const callBack = function(data) {
+        if (data && !data.failed) {
+            const isLive = data.gs.g.find(function(match){
+                return validateLiveGame(match) === 'live'
+            })
+            const badgetText = isLive ? 'live' : ''
+            chrome.browserAction.setBadgeText({text: badgetText})
+            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+        } else {
+            chrome.browserAction.setBadgeText({text: ''})
+        }
+    }
+    fetchGames(callBack)
+}
+const liveAlarmId = setInterval(liveCallBack, 30 * 60 * 1000)
+liveCallBack()
 
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
@@ -57,7 +72,7 @@ function validateLiveGame(match) {
         // haven't started
         match._status = 'prepare'
         return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End')) {
+    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
         // live
         match._status = 'live'
         return 'live'
@@ -77,7 +92,6 @@ function validateLiveGame(match) {
 // Config the live game badge
 chrome.alarms.onAlarm.addListener(function(alarm){
     if (alarm.name === 'liveAlarm') {
-        console.log('sdfsdf')
         const callBack = function(data) {
             if (data && !data.failed) {
                 const isLive = data.gs.g.find(function(match){
@@ -91,6 +105,16 @@ chrome.alarms.onAlarm.addListener(function(alarm){
             }
         }
         fetchGames(callBack)
+    } else if (alarm.name === 'scheduleAlarm') {
+        const callBack = function(data) {
+            if (data && !data.failed) {
+                chrome.storage.local.set({
+                    'schedule' : data,
+                    'scheduleRefreshTime' : new Date().getTime()
+                })
+            }
+        }
+        fetchFullSchedule(callBack)
     }
 });
 
@@ -134,29 +158,14 @@ function fetchFullSchedule(sendResponse) {
 }
 
 (function initFetch() {
-    $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
-    }).done(function(data) {
-        chrome.storage.local.set({
-            'popupRefreshTime' : 0,
-            'cacheData' : data.gs.g,
-            'fetchDataDate' : data.gs.gdte
-        })
-    }).fail(function(xhr, textStatus, errorThrown) {
-        console.log('Failed to fetch data.');
-    })
-    $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
-    }).done(function(data){
-        chrome.storage.local.set({
-            'schedule' : data.lscd,
-            'scheduleRefreshTime' : 0
-        })
-    }).fail(function(xhr, textStatus, errorThrown) {
-        console.log('Failed to fetch data.');
-    });
+    const callBack = function(data) {
+        if (data && !data.failed) {
+            chrome.storage.local.set({
+                'popupRefreshTime' : 0,
+                'cacheData' : data.gs.g,
+                'fetchDataDate' : data.gs.gdte
+            })
+        }
+    }
+    fetchGames(callBack)
 })()

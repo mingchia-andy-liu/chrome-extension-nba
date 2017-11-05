@@ -23,9 +23,9 @@ $(function(){
                 var d = new Date()
                 DATE_UTILS.fetchDataDate = data.fetchDataDate
                 // probably hasn't change much assign it first
-                DATE_UTILS.schedule = data.schedule
+                DATE_UTILS.setSchedule(data.schedule)
 
-                if (d.getTime() - popupTime > 60000) {
+                if (d.getTime() - popupTime > 1000) {
                     fetchData()
                     .done(function(games, date) {
                         DATE_UTILS.fetchDataDate = date
@@ -37,14 +37,6 @@ $(function(){
                 } else {
                     updateLastUpdate(data.popupRefreshTime)
                     updateCards(data.cacheData)
-                }
-
-                // 24 hours
-                if (d.getTime() - scheduleTime > 86400) {
-                    fetchFullSchedule()
-                    .done(function(schedule) {
-                        DATE_UTILS.schedule = schedule
-                    })
                 }
             });
         }
