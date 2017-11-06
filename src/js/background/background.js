@@ -37,29 +37,15 @@ chrome.alarms.create('minuteAlarm', {
     periodInMinutes : 1
 });
 
-// TODO: alarm won't get fired after like 5 seconds of inactive
-// because background page gets unloaded
 chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 0.1, // start time rigth away
+    delayInMinutes : 60, // start time right away
     periodInMinutes : 60   // periodical time
 });
 
-const liveCallBack = function() {
-    const callBack = function(data) {
-        if (data && !data.failed) {
-            const isLive = data.gs.g.find(function(match){
-                return validateLiveGame(match) === 'live'
-            })
-            const badgeText = isLive ? 'live' : ''
-            chrome.browserAction.setBadgeText({text: badgeText})
-            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
-        } else {
-            chrome.browserAction.setBadgeText({text: ''})
-        }
-    }
-    fetchGames(callBack)
-}
-const liveAlarmId = setInterval(liveCallBack, 30 * 60 * 1000)
+chrome.alarms.create('liveAlarm', {
+    delayInMinutes : 10, // start time
+    periodInMinutes : 10   // periodical time
+});
 
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
@@ -148,7 +134,7 @@ function fetchFullSchedule(sendResponse) {
 }
 
 (function initFetch() {
-    const callBack = function(data) {
+    const gameCallBack = function(data) {
         if (data && !data.failed) {
             const isLive = data.gs.g.find(function(match){
                 return validateLiveGame(match) === 'live'
@@ -164,5 +150,14 @@ function fetchFullSchedule(sendResponse) {
             })
         }
     }
-    fetchGames(callBack)
+    fetchGames(gameCallBack)
+    const scheduleCallBack = function(data) {
+        if (data && !data.failed) {
+            chrome.storage.local.set({
+                'schedule' : data,
+                'scheduleRefreshTime' : new Date().getTime()
+            })
+        }
+    }
+    fetchFullSchedule(scheduleCallBack)
 })()
