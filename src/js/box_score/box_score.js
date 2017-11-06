@@ -22,7 +22,7 @@ $(function(){
     })
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
-        var popupTIme = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
+        var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
         var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
 
@@ -32,7 +32,7 @@ $(function(){
         DATE_UTILS.fetchDataDate = data.fetchDataDate
         DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
 
-        if (d.getTime() - popupTIme > 60000) {
+        if (d.getTime() - popupRefreshTime > 60000) {
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash())

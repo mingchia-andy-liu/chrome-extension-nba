@@ -39,6 +39,33 @@ DATE_UTILS.setSchedule = function(schedule) {
     this.schedule = allGames
 }
 
+
+/**
+ * A getter method of [{month.mscd.g}, {month.mscd.g}, ...] schedule
+ * @returns {array} [{month.mscd.g}, ...]
+ */
+DATE_UTILS.getRawSchedule = function() {
+    const group_to_values = this.schedule.reduce(function (obj, item) {
+        const month = item.gdte.substring(5, 7)
+        obj[month] = obj[month] || []
+        obj[month].push(item)
+        return obj
+    }, {})
+
+    const groups = Object.keys(group_to_values).map(function (key) {
+        return {
+            mscd: {
+                g: group_to_values[key],
+                month: key
+            }
+        }
+    });
+
+    // move September to the first element
+    groups.unshift(groups.splice(3, 1)[0])
+    return groups
+}
+
 /**
  * Update the API's schedule when the
  *     1. daily API still on the previous date's games

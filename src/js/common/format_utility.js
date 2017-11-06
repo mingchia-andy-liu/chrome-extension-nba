@@ -217,6 +217,7 @@ function fetchData() {
                 // use the correct games in the schedule
                 const correctGames = DATE_UTILS.searchGames(d)
                 DATE_UTILS.updateSchedule(d, newGames)
+                const newSchedule = DATE_UTILS.getRawSchedule()
                 const newCacheDate = moment(d).format('YYYY-MM-DD')
 
                 updateLastUpdate(d)
@@ -224,7 +225,8 @@ function fetchData() {
                 chrome.storage.local.set({
                     'popupRefreshTime' : d.getTime(),
                     'cacheData' : correctGames,
-                    'fetchDataDate' : newCacheDate
+                    'fetchDataDate' : newCacheDate,
+                    'schedule': newSchedule
                 });
                 deferred.resolve(correctGames, newCacheDate);
             } else {
