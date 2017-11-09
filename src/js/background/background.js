@@ -32,6 +32,18 @@ chrome.runtime.onInstalled.addListener(function(details) {
     }
 });
 
+// chrome.notifications.onClicked.addListener(function(notificationId) {
+//     if (notificationId) {
+//         chrome.tabs.create({'url': "/box-score.html" })
+//     }
+// })
+
+// chrome.runtime.onSuspend.addListener(function() {
+//     chrome.storage.local.set({
+//         boxScore: null
+//     })
+// })
+
 chrome.alarms.create('minuteAlarm', {
     delayInMinutes : 1,
     periodInMinutes : 1
@@ -43,41 +55,94 @@ chrome.alarms.create('scheduleAlarm', {
 });
 
 chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 10, // start time
-    periodInMinutes : 10   // periodical time
+    delayInMinutes : 1, // start time
+    periodInMinutes : 1   // periodical time
 });
 
-function validateLiveGame(match) {
-    if (match.stt === 'Final') {
-        //finish
-        return 'finish'
-    } else if (match && !match.cl) {
-        // haven't started
-        return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
-        // live
-        return 'live'
-    } else if (match.cl === '00:00.0') {
-        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
-            return 'prepare'
+
+/**
+ * Sends a notification if the favourite team is on
+ * @param {array} games array of games from the API endpoint
+ */
+function checkFavTeamOn(games) {
+    chrome.storage.local.get(['favTeamStatus'], function(data) {
+        console.log(data.favTeamStatus)
+        if (data && data.favTeamStatus) {
+            const favTeamStatus = data.favTeamStatus
+            games.forEach(function(game){
+                if (favTeamStatus[game.v.ta] || favTeamStatus[game.h.ta]) {
+                    /**
+                     * notification status
+                     *  @property {int}
+                     *      1: just reset
+                     *      2: shown the start
+                     *      3: shown the final
+                     */
+                    if (game._status === 'live' && (favTeamStatus[game.v.ta] < 2 || favTeamStatus[game.h.ta] < 2)) {
+                        chrome.notifications.create({
+                            type: 'basic',
+                            iconUrl: '/src/assets/png/icon-color-128.png',
+                            message: `${game.h.tn} vs ${game.v.tn} has started.`,
+                            title: 'Game started',
+                        })
+                        if (favTeamStatus[game.v.ta]) {
+                            favTeamStatus[game.v.ta] = 2
+                        }
+                        if (favTeamStatus[game.h.ta]) {
+                            favTeamStatus[game.h.ta] = 2
+                        }
+                        chrome.storage.local.set({
+                            favTeamStatus: favTeamStatus
+                        })
+                    } else if (game._status === 'finish' && (favTeamStatus[game.v.ta] < 3 || favTeamStatus[game.h.ta] < 3)) {
+                        chrome.notifications.create({
+                            type: 'basic',
+                            iconUrl: '/src/assets/png/icon-color-128.png',
+                            message: `${game.h.tn} vs ${game.v.tn} has finished.`,
+                            title: 'Game finished',
+                        })
+                        if (favTeamStatus[game.v.ta]) {
+                            favTeamStatus[game.v.ta] = 3
+                        }
+                        if (favTeamStatus[game.h.ta]) {
+                            favTeamStatus[game.h.ta] = 3
+                        }
+                        chrome.storage.local.set({
+                            favTeamStatus: favTeamStatus
+                        })
+                    } else if (game._status === 'prepare' && (favTeamStatus[game.v.ta] === 3 || favTeamStatus[game.h.ta] === 3)) {
+                        if (favTeamStatus[game.v.ta]) {
+                            favTeamStatus[game.v.ta] = 1
+                        }
+                        if (favTeamStatus[game.h.ta]) {
+                            favTeamStatus[game.h.ta] = 1
+                        }
+                        chrome.storage.local.set({
+                            favTeamStatus: favTeamStatus
+                        })
+                    }
+                }
+            })
         }
-    } else if (match.cl !== '' && match.cl !== '00:00.0') {
-        return 'live'
-    }
-    return 'prepare'
+    })
 }
 
 // Config the live game badge
 chrome.alarms.onAlarm.addListener(function(alarm){
     if (alarm.name === 'liveAlarm') {
+        console.log(new Date())
         const callBack = function(data) {
             if (data && !data.failed) {
-                const isLive = data.gs.g.find(function(match){
-                    return validateLiveGame(match) === 'live'
+                let isLive = false
+                data.gs.g.forEach(function(match){
+                    isLive = validateLiveGame(match) === 'live' || isLive
                 })
                 const badgeText = isLive ? 'live' : ''
                 chrome.browserAction.setBadgeText({text: badgeText})
                 chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+                if (isLive) {
+                    checkFavTeamOn(data.gs.g)
+                }
             }
         }
         fetchGames(callBack)

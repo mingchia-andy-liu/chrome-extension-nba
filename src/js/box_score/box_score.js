@@ -429,6 +429,8 @@ $(function(){
 
         $('#away_team_logo').css('background-color','');
         $('#home_team_logo').css('background-color','');
+        $('#home_team_logo c-team-logo__svg').attr("src", "#")
+        $('#home_team_logo c-team-logo__svg').attr("src", "#")
     }
 
     function updateBox(gid) {

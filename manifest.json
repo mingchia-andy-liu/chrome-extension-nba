@@ -19,6 +19,7 @@
     "background": {
         "scripts": [
             "/src/vendor/jquery/jquery-3.1.1.min.js",
+            "/src/js/common/games.js",
             "/src/js/background/background.js"
         ],
         "persistent": false
@@ -29,6 +30,7 @@
     "permissions": [
         "storage",
         "alarms",
+        "notifications",
         "http://*.nba.com/"
     ]
 }
