@@ -5,34 +5,8 @@
  */
 function anyLiveGames(games) {
     return !!games.find(function(match){
-        return validateLiveGame(match) === 'live'
+        return match._status === 'live'
     })
-}
-
-function validateLiveGame(match) {
-    if (match.stt === 'Final') {
-        //finish
-        match._status = 'finish'
-        return 'finish'
-    } else if (match && !match.cl) {
-        // haven't started
-        match._status = 'prepare'
-        return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
-        // live
-        match._status = 'live'
-        return 'live'
-    } else if (match.cl === '00:00.0') {
-        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
-            match._status = 'prepare'
-            return 'prepare'
-        }
-    } else if (match.cl !== '' && match.cl !== '00:00.0') {
-        match._status = 'live'
-        return 'live'
-    }
-    match._status = 'prepare'
-    return 'prepare'
 }
 
 function preprocessData(games) {
@@ -182,12 +156,29 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-hyphen').text('-');
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     }
-    var hColor = LOGO_COLORS[game.h.ta] || '#000000';
-    var vColor = LOGO_COLORS[game.v.ta] || '#000000';
+
+    let hLogoExist = false
+    let vLogoExist = false
+    LOGO_EXIST.forEach(function(item) {
+        hLogoExist = hLogoExist || (item === game.h.ta)
+        vLogoExist = vLogoExist || (item === game.v.ta)
+    })
+    if (hLogoExist){
+        homeTeamEl.find('.c-team-logo .c-team-logo__svg').attr("src",`/src/assets/logo/${game.h.ta}.svg`)
+    } else {
+        var hColor = LOGO_COLORS[game.h.ta] || '#000000';
+        homeTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', hColor);
+    }
+
+    if (vLogoExist) {
+        awayTeamEl.find('.c-team-logo .c-team-logo__svg').attr("src",`/src/assets/logo/${game.v.ta}.svg`)
+    } else {
+        var vColor = LOGO_COLORS[game.v.ta] || '#000000';
+        awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
+    }
+
     awayTeamEl.find('.c-team-name').text(game.v.tn);
-    awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);
-    homeTeamEl.find('.c-team-logo').text(game.h.ta).css('background-color', hColor);
 }
 
 function updateLastUpdate(ms) {

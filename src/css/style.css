@@ -142,6 +142,11 @@ table tr:first-child th:last-child {
     border-radius: 50%;
 }
 
+.c-team-logo__svg {
+    width: 60px;
+    height: auto;
+}
+
 /* match info */
 .c-match-info {
     display: flex;
@@ -376,6 +381,10 @@ table tr:first-child th:last-child {
     justify-content: center;
 }
 
+.u-space-around {
+    justify-content: space-around;
+}
+
 .u-align-center {
     align-items: center;
 }
@@ -463,6 +472,14 @@ table tr:first-child th:last-child {
 
 .ui-tooltip {
     background-color: #E9EBEE;
+}
+
+.u-margin-md {
+    margin: 15px;
+}
+
+.u-margin-lg {
+    margin: 20px;
 }
 
 
