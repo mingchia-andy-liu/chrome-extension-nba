@@ -3,24 +3,10 @@ const EMPTY_TEAM_ROW = ['', '','0-0', '-', '0-0', '-', '0-0', '-', '0', '0', '0'
 
 // Summary table
 function formatSummary(summary){
-    let hLogoExist = false
-    let vLogoExist = false
-    LOGO_EXIST.forEach(function(item) {
-        hLogoExist = hLogoExist || (item === summary.hta)
-        vLogoExist = vLogoExist || (item === summary.ata)
-    })
-    if (hLogoExist){
-        $('#home_team_logo .c-team-logo__svg').attr("src",`/src/assets/logo/${summary.hta}.svg`)
-    } else {
-        $('#home_team_logo .c-team-logo__svg').attr("src",'#')
-    }
-
-    if (vLogoExist) {
-        $('#away_team_logo .c-team-logo__svg').attr("src",`/src/assets/logo/${summary.ata}.svg`)
-    } else {
-        $('#away_team_logo .c-team-logo__svg').attr("src",'#')
-    }
-
+    const vColor = LOGO_COLORS[summary.htlg] || '#000000';
+    const aColor = LOGO_COLORS[summary.atlg] || '#000000';
+    $('#away_team_logo').text(summary.atlg).css('background-color', aColor);
+    $('#home_team_logo').text(summary.htlg).css('background-color', vColor);
     $('.away-team-name').text(summary.atn);
     $('.home-team-name').text(summary.htn);
     $('.summary-box-score tbody tr:nth-child(2) th').eq(0).text(summary.ata);
