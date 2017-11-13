@@ -157,28 +157,12 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     }
 
-    let hLogoExist = false
-    let vLogoExist = false
-    LOGO_EXIST.forEach(function(item) {
-        hLogoExist = hLogoExist || (item === game.h.ta)
-        vLogoExist = vLogoExist || (item === game.v.ta)
-    })
-    if (hLogoExist){
-        homeTeamEl.find('.c-team-logo .c-team-logo__svg').attr("src",`/src/assets/logo/${game.h.ta}.svg`)
-    } else {
-        var hColor = LOGO_COLORS[game.h.ta] || '#000000';
-        homeTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', hColor);
-    }
-
-    if (vLogoExist) {
-        awayTeamEl.find('.c-team-logo .c-team-logo__svg').attr("src",`/src/assets/logo/${game.v.ta}.svg`)
-    } else {
-        var vColor = LOGO_COLORS[game.v.ta] || '#000000';
-        awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
-    }
-
+    const hColor = LOGO_COLORS[game.h.ta] || '#000000';
+    const vColor = LOGO_COLORS[game.v.ta] || '#000000';
     awayTeamEl.find('.c-team-name').text(game.v.tn);
+    awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);
+    homeTeamEl.find('.c-team-logo').text(game.h.ta).css('background-color', hColor);
 }
 
 function updateLastUpdate(ms) {

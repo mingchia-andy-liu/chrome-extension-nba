@@ -1,10 +1,11 @@
-'use strict';
+'use strict'
 
 $(function(){
-    chrome.storage.local.get(['favTeam'], function(data) {
-        if (data && data.favTeam) {
-            const favTeamName = $(`#favouriteTeam option[value=${data.favTeam}]`).attr("selected", "selected").text()
-            $('#status').text(`Your favourite team is ${favTeamName}`)
+    chrome.storage.local.get(['favTeamStatus'], function(data) {
+        if (data && data.favTeamStatus) {
+            Object.keys(data.favTeamStatus).forEach(function(teamAbbr) {
+                $(`#favTeams div input[value=${teamAbbr}]`).prop('checked', true)
+            })
         }
     })
     $('#submit').click(function() {
