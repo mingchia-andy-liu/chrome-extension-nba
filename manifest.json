@@ -18,6 +18,7 @@
 
     "background": {
         "scripts": [
+            "/src/vendor/moment/moment.min.js",
             "/src/vendor/jquery/jquery-3.1.1.min.js",
             "/src/js/common/games.js",
             "/src/js/background/background.js"

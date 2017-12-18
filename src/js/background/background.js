@@ -27,7 +27,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         const previousSplit = previousVersion.split('.')
         if (currentSplit[0] !== previousSplit[0] ||
             currentSplit[1] !== previousSplit[1]) {
-            chrome.runtime.openOptionsPage()
+            chrome.tabs.create({' url': "/changelog.html" })
         }
     }
 });
@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 chrome.notifications.onClicked.addListener(function(notificationId) {
     if (notificationId) {
         chrome.notifications.clear(notificationId);
-        chrome.tabs.create({'url': `/box-score.html#${notificationId}` })
+        chrome.tabs.create({ 'url': `/box-score.html#${notificationId}` })
     }
 })
 
@@ -50,9 +50,14 @@ chrome.alarms.create('scheduleAlarm', {
 });
 
 chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 1, // start time
+    delayInMinutes : 1,
     periodInMinutes : 30   // periodical time
 });
+
+// chrome.alarms.create('notificationAlarm', {
+//     when : moment().hour(11).minute(0).second(0).valueOf(),
+//     periodInMinutes : 30 // 24 hr
+// })
 
 
 /**
@@ -62,6 +67,7 @@ chrome.alarms.create('liveAlarm', {
 function checkFavTeamOn(games) {
     chrome.storage.local.get(['favTeamStatus'], function(data) {
         if (data && data.favTeamStatus) {
+            console.log('Found the teams', data.favTeamStatus)
             const favTeamStatus = data.favTeamStatus
             games.forEach(function(game) {
                 if (favTeamStatus[game.v.ta] || favTeamStatus[game.h.ta]) {
@@ -76,7 +82,7 @@ function checkFavTeamOn(games) {
                         chrome.notifications.create(game.gid, {
                             type: 'basic',
                             iconUrl: '/src/assets/png/icon-color-128.png',
-                            message: `${game.v.s} ${game.v.tn} vs ${game.h.tn} ${game.h.s} has started.`,
+                            message: `${game.v.tn} ${game.v.s} vs ${game.h.s} ${game.h.tn} has started.`,
                             title: 'Game started',
                         })
                         if (favTeamStatus[game.v.ta]) {
@@ -92,7 +98,7 @@ function checkFavTeamOn(games) {
                         chrome.notifications.create(game.gid, {
                             type: 'basic',
                             iconUrl: '/src/assets/png/icon-color-128.png',
-                            message: `${game.v.s} ${game.v.tn} vs ${game.h.tn} ${game.h.s} has finished.`,
+                            message: `${game.v.tn} ${game.v.s} vs ${game.h.s} ${game.h.tn} has finished.`,
                             title: 'Game finished',
                         })
                         if (favTeamStatus[game.v.ta]) {
@@ -133,6 +139,7 @@ chrome.alarms.onAlarm.addListener(function(alarm){
                 const badgeText = isLive ? 'live' : ''
                 chrome.browserAction.setBadgeText({text: badgeText})
                 chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+                console.log(`isLive is ${isLive}`)
                 if (isLive) {
                     checkFavTeamOn(data.gs.g)
                 }
@@ -149,6 +156,15 @@ chrome.alarms.onAlarm.addListener(function(alarm){
             }
         }
         fetchFullSchedule(callBack)
+    } else if (alarm.name === 'notificationAlarm') {
+        console.log('notification alarm')
+        console.log(new Date())
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: '/src/assets/png/icon-color-128.png',
+            message: `test`,
+            title: 'Every hour after 12',
+        })
     }
 });
 
