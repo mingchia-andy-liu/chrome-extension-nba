@@ -7,7 +7,7 @@ function validateLiveGame(match) {
         // haven't started
         match._status = 'prepare'
         return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start') || match.stt.includes('Qtr')) {
+    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start') || match.stt.includes('Qtr') || match.stt === 'Tipoff') {
         // live
         match._status = 'live'
         return 'live'
