@@ -1,3 +1,9 @@
+getConfig().then(function(config) {
+    if (config) {
+        $('body').addClass('u-dark-mode')
+    }
+})
+
 $(function(){
     'use strict';
 

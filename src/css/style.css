@@ -465,6 +465,16 @@ table tr:first-child th:last-child {
     background-color: #E9EBEE;
 }
 
+/* dark mode */
+.u-dark-mode {
+    color: hsl(0, 0%, 95%);
+    background-color: hsl(0, 0%, 30%);
+}
+
+.u-dark-mode.c-card {
+    color: hsl(0, 0%, 95%);
+    background-color: hsl(0, 0%, 15%);
+}
 
 /* === Responsive === */
 @media only screen and (max-width: 700px) {

@@ -41,3 +41,14 @@ const FETCH_DATA_FAILED = 'Unable to fetch data';
 const NON_LIVE_GAME = 'GAME HAS NOT STARTED YET';
 const LOADING = 'LOADING...';
 const VIEW_DETAILS = 'CLICK TO SEE BOX SCORE';
+
+
+const getConfig = function() {
+    return new Promise(function(resolve, reject) {
+        debugger
+            chrome.storage.local.get('dark-mode', function(data) {
+            debugger
+            resolve(true)
+        })
+    })
+}

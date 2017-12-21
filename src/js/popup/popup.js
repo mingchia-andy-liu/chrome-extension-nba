@@ -1,5 +1,10 @@
 'use strict';
 chrome.runtime.sendMessage({request : 'wakeup'});
+getConfig().then(function(config) {
+    if (config) {
+        $('body').addClass('u-dark-mode')
+    }
+})
 
 $(function(){
     $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function(){
