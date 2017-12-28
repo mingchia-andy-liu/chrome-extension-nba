@@ -18,6 +18,9 @@ chrome.runtime.onUpdateAvailable.addListener(function(details){
     chrome.runtime.reload();
 });
 
+/**
+ * Add a listener for loading up the changelog on Major/Minor update, not patches.
+ */
 chrome.runtime.onInstalled.addListener(function(details) {
     const currentVersion = chrome.runtime.getManifest().version
     const previousVersion = details.previousVersion
@@ -29,142 +32,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
             currentSplit[1] !== previousSplit[1]) {
             chrome.tabs.create({' url': "/changelog.html" })
         }
-    }
-});
-
-chrome.notifications.onClicked.addListener(function(notificationId) {
-    if (notificationId) {
-        chrome.notifications.clear(notificationId);
-        chrome.tabs.create({ 'url': `/box-score.html#${notificationId}` })
-    }
-})
-
-chrome.alarms.create('minuteAlarm', {
-    delayInMinutes : 1,
-    periodInMinutes : 1
-});
-
-chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 60,
-    periodInMinutes : 60   // periodical time
-});
-
-chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 1,
-    periodInMinutes : 30   // periodical time
-});
-
-// chrome.alarms.create('notificationAlarm', {
-//     when : moment().hour(11).minute(0).second(0).valueOf(),
-//     periodInMinutes : 30 // 24 hr
-// })
-
-
-/**
- * Sends a notification if the favourite team is on
- * @param {array} games array of games from the API endpoint
- */
-function checkFavTeamOn(games) {
-    chrome.storage.local.get(['favTeamStatus'], function(data) {
-        if (data && data.favTeamStatus) {
-            console.log('Found the teams', data.favTeamStatus)
-            const favTeamStatus = data.favTeamStatus
-            games.forEach(function(game) {
-                if (favTeamStatus[game.v.ta] || favTeamStatus[game.h.ta]) {
-                    /**
-                     * notification status
-                     *  @property {int}
-                     *      1: just reset
-                     *      2: shown the start
-                     *      3: shown the final
-                     */
-                    if (game._status === 'live' && (favTeamStatus[game.v.ta] < 2 || favTeamStatus[game.h.ta] < 2)) {
-                        chrome.notifications.create(game.gid, {
-                            type: 'basic',
-                            iconUrl: '/src/assets/png/icon-color-128.png',
-                            message: `${game.v.tn} ${game.v.s} vs ${game.h.s} ${game.h.tn} has started.`,
-                            title: 'Game started',
-                        })
-                        if (favTeamStatus[game.v.ta]) {
-                            favTeamStatus[game.v.ta] = 2
-                        }
-                        if (favTeamStatus[game.h.ta]) {
-                            favTeamStatus[game.h.ta] = 2
-                        }
-                        chrome.storage.local.set({
-                            favTeamStatus: favTeamStatus
-                        })
-                    } else if (game._status === 'finish' && (favTeamStatus[game.v.ta] < 3 || favTeamStatus[game.h.ta] < 3)) {
-                        chrome.notifications.create(game.gid, {
-                            type: 'basic',
-                            iconUrl: '/src/assets/png/icon-color-128.png',
-                            message: `${game.v.tn} ${game.v.s} vs ${game.h.s} ${game.h.tn} has finished.`,
-                            title: 'Game finished',
-                        })
-                        if (favTeamStatus[game.v.ta]) {
-                            favTeamStatus[game.v.ta] = 3
-                        }
-                        if (favTeamStatus[game.h.ta]) {
-                            favTeamStatus[game.h.ta] = 3
-                        }
-                        chrome.storage.local.set({
-                            favTeamStatus: favTeamStatus
-                        })
-                    } else if (game._status === 'prepare' && (favTeamStatus[game.v.ta] === 3 || favTeamStatus[game.h.ta] === 3)) {
-                        if (favTeamStatus[game.v.ta]) {
-                            favTeamStatus[game.v.ta] = 1
-                        }
-                        if (favTeamStatus[game.h.ta]) {
-                            favTeamStatus[game.h.ta] = 1
-                        }
-                        chrome.storage.local.set({
-                            favTeamStatus: favTeamStatus
-                        })
-                    }
-                }
-            })
-        }
-    })
-}
-
-// Config the live game badge
-chrome.alarms.onAlarm.addListener(function(alarm){
-    if (alarm.name === 'liveAlarm') {
-        const callBack = function(data) {
-            if (data && !data.failed) {
-                let isLive = false
-                data.gs.g.forEach(function(match){
-                    isLive = validateLiveGame(match) === 'live' || isLive
-                })
-                const badgeText = isLive ? 'live' : ''
-                chrome.browserAction.setBadgeText({text: badgeText})
-                chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
-                console.log(`isLive is ${isLive}`)
-                if (isLive) {
-                    checkFavTeamOn(data.gs.g)
-                }
-            }
-        }
-        fetchGames(callBack)
-    } else if (alarm.name === 'scheduleAlarm') {
-        const callBack = function(data) {
-            if (data && !data.failed) {
-                chrome.storage.local.set({
-                    'schedule' : data,
-                    'scheduleRefreshTime' : new Date().getTime()
-                })
-            }
-        }
-        fetchFullSchedule(callBack)
-    } else if (alarm.name === 'notificationAlarm') {
-        console.log('notification alarm')
-        console.log(new Date())
-        chrome.notifications.create({
-            type: 'basic',
-            iconUrl: '/src/assets/png/icon-color-128.png',
-            message: `test`,
-            title: 'Every hour after 12',
-        })
     }
 });
 
@@ -227,6 +94,7 @@ function fetchFullSchedule(sendResponse) {
     fetchGames(gameCallBack)
     const scheduleCallBack = function(data) {
         if (data && !data.failed) {
+            DATE_UTILS.setSchedule(data)
             chrome.storage.local.set({
                 'schedule' : data,
                 'scheduleRefreshTime' : new Date().getTime()
