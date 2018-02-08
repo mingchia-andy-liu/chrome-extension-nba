@@ -151,6 +151,11 @@ function updateCardWithGame(card, game) {
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);
         matchinfoEl.find('.c-clock').text(time).addClass(UTILS.TIME);
+    } else if (game._status === 'postponed') {
+        debugger
+        let clock = formatClock(game.cl, 'PPD');
+        matchinfoEl.find('.c-hyphen').text('');
+        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     } else {
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
