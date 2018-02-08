@@ -3,6 +3,9 @@ function validateLiveGame(match) {
         //finish
         match._status = 'finish'
         return 'finish'
+    } else if (match.stt === 'PPD') {
+        match._status = 'postponed'
+        return 'postponed'
     } else if (match && !match.cl) {
         // haven't started
         match._status = 'prepare'
@@ -12,7 +15,7 @@ function validateLiveGame(match) {
         match._status = 'live'
         return 'live'
     } else if (match.cl === '00:00.0') {
-        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
+        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am')) {
             match._status = 'prepare'
             return 'prepare'
         }
