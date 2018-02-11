@@ -20,7 +20,11 @@ th, td {
     min-width: 43px;
     width: 5vw;
     text-align: center;
-    border-bottom: 1px solid #cecece;
+    border-bottom: 1px solid hsl(0, 0%, 85%);;
+}
+
+.u-dark-mode th, .u-dark-mode td {
+    border-bottom: 1px solid hsl(0, 0%, 50%);
 }
 
 table tr:first-child th:first-child {
@@ -117,6 +121,18 @@ table tr:first-child th:last-child {
     border: 2px solid transparent;
 }
 
+.c-card.u-fav::before{
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    border-top-left-radius: 3px;
+    border-top: 10px solid gold;
+    border-left: 5px solid gold;
+    border-right: 10px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
 .c-card:hover {
     cursor: pointer;
 }
@@ -194,7 +210,11 @@ table tr:first-child th:last-child {
     background-color: #f9f9f9;
     border-radius: 5px;
     border: 2px solid transparent;
+}
 
+.u-dark-mode .c-calendar-picker input {
+    background-color: hsl(0, 0%, 15%);
+    color: #fff;
 }
 
 .c-arrow {
@@ -243,6 +263,10 @@ table tr:first-child th:last-child {
 
 .team-table tr:not(:first-child):hover {
     background-color: #e1e1e1;
+}
+
+.team-table.u-dark-mode tr:not(:first-child):hover {
+    background-color: #53A2CE;
 }
 
 .c-team-name {
@@ -317,9 +341,17 @@ table tr:first-child th:last-child {
     cursor: pointer;
 }
 
-.tab-button.active  {
+.tab .tab-button.active  {
     background-color: #f9f9f9;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+}
+
+.u-dark-mode .tab .tab-button {
+    background-color: hsl(0, 0%, 40%);
+}
+
+.u-dark-mode .tab .tab-button.active {
+    background-color: hsl(0, 0%, 15%);
 }
 
 #away_tab {
@@ -341,7 +373,6 @@ table tr:first-child th:last-child {
 
 /* tab content*/
 .tab-content {
-    border-top: 2px solid #f9f9f9;
     border-radius: 5px;
     background-color: #f9f9f9;
     padding: 10px 10px 10px 10px;
@@ -480,9 +511,33 @@ table tr:first-child th:last-child {
     background-color: hsl(0, 0%, 30%);
 }
 
-.u-dark-mode.c-card {
+.u-dark-mode.u--dark {
     color: hsl(0, 0%, 95%);
     background-color: hsl(0, 0%, 15%);
+}
+
+.u-dark-mode .u-color-green {
+    color: #00ee00;
+}
+
+.u-dark-mode .u-color-red {
+    color: #ee0000;
+}
+
+.u-dark-mode .u-background-purple {
+    background-color: #724C9F;
+}
+
+.u-dark-mode .u-background-blue{
+    background-color: #4c4ca6;
+}
+
+.u-dark-mode .u-background-green{
+    background-color: #008348;
+}
+
+.u-dark-mode .u-background-orange{
+    background-color: #f19132;
 }
 
 /* === Responsive === */

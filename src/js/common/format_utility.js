@@ -92,7 +92,7 @@ function updateCards(games) {
         if (index >= games.length) {
             $(el).addClass('u-hide');
         } else {
-            $(el).removeClass('u-hide').addClass('u-dark-mode');
+            $(el).removeClass('u-hide');
             updateCardWithGame(el, games[index]);
         }
     });

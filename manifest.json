@@ -36,7 +36,6 @@
     "permissions": [
         "storage",
         "alarms",
-        "notifications",
-        "http://*.nba.com/"
+        "https://*.nba.com/"
     ]
 }

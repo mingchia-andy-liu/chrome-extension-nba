@@ -39,7 +39,7 @@ function fetchGames(sendResponse) {
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
+        url: 'https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json'
     }).done(function(data) {
         sendResponse(data);
     }).fail(function(xhr, textStatus, errorThrown) {
@@ -52,7 +52,7 @@ function fetchLiveGameBox(sendResponse, gid) {
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
-        url: `http://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/gamedetail/${gid}_gamedetail.json`
+        url: `https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/gamedetail/${gid}_gamedetail.json`
     }).done(function(data){
         sendResponse(data);
     }).fail(function(xhr, textStatus, errorThrown) {
@@ -65,7 +65,7 @@ function fetchFullSchedule(sendResponse) {
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
-        url: 'http://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
+        url: 'https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
     }).done(function(data){
         sendResponse(data.lscd);
     }).fail(function(xhr, textStatus, errorThrown) {
