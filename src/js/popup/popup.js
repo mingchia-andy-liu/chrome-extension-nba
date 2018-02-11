@@ -8,7 +8,7 @@ $(function(){
     });
 
     $('#boxScorePage').on('click', function() {
-        chrome.tabs.create({'url': "/box-score.html" })
+        chrome.tabs.create({ 'url': "/box-score.html" })
     });
 
     $('#optionsPage').on('click', function() {

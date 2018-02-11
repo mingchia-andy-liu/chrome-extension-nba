@@ -18,6 +18,9 @@ chrome.runtime.onUpdateAvailable.addListener(function(details){
     chrome.runtime.reload();
 });
 
+/**
+ * Add a listener for loading up the changelog on Major/Minor update, not patches.
+ */
 chrome.runtime.onInstalled.addListener(function(details) {
     const currentVersion = chrome.runtime.getManifest().version
     const previousVersion = details.previousVersion
@@ -27,70 +30,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
         const previousSplit = previousVersion.split('.')
         if (currentSplit[0] !== previousSplit[0] ||
             currentSplit[1] !== previousSplit[1]) {
-            chrome.runtime.openOptionsPage()
+            chrome.tabs.create({' url': "/changelog.html" })
         }
-    }
-});
-
-chrome.alarms.create('minuteAlarm', {
-    delayInMinutes : 1,
-    periodInMinutes : 1
-});
-
-chrome.alarms.create('scheduleAlarm', {
-    delayInMinutes : 60, // start time right away
-    periodInMinutes : 60   // periodical time
-});
-
-chrome.alarms.create('liveAlarm', {
-    delayInMinutes : 10, // start time
-    periodInMinutes : 10   // periodical time
-});
-
-function validateLiveGame(match) {
-    if (match.stt === 'Final') {
-        //finish
-        return 'finish'
-    } else if (match && !match.cl) {
-        // haven't started
-        return 'prepare'
-    } else if (match.stt === 'Halftime' || match.stt.includes('End') || match.stt.includes('Start')) {
-        // live
-        return 'live'
-    } else if (match.cl === '00:00.0') {
-        if (match.stt.includes('ET') || match.stt.includes('pm') || match.stt.includes('am') || match.stt === 'PPD') {
-            return 'prepare'
-        }
-    } else if (match.cl !== '' && match.cl !== '00:00.0') {
-        return 'live'
-    }
-    return 'prepare'
-}
-
-// Config the live game badge
-chrome.alarms.onAlarm.addListener(function(alarm){
-    if (alarm.name === 'liveAlarm') {
-        const callBack = function(data) {
-            if (data && !data.failed) {
-                const isLive = data.gs.g.find(function(match){
-                    return validateLiveGame(match) === 'live'
-                })
-                const badgeText = isLive ? 'live' : ''
-                chrome.browserAction.setBadgeText({text: badgeText})
-                chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
-            }
-        }
-        fetchGames(callBack)
-    } else if (alarm.name === 'scheduleAlarm') {
-        const callBack = function(data) {
-            if (data && !data.failed) {
-                chrome.storage.local.set({
-                    'schedule' : data,
-                    'scheduleRefreshTime' : new Date().getTime()
-                })
-            }
-        }
-        fetchFullSchedule(callBack)
     }
 });
 
@@ -153,6 +94,7 @@ function fetchFullSchedule(sendResponse) {
     fetchGames(gameCallBack)
     const scheduleCallBack = function(data) {
         if (data && !data.failed) {
+            DATE_UTILS.setSchedule(data)
             chrome.storage.local.set({
                 'schedule' : data,
                 'scheduleRefreshTime' : new Date().getTime()
