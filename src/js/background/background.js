@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         const previousSplit = previousVersion.split('.')
         if (currentSplit[0] !== previousSplit[0] ||
             currentSplit[1] !== previousSplit[1]) {
-            chrome.tabs.create({' url': "/changelog.html" })
+            chrome.tabs.create({ 'url': "/changelog.html" })
         }
     }
 });

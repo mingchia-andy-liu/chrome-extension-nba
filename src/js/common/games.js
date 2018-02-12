@@ -104,7 +104,6 @@ function preprocessData(games) {
     const favGameIndex = ordered.findIndex(function(game) {
         return game._fav
     })
-    debugger
     if (favGameIndex != -1) {
         return ordered.splice(favGameIndex, 1).concat(ordered)
     } else {
