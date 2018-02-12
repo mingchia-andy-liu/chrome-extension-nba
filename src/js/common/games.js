@@ -1,3 +1,10 @@
+let FAV_TEAM = ''
+getConfig().then(function(config) {
+    if (config.favTeam) {
+        FAV_TEAM = config.favTeam
+    }
+})
+
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
         //finish
@@ -38,14 +45,29 @@ function anyLiveGames(games) {
     })
 }
 
+/**
+ * Check if favourite is part of the game
+ */
+function checkFavGame(game) {
+    if (game.h.ta === FAV_TEAM || game.v.ta === FAV_TEAM) {
+        game._fav = true
+        return true
+    } else {
+        game._fav = false
+        return false
+    }
+}
+
 function preprocessData(games) {
     // preprocess the data before anything
+    var fav = []
     var live = []
     var finish = []
     var prepare = []
     games.forEach(function(game, index) {
         // adding property so the schedule in DATE_UTILS can be found
         game.gdte = moment(game.gcode.split('/')[0]).format('YYYY-MM-DD')
+        checkFavGame(game)
         switch (validateLiveGame(game)) {
             case 'prepare':
                 game._localTime = getGameStartTime(game.stt, game.gcode)
@@ -77,7 +99,17 @@ function preprocessData(games) {
                 finish.push(game)
         }
     })
-    return live.concat(finish.concat(prepare))
+
+    const ordered = live.concat(finish.concat(prepare))
+    const favGameIndex = ordered.findIndex(function(game) {
+        return game._fav
+    })
+    debugger
+    if (favGameIndex != -1) {
+        return ordered.splice(favGameIndex, 1).concat(ordered)
+    } else {
+        return ordered
+    }
 }
 
 function getGameStartTime(status, gcode) {

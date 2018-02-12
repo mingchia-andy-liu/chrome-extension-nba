@@ -1,11 +1,12 @@
-$('#mode-switch').click(function(event) {
-    $('body').toggleClass('u-dark-mode')
-    $('.c-card').each(function(index, el){
-        $(el).toggleClass('u-dark-mode u--dark')
-    })
-    $('.tab-content').toggleClass('u-dark-mode u--dark')
-    $('.team-table').toggleClass('u-dark-mode u--dark')
-    console.log('toggled')
+getConfig().then(function(config) {
+    if (config.nightMode) {
+        $('body').toggleClass('u-dark-mode')
+        $('.c-card').each(function(index, el){
+            $(el).toggleClass('u-dark-mode').toggleClass('u--dark')
+        })
+        $('.tab-content').toggleClass('u-dark-mode').toggleClass('u--dark')
+        $('.team-table').toggleClass('u-dark-mode').toggleClass('u--dark')
+    }
 })
 
 $(function(){

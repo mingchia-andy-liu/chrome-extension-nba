@@ -45,8 +45,12 @@ const VIEW_DETAILS = 'CLICK TO SEE BOX SCORE';
 
 const getConfig = function() {
     return new Promise(function(resolve, reject) {
-            chrome.storage.local.get('dark-mode', function(data) {
-            resolve(true)
+            chrome.storage.local.get(['nightMode', 'favTeam'], function(data) {
+                if(data) {
+                    resolve(data)
+                } else {
+                    reject(false)
+                }
         })
     })
 }

@@ -1,20 +1,20 @@
 'use strict'
 
 $(function(){
-    chrome.storage.local.get(['favTeamStatus'], function(data) {
-        if (data && data.favTeamStatus) {
-            Object.keys(data.favTeamStatus).forEach(function(teamAbbr) {
-                $(`#favTeams div input[value=${teamAbbr}]`).prop('checked', true)
-            })
+    chrome.storage.local.get(['favTeam', 'nightMode'], function(data) {
+        if (data) {
+            $('#favTeams').val(data.favTeam)
+            $('#night-mode-switch').prop('checked', data.nightMode)
         }
     })
     $('#submit').click(function() {
-        let favTeamStatus = {}
-        $('.team:checkbox:checked').each(function() {
-            favTeamStatus[$(this).val()] = 1
-        })
+        const favTeam = $('#favTeams').val()
+        const isNight = $('#night-mode-switch').is(":checked")
         chrome.storage.local.set({
-            favTeamStatus: favTeamStatus
+            favTeam: favTeam,
+            nightMode: isNight
+        }, function() {
+            $('#submit').text('Saved')
         })
     })
 })

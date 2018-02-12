@@ -23,10 +23,6 @@ th, td {
     border-bottom: 1px solid hsl(0, 0%, 85%);;
 }
 
-.u-dark-mode th, .u-dark-mode td {
-    border-bottom: 1px solid hsl(0, 0%, 50%);
-}
-
 table tr:first-child th:first-child {
     border-top-left-radius: 5px;
 }
@@ -212,11 +208,6 @@ table tr:first-child th:last-child {
     border: 2px solid transparent;
 }
 
-.u-dark-mode .c-calendar-picker input {
-    background-color: hsl(0, 0%, 15%);
-    color: #fff;
-}
-
 .c-arrow {
     width: 10%;
     border:none;
@@ -263,10 +254,6 @@ table tr:first-child th:last-child {
 
 .team-table tr:not(:first-child):hover {
     background-color: #e1e1e1;
-}
-
-.team-table.u-dark-mode tr:not(:first-child):hover {
-    background-color: #53A2CE;
 }
 
 .c-team-name {
@@ -346,14 +333,6 @@ table tr:first-child th:last-child {
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
 }
 
-.u-dark-mode .tab .tab-button {
-    background-color: hsl(0, 0%, 40%);
-}
-
-.u-dark-mode .tab .tab-button.active {
-    background-color: hsl(0, 0%, 15%);
-}
-
 #away_tab {
     margin-left: 1em;
 }
@@ -387,6 +366,30 @@ table tr:first-child th:last-child {
 .tab-content th {
     background-color: #046fdb;
     color: white;
+}
+
+/* buttom */
+.c-btn {
+    min-width: 30px;
+    min-height: 30px;
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+    background-color: #296ebd;
+    color: hsl(0, 0%, 95%);
+    transition: background-color .3s;
+    padding: 15px;
+}
+.c-btn:hover {
+    background-color: #164881;
+    cursor: pointer;
+}
+
+.c-save-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 /* === utility === */
@@ -538,6 +541,32 @@ table tr:first-child th:last-child {
 
 .u-dark-mode .u-background-orange{
     background-color: #f19132;
+}
+
+.u-dark-mode #optionsPage,
+.u-dark-mode  #boxScorePage {
+    color: #5188ff;
+}
+
+.team-table.u-dark-mode tr:not(:first-child):hover {
+    background-color: hsl(0, 0%, 60%);
+}
+
+.u-dark-mode th, .u-dark-mode td {
+    border-bottom: 1px solid hsl(0, 0%, 50%);
+}
+
+.u-dark-mode .c-calendar-picker input {
+    background-color: hsl(0, 0%, 15%);
+    color: #fff;
+}
+
+.u-dark-mode .tab .tab-button {
+    background-color: hsl(0, 0%, 40%);
+}
+
+.u-dark-mode .tab .tab-button.active {
+    background-color: hsl(0, 0%, 15%);
 }
 
 /* === Responsive === */

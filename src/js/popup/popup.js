@@ -1,8 +1,11 @@
 'use strict';
 chrome.runtime.sendMessage({request : 'wakeup'});
 getConfig().then(function(config) {
-    if (config) {
-        $('body').addClass('u-dark-mode')
+    if (config.nightMode) {
+        $('body').toggleClass('u-dark-mode')
+        $('.c-card').each(function(index, el){
+            $(el).toggleClass('u-dark-mode u--dark')
+        })
     }
 })
 
