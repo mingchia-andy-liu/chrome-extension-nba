@@ -41,3 +41,16 @@ const FETCH_DATA_FAILED = 'Unable to fetch data';
 const NON_LIVE_GAME = 'GAME HAS NOT STARTED YET';
 const LOADING = 'LOADING...';
 const VIEW_DETAILS = 'CLICK TO SEE BOX SCORE';
+
+
+const getConfig = function() {
+    return new Promise(function(resolve, reject) {
+            chrome.storage.local.get(['nightMode', 'favTeam'], function(data) {
+                if(data) {
+                    resolve(data)
+                } else {
+                    reject(false)
+                }
+        })
+    })
+}

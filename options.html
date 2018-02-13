@@ -3,102 +3,61 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Box Scores</title>
-        <link rel="stylesheet" type="text/css" href="src/vendor/jquery-ui/jquery-ui.min.css">
+        <title>Box Scores Options</title>
         <link rel="stylesheet" type="text/css" href="src/css/style.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
     </head>
     <body>
-        <h3 class='u-display-flex u-justify-center'>
-            If you have any question or found any bugs, please email it to box.scores.extension@gmail.com
-        </h3>
-        <div class="u-flex-column u-align-center u-font-size-medium">
-            <h1>
-                Box Score Changelog
-            </h1>
+        <header class="u-flex-column u-align-center u-font-size-medium">
+            <h1>Box Scores Options</h1>
+            <a class="u-margin-md" href="/changelog.html">Changelog</a>
+        </header>
+        <div class="u-display-flex u-space-around u-font-size-medium">
             <div>
-                <h2> 1.1.5 Updates: (2017-11-05)</h2>
-                <ul>
-                    <li> Fix calendar popup selection issue </li>
-                    <li> Update the schedule cache if the daily games are not up to date </li>
-                    <li> Update badge text logic </li>
-                </ul>
-                <h2> 1.1.3/4 Updates: (2017-11-03)</h2>
-                <ul>
-                    <li> Add a live badge text if any game is live (refresh every 30 mins) </li>
-                    <li> Fix daily games showing the wrong games in some timezones</li>
-                    <li> Fix box-score's daily games don't show scores</li>
-                </ul>
-                <h2> 1.1.2 Updates: (2017-10-27)</h2>
-                <ul>
-                    <li> Fix date AM/PM issue</li>
-                    <li> Fix card ordering </li>
-                    <li> Minor bug fixes</li>
-                    <li> Update the daily games to reflect local time</li>
-                    <li> Last updated time is now in <code>second</code> format</li>
-                </ul>
-                <h2> 1.1.0.1 Updates: (2017-10-19)</h2>
-                <ul>
-                    <li> Fix card text issue</li>
-                    <li> Fix card ordering </li>
-                </ul>
-                <h2> 1.1.0.0 Updates: (2017-10-10)</h2>
-                <p>
-                    It's the beginning of the 2017-2018 season! 🎉
-                    Sorry it took a while, new season's API has
-                    changed a lot. Let me know if there are any bugs.
-                    <br><br>
-                    I hope everyone has a good season!
-                </p>
-                <h2> 1.0.0.2 Updates: </h2>
-                <ul>
-                    <li> Add a calendar feature so users can go back/forwards </li>
-                    <li> Adjust responsive styling </li>
-                </ul>
-                <h2> 1.0.0.19 Updates: </h2>
-                <ul>
-                    <li>Fix DST and other issues </li>
-                </ul>
-                <h2> 1.0.0.16/17 Updates: </h2>
-                <ul>
-                    <li> Bug fix </li>
-                    <li> Add more logo color for All Stars Weekend </li>
-                </ul>
-                <h2> 1.0.0.15 Updates: </h2>
-                <ul>
-                    <li> Add options page </li>
-                </ul>
-                <h2> 1.0.0.12/13 Updates: </h2>
-                <ul>
-                    <li> Bug fix </li>
-                </ul>
-                <h2> 1.0.0.11 Updates: </h2>
-                <ul>
-                    <li> Update text </li>
-                    <li> Bug fix </li>
-                </ul>
-                <h2> 1.0.0.10 Updates: </h2>
-                <ul>
-                    <li> Add Tab layout to the box score page </li>
-                    <li> Box score page should be easier to view/navigate between games </li>
-                    <li> Remove overlay on cards so you can see the score </li>
-                    <li> Remove city name, and home vs away theme </li>
-                    <li> Change the color scheme. Green means good and red means bad now. </li>
-                    <li> Fix no game will get fetched on first click. </li>
-                    <li> Minor bug fix </li>
-                </ul>
-                <h2> 1.0.0.5 Updates: </h2>
-                <ul>
-                    <li> Smooth overlay update </li>
-                    <li> Bug fix </li>
-                </ul>
-                <h2> 1.0.0.4 Updates: </h2>
-                <ul>
-                    <li> Brand new cards look </li>
-                    <li> Update performance </li>
-                    <li> Bug fix </li>
-                </ul>
+                <p class="u-margin-none">Select your favorite teams:</p>
+                <select id="favTeams">
+                    <option value="" selected>Choose here</option>
+                    <option value="ATL">Atlanta Hawks</option>
+                    <option value="BOS">Boston Celtics</option>
+                    <option value="BKN">Brooklyn Nets</option>
+                    <option value="CHA">Charlotte Hornets</option>
+                    <option value="CHI">Chicago Bulls</option>
+                    <option value="CLE">Cleveland Cavaliers</option>
+                    <option value="DAL">Dallas Mavericks</option>
+                    <option value="DEN">Denver Nuggets</option>
+                    <option value="DET">Detroit Pistons</option>
+                    <option value="GSW">Golden State Warriors</option>
+                    <option value="HOU">Houston Rockets</option>
+                    <option value="IND">Indiana Pacers</option>
+                    <option value="LAC">LA Clippers</option>
+                    <option value="LAL">Los Angeles Lakers</option>
+                    <option value="MEM">Memphis Grizzlies</option>
+                    <option value="MIA">Miami Heat</option>
+                    <option value="MIL">Milwaukee Bucks</option>
+                    <option value="MIN">Minnesota Timberwolves</option>
+                    <option value="NOP">New Orleans Pelicans</option>
+                    <option value="NYK">New York Knicks</option>
+                    <option value="OKC">Oklahoma City Thunder</option>
+                    <option value="ORL">Orlando Magic</option>
+                    <option value="PHI">Philadelphia 76ers</option>
+                    <option value="PHX">Phoenix Suns</option>
+                    <option value="POR">Portland Trail Blazers</option>
+                    <option value="SAC">Sacramento Kings</option>
+                    <option value="SAS">San Antonio Spurs</option>
+                    <option value="TOR">Toronto Raptors</option>
+                    <option value="UTA">Utah Jazz</option>
+                    <option value="WAS">Washington Wizards</option>
+                </select>
+            </div>
+            <div style="padding: 20px">
+                <input id="night-mode-switch" type="checkbox" />
+                <label for="night-mode-switch">Night mode</label>
             </div>
         </div>
+        <div class="u-display-flex u-space-around">
+            <button id="submit" type="submit" class="c-btn">Save</button>
+        </div>
     </body>
+    <script src="src/vendor/jquery/jquery-3.1.1.min.js"></script>
+    <script src="/src/js/options.js"></script>
 </html>

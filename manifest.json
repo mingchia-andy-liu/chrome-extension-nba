@@ -18,7 +18,14 @@
 
     "background": {
         "scripts": [
+            "/src/vendor/moment/moment.min.js",
+            "src/vendor/moment/moment-timezone.min.js",
+            "src/vendor/moment/moment-timezone-data.min.js",
             "/src/vendor/jquery/jquery-3.1.1.min.js",
+            "/src/js/common/games.js",
+            "/src/js/common/date_utils.js",
+            "/src/js/alarms/alarms.js",
+            "/src/js/alarms/listeners.js",
             "/src/js/background/background.js"
         ],
         "persistent": false
@@ -29,6 +36,6 @@
     "permissions": [
         "storage",
         "alarms",
-        "http://*.nba.com/"
+        "https://*.nba.com/"
     ]
 }
