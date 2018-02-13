@@ -41,12 +41,6 @@ table tr:first-child th:last-child {
     /*height: 100vh;*/
     padding: 5px 5px 5px 5px;
 }
-/*
-#box_score_page #games {
-    min-width: 26%;
-    margin: 0 5px 0 5px;
-    overflow-y: auto;
-}*/
 
 .c-card-list {
     min-width: 26%;
@@ -71,7 +65,7 @@ table tr:first-child th:last-child {
     color: #8f8f8f;
 }
 
-#optionsPage, #boxScorePage {
+.u-page {
     color: blue;
     margin: 5px 5px 5px 5px;
     cursor: pointer;
@@ -392,6 +386,22 @@ table tr:first-child th:last-child {
     left: 0;
 }
 
+/* standings */
+.c-standings-table {
+    width: 100%;
+    font-size: 15px;
+    border-collapse: collapse;
+}
+
+.c-standings-table tr th,
+.c-standings-table tr td {
+    width: 9%;
+}
+
+.u-8th-seed {
+    border-bottom: 2px solid #0E6CB4;
+}
+
 /* === utility === */
 .u-display-flex {
     display: flex;
@@ -429,6 +439,11 @@ table tr:first-child th:last-child {
 
 .u-selected {
     border: 2px solid rgb(30, 90, 250) !important;
+}
+
+/* spacing */
+.u-padding-lg {
+    padding: 20px;
 }
 
 .u-full-width {
@@ -473,7 +488,7 @@ table tr:first-child th:last-child {
 }
 
 .u-font-size-small {
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .u-font-size-medium {
@@ -543,8 +558,7 @@ table tr:first-child th:last-child {
     background-color: #f19132;
 }
 
-.u-dark-mode #optionsPage,
-.u-dark-mode  #boxScorePage {
+.u-dark-mode .u-page {
     color: #5188ff;
 }
 
@@ -571,11 +585,6 @@ table tr:first-child th:last-child {
 
 /* === Responsive === */
 @media only screen and (max-width: 700px) {
-
-/*    #box_score_page #games {
-        min-width: 300px;
-    }
-*/
     .c-card-list {
         min-width: 300px;
     }
@@ -586,10 +595,6 @@ table tr:first-child th:last-child {
 }
 
 @media only screen and (min-width: 1600px) {
-
-    /*.c-card-list {
-        min-width: 33%;
-    }*/
     #footer {
         font-size: calc(15px + 0.1vw);
     }

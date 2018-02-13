@@ -13,15 +13,19 @@ $(function(){
     $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function(){
         let hashedUrl = 'box-score.html#' + $(this).attr('gid');
         chrome.tabs.create({url: hashedUrl});
-    });
+    })
 
-    $('#boxScorePage').on('click', function() {
+    $('#boxScorePage').click(function() {
         chrome.tabs.create({ 'url': "/box-score.html" })
-    });
+    })
 
-    $('#optionsPage').on('click', function() {
+    $('#optionsPage').click(function() {
         chrome.runtime.openOptionsPage()
-    });
+    })
+
+    $('#standingsPage').click(function() {
+        chrome.tabs.create({ 'url': "/standings.html" })
+    })
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'scheduleRefreshTime', 'schedule'], function(data) {
         var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
