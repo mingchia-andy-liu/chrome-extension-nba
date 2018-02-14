@@ -11,7 +11,6 @@
         "128": "/src/assets/png/icon-color-128.png"
     },
 
-
     "browser_action": {
         "default_popup": "popup.html"
     },
@@ -27,7 +26,8 @@
             "/src/js/common/date_utils.js",
             "/src/js/alarms/alarms.js",
             "/src/js/alarms/listeners.js",
-            "/src/js/background/background.js"
+            "/src/js/background/background.js",
+            "/src/js/ga.js"
         ],
         "persistent": false
     },
@@ -38,5 +38,7 @@
         "storage",
         "alarms",
         "https://*.nba.com/"
-    ]
+    ],
+
+    "content_security_policy": "script-src 'self' https://www.google-analytics.com/analytics.js; object-src 'self'"
 }
