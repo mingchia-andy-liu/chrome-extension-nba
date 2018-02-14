@@ -117,6 +117,7 @@ function getGameStartTime(status, gcode) {
     var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
     var zone = "America/New_York";
     var input = `${today} ${gameTime}`
-    var result = moment.tz(input, zone).local().format("hh:mm A");
+    // guess() uses the Internationalization API
+    var result = moment.tz(input, zone).tz(moment.tz.guess()).format("hh:mm A")
     return result
 }
