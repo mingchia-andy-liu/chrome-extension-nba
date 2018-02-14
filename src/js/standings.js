@@ -62,30 +62,32 @@ $(function(){
                 minIndex = index
             }
         }
+        const greenColor = '#00bb00'
+        const redColor = 'red'
         $('#eastern tr > td:nth-child(9)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color','#00bb00')
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color','red')
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color',greenColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color',redColor)
         resetMinMax()
         $('#eastern tr > td:nth-child(10)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color','red')
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color','#00bb00')
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',redColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',greenColor)
         resetMinMax()
         $('#eastern tr > td:nth-child(11)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color','#00bb00')
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color','red')
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',greenColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',redColor)
         resetMinMax()
 
         $('#western tr > td:nth-child(9)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color','#00bb00')
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color','red')
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color',greenColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color',redColor)
         resetMinMax()
         $('#western tr > td:nth-child(10)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color','red')
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color','#00bb00')
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',redColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',greenColor)
         resetMinMax()
         $('#western tr > td:nth-child(11)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color','#00bb00')
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color','red')
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',greenColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',redColor)
     }).fail(function(xhr, textStatus, errorThrown) {
         console.log('Failed to fetch data.');
     });

@@ -441,11 +441,6 @@ table tr:first-child th:last-child {
     border: 2px solid rgb(30, 90, 250) !important;
 }
 
-/* spacing */
-.u-padding-lg {
-    padding: 20px;
-}
-
 .u-full-width {
     width: 100%
 }
