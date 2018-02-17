@@ -6,7 +6,7 @@ chrome.alarms.create('minuteAlarm', {
 
 chrome.alarms.create('scheduleAlarm', {
     delayInMinutes : 60,
-    periodInMinutes : 60
+    periodInMinutes : 60 * 12
 })
 
 chrome.alarms.create('liveAlarm', {

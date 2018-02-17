@@ -9,6 +9,8 @@ body {
     /*remove browser padding and margin*/
     padding: 0;
     margin:0;
+    /* reset 1em */
+    font-size: 14px;
 }
 
 sup {
@@ -38,19 +40,16 @@ table tr:first-child th:last-child {
 }
 
 #box_score_page {
-    /*height: 100vh;*/
     padding: 5px 5px 5px 5px;
 }
 
 .c-card-list {
-    min-width: 26%;
-    margin: 0 5px 0 5px;
-    overflow-y: auto;
+    min-width: 27%;
+    padding-top: 10px;
 }
 
 #footer {
     width: 100%;
-    min-height: 15px;
     justify-content: center;
 }
 
@@ -75,9 +74,8 @@ table tr:first-child th:last-child {
     display: none;
     /*parent needs to relative in order to float*/
     position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 15px;
+    width: 99%;
+    height: 99%;
     border-radius: 5px;
     text-align: center;
     background: rgba(10, 40, 70, 0.9);
@@ -104,7 +102,7 @@ table tr:first-child th:last-child {
     align-items: center;
     position: relative;
     min-height: 85px;
-    margin: 2px 5px 10px 5px;
+    margin: 3px 5px 5px 5px;
     font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
@@ -189,8 +187,8 @@ table tr:first-child th:last-child {
 
 /* === calendar === */
 .c-calendar-picker {
-    padding: 10px 10px 10px 10px;
-    height: 5em;
+    height: 40px;
+    margin-bottom: 5px;
 }
 
 .c-calendar-picker input {
@@ -214,15 +212,10 @@ table tr:first-child th:last-child {
 .c-table {
     width: 100%;
     height: 100%;
-    /*max-height: 1000px;*/
-    min-width: 900px;
     border-radius: 5px;
     position: relative;
-    font-size: calc(13px + 0.1vw);
-    padding: 10px 10px 10px 10px;
-    margin: 0 5px 0 5px;
-/*    overflow-y: auto;
-    overflow-x: hidden;*/
+    font-size: calc(1em + 0.1vh);
+    padding: 0px 10px 10px 10px;
 }
 
 .c-table table {

@@ -5,7 +5,8 @@ $(function(){
         url: 'https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2017-18&SeasonType=Regular+Season'
     }).done(function(data){
         const resultSet = data.resultSets[0]
-        // const headers = resultSet.headers
+        const headers = resultSet.headers
+        debugger
         const teams = resultSet.rowSet
         const east = teams.filter(function(team){
             return team[5] === 'East'
@@ -23,24 +24,34 @@ $(function(){
             $(eastern.rows[i].cells[2]).text(east[i-1][13])
             $(eastern.rows[i].cells[3]).text(east[i-1][14])
             $(eastern.rows[i].cells[4]).text(east[i-1][37])
-            $(eastern.rows[i].cells[5]).text(east[i-1][22])
+            $(eastern.rows[i].cells[5]).text(east[i-1][17])
             $(eastern.rows[i].cells[6]).text(east[i-1][18])
             $(eastern.rows[i].cells[7]).text(east[i-1][19])
-            $(eastern.rows[i].cells[8]).text(east[i-1][56])
-            $(eastern.rows[i].cells[9]).text(east[i-1][57])
-            $(eastern.rows[i].cells[10]).text(east[i-1][58])
+            if (east[i-1][35] > 0) {
+                $(eastern.rows[i].cells[8]).text(`W ${east[i-1][35]}`)
+            } else {
+                $(eastern.rows[i].cells[8]).text(`L ${Math.abs(east[i-1][35])}`)
+            }
+            $(eastern.rows[i].cells[9]).text(east[i-1][56])
+            $(eastern.rows[i].cells[10]).text(east[i-1][57])
+            $(eastern.rows[i].cells[11]).text(east[i-1][58])
 
             $(western.rows[i].cells[0]).text(west[i-1][4])
             $(western.rows[i].cells[1]).text(west[i-1][12])
             $(western.rows[i].cells[2]).text(west[i-1][13])
             $(western.rows[i].cells[3]).text(west[i-1][14])
             $(western.rows[i].cells[4]).text(west[i-1][37])
-            $(western.rows[i].cells[5]).text(west[i-1][22])
+            $(western.rows[i].cells[5]).text(west[i-1][17])
             $(western.rows[i].cells[6]).text(west[i-1][18])
             $(western.rows[i].cells[7]).text(west[i-1][19])
-            $(western.rows[i].cells[8]).text(west[i-1][56])
-            $(western.rows[i].cells[9]).text(west[i-1][57])
-            $(western.rows[i].cells[10]).text(west[i-1][58])
+            if (west[i-1][35] > 0) {
+                $(western.rows[i].cells[8]).text(`W ${west[i-1][35]}`)
+            } else {
+                $(western.rows[i].cells[8]).text(`L ${Math.abs(west[i-1][35])}`)
+            }
+            $(western.rows[i].cells[9]).text(west[i-1][56])
+            $(western.rows[i].cells[10]).text(west[i-1][57])
+            $(western.rows[i].cells[11]).text(west[i-1][58])
         }
 
         let min = Infinity
@@ -64,30 +75,30 @@ $(function(){
         }
         const greenColor = '#00bb00'
         const redColor = 'red'
-        $('#eastern tr > td:nth-child(9)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color',greenColor)
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color',redColor)
-        resetMinMax()
         $('#eastern tr > td:nth-child(10)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',redColor)
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',greenColor)
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',greenColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',redColor)
         resetMinMax()
         $('#eastern tr > td:nth-child(11)').each(findMinMax)
-        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',greenColor)
-        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',redColor)
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',redColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',greenColor)
+        resetMinMax()
+        $('#eastern tr > td:nth-child(12)').each(findMinMax)
+        $(`#eastern tr:nth-child(${maxIndex+2}) > td:nth-child(12)`).css('color',greenColor)
+        $(`#eastern tr:nth-child(${minIndex+2}) > td:nth-child(12)`).css('color',redColor)
         resetMinMax()
 
-        $('#western tr > td:nth-child(9)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(9)`).css('color',greenColor)
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(9)`).css('color',redColor)
-        resetMinMax()
         $('#western tr > td:nth-child(10)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',redColor)
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',greenColor)
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(10)`).css('color',greenColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(10)`).css('color',redColor)
         resetMinMax()
         $('#western tr > td:nth-child(11)').each(findMinMax)
-        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',greenColor)
-        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',redColor)
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(11)`).css('color',redColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(11)`).css('color',greenColor)
+        resetMinMax()
+        $('#western tr > td:nth-child(12)').each(findMinMax)
+        $(`#western tr:nth-child(${maxIndex+2}) > td:nth-child(12)`).css('color',greenColor)
+        $(`#western tr:nth-child(${minIndex+2}) > td:nth-child(12)`).css('color',redColor)
     }).fail(function(xhr, textStatus, errorThrown) {
         console.log('Failed to fetch data.');
     });

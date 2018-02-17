@@ -46,6 +46,16 @@ function anyLiveGames(games) {
 }
 
 /**
+ * Check if there will be any live games, it will only be triggered if ther is
+ * no live games at the moment
+ */
+function willHaveLiveGames(games) {
+    return !!games.find(function(match){
+        return match._status === 'prepare'
+    })
+}
+
+/**
  * Check if favourite is part of the game
  */
 function checkFavGame(game) {
@@ -117,6 +127,7 @@ function getGameStartTime(status, gcode) {
     var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
     var zone = "America/New_York";
     var input = `${today} ${gameTime}`
-    var result = moment.tz(input, zone).local().format("hh:mm A");
+    // guess() uses the Internationalization API
+    var result = moment.tz(input, zone).tz(moment.tz.guess()).format("hh:mm A")
     return result
 }

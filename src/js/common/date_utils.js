@@ -101,9 +101,15 @@ DATE_UTILS.searchGames = function(date) {
     const startIndex = this.schedule.findIndex(function(game){
         return game.gdte === selectedDateStr
     })
-    const lastIndex = this.schedule.findIndex(function(game){
-        return game.gdte === nextDay
+    if (startIndex === -1) {
+        return []
+    }
+    // need to find the last game of the day
+    const secondHalf = this.schedule.slice(startIndex).reverse()
+    let lastIndex = secondHalf.findIndex(function(game){
+        return game.gdte === selectedDateStr
     })
+    lastIndex = secondHalf.length - lastIndex + startIndex
     return this.schedule.slice(startIndex, lastIndex)
 }
 
