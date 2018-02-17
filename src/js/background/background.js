@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse('woken');
     }
 
-    return true;        // return true to tell google to use sendResponse asynchronously
+    return true;        // return true to tell broswer to use sendResponse asynchronously
 });
 
 // this will reload the background explicitly to trigger an update as soon as possible if available

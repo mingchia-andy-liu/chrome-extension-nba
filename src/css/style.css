@@ -215,7 +215,7 @@ table tr:first-child th:last-child {
     border-radius: 5px;
     position: relative;
     font-size: calc(1em + 0.1vh);
-    padding: 10px 10px 10px 10px;
+    padding: 0px 10px 10px 10px;
 }
 
 .c-table table {

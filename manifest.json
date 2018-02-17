@@ -6,9 +6,9 @@
     "version": "1.1.5",
 
     "icons": {
-        "16": "/src/assets/png/icon-color-16.png",
-        "48": "/src/assets/png/icon-color-48.png",
-        "128": "/src/assets/png/icon-color-128.png"
+        "16": "src/assets/png/icon-color-16.png",
+        "48": "src/assets/png/icon-color-48.png",
+        "128": "src/assets/png/icon-color-128.png"
     },
 
     "browser_action": {
@@ -17,17 +17,17 @@
 
     "background": {
         "scripts": [
-            "/src/vendor/moment/moment.min.js",
+            "src/vendor/moment/moment.min.js",
             "src/vendor/moment/moment-timezone.min.js",
             "src/vendor/moment/moment-timezone-data.min.js",
-            "/src/vendor/jquery/jquery-3.1.1.min.js",
-            "/src/js/common/utils.js",
-            "/src/js/common/games.js",
-            "/src/js/common/date_utils.js",
-            "/src/js/alarms/alarms.js",
-            "/src/js/alarms/listeners.js",
-            "/src/js/background/background.js",
-            "/src/js/ga.js"
+            "src/vendor/jquery/jquery-3.1.1.min.js",
+            "src/js/common/utils.js",
+            "src/js/common/games.js",
+            "src/js/common/date_utils.js",
+            "src/js/alarms/alarms.js",
+            "src/js/alarms/listeners.js",
+            "src/js/background/background.js",
+            "src/js/ga.js"
         ],
         "persistent": false
     },
@@ -37,6 +37,7 @@
     "permissions": [
         "storage",
         "alarms",
+        "http://*.nba.com/",
         "https://*.nba.com/"
     ],
 
