@@ -20,7 +20,7 @@ $(function(){
     })
 
     $('#optionsPage').click(function() {
-        chrome.runtime.openOptionsPage()
+        chrome.tabs.create({ 'url': "/options.html" })
     })
 
     $('#standingsPage').click(function() {

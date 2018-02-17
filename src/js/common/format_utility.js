@@ -126,13 +126,14 @@ function fetchData() {
             const d = new Date()
             let newGames = preprocessData(data.gs.g);
             const isAnyGameLive = anyLiveGames(newGames)
+            const willHaveLive = isAnyGameLive || willHaveLiveGames(newGames)
 
             // Set the badge text when the alarm hasn't go off but the extension is opened
             const badgeText = isAnyGameLive ? 'live' : ''
             chrome.browserAction.setBadgeText({text: badgeText})
             chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
 
-            if (!isAnyGameLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
+            if (!isAnyGameLive && !willHaveLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
                 DATE_UTILS.selectedDate = moment(d).toDate()
 
                 // API is in different DATE then the timezone date

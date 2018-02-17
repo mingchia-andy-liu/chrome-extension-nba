@@ -46,6 +46,16 @@ function anyLiveGames(games) {
 }
 
 /**
+ * Check if there will be any live games, it will only be triggered if ther is
+ * no live games at the moment
+ */
+function willHaveLiveGames(games) {
+    return !!games.find(function(match){
+        return match._status === 'prepare'
+    })
+}
+
+/**
  * Check if favourite is part of the game
  */
 function checkFavGame(game) {
