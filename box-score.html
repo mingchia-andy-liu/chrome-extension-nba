@@ -343,8 +343,8 @@
                         </table>
                     </div>
 
-                    <div class="u-display-flex u-justify-center">
-                        <table class='detail-box-score'>
+                    <div id="detail-tables" class="u-display-flex u-justify-center">
+                        <div><table class='detail-box-score'>
                             <tbody>
                                 <tr>
                                     <th title='Team Name'>Team</th>
@@ -374,19 +374,12 @@
                                     <td>0</td>
                                 </tr>
                             </tbody>
-                        </table>
-                        <table class='game-box-score'>
+                        </table></div>
+                        <div><table class='game-box-score'>
                             <tbody>
-                                <tr>
-                                    <th>Lead Changes</th>
-                                    <th>Times Tied</th>
-                                </tr>
-                                <tr>
-                                    <td id='lead_changes'>0</td>
-                                    <td id='times_tied'>0</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <tr> <th>Lead Changes</th> <th>Times Tied</th> </tr>
+                                <tr> <td id='lead_changes'>0</td> <td id='times_tied'>0</td> </tr> </tbody>
+                        </table></div>
                     </div>
 
                     <div id='away_tab_content' class="u-flex-column u-center">

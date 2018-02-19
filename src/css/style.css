@@ -64,6 +64,10 @@ table tr:first-child th:last-child {
     color: #8f8f8f;
 }
 
+#detail-tables div table{
+    width: 100%;
+}
+
 .u-page {
     color: blue;
     margin: 5px 5px 5px 5px;
@@ -289,12 +293,12 @@ table tr:first-child th:last-child {
 }
 
 /* Detail Box Score*/
-.detail-box-score {
+#detail-tables div:nth-child(1) {
     width: 75%;
     margin-right: 0.25em;
 }
 
-.game-box-score {
+#detail-tables div:nth-child(2) {
     width: 20%;
     margin-left: 0.25em;
 }
@@ -572,7 +576,46 @@ table tr:first-child th:last-child {
 }
 
 /* === Responsive === */
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
+    #box_score_page {
+        flex-direction: column;
+    }
+
+    .box-banner {
+        font-size: calc(12px + 1vw);
+    }
+
+    .box-banner .c-team-logo {
+        display: none;
+    }
+
+    .c-table {
+        padding: 0 5px;
+        font-size: 12px;
+    }
+
+    .tab-content {
+        overflow-x: scroll;
+    }
+
+    #detail-tables,
+    .tab-content div:nth-child(1) {
+        justify-content: normal;
+    }
+
+    .tab-content div:nth-child(1) table {
+        width:100%;
+    }
+
+    #detail-tables div {
+        width: 100% !important;
+    }
+
+    #away_tab_content,
+    #home_tab_content {
+        align-items: normal;
+    }
+
     .c-card-list {
         min-width: 300px;
     }
