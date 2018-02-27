@@ -5,6 +5,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchGames(sendResponse);
     } else if (request.request === 'box_score') {
         fetchLiveGameBox(sendResponse, request.gid);
+    } else if (request.request === 'pbp') {
+        fetchPlayByPlay(sendResponse, request.gid)
     } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
@@ -68,6 +70,20 @@ function fetchFullSchedule(sendResponse) {
         url: 'https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json'
     }).done(function(data){
         sendResponse(data.lscd);
+    }).fail(function(xhr, textStatus, errorThrown) {
+        console.log('Failed to fetch data.');
+        sendResponse({failed: true});
+    });
+}
+
+function fetchPlayByPlay(sendResponse, gid) {
+    console.log(`https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/pbp/${gid}_full_pbp.json`)
+    $.ajax({
+        type: 'GET',
+        contentType: 'application/json',
+        url: `https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/pbp/${gid}_full_pbp.json`
+    }).done(function(data){
+        sendResponse(data);
     }).fail(function(xhr, textStatus, errorThrown) {
         console.log('Failed to fetch data.');
         sendResponse({failed: true});

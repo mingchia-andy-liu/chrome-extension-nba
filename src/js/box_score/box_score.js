@@ -6,6 +6,7 @@ getConfig().then(function(config) {
         })
         $('.tab-content').toggleClass('u-dark-mode').toggleClass('u--dark')
         $('.team-table').toggleClass('u-dark-mode').toggleClass('u--dark')
+        $('#pbp_container').toggleClass('u-dark-mode').toggleClass('u--dark')
     }
 })
 
@@ -139,6 +140,7 @@ $(function(){
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
+                fetchPlayByPlay(gid);
                 if (gameData && gameData.boxScore &&
                     gameData.boxScore[gid] &&
                     !$.isEmptyObject(gameData.boxScore[gid].data) &&
@@ -440,6 +442,7 @@ $(function(){
         if (gid) {
             fetchBox(gid).done(function(boxScoreData){
                 showBox(boxScoreData);
+                fetchPlayByPlay(gid);
                 var cacheData = {
                     boxScore : {}
                 };
