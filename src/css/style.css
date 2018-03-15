@@ -425,6 +425,17 @@ table tr:first-child th:last-child {
     width: 80%;
 }
 
+.c-quarter-btn {
+    padding: 0 1em;
+    cursor: pointer;
+}
+
+.c-quarter-btn.active {
+    font-weight: bold;
+    background-color: #046fdb;
+    color: white;
+}
+
 /* === utility === */
 .u-display-flex {
     display: flex;

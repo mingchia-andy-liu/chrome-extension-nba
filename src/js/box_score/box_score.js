@@ -491,6 +491,7 @@ $(function(){
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
+            fetchPlayByPlay(getHash());
         }
     });
 

@@ -77,7 +77,6 @@ function fetchFullSchedule(sendResponse) {
 }
 
 function fetchPlayByPlay(sendResponse, gid) {
-    console.log(`https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/pbp/${gid}_full_pbp.json`)
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
