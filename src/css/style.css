@@ -399,6 +399,41 @@ table tr:first-child th:last-child {
     border-bottom: 2px solid #0E6CB4;
 }
 
+/* play by play */
+#pbp tr:nth-child(even) {
+    background-color: hsl(0, 0%, 95%);
+}
+
+.u-dark-mode #pbp tr:nth-child(even) {
+    background-color: hsl(0, 0%, 30%);
+}
+
+#pbp th:nth-child(4),
+#pbp td:nth-child(4) {
+    text-align: initial;
+}
+
+#pbp tr th:nth-child(1),
+#pbp tr th:nth-child(2),
+#pbp tr th:nth-child(3) {
+    width: 10%;
+}
+
+#pbp tr th:nth-child(4) {
+    width: 70%;
+}
+
+.c-quarter-btn {
+    padding: 0 1em;
+    cursor: pointer;
+}
+
+.c-quarter-btn.active {
+    font-weight: bold;
+    background-color: #046fdb;
+    color: white;
+}
+
 /* === utility === */
 .u-display-flex {
     display: flex;
@@ -445,6 +480,10 @@ table tr:first-child th:last-child {
 /*text*/
 .u-text-align-center {
     text-align: center;
+}
+
+.u-text-bold {
+    font-weight: bold;
 }
 
 .u-color-green {

@@ -6,7 +6,6 @@ $(function(){
     }).done(function(data){
         const resultSet = data.resultSets[0]
         const headers = resultSet.headers
-        debugger
         const teams = resultSet.rowSet
         const east = teams.filter(function(team){
             return team[5] === 'East'
