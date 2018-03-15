@@ -62,9 +62,8 @@ const fetchPlayByPlay = function(gid) {
                     let index = data.g.pd[i].p - 1      // convert to 0 base
                     if (!PBP[gid]) {
                         PBP[gid] = []
-                    } else if (!PBP[gid][index]) {
-                        PBP[gid][index] = data.g.pd[i].pla.reverse()
-                    } else if (PBP[gid][index].length < data.g.pd[i].pla.length) {
+                    }
+                    if (!PBP[gid][index] || PBP[gid][index].length < data.g.pd[i].pla.length) {
                         PBP[gid][index] = data.g.pd[i].pla.reverse()
                     }
                 }
