@@ -408,21 +408,19 @@ table tr:first-child th:last-child {
     background-color: hsl(0, 0%, 30%);
 }
 
-#pbp th:nth-child(3),
-#pbp td:nth-child(3) {
+#pbp th:nth-child(4),
+#pbp td:nth-child(4) {
     text-align: initial;
 }
 
-#pbp tr th:nth-child(1) {
-    width: 10%;
-}
-
-#pbp tr th:nth-child(2) {
-    width: 10%;
-}
-
+#pbp tr th:nth-child(1),
+#pbp tr th:nth-child(2),
 #pbp tr th:nth-child(3) {
-    width: 80%;
+    width: 10%;
+}
+
+#pbp tr th:nth-child(4) {
+    width: 70%;
 }
 
 .c-quarter-btn {
