@@ -11,7 +11,8 @@ const formatPBPRow = function(play) {
     const name = play.etype < 1 || play.etype > 9
         ? ''
         : play.de.substring(1,4)
-    const style = `"color: white;background-color:${LOGO_COLORS[name]}"`
+    const color = LOGO_COLORS[name] || '#000000'
+    const style = `"color: white;background-color:${color}"`
     const logo = `<div style=${style}>${name}</div>`
     if (index > 4) {
         return `<tr><td>${play.cl}</td><td>${logo}</td><td class="u-text-bold">${play.de.substring(5,index)}</td><td class="u-text-bold u-color-green">${play.de.substring(index + 1)}</td></tr>`
@@ -20,10 +21,13 @@ const formatPBPRow = function(play) {
 }
 
 const showQuarter = function(gid, quarter) {
+    const data = PBP[`${gid}`]
+    // not started yet
+    if (data === undefined) return
     if (quarter === undefined) {
-        quarter = PBP[`${gid}`].length - 1
+        quarter = data.length - 1
     }
-    const qtrData = PBP[`${gid}`][quarter]
+    const qtrData = data[quarter]
     const $table = $('#pbp')
     $table.empty().append(headerRow)
     if (!qtrData || qtrData.length === 0) {
@@ -41,13 +45,14 @@ const showQuarter = function(gid, quarter) {
         }
     }
     $('.c-quarter-btn').each(function(index, el) {
-        if (index >= PBP[`${gid}`].length) {
+        if (index >= data.length) {
             $(el).addClass('u-hide')
         } else {
             $(el).removeClass('u-hide')
         }
     })
 }
+
 $('.c-quarter-btn').click(function(event) {
     showQuarter(window.location.hash.substring(1), parseInt(event.target.dataset.qtr) - 1)
 })
