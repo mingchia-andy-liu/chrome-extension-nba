@@ -1,10 +1,9 @@
 const PBP = {}
 let quarter = 0
 /**
- * @param {object} content
- * @param {string} cl
- * @param {number} etype
- *  @example 1
+ * @param {object} play
+ *   @param {object} content
+ *   @param {string} cl
  */
 const formatPBPRow = function(play) {
     const index = play.de.indexOf(']')
