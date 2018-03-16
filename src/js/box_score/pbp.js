@@ -1,5 +1,8 @@
 const PBP = {}
-const headerRow = '<tr><th>Clock</th><th>Team</th><th>Score</th><th>Play</th></tr>'
+const CURRENT_PBP = {
+    gid: 0,
+    quarter: -1,
+}
 let quarter = 0
 /**
  * @param {object} play
@@ -15,26 +18,54 @@ const formatPBPRow = function(play) {
     const style = `"color: white;background-color:${color}"`
     const logo = `<div style=${style}>${name}</div>`
     if (index > 4) {
+        // score
         return `<tr><td>${play.cl}</td><td>${logo}</td><td class="u-text-bold">${play.de.substring(5,index)}</td><td class="u-text-bold u-color-green">${play.de.substring(index + 1)}</td></tr>`
+    } else if (!play.de.includes('[')){
+        // no team info
+        return `<tr><td>${play.cl}</td><td></td><td></td><td>${play.de}</td></tr>`
     }
     return `<tr><td>${play.cl}</td><td>${logo}</td><td></td><td>${play.de.substring(index + 1)}</td></tr>`
+}
+
+const removePBP = function(gid, quarter) {
+    $('#pbp').empty().append(HEADER_ROW)
+    CURRENT_PBP.gid = 0
+    CURRENT_PBP.quarter = -1
 }
 
 const showQuarter = function(gid, quarter) {
     const data = PBP[`${gid}`]
     // not started yet
-    if (data === undefined) return
+    if (data === undefined) {
+        return
+    }
     if (quarter === undefined) {
         quarter = data.length - 1
     }
+    const isSame = CURRENT_PBP.gid === gid && CURRENT_PBP.quarter === quarter
+
     const qtrData = data[quarter]
     const $table = $('#pbp')
-    $table.empty().append(headerRow)
+    const $tableRows = $('#pbp tr')
+    // nothing to update
+    if (qtrData.length === $tableRows.length) {
+        return
+    }
+
     if (!qtrData || qtrData.length === 0) {
+        removePBP()
         $table.append('<tr><td colspan="4">No Data Available</td></tr>')
     } else {
-        for (let i = 0; i < qtrData.length; i++) {
-            $table.append(formatPBPRow(qtrData[i]))
+        if (isSame) {
+            const diff = qtrData.length - $tableRows.length
+            for (let i = 0; i < diff; i++) {
+                $("#pbp tr:first").after(formatPBPRow(qtrData[diff - i]));
+            }
+        } else {
+            removePBP()
+            for (let i = 0; i < qtrData.length; i++) {
+                $table.append(formatPBPRow(qtrData[i]))
+            }
         }
     }
     for (let i = 0; i < 14; i++) {
@@ -51,6 +82,8 @@ const showQuarter = function(gid, quarter) {
             $(el).removeClass('u-hide')
         }
     })
+    CURRENT_PBP.gid = gid
+    CURRENT_PBP.quarter = quarter
 }
 
 $('.c-quarter-btn').click(function(event) {
@@ -58,8 +91,6 @@ $('.c-quarter-btn').click(function(event) {
 })
 
 const fetchPlayByPlay = function(gid) {
-    const $table = $('#pbp')
-    $table.empty().append(headerRow)
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage({request : 'pbp', gid: gid}, function (data) {
             if (data && data.g && data.g.pd) {
