@@ -104,8 +104,8 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
     }
 
-    const hColor = LOGO_COLORS[game.h.ta] || '#000000';
-    const vColor = LOGO_COLORS[game.v.ta] || '#000000';
+    const hColor = getLogoColor(game.h.ta)
+    const vColor = getLogoColor(game.v.ta)
     awayTeamEl.find('.c-team-name').text(game.v.tn);
     awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);

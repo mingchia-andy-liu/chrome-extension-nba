@@ -6,15 +6,15 @@ const CURRENT_PBP = {
 let quarter = 0
 /**
  * @param {object} play
- *   @param {object} content
- *   @param {string} cl
+ *   @field {object} content
+ *   @field {object} cl
  */
 const formatPBPRow = function(play) {
     const index = play.de.indexOf(']')
     const name = play.etype < 1 || play.etype > 9
         ? ''
         : play.de.substring(1,4)
-    const color = LOGO_COLORS[name] || '#000000'
+    const color = getLogoColor(name)
     const style = `"color: white;background-color:${color}"`
     const logo = `<div style=${style}>${name}</div>`
     if (index > 4) {
@@ -31,6 +31,9 @@ const removePBP = function(gid, quarter) {
     $('#pbp').empty().append(HEADER_ROW)
     CURRENT_PBP.gid = 0
     CURRENT_PBP.quarter = -1
+    $(`.c-quarter-btn`).each(function(index, el) {
+        $(el).removeClass('active').removeClass('u-hide')
+    })
 }
 
 const showQuarter = function(gid, quarter) {
@@ -38,9 +41,6 @@ const showQuarter = function(gid, quarter) {
     // not started yet
     if (data === undefined) {
         return
-    }
-    if (quarter === undefined) {
-        quarter = data.length - 1
     }
     const isSame = CURRENT_PBP.gid === gid && CURRENT_PBP.quarter === quarter
 
@@ -94,7 +94,9 @@ const fetchPlayByPlay = function(gid) {
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage({request : 'pbp', gid: gid}, function (data) {
             if (data && data.g && data.g.pd) {
+                let latest = 0;
                 for (let i = 0; i < data.g.pd.length; i++) {
+                    latest = data.g.pd[i].p > latest ? data.g.pd[i].p : latest
                     let index = data.g.pd[i].p - 1      // convert to 0 base
                     if (!PBP[gid]) {
                         PBP[gid] = []
@@ -103,7 +105,7 @@ const fetchPlayByPlay = function(gid) {
                         PBP[gid][index] = data.g.pd[i].pla.reverse()
                     }
                 }
-                showQuarter(gid)
+                showQuarter(gid, latest - 1)
             }
         })
     })

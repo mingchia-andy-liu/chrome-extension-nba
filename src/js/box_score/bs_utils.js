@@ -3,8 +3,8 @@ const EMPTY_TEAM_ROW = ['', '','0-0', '-', '0-0', '-', '0-0', '-', '0', '0', '0'
 
 // Summary table
 function formatSummary(summary){
-    const vColor = LOGO_COLORS[summary.htlg] || '#000000';
-    const aColor = LOGO_COLORS[summary.atlg] || '#000000';
+    const vColor = getLogoColor(summary.htlg)
+    const aColor = getLogoColor(summary.atlg)
     $('#away_team_logo').text(summary.atlg).css('background-color', aColor);
     $('#home_team_logo').text(summary.htlg).css('background-color', vColor);
     $('.away-team-name').text(summary.atn);
