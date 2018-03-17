@@ -66,9 +66,11 @@ const showQuarter = function(gid, quarter) {
             }
         } else {
             removePBP()
+            let html = HEADER_ROW
             for (let i = 0; i < qtrData.length; i++) {
-                $table.append(formatPBPRow(qtrData[i]))
+                html += formatPBPRow(qtrData[i])
             }
+            $table.html(html)   // batch insert
         }
     }
     for (let i = 0; i < 14; i++) {
