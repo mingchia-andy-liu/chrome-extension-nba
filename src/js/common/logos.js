@@ -36,7 +36,6 @@ const LOGO_COLORS = {
     WST : "#ED174C"
 }
 
-
 const getLogoColor = function(name) {
     return LOGO_COLORS[name] || '#000000'
 }

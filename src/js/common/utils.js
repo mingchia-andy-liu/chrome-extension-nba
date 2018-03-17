@@ -46,12 +46,12 @@ const HEADER_ROW = '<tr><th>Clock</th><th>Team</th><th>Score</th><th>Play</th></
 
 const getConfig = function() {
     return new Promise(function(resolve, reject) {
-            chrome.storage.local.get(['nightMode', 'favTeam'], function(data) {
-                if(data) {
-                    resolve(data)
-                } else {
-                    reject(false)
-                }
+        chrome.storage.local.get(['nightMode', 'favTeam'], function(data) {
+            if(data) {
+                resolve(data)
+            } else {
+                reject(false)
+            }
         })
     })
 }

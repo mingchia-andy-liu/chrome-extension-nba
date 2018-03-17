@@ -39,8 +39,11 @@ const removePBP = function(gid, quarter) {
 const showQuarter = function(gid, quarter) {
     const data = PBP[`${gid}`]
     // not started yet
-    if (data === undefined) {
+    if (data === undefined || data.length === 0) {
         return
+    }
+    if (quarter === undefined) {
+        quarter = data.length - 1
     }
     const isSame = CURRENT_PBP.gid === gid && CURRENT_PBP.quarter === quarter
 
@@ -91,9 +94,10 @@ $('.c-quarter-btn').click(function(event) {
 })
 
 const fetchPlayByPlay = function(gid) {
+    debugger
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage({request : 'pbp', gid: gid}, function (data) {
-            if (data && data.g && data.g.pd) {
+            if (data && data.g && data.g.pd.length !== 0) {
                 let latest = 0;
                 for (let i = 0; i < data.g.pd.length; i++) {
                     latest = data.g.pd[i].p > latest ? data.g.pd[i].p : latest
@@ -105,7 +109,9 @@ const fetchPlayByPlay = function(gid) {
                         PBP[gid][index] = data.g.pd[i].pla.reverse()
                     }
                 }
-                showQuarter(gid, latest - 1)
+                resolve(latest - 1)
+            } else {
+                reject()
             }
         })
     })
