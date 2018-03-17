@@ -466,7 +466,6 @@ $(function(){
                 })
         } else {
             removeBox();
-            removePBP();
         }
     }
 

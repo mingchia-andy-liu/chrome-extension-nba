@@ -94,7 +94,6 @@ $('.c-quarter-btn').click(function(event) {
 })
 
 const fetchPlayByPlay = function(gid) {
-    debugger
     return new Promise(function(resolve, reject) {
         chrome.runtime.sendMessage({request : 'pbp', gid: gid}, function (data) {
             if (data && data.g && data.g.pd.length !== 0) {
