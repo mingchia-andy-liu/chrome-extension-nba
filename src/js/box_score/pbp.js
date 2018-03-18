@@ -1,9 +1,4 @@
 const PBP = {}
-const CURRENT_PBP = {
-    gid: 0,
-    quarter: -1,
-}
-let quarter = 0
 /**
  * @param {object} play
  *   @field {object} content
@@ -27,13 +22,14 @@ const formatPBPRow = function(play) {
     return `<tr><td>${play.cl}</td><td>${logo}</td><td></td><td>${play.de.substring(index + 1)}</td></tr>`
 }
 
-const removePBP = function(gid, quarter) {
-    $('#pbp').empty().append(HEADER_ROW)
-    CURRENT_PBP.gid = 0
-    CURRENT_PBP.quarter = -1
+const removePBP = function(showError) {
+    $('#pbp').empty().append(HEADER_ROW).removeData('gid')
     $(`.c-quarter-btn`).each(function(index, el) {
         $(el).removeClass('active').removeClass('u-hide')
     })
+    if (showError) {
+        $('#pbp').append('<tr><td colspan="4">No Data Available</td></tr>')
+    }
 }
 
 const showQuarter = function(gid, quarter) {
@@ -45,13 +41,11 @@ const showQuarter = function(gid, quarter) {
     if (quarter === undefined) {
         quarter = data.length - 1
     }
-    const isSame = CURRENT_PBP.gid === gid && CURRENT_PBP.quarter === quarter
 
     const qtrData = data[quarter]
     const $table = $('#pbp')
-    const $tableRows = $('#pbp tr')
     // nothing to update
-    if (qtrData.length === $tableRows.length) {
+    if ($table.data('gid') === gid && qtrData.length === $table.children().length) {
         return
     }
 
@@ -59,36 +53,24 @@ const showQuarter = function(gid, quarter) {
         removePBP()
         $table.append('<tr><td colspan="4">No Data Available</td></tr>')
     } else {
-        if (isSame) {
-            const diff = qtrData.length - $tableRows.length
-            for (let i = 0; i < diff; i++) {
-                $("#pbp tr:first").after(formatPBPRow(qtrData[diff - i]));
-            }
-        } else {
-            removePBP()
-            let html = HEADER_ROW
-            for (let i = 0; i < qtrData.length; i++) {
-                html += formatPBPRow(qtrData[i])
-            }
-            $table.html(html)   // batch insert
+        let html = HEADER_ROW
+        for (let i = 0; i < qtrData.length; i++) {
+            html += formatPBPRow(qtrData[i])
         }
+        $table.html(html)   // batch insert
     }
-    for (let i = 0; i < 14; i++) {
-        if (i === quarter){
-            $(`.c-quarter-btn[data-qtr=${i + 1}]`).addClass('active')
+
+    $('.c-quarter-btn').each(function(i, el) {
+        const $btn = $(el)
+        if (i === quarter) {
+            $btn.addClass('active').removeClass('u-hide')
+        } else if (i > data.length - 1) {
+            $btn.removeClass('active').addClass('u-hide')
         } else {
-            $(`.c-quarter-btn[data-qtr=${i + 1}]`).removeClass('active')
-        }
-    }
-    $('.c-quarter-btn').each(function(index, el) {
-        if (index >= data.length) {
-            $(el).addClass('u-hide')
-        } else {
-            $(el).removeClass('u-hide')
+            $btn.removeClass('active').removeClass('u-hide')
         }
     })
-    CURRENT_PBP.gid = gid
-    CURRENT_PBP.quarter = quarter
+    $table.data('gid', gid)
 }
 
 $('.c-quarter-btn').click(function(event) {

@@ -163,7 +163,7 @@ $(function(){
                             showQuarter(gid, quarter)
                         })
                         .catch(function(){
-                            removePBP()
+                            removePBP(true)
                         })
                 }
             });
@@ -462,7 +462,7 @@ $(function(){
                     showQuarter(gid, quarter)
                 })
                 .catch(function(){
-                    removePBP()
+                    removePBP(true)
                 })
         } else {
             removeBox();
