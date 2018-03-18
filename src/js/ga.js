@@ -8,9 +8,16 @@ ga('send', 'pageview',location.pathname);
 
 
 // /* FF
+function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+
+const uuid = s4() + '.' + s4()
 $.ajax({
     type: 'POST',
-    url: 'https://www.google-analytics.com/collect?v=1&cid=3123123.123123&tid=UA-114000944-2&t=pageview&dp=' + location.pathname,
+    url: 'https://www.google-analytics.com/collect?v=1&cid=' + uuid + '&tid=UA-114000944-2&t=pageview&dp=' + location.pathname,
 }).fail(function(xhr, textStatus, errorThrown) {
     console.log('Failed to send report to ga');
 });
