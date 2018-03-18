@@ -69,9 +69,9 @@ function updateCardWithGame(card, game) {
             $(scores[1]).addClass(COLOR.GREEN);
         }
         if ( (game.h.ot1 && game.h.ot1 !== 0) || (game.v.ot1 && game.v.ot1 !== 0)) {
-            matchinfoEl.find('.c-clock').text('Final/OT').addClass(UTILS.CLOCK);
+            matchinfoEl.find('.c-clock').text('Final/OT').addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
         } else {
-            matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK);
+            matchinfoEl.find('.c-clock').text('Final').addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
         }
     } else if (game._status === 'live') {
         $(scores[0]).text(game.v.s);
@@ -82,7 +82,7 @@ function updateCardWithGame(card, game) {
         $(scores[1]).addClass(COLOR.GREEN);
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
-        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
+        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
     } else if (game._status === 'prepare'){
         const time = game._localTime || getGameStartTime(game.stt, game.gcode);
         // if (game.lm && game.lm.seri != '') {
@@ -97,15 +97,15 @@ function updateCardWithGame(card, game) {
     } else if (game._status === 'postponed') {
         let clock = formatClock(game.cl, 'PPD');
         matchinfoEl.find('.c-hyphen').text('');
-        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
+        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
     } else {
         let clock = formatClock(game.cl, game.stt);
         matchinfoEl.find('.c-hyphen').text('-');
-        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK);
+        matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
     }
 
-    const hColor = LOGO_COLORS[game.h.ta] || '#000000';
-    const vColor = LOGO_COLORS[game.v.ta] || '#000000';
+    const hColor = getLogoColor(game.h.ta)
+    const vColor = getLogoColor(game.v.ta)
     awayTeamEl.find('.c-team-name').text(game.v.tn);
     awayTeamEl.find('.c-team-logo').text(game.v.ta).css('background-color', vColor);
     homeTeamEl.find('.c-team-name').text(game.h.tn);

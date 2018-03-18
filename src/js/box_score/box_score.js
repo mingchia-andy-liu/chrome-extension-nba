@@ -140,14 +140,14 @@ $(function(){
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
-                fetchPlayByPlay(gid);
                 if (gameData && gameData.boxScore &&
                     gameData.boxScore[gid] &&
                     !$.isEmptyObject(gameData.boxScore[gid].data) &&
                     (gameData.boxScore[gid].time - d) < 60000) {
                     showBox(gameData.boxScore[gid].data);
+                    showQuarter(gid)
                 } else {
-                    fetchBox(gid).done(function(boxScoreData){
+                    fetchBox(gid).then(function(boxScoreData){
                         showBox(boxScoreData);
                         var cacheData = {
                             boxScore : {}
@@ -157,27 +157,31 @@ $(function(){
                             time : d
                         };
                         chrome.storage.local.set(cacheData);
-                    });
+                    })
+                    fetchPlayByPlay(gid)
+                        .then(function(quarter){
+                            showQuarter(gid, quarter)
+                        })
+                        .catch(function(){
+                            removePBP(true)
+                        })
                 }
             });
         }
     });
 
     function fetchBox(gid) {
-        var deferred = $.Deferred();
-
-        chrome.runtime.sendMessage({request : 'box_score', gid: gid}, function (data) {
-            if (data && !data.g.stt.includes('ET')) {
-                 data.g.vls.tstsg.pts = data.g.vls.s;
-                 data.g.hls.tstsg.pts = data.g.hls.s;
-
-                deferred.resolve(data.g);
-            } else {
-                deferred.resolve({});
-            }
-        });
-
-        return deferred.promise();
+        return new Promise(function(resolve, reject) {
+            chrome.runtime.sendMessage({request : 'box_score', gid: gid}, function (data) {
+                if (data && !data.g.stt.includes('ET')) {
+                    data.g.vls.tstsg.pts = data.g.vls.s;
+                    data.g.hls.tstsg.pts = data.g.hls.s;
+                    resolve(data.g);
+                } else {
+                    resolve({});
+                }
+            });
+        })
     }
 
     function showBox(g) {
@@ -363,6 +367,7 @@ $(function(){
         } else {
             $('.c-table .over p').html(NON_LIVE_GAME);
         }
+        removePBP(false)
 
         let summary = {
             atn : AWAY_TEXT,
@@ -440,9 +445,8 @@ $(function(){
 
     function updateBox(gid) {
         if (gid) {
-            fetchBox(gid).done(function(boxScoreData){
+            fetchBox(gid).then(function(boxScoreData){
                 showBox(boxScoreData);
-                fetchPlayByPlay(gid);
                 var cacheData = {
                     boxScore : {}
                 };
@@ -453,6 +457,13 @@ $(function(){
                 chrome.storage.local.set(cacheData);
                 checkExistGame(gid);
             });
+            fetchPlayByPlay(gid)
+                .then(function(quarter){
+                    showQuarter(gid, quarter)
+                })
+                .catch(function(){
+                    removePBP(true)
+                })
         } else {
             removeBox();
         }
@@ -491,7 +502,6 @@ $(function(){
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
-            fetchPlayByPlay(getHash());
         }
     });
 
