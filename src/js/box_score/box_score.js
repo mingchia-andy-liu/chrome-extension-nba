@@ -367,7 +367,7 @@ $(function(){
         } else {
             $('.c-table .over p').html(NON_LIVE_GAME);
         }
-        removePBP()
+        removePBP(false)
 
         let summary = {
             atn : AWAY_TEXT,

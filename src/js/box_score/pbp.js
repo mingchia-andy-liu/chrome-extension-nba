@@ -28,7 +28,7 @@ const removePBP = function(showError) {
         $(el).removeClass('active').removeClass('u-hide')
     })
     if (showError) {
-        $('#pbp').append('<tr><td colspan="4">No Data Available</td></tr>')
+        $('#pbp').append('<tr><td colspan="4">No Data Available. Please Try Again Later.</td></tr>')
     }
 }
 
@@ -50,8 +50,7 @@ const showQuarter = function(gid, quarter) {
     }
 
     if (!qtrData || qtrData.length === 0) {
-        removePBP()
-        $table.append('<tr><td colspan="4">No Data Available</td></tr>')
+        removePBP(true)
     } else {
         let html = HEADER_ROW
         for (let i = 0; i < qtrData.length; i++) {
