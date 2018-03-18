@@ -33,7 +33,7 @@ const removePBP = function(showError) {
 }
 
 const showQuarter = function(gid, quarter) {
-    const data = PBP[`${gid}`]
+    const data = PBP[gid]
     // not started yet
     if (data === undefined || data.length === 0) {
         return
