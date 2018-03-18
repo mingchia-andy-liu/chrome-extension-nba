@@ -24,7 +24,7 @@ const formatPBPRow = function(play) {
 
 const removePBP = function(showError) {
     $('#pbp').empty().append(HEADER_ROW).removeData('gid')
-    $(`.c-quarter-btn`).each(function(index, el) {
+    $('.c-quarter-btn').each(function(index, el) {
         $(el).removeClass('active').removeClass('u-hide')
     })
     if (showError) {
