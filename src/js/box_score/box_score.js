@@ -16,61 +16,29 @@ $(function(){
     var SELECTED_GAME_OBJ = {}
     var SELECTED_SCHEDULE = {}
 
-    var calendar = flatpickr("#schedule", {
-        defaultDate: new Date(),
+    const calendar = $("#datepicker").datepicker({
+        constrainInput: true,
+        dateFormat: "yy-mm-dd",
+        minDate: '2017-09-30',
         maxDate: '2018-06-18',
-        minDate: '2017-10-01',
-        onChange: function(selectedDate, dateStr, instance) {
-            if (DATE_UTILS.checkSelectToday(selectedDate[0])) {
+        showOtherMonths: true,
+        dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        onSelect: function(dateText, instance) {
+            const d = moment(dateText, 'YYYY-MM-DD').toDate();
+            if (DATE_UTILS.checkSelectToday(d)) {
                 updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
                 updateCards(SELECTED_SCHEDULE.cacheData);
                 updateBox(getHash());
             } else {
-                updateCards(DATE_UTILS.searchGames(selectedDate[0]))
-                DATE_UTILS.onSelectChange(selectedDate[0])
+                updateCards(DATE_UTILS.searchGames(d))
+                DATE_UTILS.onSelectChange(d)
                 resetPage()
             }
         }
-    })
-
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
-        var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
-        var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
-        var d = new Date();
-
-        // probably hasn't change much assign it first
-        DATE_UTILS.setSchedule(data.schedule)
-        // set up the fetch data date and selectedDate for calendar
-        DATE_UTILS.fetchDataDate = data.fetchDataDate
-        DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
-
-        if (d.getTime() - popupRefreshTime > 60000) {
-            fetchData()
-            .done(function(games, gdte){
-                updateBox(getHash())
-                SELECTED_SCHEDULE.cacheData = games
-                calendar.setDate([gdte])
-            })
-            .fail(function(){
-                removeBox();
-                window.location.hash = '';
-                $('.c-card:not(no-game)').each(function(index, el){
-                    $(el).addClass('u-hide');
-                });
-                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
-                $('.c-table .over p').html(FETCH_DATA_FAILED);
-            });
-        } else {
-            updateLastUpdate(data.popupRefreshTime);
-            updateCards(data.cacheData);
-            updateBox(getHash());
-            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
-            SELECTED_SCHEDULE.cacheData = data.cacheData
-        }
-    });
+    }).datepicker("setDate", "0")
 
     function onArrowClick() {
-        calendar.setDate([DATE_UTILS.selectedDate])
+        calendar.datepicker('setDate', (DATE_UTILS.selectedDate))
         if (DATE_UTILS.checkSelectToday()) {
             updateLastUpdate(SELECTED_SCHEDULE.popupRefreshTime);
             updateCards(SELECTED_SCHEDULE.cacheData);
@@ -92,6 +60,42 @@ $(function(){
             onArrowClick()
         }
     })
+
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
+        var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
+        var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
+        var d = new Date();
+
+        // probably hasn't change much assign it first
+        DATE_UTILS.setSchedule(data.schedule)
+        // set up the fetch data date and selectedDate for calendar
+        DATE_UTILS.fetchDataDate = data.fetchDataDate
+        DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
+
+        if (d.getTime() - popupRefreshTime > 60000) {
+            fetchData()
+            .done(function(games, gdte){
+                updateBox(getHash())
+                SELECTED_SCHEDULE.cacheData = games
+                calendar.datepicker('setDate', gdte)
+            })
+            .fail(function(){
+                removeBox();
+                window.location.hash = '';
+                $('.c-card:not(no-game)').each(function(index, el){
+                    $(el).addClass('u-hide');
+                });
+                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
+                $('.c-table .over p').html(FETCH_DATA_FAILED);
+            });
+        } else {
+            updateLastUpdate(data.popupRefreshTime);
+            updateCards(data.cacheData);
+            updateBox(getHash());
+            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
+            SELECTED_SCHEDULE.cacheData = data.cacheData
+        }
+    });
 
     function getHash() {
         if (window.location.hash) {
@@ -491,7 +495,7 @@ $(function(){
                 updateBox(getHash());
                 SELECTED_SCHEDULE.popupRefreshTime = new Date().getTime()
                 SELECTED_SCHEDULE.cacheData = gids
-                calendar.setDate([gdte])
+                calendar.datepicker('setDate', gdte)
             })
             .fail(function(){
                 removeBox();

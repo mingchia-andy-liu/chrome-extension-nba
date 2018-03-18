@@ -3,7 +3,7 @@ var DATE_UTILS = {}
 DATE_UTILS.selectedDate = new Date()
 DATE_UTILS.fetchDataDate = '1960-01-01'
 DATE_UTILS.maxDate = new Date('2018-06-17')
-DATE_UTILS.minDate = new Date('2017-09-31')
+DATE_UTILS.minDate = new Date('2017-09-30')
 
 DATE_UTILS.schedule = []
 
