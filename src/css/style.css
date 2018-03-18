@@ -776,6 +776,10 @@ table tr:first-child th:last-child {
     padding: 0;
 }
 
+.ui-datepicker thead tr {
+    height: 23px;
+}
+
 .ui-datepicker td .ui-state-default {
     background-color: transparent;
     border: none;

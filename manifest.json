@@ -41,7 +41,8 @@
         "storage",
         "alarms",
         "http://*.nba.com/",
-        "https://*.nba.com/"
+        "https://*.nba.com/",
+        "*://*.google-analytics.com/*"
     ],
 
     "content_security_policy": "script-src 'self' https://www.google-analytics.com/analytics.js; object-src 'self'"
