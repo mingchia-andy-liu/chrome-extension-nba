@@ -143,7 +143,6 @@ $(function(){
         SELECTED_GAME_OBJ = $(this).addClass(UTILS.SELECTED);
         $('.c-table .over').removeClass(UTILS.HIDE);
         $('.c-table .over p').html(LOADING);
-
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime();
