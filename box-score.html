@@ -7,18 +7,17 @@
         <link rel="stylesheet" type="text/css" href="src/vendor/jquery-ui/jquery-ui.min.css">
         <link rel="stylesheet" type="text/css" href="src/css/fonts.css">
         <link rel="stylesheet" type="text/css" href="src/css/style.css">
-        <link rel="stylesheet" type="text/css" href="src/vendor/flatpickr/dist/flatpickr.min.css">
     </head>
     <body>
         <div id="box_score_page" class="u-display-flex">
             <div class='u-flex-column c-card-list'>
-                <div id='picker' class='c-calendar-picker u-display-flex'>
+                <div class="c-calendar-picker u-display-flex u-full-width">
                     <button id='prevArrow' class='c-arrow'>
                     <img src="/src/assets/svg/arrow-left.svg"/>
                     </button>
-                    <input id='schedule' data-defaultDate=today class='u-full-width'></input>
+                    <input type="text" id="datepicker" readonly="readonly">
                     <button id='nextArrow' class='c-arrow'>
-                    <img src="/src/assets/svg/arrow-right.svg"/>
+                        <img src="/src/assets/svg/arrow-right.svg"/>
                     </button>
                 </div>
                 <div id='footer' class="u-display-flex u-justify-center">
@@ -548,7 +547,6 @@
         </div>
         <script src="src/vendor/jquery/jquery-3.1.1.min.js"></script>
         <script src="src/vendor/jquery-ui/jquery-ui.min.js"></script>
-        <script src="src/vendor/flatpickr/dist/flatpickr.min.js"></script>
         <script src="src/vendor/moment/moment.min.js"></script>
         <script src="src/vendor/moment/moment-timezone.min.js"></script>
         <script src="src/vendor/moment/moment-timezone-data.min.js"></script>
