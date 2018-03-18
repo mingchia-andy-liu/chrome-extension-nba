@@ -16,11 +16,9 @@ $(function(){
     var SELECTED_GAME_OBJ = {}
     var SELECTED_SCHEDULE = {}
 
-
     const calendar = $("#datepicker").datepicker({
         constrainInput: true,
         dateFormat: "yy-mm-dd",
-        gotoCurrent: true,
         minDate: '2017-09-30',
         maxDate: '2018-06-18',
         showOtherMonths: true,
