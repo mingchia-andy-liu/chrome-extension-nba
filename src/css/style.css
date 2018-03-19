@@ -55,7 +55,7 @@ table tr:first-child th:last-child {
 
 #popup_page {
     width: 330px;
-    height: 460px;
+    max-height: 460px;
     overflow-y: scroll;
     padding: 0 5px 0 5px;
     margin: 0 auto;
@@ -391,13 +391,8 @@ table tr:first-child th:last-child {
     border-collapse: collapse;
 }
 
-.c-standings-table tr th,
-.c-standings-table tr td {
-    width: 9%;
-}
-
-.u-8th-seed {
-    border-bottom: 2px solid #0E6CB4;
+.c-standings-table tbody tr td:first-child {
+    width: 1%;
 }
 
 /* play by play */
