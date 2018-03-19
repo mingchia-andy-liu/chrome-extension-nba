@@ -9,9 +9,7 @@ chrome.alarms.onAlarm.addListener(function(alarm){
                 data.gs.g.forEach(function(match){
                     isLive = validateLiveGame(match) === 'live' || isLive
                 })
-                const badgeText = isLive ? 'live' : ''
-                chrome.browserAction.setBadgeText({text: badgeText})
-                chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+                setLiveBadge(isLive)
             }
         }
         fetchGames(callBack)

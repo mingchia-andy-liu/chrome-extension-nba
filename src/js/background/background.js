@@ -95,9 +95,7 @@ function fetchPlayByPlay(sendResponse, gid) {
             const isLive = data.gs.g.find(function(match){
                 return validateLiveGame(match) === 'live'
             })
-            const badgeText = isLive ? 'live' : ''
-            chrome.browserAction.setBadgeText({text: badgeText})
-            chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+            setLiveBadge(isLive)
 
             chrome.storage.local.set({
                 'popupRefreshTime' : 0,

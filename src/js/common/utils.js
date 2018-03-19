@@ -55,3 +55,17 @@ const getConfig = function() {
         })
     })
 }
+
+const setLiveBadge = function(hasLiveGame) {
+    if (!chrome.browserAction.setBadgeText) {
+        // on mobile
+        return
+    }
+    const badgeText = hasLiveGame ? 'live' : ''
+    if (hasLiveGame) {
+        chrome.browserAction.setBadgeText({text: badgeText})
+        chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
+    } else {
+        chrome.browserAction.setBadgeText({text: badgeText})
+    }
+}
