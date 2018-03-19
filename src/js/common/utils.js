@@ -61,11 +61,10 @@ const setLiveBadge = function(hasLiveGame) {
         // on mobile
         return
     }
-    const badgeText = hasLiveGame ? 'live' : ''
     if (hasLiveGame) {
-        chrome.browserAction.setBadgeText({text: badgeText})
+        chrome.browserAction.setBadgeText({text: 'live'})
         chrome.browserAction.setBadgeBackgroundColor({color: '#FC0D1B'})
     } else {
-        chrome.browserAction.setBadgeText({text: badgeText})
+        chrome.browserAction.setBadgeText({text: ''})
     }
 }
