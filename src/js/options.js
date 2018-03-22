@@ -5,8 +5,16 @@ $(function(){
         if (data) {
             $('#favTeams').val(data.favTeam)
             $('#night-mode-switch').prop('checked', data.nightMode)
+            if (data.nightMode) {
+                $('body').addClass('u-dark-mode')
+            }
         }
     })
+
+    $('#night-mode-switch').change(function() {
+        $('body').toggleClass('u-dark-mode')
+    });
+
     $('#submit').click(function() {
         const favTeam = $('#favTeams').val()
         const isNight = $('#night-mode-switch').is(":checked")
