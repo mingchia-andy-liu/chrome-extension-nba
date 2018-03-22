@@ -10,21 +10,31 @@ getConfig().then(function(config) {
 })
 
 $(function(){
+    chrome.tabs.getCurrent(function(tab) {
+        if (!tab) {
+            $('#popup_page').css('max-height', '460px')
+        }
+    })
+
     $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function(){
         let hashedUrl = 'box-score.html#' + $(this).attr('gid');
         chrome.tabs.create({url: hashedUrl});
+        window.close()
     })
 
     $('#boxScorePage').click(function() {
         chrome.tabs.create({ 'url': "/box-score.html" })
+        window.close()
     })
 
     $('#optionsPage').click(function() {
         chrome.tabs.create({ 'url': "/options.html" })
+        window.close()
     })
 
     $('#standingsPage').click(function() {
         chrome.tabs.create({ 'url': "/standings.html" })
+        window.close()
     })
 
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'scheduleRefreshTime', 'schedule'], function(data) {
