@@ -55,7 +55,7 @@ table tr:first-child th:last-child {
 
 #popup_page {
     width: 330px;
-    max-height: 460px;
+    height: 460px;
     overflow-y: scroll;
     padding: 0 5px 0 5px;
     margin: 0 auto;
