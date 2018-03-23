@@ -30,7 +30,7 @@ const onLoadPopUp = function() {
             .done(function(games, date) {
                 DATE_UTILS.fetchDataDate = date
                 CACHED_DATA.games = games
-                CACHED_DATA.d = popupTime
+                CACHED_DATA.d = d
             })
             .fail(function(){
                 updateLastUpdate(data.popupRefreshTime);
@@ -100,6 +100,7 @@ $(function(){
     })
 
     $('#prevArrow').click(function(event){
+        if (CURRENT_SELECTED_DATE <= -1) return
         if (DATE_UTILS.onArrowClick(-1)) {
             CURRENT_SELECTED_DATE -= 1
             updateArrowVisibility()
@@ -108,6 +109,7 @@ $(function(){
     })
 
     $('#nextArrow').click(function(event){
+        if (CURRENT_SELECTED_DATE >= 1) return
         if (DATE_UTILS.onArrowClick(1)) {
             CURRENT_SELECTED_DATE += 1
             updateArrowVisibility()
