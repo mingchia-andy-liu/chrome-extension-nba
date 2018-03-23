@@ -122,7 +122,7 @@ DATE_UTILS.searchTVScopeForGame = function(gid) {
     const game = this.schedule.find(function(game) {
         return game.gid === gid
     })
-    if (!game.bd) return ''
+    if (!game || !game.bd) return ''
     if (game.bd.b[0].scope !== "natl") return ''
     return game.bd.b[0].disp
 }
