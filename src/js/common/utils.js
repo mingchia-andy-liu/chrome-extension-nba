@@ -42,7 +42,11 @@ const NON_LIVE_GAME = 'GAME HAS NOT STARTED YET';
 const LOADING = 'LOADING...';
 const VIEW_DETAILS = 'CLICK TO SEE BOX SCORE';
 const HEADER_ROW = '<tr><th>Clock</th><th>Team</th><th>Score</th><th>Play</th></tr>'
+const TITLE = ['Yesterday', `Today's Games`, 'Tomorrow']
 
+const getTitle = function(index) {
+    return TITLE[index + 1] || `Today's Game`
+}
 
 const getConfig = function() {
     return new Promise(function(resolve, reject) {

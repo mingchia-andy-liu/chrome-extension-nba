@@ -114,6 +114,18 @@ DATE_UTILS.searchGames = function(date) {
 }
 
 /**
+ * Find whether or not the game is being televised
+ * @argument gid {string} the game's id
+ * @return false OR the string of the televised TV
+ */
+DATE_UTILS.searchTVScoprForGame = function(gid) {
+    const game = this.schedule.find(function(game) {
+        return game.gid === gid
+    })
+    return game.bd && game.bd.b[0].scope === "natl" && game.bd.b[0].disp
+}
+
+/**
  * Check if the parameter is the same date as the timezone date
  * @param {Date} newDate is the API's date or the calendar's date
  *

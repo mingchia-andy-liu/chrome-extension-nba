@@ -53,6 +53,12 @@ table tr:first-child th:last-child {
     justify-content: center;
 }
 
+#title {
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+}
+
 #popup_page {
     width: 330px;
     overflow-y: scroll;
@@ -69,8 +75,8 @@ table tr:first-child th:last-child {
 }
 
 .u-page {
-    color: blue;
-    margin: 5px 5px 5px 5px;
+    color: rgb(46, 46, 223);
+    padding: 2px 3px 0px 3px;
     cursor: pointer;
 }
 
@@ -205,11 +211,7 @@ table tr:first-child th:last-child {
 }
 
 .c-arrow {
-    width: 10%;
-    border:none;
-    outline: none;
     cursor: pointer;
-    background-color: transparent;
 }
 
 /* === table === */
@@ -462,6 +464,10 @@ table tr:first-child th:last-child {
 
 .u-hide {
     display: none !important;
+}
+
+.u-not-visible {
+    visibility: hidden !important;
 }
 
 .u-selected {
