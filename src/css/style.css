@@ -249,6 +249,11 @@ table tr:first-child th:last-child {
     background-color: #e1e1e1;
 }
 
+.team-table tr:not(:first-child) td:first-child {
+    text-align: left;
+    padding-left: 0.5em;
+}
+
 .c-team-name {
     font-size: calc(15px + 0.1vw);
 }

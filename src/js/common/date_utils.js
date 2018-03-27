@@ -114,17 +114,17 @@ DATE_UTILS.searchGames = function(date) {
 }
 
 /**
- * Find whether or not the game is being televised
- * @argument gid {string} the game's id
- * @return the string of the televised TV
+ * Find the date of game base on gid
+ * @param {string} gid of the game
  */
-DATE_UTILS.searchTVScopeForGame = function(gid) {
-    const game = this.schedule.find(function(game) {
+DATE_UTILS.searchGameDateById = function(gid) {
+    const game = this.schedule.find(function(game){
         return game.gid === gid
     })
-    if (!game || !game.bd) return ''
-    if (game.bd.b[0].scope !== "natl") return ''
-    return game.bd.b[0].disp
+    if (!game) {
+        return null
+    }
+    return moment(game.gdte).format('YYYY-MM-DD')
 }
 
 /**

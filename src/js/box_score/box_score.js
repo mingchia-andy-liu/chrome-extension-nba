@@ -70,9 +70,19 @@ $(function(){
         DATE_UTILS.setSchedule(data.schedule)
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
-        DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
+        const selectedDate = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
 
-        if (d.getTime() - popupRefreshTime > 60000) {
+        if (selectedDate && selectedDate !== moment().format('YYYY-MM-DD')) {
+            // selected the date before or after today
+            DATE_UTILS.selectedDate = moment(selectedDate).toDate()
+            calendar.datepicker('setDate', (selectedDate))
+            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
+            SELECTED_SCHEDULE.cacheData = data.cacheData
+            updateCards(DATE_UTILS.searchGames(selectedDate))
+            updateLastUpdate(data.popupRefreshTime)
+            updateBox(window.location.hash.substring(1))
+        } else if (d.getTime() - popupRefreshTime > 60000) {
+            DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash())
@@ -89,6 +99,7 @@ $(function(){
                 $('.c-table .over p').html(FETCH_DATA_FAILED);
             });
         } else {
+            DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());
@@ -212,6 +223,7 @@ $(function(){
             rm : false
         };
         formatSummary(summary);
+        const isLive = validateLiveGame(g) === 'live'
 
         // Update quarter scores in Summary Box Score
         $('.summary-box-score tbody tr:nth-child(2) >').each(function(index, el){
@@ -268,7 +280,7 @@ $(function(){
         $('#away_box_score tbody tr:not(:first-child)').each(function(rowNum, el){
             sanitizeTableRow(el);
             if (g.vls.pstsg[rowNum]) {
-                let rowData = formatBoxScoreData(g.vls.pstsg[rowNum]);
+                let rowData = formatBoxScoreData(g.vls.pstsg[rowNum], isLive);
                 $(el).show().children().each(function(col, cell){
                     $(cell).html(rowData[col]);
                 });
@@ -296,7 +308,7 @@ $(function(){
        $('#home_box_score tbody tr:not(:first-child)').each(function(rowNum, el){
             sanitizeTableRow(el);
             if (g.hls.pstsg[rowNum]) {
-                let rowData = formatBoxScoreData(g.hls.pstsg[rowNum]);
+                let rowData = formatBoxScoreData(g.hls.pstsg[rowNum], isLive);
                 $(el).show().children().each(function(col, cell){
                     $(cell).html(rowData[col]);
                 });

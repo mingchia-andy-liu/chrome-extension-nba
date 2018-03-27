@@ -90,9 +90,7 @@ function updateCardWithGame(card, game) {
         // } else if (game.seri != '') {
         //     matchinfoEl.find('.c-series').text(game.seri)
         // }
-        // matchinfoEl.find('.c-hyphen').text('');
-        const tv = DATE_UTILS.searchTVScopeForGame(game.gid)
-        matchinfoEl.find('.c-hyphen').text(tv)
+        matchinfoEl.find('.c-hyphen').text('');
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);
         matchinfoEl.find('.c-clock').text(time).addClass(UTILS.TIME);
