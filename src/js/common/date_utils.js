@@ -114,6 +114,20 @@ DATE_UTILS.searchGames = function(date) {
 }
 
 /**
+ * Find the date of game base on gid
+ * @param {string} gid of the game
+ */
+DATE_UTILS.searchGameDateById = function(gid) {
+    const game = this.schedule.find(function(game){
+        return game.gid === gid
+    })
+    if (!game) {
+        return null
+    }
+    return moment(game.gdte).format('YYYY-MM-DD')
+}
+
+/**
  * Check if the parameter is the same date as the timezone date
  * @param {Date} newDate is the API's date or the calendar's date
  *

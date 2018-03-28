@@ -7,12 +7,22 @@
         <link rel="stylesheet" type="text/css" href="src/vendor/jquery-ui/jquery-ui.min.css">
         <link rel="stylesheet" type="text/css" href="src/css/fonts.css">
         <link rel="stylesheet" type="text/css" href="src/css/style.css">
+        <link rel="icon" type="image/png" href="src/assets/png/icon-color-48.png">
     </head>
     <body>
         <div id="popup_page">
-            <h1 class='u-text-align-center'>Today's Games</h1>
+            <div class="u-display-flex">
+                <img id="prevArrow" class="c-arrow" src="/src/assets/svg/arrow-left.svg"/>
+                <h1 id="title">Today's Games</h1>
+                <img id="nextArrow" class="c-arrow" src="/src/assets/svg/arrow-right.svg"/>
+            </div>
             <div id='footer' class='u-flex-column u-align-center'>
                 <div id="lastUpdate">Last updated: --:--:--</div>
+            </div>
+            <div class='u-display-flex u-justify-center'>
+                <a herf='#' class="u-page" id='optionsPage'>Options</a>
+                <a herf='#' class="u-page" id='boxScorePage'>Box-Score</a>
+                <a herf='#' class="u-page" id='standingsPage'>Standings</a>
             </div>
             <div id="cards">
                 <div class="c-card u-shadow u-justify-center u-align-center no-game">Loading...</div>
@@ -301,11 +311,6 @@
                         <div class="c-team-name"></div>
                     </div>
                 </div>
-            </div>
-            <div class='u-display-flex u-justify-center'>
-                <a herf='#' class="u-page" id='optionsPage'>Options</a>
-                <a herf='#' class="u-page" id='boxScorePage'>Box-Score</a>
-                <a herf='#' class="u-page" id='standingsPage'>Standings</a>
             </div>
         </div>
         <script src="src/vendor/jquery/jquery-3.1.1.min.js"></script>

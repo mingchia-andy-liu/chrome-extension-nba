@@ -53,6 +53,12 @@ table tr:first-child th:last-child {
     justify-content: center;
 }
 
+#title {
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+}
+
 #popup_page {
     width: 330px;
     overflow-y: scroll;
@@ -69,8 +75,8 @@ table tr:first-child th:last-child {
 }
 
 .u-page {
-    color: blue;
-    margin: 5px 5px 5px 5px;
+    color: rgb(46, 46, 223);
+    padding: 2px 3px 0px 3px;
     cursor: pointer;
 }
 
@@ -205,11 +211,7 @@ table tr:first-child th:last-child {
 }
 
 .c-arrow {
-    width: 10%;
-    border:none;
-    outline: none;
     cursor: pointer;
-    background-color: transparent;
 }
 
 /* === table === */
@@ -245,6 +247,11 @@ table tr:first-child th:last-child {
 
 .team-table tr:not(:first-child):hover {
     background-color: #e1e1e1;
+}
+
+.team-table tr:not(:first-child) td:first-child {
+    text-align: left;
+    padding-left: 0.5em;
 }
 
 .c-team-name {
@@ -462,6 +469,10 @@ table tr:first-child th:last-child {
 
 .u-hide {
     display: none !important;
+}
+
+.u-not-visible {
+    visibility: hidden !important;
 }
 
 .u-selected {
@@ -719,6 +730,7 @@ table tr:first-child th:last-child {
 .ui-datepicker .ui-datepicker-next span {
     display: block;
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     left: 0;
@@ -743,10 +755,12 @@ table tr:first-child th:last-child {
 }
 
 .ui-datepicker .ui-datepicker-prev span {
+    background-size: contain;
     background-image: url(../assets/svg/arrow-left.svg);
 }
 
 .ui-datepicker .ui-datepicker-next span{
+    background-size: contain;
     background-image: url(../assets/svg/arrow-right.svg);
 }
 
