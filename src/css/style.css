@@ -730,6 +730,7 @@ table tr:first-child th:last-child {
 .ui-datepicker .ui-datepicker-next span {
     display: block;
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     left: 0;
@@ -754,10 +755,12 @@ table tr:first-child th:last-child {
 }
 
 .ui-datepicker .ui-datepicker-prev span {
+    background-size: contain;
     background-image: url(../assets/svg/arrow-left.svg);
 }
 
 .ui-datepicker .ui-datepicker-next span{
+    background-size: contain;
     background-image: url(../assets/svg/arrow-right.svg);
 }
 
