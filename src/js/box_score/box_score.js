@@ -282,7 +282,11 @@ $(function(){
             if (g.vls.pstsg[rowNum]) {
                 let rowData = formatBoxScoreData(g.vls.pstsg[rowNum], isLive);
                 $(el).show().children().each(function(col, cell){
-                    $(cell).html(rowData[col]);
+                    if (col === 0) {
+                        $(cell).html(rowData[col])
+                    } else {
+                        $(cell).text(rowData[col])
+                    }
                 });
                 // if (g.vls.pstsg[rowNum].court) {
                 //     $(el).find(">:first-child").css('background-color', '#fcd399');

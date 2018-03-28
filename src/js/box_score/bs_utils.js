@@ -102,8 +102,8 @@ function sanitizeTableRow(row){
 function formatBoxScoreData(player, isLive) {
     var playerRecord = [];
     var fn = player && player.fn.trim() ? player.fn.charAt(0) + '.' : '';
-    var ln = player.pos ? player.ln + (' ' + player.pos).sup() : player.ln;
-    const name = isLive && player.court ? `${fn} ${ln} 🏀` : `${fn} ${ln}`
+    var ln = player.pos ? player.ln + `` : player.ln;
+    const name = true && player.court ? `${fn} ${ln}` : `${fn} ${ln}`
     playerRecord.push(name);
     playerRecord.push(formatMinutes(player));
     playerRecord.push(player.fgm.toString() + '-' + player.fga.toString());
