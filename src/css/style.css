@@ -13,10 +13,6 @@ body {
     font-size: 14px;
 }
 
-sup {
-    color: #888888;
-    font-size: 13px;
-}
 
 th, td {
     min-width: 43px;
@@ -434,6 +430,21 @@ table tr:first-child th:last-child {
     font-weight: bold;
     background-color: #046fdb;
     color: white;
+}
+
+.c-court {
+    background-image: url(../assets/png/icon-color-48.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 1em;
+    text-indent: -9999px;
+    position: absolute;
+}
+
+.c-player-pos {
+    color: #888888;
+    font-size: 13px;
 }
 
 /* === utility === */
