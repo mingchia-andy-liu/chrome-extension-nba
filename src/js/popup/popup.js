@@ -15,9 +15,8 @@ let CACHED_DATA = {
     d: {},
 }
 const onLoadPopUp = function() {
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'scheduleRefreshTime', 'schedule'], function(data) {
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'schedule'], function(data) {
         var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
-        var scheduleTime = data && data.scheduleTime ? data.scheduleTime : 0
         var d = new Date()
         // probably hasn't change much assign it first
         DATE_UTILS.setSchedule(data.schedule)
@@ -25,12 +24,12 @@ const onLoadPopUp = function() {
         DATE_UTILS.fetchDataDate = data.fetchDataDate
         DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
 
-        if (d.getTime() - popupTime > 60000) {
+        if ((d.getTime() - popupTime) > 60000) {
             fetchData()
             .done(function(games, date) {
                 DATE_UTILS.fetchDataDate = date
                 CACHED_DATA.games = games
-                CACHED_DATA.d = d
+                CACHED_DATA.d = d.getTime()
             })
             .fail(function(){
                 updateLastUpdate(data.popupRefreshTime);

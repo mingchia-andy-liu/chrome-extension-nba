@@ -433,13 +433,7 @@ table tr:first-child th:last-child {
 }
 
 .c-court {
-    background-image: url(../assets/png/icon-color-48.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     width: 1em;
-    text-indent: -9999px;
-    position: absolute;
 }
 
 .c-player-pos {

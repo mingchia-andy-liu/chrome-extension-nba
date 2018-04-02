@@ -109,8 +109,7 @@ function fetchPlayByPlay(sendResponse, gid) {
         if (data && !data.failed) {
             DATE_UTILS.setSchedule(data)
             chrome.storage.local.set({
-                'schedule' : data,
-                'scheduleRefreshTime' : new Date().getTime()
+                'schedule' : data
             })
         }
     }

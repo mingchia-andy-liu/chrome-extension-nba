@@ -17,8 +17,7 @@ chrome.alarms.onAlarm.addListener(function(alarm){
         const callBack = function(data) {
             if (data && !data.failed) {
                 chrome.storage.local.set({
-                    'schedule' : data,
-                    'scheduleRefreshTime' : new Date().getTime()
+                    'schedule' : data
                 })
             }
         }
