@@ -100,7 +100,11 @@ $(function(){
             });
         } else {
             DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
-            calendar.datepicker('setDate', (selectedDateET))
+            if (selectedDateET) {
+                calendar.datepicker('setDate', (selectedDateET))
+            } else {
+                calendar.datepicker('setDate', (currentDateET))
+            }
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());
