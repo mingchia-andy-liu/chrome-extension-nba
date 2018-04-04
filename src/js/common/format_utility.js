@@ -91,7 +91,7 @@ function updateCardWithGame(card, game) {
         //     matchinfoEl.find('.c-series').text(game.seri)
         // }
         if (CONFIG.broadcast) {
-            matchinfoEl.find('.c-hyphen').text(DATE_UTILS.searchGameDateById(game.gid));
+            matchinfoEl.find('.c-hyphen').text(DATE_UTILS.searchGameBroadcastById(game.gid));
         } else {
             matchinfoEl.find('.c-hyphen').text('');
         }
@@ -135,15 +135,19 @@ function fetchData() {
             // Set the badge text when the alarm hasn't go off but the extension is opened
             setLiveBadge(isAnyGameLive)
 
-            if (!isAnyGameLive && !willHaveLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
-                const correctDateStr = moment(d).tz('America/New_York').format('YYYY-MM-DD')
-                const correctDate = moment(correctDateStr).toDate()
-                DATE_UTILS.selectedDate = correctDate
+            if (!isAnyGameLive && !willHaveLive) {
+                const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
+                // const correctDateStr = moment(d).format('YYYY-MM-DD')
+                DATE_UTILS.selectedDate = moment(displayDateStr)
 
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
-                const correctGames = DATE_UTILS.searchGames(correctDate)
-                DATE_UTILS.updateSchedule(correctDate, newGames)
+                const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
+
+                // only update the old schedule data if i want to display the yesterday's game but schedule hasn't updated it
+                if (displayDateStr === data.gs.gdte) {
+                    DATE_UTILS.updateSchedule(moment(data.gs.gdte), newGames)
+                }
                 const newSchedule = DATE_UTILS.getRawSchedule()
 
                 updateLastUpdate(d)
@@ -151,10 +155,10 @@ function fetchData() {
                 chrome.storage.local.set({
                     'popupRefreshTime' : d.getTime(),
                     'cacheData' : correctGames,
-                    'fetchDataDate' : correctDateStr,
+                    'fetchDataDate' : displayDateStr,
                     'schedule': newSchedule
                 });
-                deferred.resolve(correctGames, correctDateStr);
+                deferred.resolve(correctGames, displayDateStr);
             } else {
                 DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);

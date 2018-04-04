@@ -10,12 +10,11 @@ const onLoadPopUp = function() {
     chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'fetchDataDate', 'schedule'], function(data) {
         var popupTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
         var d = new Date()
-        const correctDate = moment(d).tz('America/New_York').format('YYYY-MM-DD')
         // probably hasn't change much assign it first
         DATE_UTILS.setSchedule(data.schedule)
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
-        DATE_UTILS.selectedDate = moment(correctDate).toDate()
+        DATE_UTILS.selectedDate = moment(d).toDate()
 
         if ((d.getTime() - popupTime) > 60000) {
             fetchData()
