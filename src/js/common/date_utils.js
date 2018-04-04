@@ -128,6 +128,20 @@ DATE_UTILS.searchGameDateById = function(gid) {
 }
 
 /**
+ * Find televised broadcast channel
+ * @returns {string} the broadcaster's name
+ */
+DATE_UTILS.searchGameDateById = function(gid) {
+    const game = this.schedule.find(function(game){
+        return game.gid === gid
+    })
+    if (!game) {
+        return ''
+    }
+    return game.bd.b[0].scope === 'natl' ? game.bd.b[0].disp : ''
+}
+
+/**
  * Check if the parameter is the same date as the timezone date
  * @param {Date} newDate is the API's date or the calendar's date
  *
