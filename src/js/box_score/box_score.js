@@ -61,32 +61,32 @@ $(function(){
         }
     })
 
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'scheduleRefreshTime', 'schedule', 'fetchDataDate'], function(data) {
+    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'schedule', 'fetchDataDate'], function(data) {
         var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0;
-        var scheduleRefreshTime = data && data.scheduleRefreshTime ? data.scheduleRefreshTime : 0
         var d = new Date();
 
         // probably hasn't change much assign it first
         DATE_UTILS.setSchedule(data.schedule)
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
-        const selectedDate = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
+        const selectedDateET = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
+        const currentDateET = moment().tz('America/New_York').format('YYYY-MM-DD')
 
-        if (selectedDate && selectedDate !== moment().format('YYYY-MM-DD')) {
+        if (selectedDateET && selectedDateET !== currentDateET) {
             // selected the date before or after today
-            DATE_UTILS.selectedDate = moment(selectedDate).toDate()
-            calendar.datepicker('setDate', (selectedDate))
+            DATE_UTILS.selectedDate = moment(selectedDateET).toDate()
+            calendar.datepicker('setDate', (selectedDateET))
             SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
             SELECTED_SCHEDULE.cacheData = data.cacheData
-            updateCards(DATE_UTILS.searchGames(selectedDate))
+            updateCards(DATE_UTILS.searchGames(selectedDateET))
             updateLastUpdate(data.popupRefreshTime)
             updateBox(window.location.hash.substring(1))
         } else if (d.getTime() - popupRefreshTime > 60000) {
-            DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
             fetchData()
             .done(function(games, gdte){
                 updateBox(getHash())
                 SELECTED_SCHEDULE.cacheData = games
+                DATE_UTILS.selectedDate = moment(gdte).toDate()
                 calendar.datepicker('setDate', gdte)
             })
             .fail(function(){
@@ -100,6 +100,11 @@ $(function(){
             });
         } else {
             DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
+            if (selectedDateET) {
+                calendar.datepicker('setDate', (selectedDateET))
+            } else {
+                calendar.datepicker('setDate', (currentDateET))
+            }
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);
             updateBox(getHash());

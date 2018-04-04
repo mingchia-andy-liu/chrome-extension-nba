@@ -103,7 +103,7 @@ function formatBoxScoreData(player, isLive) {
     var playerRecord = [];
     var fn = player && player.fn.trim() ? player.fn.charAt(0) + '.' : '';
     var ln = player.pos ? player.ln + ` <span class="c-player-pos">${player.pos}</span>` : player.ln;
-    const name = isLive && player.court ? `${fn} ${ln}<span class="c-court">court</span>` : `${fn} ${ln}`
+    const name = isLive && player.court ? `${fn} ${ln}<img src="/src/assets/png/icon-color-48.png" class="c-court"/>` : `${fn} ${ln}`
     playerRecord.push(name);
     playerRecord.push(formatMinutes(player));
     playerRecord.push(player.fgm.toString() + '-' + player.fga.toString());

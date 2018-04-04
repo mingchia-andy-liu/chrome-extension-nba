@@ -132,24 +132,25 @@ function fetchData() {
             setLiveBadge(isAnyGameLive)
 
             if (!isAnyGameLive && !willHaveLive && DATE_UTILS.needNewSchedule(data.gs.gdte, d)) {
-                DATE_UTILS.selectedDate = moment(d).toDate()
+                const correctDateStr = moment(d).tz('America/New_York').format('YYYY-MM-DD')
+                const correctDate = moment(correctDateStr).toDate()
+                DATE_UTILS.selectedDate = correctDate
 
                 // API is in different DATE then the timezone date
                 // use the correct games in the schedule
-                const correctGames = DATE_UTILS.searchGames(d)
-                DATE_UTILS.updateSchedule(d, newGames)
+                const correctGames = DATE_UTILS.searchGames(correctDate)
+                DATE_UTILS.updateSchedule(correctDate, newGames)
                 const newSchedule = DATE_UTILS.getRawSchedule()
-                const newCacheDate = moment(d).format('YYYY-MM-DD')
 
                 updateLastUpdate(d)
                 updateCards(correctGames)
                 chrome.storage.local.set({
                     'popupRefreshTime' : d.getTime(),
                     'cacheData' : correctGames,
-                    'fetchDataDate' : newCacheDate,
+                    'fetchDataDate' : correctDateStr,
                     'schedule': newSchedule
                 });
-                deferred.resolve(correctGames, newCacheDate);
+                deferred.resolve(correctGames, correctDateStr);
             } else {
                 DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);

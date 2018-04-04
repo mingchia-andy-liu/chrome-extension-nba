@@ -45,7 +45,8 @@ const showQuarter = function(gid, quarter) {
     const qtrData = data[quarter]
     const $table = $('#pbp')
     // nothing to update
-    if ($table.data('gid') === gid && qtrData.length === $table.children().length) {
+    if ($table.data('gid') === gid &&
+        (qtrData && qtrData.length === $table.children().length)) {
         return
     }
 
