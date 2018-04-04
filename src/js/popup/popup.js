@@ -1,13 +1,5 @@
 'use strict';
 chrome.runtime.sendMessage({request : 'wakeup'});
-getConfig().then(function(config) {
-    if (config.nightMode) {
-        $('body').toggleClass('u-dark-mode')
-        $('.c-card').each(function(index, el){
-            $(el).toggleClass('u-dark-mode u--dark')
-        })
-    }
-})
 
 let CURRENT_SELECTED_DATE = 0
 let CACHED_DATA = {
@@ -72,6 +64,14 @@ const updateArrowVisibility = function() {
 }
 
 $(function(){
+    if (CONFIG.nightMode) {
+        $('body').toggleClass('u-dark-mode')
+        $('.c-card').each(function(index, el){
+            $(el).toggleClass('u-dark-mode u--dark')
+        })
+    }
+
+    // check if popup is opened in the "popup" or in a tab
     chrome.tabs.getCurrent(function(tab) {
         if (!tab) {
             $('#popup_page').css('max-height', '460px')

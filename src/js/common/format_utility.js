@@ -90,7 +90,11 @@ function updateCardWithGame(card, game) {
         // } else if (game.seri != '') {
         //     matchinfoEl.find('.c-series').text(game.seri)
         // }
-        matchinfoEl.find('.c-hyphen').text('');
+        if (CONFIG.broadcast) {
+            matchinfoEl.find('.c-hyphen').text(DATE_UTILS.searchGameDateById(game.gid));
+        } else {
+            matchinfoEl.find('.c-hyphen').text('');
+        }
         $(scores[0]).text('').removeClass(COLOR.GREEN);
         $(scores[1]).text('').removeClass(COLOR.GREEN);
         matchinfoEl.find('.c-clock').text(time).addClass(UTILS.TIME);

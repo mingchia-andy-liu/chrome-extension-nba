@@ -434,11 +434,16 @@ table tr:first-child th:last-child {
 
 .c-court {
     width: 1em;
+    vertical-align: middle;
 }
 
 .c-player-pos {
     color: #888888;
     font-size: 13px;
+}
+
+.c-option-list > * {
+    padding: 0.5em 0;
 }
 
 /* === utility === */

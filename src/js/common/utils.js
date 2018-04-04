@@ -50,7 +50,7 @@ const getTitle = function(index) {
 
 const getConfig = function() {
     return new Promise(function(resolve, reject) {
-        chrome.storage.local.get(['nightMode', 'favTeam'], function(data) {
+        chrome.storage.local.get(['nightMode', 'favTeam', 'broadcast'], function(data) {
             if(data) {
                 resolve(data)
             } else {
@@ -72,3 +72,13 @@ const setLiveBadge = function(hasLiveGame) {
         chrome.browserAction.setBadgeText({text: ''})
     }
 }
+
+let CONFIG = {}
+
+getConfig()
+.then(function(savedConfig) {
+    CONFIG = savedConfig || {}
+})
+.catch(function() {
+    CONFIG = {}
+})

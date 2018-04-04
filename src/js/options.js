@@ -1,10 +1,11 @@
 'use strict'
 
 $(function(){
-    chrome.storage.local.get(['favTeam', 'nightMode'], function(data) {
+    chrome.storage.local.get(['favTeam', 'nightMode', 'broadcast'], function(data) {
         if (data) {
             $('#favTeams').val(data.favTeam)
             $('#night-mode-switch').prop('checked', data.nightMode)
+            $('#us-broadcast').prop('checked', data.broadcast)
             if (data.nightMode) {
                 $('body').addClass('u-dark-mode')
             }
@@ -18,9 +19,11 @@ $(function(){
     $('#submit').click(function() {
         const favTeam = $('#favTeams').val()
         const isNight = $('#night-mode-switch').is(":checked")
+        const broadcast = $('#us-broadcast').is(":checked")
         chrome.storage.local.set({
             favTeam: favTeam,
-            nightMode: isNight
+            nightMode: isNight,
+            broadcast: broadcast
         }, function() {
             $('#submit').text('Saved')
         })

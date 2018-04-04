@@ -1,5 +1,7 @@
-getConfig().then(function(config) {
-    if (config.nightMode) {
+$(function(){
+    'use strict';
+
+    if (CONFIG.nightMode) {
         $('body').toggleClass('u-dark-mode')
         $('.c-card').each(function(index, el){
             $(el).toggleClass('u-dark-mode').toggleClass('u--dark')
@@ -8,10 +10,6 @@ getConfig().then(function(config) {
         $('.team-table').toggleClass('u-dark-mode').toggleClass('u--dark')
         $('#pbp_container').toggleClass('u-dark-mode').toggleClass('u--dark')
     }
-})
-
-$(function(){
-    'use strict';
 
     var SELECTED_GAME_OBJ = {}
     var SELECTED_SCHEDULE = {}

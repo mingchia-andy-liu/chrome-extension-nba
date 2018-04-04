@@ -1,10 +1,3 @@
-let FAV_TEAM = ''
-getConfig().then(function(config) {
-    if (config.favTeam) {
-        FAV_TEAM = config.favTeam
-    }
-})
-
 function validateLiveGame(match) {
     if (match.stt === 'Final') {
         //finish
@@ -59,7 +52,7 @@ function willHaveLiveGames(games) {
  * Check if favourite is part of the game
  */
 function checkFavGame(game) {
-    if (game.h.ta === FAV_TEAM || game.v.ta === FAV_TEAM) {
+    if (game.h.ta === CONFIG.favTeam || game.v.ta === CONFIG.favTeam) {
         game._fav = true
         return true
     } else {
