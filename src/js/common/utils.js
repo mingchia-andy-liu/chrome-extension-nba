@@ -72,3 +72,13 @@ const setLiveBadge = function(hasLiveGame) {
         chrome.browserAction.setBadgeText({text: ''})
     }
 }
+
+let CONFIG = {}
+
+getConfig()
+.then(function(savedConfig) {
+    CONFIG = savedConfig || {}
+})
+.catch(function() {
+    CONFIG = {}
+})

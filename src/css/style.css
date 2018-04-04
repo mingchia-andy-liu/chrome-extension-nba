@@ -434,6 +434,7 @@ table tr:first-child th:last-child {
 
 .c-court {
     width: 1em;
+    vertical-align: middle;
 }
 
 .c-player-pos {
