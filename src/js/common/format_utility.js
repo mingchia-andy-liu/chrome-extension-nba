@@ -137,7 +137,6 @@ function fetchData() {
 
             if (!isAnyGameLive && !willHaveLive) {
                 const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
-                // const correctDateStr = moment(d).format('YYYY-MM-DD')
                 DATE_UTILS.selectedDate = moment(displayDateStr)
 
                 // API is in different DATE then the timezone date
