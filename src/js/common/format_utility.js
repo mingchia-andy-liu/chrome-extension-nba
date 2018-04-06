@@ -137,27 +137,35 @@ function fetchData() {
 
             if (!isAnyGameLive && !willHaveLive) {
                 const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
-                DATE_UTILS.selectedDate = moment(displayDateStr)
-
-                // API is in different DATE then the timezone date
-                // use the correct games in the schedule
-                const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
-
-                // only update the old schedule data if i want to display the yesterday's game but schedule hasn't updated it
-                if (displayDateStr === data.gs.gdte) {
+                DATE_UTILS.selectedDate = moment(displayDateStr).toDate()
+                if (displayDateStr !== data.gs.gdte) {
+                    // API is in different DATE then the timezone date
+                    // use the correct games in the schedule
+                    const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
+                    // then update the games in the schedule
                     DATE_UTILS.updateSchedule(moment(data.gs.gdte), newGames)
-                }
-                const newSchedule = DATE_UTILS.getRawSchedule()
+                    const newSchedule = DATE_UTILS.getRawSchedule()
 
-                updateLastUpdate(d)
-                updateCards(correctGames)
-                chrome.storage.local.set({
-                    'popupRefreshTime' : d.getTime(),
-                    'cacheData' : correctGames,
-                    'fetchDataDate' : displayDateStr,
-                    'schedule': newSchedule
-                });
-                deferred.resolve(correctGames, displayDateStr);
+                    updateLastUpdate(d)
+                    updateCards(correctGames)
+                    chrome.storage.local.set({
+                        'popupRefreshTime' : d.getTime(),
+                        'cacheData' : correctGames,
+                        'fetchDataDate' : displayDateStr,
+                        'schedule': newSchedule
+                    });
+                    deferred.resolve(correctGames, displayDateStr)
+                } else {
+                    // display date is the same as API date, just use fresh data games
+                    updateLastUpdate(d)
+                    updateCards(newGames)
+                    chrome.storage.local.set({
+                        'popupRefreshTime' : d.getTime(),
+                        'cacheData' : newGames,
+                        'fetchDataDate' : displayDateStr,
+                    });
+                    deferred.resolve(newGames, displayDateStr)
+                }
             } else {
                 DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);

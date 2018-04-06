@@ -68,10 +68,10 @@ $(function(){
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
         const selectedDateET = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
-        const currentDateET = moment().tz('America/New_York').format('YYYY-MM-DD')
+        const displayDateStr = DATE_UTILS.needNewSchedule(data.fetchDataDate, d)
 
-        if (selectedDateET && selectedDateET !== currentDateET) {
-            // selected the date before or after today
+        if (selectedDateET && selectedDateET !== displayDateStr) {
+            // selected other dates than potential display date
             DATE_UTILS.selectedDate = moment(selectedDateET).toDate()
             calendar.datepicker('setDate', (selectedDateET))
             SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
@@ -101,7 +101,7 @@ $(function(){
             if (selectedDateET) {
                 calendar.datepicker('setDate', (selectedDateET))
             } else {
-                calendar.datepicker('setDate', (currentDateET))
+                calendar.datepicker('setDate', (displayDateStr))
             }
             updateLastUpdate(data.popupRefreshTime);
             updateCards(data.cacheData);

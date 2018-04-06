@@ -14,7 +14,6 @@ const onLoadPopUp = function() {
         DATE_UTILS.setSchedule(data.schedule)
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
-        DATE_UTILS.selectedDate = moment(d).toDate()
 
         if ((d.getTime() - popupTime) > 60000) {
             fetchData()
@@ -28,6 +27,7 @@ const onLoadPopUp = function() {
                 $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
             });
         } else {
+            DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
             updateLastUpdate(data.popupRefreshTime)
             updateCards(data.cacheData)
             CACHED_DATA.games = data.cacheData

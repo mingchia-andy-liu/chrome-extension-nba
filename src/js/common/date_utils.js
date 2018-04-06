@@ -135,7 +135,7 @@ DATE_UTILS.searchGameBroadcastById = function(gid) {
     const game = this.schedule.find(function(game){
         return game.gid === gid
     })
-    if (!game) {
+    if (!game || !game.bd || !game.bd.b || !game.bd.b[0]) {
         return ''
     }
     return game.bd.b[0].scope === 'natl' ? game.bd.b[0].disp : ''
