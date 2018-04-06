@@ -143,7 +143,7 @@ function fetchData() {
                     // use the correct games in the schedule
                     const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
                     // then update the games in the schedule
-                    DATE_UTILS.updateSchedule(moment(data.gs.gdte), newGames)
+                    DATE_UTILS.updateSchedule(data.gs.gdte, newGames)
                     const newSchedule = DATE_UTILS.getRawSchedule()
 
                     updateLastUpdate(d)
