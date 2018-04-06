@@ -131,11 +131,11 @@ DATE_UTILS.searchGameDateById = function(gid) {
  * Find televised broadcast channel
  * @returns {string} the broadcaster's name
  */
-DATE_UTILS.searchGameDateById = function(gid) {
+DATE_UTILS.searchGameBroadcastById = function(gid) {
     const game = this.schedule.find(function(game){
         return game.gid === gid
     })
-    if (!game) {
+    if (!game || !game.bd || !game.bd.b || !game.bd.b[0]) {
         return ''
     }
     return game.bd.b[0].scope === 'natl' ? game.bd.b[0].disp : ''
@@ -162,8 +162,30 @@ DATE_UTILS.checkSelectToday = function(newDate) {
  * @param {string} dataDate the API's return date
  * @param {Date} today current date
  *
- * @returns {Boolean} check if the @param dateDate is before the @param today
+ * @returns {String} the date of want to display date
+ *      check if the @param dateDate is before the @param today
  */
 DATE_UTILS.needNewSchedule = function(dataDate, today) {
-    return moment(dataDate).isBefore(today, 'day')
+    const EThour = parseInt(moment.tz('America/New_York').format('HH'))
+    // if ET time has not pass 6 am, don't jump ahead
+    if (EThour < 6) {
+        return dataDate
+    } else {
+        if (moment(dataDate).isBefore(today)) {
+            // if the data date is before &&
+            // it has 2 days apart --> API returns the yesterday's game of ET TZ
+            // ET Time: yesterday, current, tomorrow
+            // Asia timezone however, is in tomorrow of the ET TZ
+            const diffDays = moment(dataDate).diff(today, 'day')
+            if (diffDays <= -2) {
+                // in tomorrow
+                return moment(dataDate).add(1, 'day').format('YYYY-MM-DD')
+            } else {
+                // in current
+                return moment(today).format('YYYY-MM-DD')
+            }
+        } else {
+            return dataDate
+        }
+    }
 }

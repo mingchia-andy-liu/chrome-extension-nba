@@ -626,6 +626,7 @@ table tr:first-child th:last-child {
         flex-direction: column;
     }
 
+    .c-table .c-time,
     .box-banner {
         font-size: calc(12px + 1vw);
     }
