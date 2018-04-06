@@ -139,7 +139,7 @@ function fetchData() {
                 const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
                 DATE_UTILS.selectedDate = moment(displayDateStr).toDate()
                 if (displayDateStr !== data.gs.gdte) {
-                    // API is in different DATE then the timezone date
+                    // API is in different DATE then display date
                     // use the correct games in the schedule
                     const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
                     // then update the games in the schedule

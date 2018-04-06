@@ -162,7 +162,8 @@ DATE_UTILS.checkSelectToday = function(newDate) {
  * @param {string} dataDate the API's return date
  * @param {Date} today current date
  *
- * @returns {String} check if the @param dateDate is before the @param today
+ * @returns {String} the date of want to display date
+ *      check if the @param dateDate is before the @param today
  */
 DATE_UTILS.needNewSchedule = function(dataDate, today) {
     const EThour = parseInt(moment.tz('America/New_York').format('HH'))
