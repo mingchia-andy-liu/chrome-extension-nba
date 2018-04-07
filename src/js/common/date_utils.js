@@ -73,7 +73,7 @@ DATE_UTILS.getRawSchedule = function() {
  * @param {string} date  the updated (API) date
  * @param {games} games the API's games end versions
  */
-DATE_UTILS.updateSchedule = function(date, games) {
+DATE_UTILS.updateScheduleOnDate = function(date, games) {
     const startIndex = this.schedule.findIndex(function(game){
         return game.gdte === date
     })
@@ -83,6 +83,23 @@ DATE_UTILS.updateSchedule = function(date, games) {
     }, this)
 }
 
+/**
+ * Update the schedule
+ */
+DATE_UTILS.updateSchedule = function() {
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage({request : 'schedule'}, function(data) {
+            if (data && !data.failed) {
+                DATE_UTILS.setSchedule(data)
+                chrome.storage.local.set({
+                    'schedule' : data
+                }, resolve())
+            } else {
+                reject()
+            }
+        })
+    })
+}
 
 /**
  * Find the array games from the schedule's API
@@ -165,9 +182,10 @@ DATE_UTILS.checkSelectToday = function(newDate) {
  *      check if the @param dateDate is before the @param today
  */
 DATE_UTILS.needNewSchedule = function(dataDate, today) {
+    const ETDate = moment.tz('America/New_York').format('YYYY-MM-DD')
     const EThour = parseInt(moment.tz('America/New_York').format('HH'))
     // if ET time has not pass 6 am, don't jump ahead
-    if (EThour < 6) {
+    if (EThour < 6 || ETDate === dataDate) {
         return dataDate
     } else {
         if (moment(dataDate).isBefore(today)) {

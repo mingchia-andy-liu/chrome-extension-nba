@@ -122,6 +122,19 @@ function updateLastUpdate(ms) {
     $("#lastUpdate").text(`Last updated: ${exactSeconds + 1} second(s) ago`);
 }
 
+const updateScheduleIfNecessary = function(gdte) {
+    const prevDate = moment(gdte).add(-1, 'day')
+    const prevGames = DATE_UTILS.searchGames(prevDate)
+    if (!prevDate || prevGames.length === 0) {
+        return
+    } else {
+        const firstGame = prevGames[0]
+        if (firstGame.stt !== 'Final') {
+            DATE_UTILS.updateSchedule()
+        }
+    }
+}
+
 function fetchData() {
     var deferred = $.Deferred();
 
@@ -135,15 +148,15 @@ function fetchData() {
             // Set the badge text when the alarm hasn't go off but the extension is opened
             setLiveBadge(isAnyGameLive)
 
+            const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
             if (!isAnyGameLive && !willHaveLive) {
-                const displayDateStr = DATE_UTILS.needNewSchedule(data.gs.gdte, d)
                 DATE_UTILS.selectedDate = moment(displayDateStr).toDate()
                 if (displayDateStr !== data.gs.gdte) {
                     // API is in different DATE then display date
                     // use the correct games in the schedule
-                    const correctGames = DATE_UTILS.searchGames(moment(displayDateStr))
+                    const correctGames = DATE_UTILS.searchGames(displayDateStr)
                     // then update the games in the schedule
-                    DATE_UTILS.updateSchedule(data.gs.gdte, newGames)
+                    DATE_UTILS.updateScheduleOnDate(data.gs.gdte, newGames)
                     const newSchedule = DATE_UTILS.getRawSchedule()
 
                     updateLastUpdate(d)
@@ -174,7 +187,7 @@ function fetchData() {
                     'popupRefreshTime' : d.getTime(),
                     'cacheData' : newGames,
                     'fetchDataDate' : data.gs.gdte
-                });
+                }, updateScheduleIfNecessary(data.gs.gdte));
                 deferred.resolve(newGames, data.gs.gdte);
             }
         } else if (data && data.failed) {
