@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchPlayByPlay(sendResponse, request.gid)
     } else if (request.request === 'schedule') {
         fetchFullSchedule(sendResponse)
-    }else if (request.request === 'wakeup') {
+    } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
 

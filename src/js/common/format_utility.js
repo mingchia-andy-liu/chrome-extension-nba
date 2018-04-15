@@ -125,7 +125,7 @@ function updateLastUpdate(ms) {
 const updateScheduleIfNecessary = function(gdte) {
     const prevDate = moment(gdte).add(-1, 'day')
     const prevGames = DATE_UTILS.searchGames(prevDate)
-    if (!prevDate || prevGames.length === 0) {
+    if (!prevGames || prevGames.length === 0) {
         return
     } else {
         const firstGame = prevGames[0]
@@ -180,6 +180,7 @@ function fetchData() {
                     deferred.resolve(newGames, displayDateStr)
                 }
             } else {
+                // Either some games are live or no games has started
                 DATE_UTILS.selectedDate = moment(data.gs.gdte).toDate()
                 updateLastUpdate(d);
                 updateCards(newGames);
