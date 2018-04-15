@@ -70,20 +70,36 @@ DATE_UTILS.getRawSchedule = function() {
  * Update the API's schedule when the
  *     1. daily API still on the previous date's games
  *     2. schedule API has not update the endpoint
- * @param {Date} date  the "current" date
- * @param {games} games the previous API's games end versions
+ * @param {string} date  the updated (API) date
+ * @param {games} games the API's games end versions
  */
-DATE_UTILS.updateSchedule = function(date, games) {
-    const prevDay = moment(date).subtract(1, 'day').format('YYYY-MM-DD')
+DATE_UTILS.updateScheduleOnDate = function(date, games) {
     const startIndex = this.schedule.findIndex(function(game){
-        return game.gdte === prevDay
+        return game.gdte === date
     })
 
     games.forEach(function(item, index) {
-        DATE_UTILS.schedule.splice(startIndex + index, 1, item)
-    })
+        this.schedule.splice(startIndex + index, 1, item)
+    }, this)
 }
 
+/**
+ * Update the schedule
+ */
+DATE_UTILS.updateSchedule = function() {
+    return new Promise(function(resolve, reject) {
+        chrome.runtime.sendMessage({request : 'schedule'}, function(data) {
+            if (data && !data.failed) {
+                DATE_UTILS.setSchedule(data)
+                chrome.storage.local.set({
+                    'schedule' : data
+                }, resolve())
+            } else {
+                reject()
+            }
+        })
+    })
+}
 
 /**
  * Find the array games from the schedule's API
@@ -166,9 +182,10 @@ DATE_UTILS.checkSelectToday = function(newDate) {
  *      check if the @param dateDate is before the @param today
  */
 DATE_UTILS.needNewSchedule = function(dataDate, today) {
+    const ETDate = moment.tz('America/New_York').format('YYYY-MM-DD')
     const EThour = parseInt(moment.tz('America/New_York').format('HH'))
     // if ET time has not pass 6 am, don't jump ahead
-    if (EThour < 6) {
+    if (EThour < 6 || ETDate === dataDate) {
         return dataDate
     } else {
         if (moment(dataDate).isBefore(today)) {

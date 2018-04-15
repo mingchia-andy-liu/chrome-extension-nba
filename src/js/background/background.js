@@ -7,6 +7,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchLiveGameBox(sendResponse, request.gid);
     } else if (request.request === 'pbp') {
         fetchPlayByPlay(sendResponse, request.gid)
+    } else if (request.request === 'schedule') {
+        fetchFullSchedule(sendResponse)
     } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
