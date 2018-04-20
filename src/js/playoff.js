@@ -15,12 +15,23 @@ const generateTeamBlock = function(seed, name, score, color, losing) {
     `
 }
 
-$(function() {
-    if (CONFIG.nightMode) {
+const toggleMode = function(nightMode) {
+    if (nightMode) {
         $('body').toggleClass('u-dark-mode')
         $('.c-playoff-serie')
             .addClass('u-dark-mode')
             .addClass('u--dark')
+    }
+}
+
+$(function() {
+    if ($.isEmptyObject(CONFIG)) {
+        getConfig().then(function(savedConfig) {
+            CONFIG = savedConfig
+            toggleMode(savedConfig.nightMode)
+        })
+    } else {
+        toggleMode(CONFIG.nightMode)
     }
 
     chrome.runtime.sendMessage({ request: 'playoff' }, function(data) {
