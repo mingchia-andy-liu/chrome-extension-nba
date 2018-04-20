@@ -33,7 +33,7 @@ function validateLiveGame(match) {
  * @returns {bool} true if there is one or more live game, false otherwise
  */
 function anyLiveGames(games) {
-    return !!games.find(function(match){
+    return !!games.find(function(match) {
         return match._status === 'live'
     })
 }
@@ -43,7 +43,7 @@ function anyLiveGames(games) {
  * no live games at the moment
  */
 function willHaveLiveGames(games) {
-    return !!games.find(function(match){
+    return !!games.find(function(match) {
         return match._status === 'prepare'
     })
 }
@@ -75,13 +75,13 @@ function preprocessData(games) {
             case 'prepare':
                 game._localTime = getGameStartTime(game.stt, game.gcode)
                 if (prepare.length === 0) {
-                    prepare.push(game);
+                    prepare.push(game)
                     break
                 }
-                const start = moment(game._localTime, ["h:mm A"])
-                for(let i = 0; i < prepare.length; i++) {
+                const start = moment(game._localTime, ['h:mm A'])
+                for (let i = 0; i < prepare.length; i++) {
                     // prepare items should have localTime because they were just inserted
-                    const end = moment(prepare[i]._localTime, ["h:mm A"])
+                    const end = moment(prepare[i]._localTime, ['h:mm A'])
                     if (start.isBefore(end)) {
                         prepare.splice(i, 0, game)
                         break
@@ -91,13 +91,13 @@ function preprocessData(games) {
                         break
                     }
                 }
-                break;
+                break
             case 'live':
-                live.push(game);
-                break;
+                live.push(game)
+                break
             case 'finish':
                 finish.push(game)
-                break;
+                break
             default:
                 finish.push(game)
         }
@@ -116,11 +116,14 @@ function preprocessData(games) {
 
 function getGameStartTime(status, gcode) {
     var date = gcode.split('/')[0]
-    var today = moment(date, ["YYYYMMDD"]).format("YYYY-MM-DD")
-    var gameTime = moment(status, ["h:mm A"]).format("HH:mm");
-    var zone = "America/New_York";
+    var today = moment(date, ['YYYYMMDD']).format('YYYY-MM-DD')
+    var gameTime = moment(status, ['h:mm A']).format('HH:mm')
+    var zone = 'America/New_York'
     var input = `${today} ${gameTime}`
     // guess() uses the Internationalization API
-    var result = moment.tz(input, zone).tz(moment.tz.guess()).format("hh:mm A")
+    var result = moment
+        .tz(input, zone)
+        .tz(moment.tz.guess())
+        .format('hh:mm A')
     return result
 }

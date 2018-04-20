@@ -6,16 +6,14 @@ const PBP = {}
  */
 const formatPBPRow = function(play) {
     const index = play.de.indexOf(']')
-    const name = play.etype < 1 || play.etype > 9
-        ? ''
-        : play.de.substring(1,4)
+    const name = play.etype < 1 || play.etype > 9 ? '' : play.de.substring(1, 4)
     const color = getLogoColor(name)
     const style = `"color: white;background-color:${color}"`
     const logo = `<div style=${style}>${name}</div>`
     if (index > 4) {
         // score
-        return `<tr><td>${play.cl}</td><td>${logo}</td><td class="u-text-bold">${play.de.substring(5,index)}</td><td class="u-text-bold u-color-green">${play.de.substring(index + 1)}</td></tr>`
-    } else if (!play.de.includes('[')){
+        return `<tr><td>${play.cl}</td><td>${logo}</td><td class="u-text-bold">${play.de.substring(5, index)}</td><td class="u-text-bold u-color-green">${play.de.substring(index + 1)}</td></tr>`
+    } else if (!play.de.includes('[')) {
         // no team info
         return `<tr><td>${play.cl}</td><td></td><td></td><td>${play.de}</td></tr>`
     }
@@ -23,9 +21,14 @@ const formatPBPRow = function(play) {
 }
 
 const removePBP = function(showError) {
-    $('#pbp').empty().append(HEADER_ROW).removeData('gid')
+    $('#pbp')
+        .empty()
+        .append(HEADER_ROW)
+        .removeData('gid')
     $('.c-quarter-btn').each(function(index, el) {
-        $(el).removeClass('active').removeClass('u-hide')
+        $(el)
+            .removeClass('active')
+            .removeClass('u-hide')
     })
     if (showError) {
         $('#pbp').append('<tr><td colspan="4">No Data Available. Please Try Again Later.</td></tr>')
@@ -45,8 +48,7 @@ const showQuarter = function(gid, quarter) {
     const qtrData = data[quarter]
     const $table = $('#pbp')
     // nothing to update
-    if ($table.data('gid') === gid &&
-        (qtrData && qtrData.length === $table.children().length)) {
+    if ($table.data('gid') === gid && (qtrData && qtrData.length === $table.children().length)) {
         return
     }
 
@@ -57,7 +59,7 @@ const showQuarter = function(gid, quarter) {
         for (let i = 0; i < qtrData.length; i++) {
             html += formatPBPRow(qtrData[i])
         }
-        $table.html(html)   // batch insert
+        $table.html(html) // batch insert
     }
 
     $('.c-quarter-btn').each(function(i, el) {
@@ -79,12 +81,12 @@ $('.c-quarter-btn').click(function(event) {
 
 const fetchPlayByPlay = function(gid) {
     return new Promise(function(resolve, reject) {
-        chrome.runtime.sendMessage({request : 'pbp', gid: gid}, function (data) {
+        chrome.runtime.sendMessage({ request: 'pbp', gid: gid }, function(data) {
             if (data && data.g && data.g.pd.length !== 0) {
-                let latest = 0;
+                let latest = 0
                 for (let i = 0; i < data.g.pd.length; i++) {
                     latest = data.g.pd[i].p > latest ? data.g.pd[i].p : latest
-                    let index = data.g.pd[i].p - 1      // convert to 0 base
+                    let index = data.g.pd[i].p - 1 // convert to 0 base
                     if (!PBP[gid]) {
                         PBP[gid] = []
                     }

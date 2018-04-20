@@ -1,346 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Box Scores</title>
-        <link rel="stylesheet" type="text/css" href="src/vendor/jquery-ui/jquery-ui.min.css">
-        <link rel="stylesheet" type="text/css" href="src/css/fonts.css">
-        <link rel="stylesheet" type="text/css" href="src/css/style.css">
-        <link rel="icon" type="image/png" href="src/assets/png/icon-color-48.png">
-    </head>
-    <body>
-        <div id="box_score_page" class="u-display-flex">
-            <div class='u-flex-column c-card-list'>
-                <div class="c-calendar-picker u-display-flex u-full-width">
-                    <img alt="prev-arrow" id="prevArrow" class="c-arrow" src="/src/assets/svg/arrow-left.svg"/>
-                    <input type="text" id="datepicker" readonly="readonly">
-                    <img alt="next-arrow" id="nextArrow" class="c-arrow" src="/src/assets/svg/arrow-right.svg"/>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Box Scores</title>
+    <link rel="stylesheet" type="text/css" href="src/vendor/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="src/css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="src/css/style.css">
+    <link rel="icon" type="image/png" href="src/assets/png/icon-color-48.png">
+</head>
+
+<body>
+    <div id="box_score_page" class="u-display-flex">
+        <div class='u-flex-column c-card-list'>
+            <div class="c-calendar-picker u-display-flex u-full-width">
+                <img alt="prev-arrow" id="prevArrow" class="c-arrow" src="/src/assets/svg/arrow-left.svg" />
+                <input type="text" id="datepicker" readonly="readonly">
+                <img alt="next-arrow" id="nextArrow" class="c-arrow" src="/src/assets/svg/arrow-right.svg" />
+            </div>
+            <div id='footer' class="u-display-flex u-justify-center">
+                <div id='lastUpdate'>Last updated: --:--:--</div>
+            </div>
+            <div id="cards">
+                <div class="c-card u-shadow u-justify-center u-align-center no-game">Loading...</div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
                 </div>
-                <div id='footer' class="u-display-flex u-justify-center">
-                    <div id='lastUpdate'>Last updated: --:--:--</div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
                 </div>
-                <div id="cards" >
-                    <div class="c-card u-shadow u-justify-center u-align-center no-game">Loading...</div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
-                        </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
-                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
                     </div>
-                    <div class="c-card u-shadow u-hide">
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-match-info">
-                            <div class="u-display-flex u-justify-center">
-                                <span class="c-team-score"></span>
-                                <div class="c-hyphen"></div>
-                                <span class="c-team-score"></span>
-                            </div>
-                            <div class='c-series'></div>
-                            <div class="c-clock">Loading...</div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
-                        <div class="c-team-info">
-                            <div class="c-team-logo"></div>
-                            <div class="c-team-name"></div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
                         </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                </div>
+                <div class="c-card u-shadow u-hide">
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
+                    </div>
+                    <div class="c-match-info">
+                        <div class="u-display-flex u-justify-center">
+                            <span class="c-team-score"></span>
+                            <div class="c-hyphen"></div>
+                            <span class="c-team-score"></span>
+                        </div>
+                        <div class='c-series'></div>
+                        <div class="c-clock">Loading...</div>
+                    </div>
+                    <div class="c-team-info">
+                        <div class="c-team-logo"></div>
+                        <div class="c-team-name"></div>
                     </div>
                 </div>
             </div>
-            <div class='c-table'>
-                <div class='over'>
-                    <p>CLICK ON A GAME TO SEE THE BOX SCORE</p>
+        </div>
+        <div class='c-table'>
+            <div class='over'>
+                <p>CLICK ON A GAME TO SEE THE BOX SCORE</p>
+            </div>
+            <div class="box-banner u-display-flex u-justify-center tab">
+                <div id='away_tab' class="away-team-section team-section tab-button active">
+                    <div id="away_team_logo" class="c-team-logo"></div>
+                    <div class="away-team-name">Away</div>
                 </div>
-                <div class="box-banner u-display-flex u-justify-center tab">
-                    <div id='away_tab' class="away-team-section team-section tab-button active">
-                        <div id="away_team_logo" class="c-team-logo"></div>
-                        <div class="away-team-name">Away</div>
-                    </div>
-                    <div class="u-display-flex tab-empty">
-                            <div id="away_team_pts" class='c-team-pts'>0</div>
-                            <div class='c-time'>-</div>
-                            <div id="home_team_pts" class='c-team-pts'>0</div>
-                    </div>
-                    <div id='home_tab' class="home-team-section team-section tab-button">
-                        <div class="home-team-name">Home</div>
-                        <div id="home_team_logo" class="c-team-logo"></div>
-                    </div>
+                <div class="u-display-flex tab-empty">
+                    <div id="away_team_pts" class='c-team-pts'>0</div>
+                    <div class='c-time'>-</div>
+                    <div id="home_team_pts" class='c-team-pts'>0</div>
                 </div>
-                <div class='tab-content'>
-                    <div class='u-display-flex u-justify-center'>
-                        <table class="summary-box-score">
-                            <tbody>
-                                <tr> <th>Team</th> <th>Q1</th> <th>Q2</th> <th>Q3</th> <th>Q4</th> <th class="u-hide ot1">OT1</th> <th class="u-hide ot2">OT2</th> <th class="u-hide ot3">OT3</th> <th class="u-hide ot4">OT4</th> <th class="u-hide ot5">OT5</th> <th class="u-hide ot6">OT6</th> <th class="u-hide ot7">OT7</th> <th class="u-hide ot8">OT8</th> <th class="u-hide ot9">OT9</th> <th class="u-hide ot10">OT10</th> <th class="summary-final">Final</th> </tr>
-                                <tr> <th class="summary-team-name">Away</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td> </tr>
-                                <tr> <th class="summary-team-name">Home</th> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td class="u-hide ot1">0</td> <td class="u-hide ot2">0</td> <td class="u-hide ot3">0</td> <td class="u-hide ot4">0</td> <td class="u-hide ot5">0</td> <td class="u-hide ot6">0</td> <td class="u-hide ot7">0</td> <td class="u-hide ot8">0</td> <td class="u-hide ot9">0</td> <td class="u-hide ot10">0</td> <td>0</td> </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div id='home_tab' class="home-team-section team-section tab-button">
+                    <div class="home-team-name">Home</div>
+                    <div id="home_team_logo" class="c-team-logo"></div>
+                </div>
+            </div>
+            <div class='tab-content'>
+                <div class='u-display-flex u-justify-center'>
+                    <table class="summary-box-score">
+                        <tbody>
+                            <tr>
+                                <th>Team</th>
+                                <th>Q1</th>
+                                <th>Q2</th>
+                                <th>Q3</th>
+                                <th>Q4</th>
+                                <th class="u-hide ot1">OT1</th>
+                                <th class="u-hide ot2">OT2</th>
+                                <th class="u-hide ot3">OT3</th>
+                                <th class="u-hide ot4">OT4</th>
+                                <th class="u-hide ot5">OT5</th>
+                                <th class="u-hide ot6">OT6</th>
+                                <th class="u-hide ot7">OT7</th>
+                                <th class="u-hide ot8">OT8</th>
+                                <th class="u-hide ot9">OT9</th>
+                                <th class="u-hide ot10">OT10</th>
+                                <th class="summary-final">Final</th>
+                            </tr>
+                            <tr>
+                                <th class="summary-team-name">Away</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="u-hide ot1">0</td>
+                                <td class="u-hide ot2">0</td>
+                                <td class="u-hide ot3">0</td>
+                                <td class="u-hide ot4">0</td>
+                                <td class="u-hide ot5">0</td>
+                                <td class="u-hide ot6">0</td>
+                                <td class="u-hide ot7">0</td>
+                                <td class="u-hide ot8">0</td>
+                                <td class="u-hide ot9">0</td>
+                                <td class="u-hide ot10">0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <th class="summary-team-name">Home</th>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="u-hide ot1">0</td>
+                                <td class="u-hide ot2">0</td>
+                                <td class="u-hide ot3">0</td>
+                                <td class="u-hide ot4">0</td>
+                                <td class="u-hide ot5">0</td>
+                                <td class="u-hide ot6">0</td>
+                                <td class="u-hide ot7">0</td>
+                                <td class="u-hide ot8">0</td>
+                                <td class="u-hide ot9">0</td>
+                                <td class="u-hide ot10">0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <div id="detail-tables" class="u-display-flex u-justify-center">
-                        <div><table class='detail-box-score'>
+                <div id="detail-tables" class="u-display-flex u-justify-center">
+                    <div>
+                        <table class='detail-box-score'>
                             <tbody>
                                 <tr>
                                     <th title='Team Name'>Team</th>
@@ -370,191 +424,815 @@
                                     <td>0</td>
                                 </tr>
                             </tbody>
-                        </table></div>
-                        <div><table class='game-box-score'>
-                            <tbody>
-                                <tr> <th>Lead Changes</th> <th>Times Tied</th> </tr>
-                                <tr> <td id='lead_changes'>0</td> <td id='times_tied'>0</td> </tr> </tbody>
-                        </table></div>
-                    </div>
-
-                    <div id='away_tab_content' class="u-flex-column u-center">
-                        <table id="away_box_score" class="team-table">
-                            <tbody>
-                                <tr>
-                                    <th title='Player Name (Starter Position)'>Player</th>
-                                    <th title='Minutes Played'>MIN</th>
-                                    <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                                    <th title='Field Goal Percentage'>FG%</th>
-                                    <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                                    <th title='Three Point Percentage'>3P%</th>
-                                    <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                                    <th title='Free Throw Percentage'>FT%</th>
-                                    <th title='Offensive Rebounds'>OREB</th>
-                                    <th title='Defensive Rebounds'>DREB</th>
-                                    <th title='Rebounds'>REB</th>
-                                    <th title='Assists'>AST</th>
-                                    <th title='Steals'>STL</th>
-                                    <th title='Blocked Shots'>BLK</th>
-                                    <th title='Turnovers'>TOV</th>
-                                    <th title='Personal Fouls'>PF</th>
-                                    <th title='Plus-Minus'>+/-</th>
-                                    <th title='Points'>PTS</th>
-                                </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                            </tbody>
                         </table>
-                        <table id='away_team_stats' class='team-stats-table'>
+                    </div>
+                    <div>
+                        <table class='game-box-score'>
                             <tbody>
                                 <tr>
-                                    <th class='u-cursor-default'>Total</th>
-                                    <th class='u-cursor-default'></th>
-                                    <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                                    <th title='Field Goal Percentage'>FG%</th>
-                                    <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                                    <th title='Three Point Percentage'>3P%</th>
-                                    <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                                    <th title='Free Throw Percentage'>FT%</th>
-                                    <th title='Offensive Rebounds'>OREB</th>
-                                    <th title='Defensive Rebounds'>DREB</th>
-                                    <th title='Rebounds'>REB</th>
-                                    <th title='Assists'>AST</th>
-                                    <th title='Steals'>STL</th>
-                                    <th title='Blocked Shots'>BLK</th>
-                                    <th title='Turnovers'>TOV</th>
-                                    <th title='Personal Fouls'>PF</th>
-                                    <th class='u-cursor-default'></th>
-                                    <th title='Points'>PTS</th>
+                                    <th>Lead Changes</th>
+                                    <th>Times Tied</th>
                                 </tr>
-
-                                <tr><td></td><td></td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td></tr>
+                                <tr>
+                                    <td id='lead_changes'>0</td>
+                                    <td id='times_tied'>0</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <div id='home_tab_content' class="u-flex-column u-center">
-                        <table id="home_box_score" class="team-table">
-                            <tbody>
-                                <tr>
-                                    <th title='Player Name (Starter Position)'>Player</th>
-                                    <th title='Minutes Played'>MIN</th>
-                                    <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                                    <th title='Field Goal Percentage'>FG%</th>
-                                    <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                                    <th title='Three Point Percentage'>3P%</th>
-                                    <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                                    <th title='Free Throw Percentage'>FT%</th>
-                                    <th title='Offensive Rebounds'>OREB</th>
-                                    <th title='Defensive Rebounds'>DREB</th>
-                                    <th title='Rebounds'>REB</th>
-                                    <th title='Assists'>AST</th>
-                                    <th title='Steals'>STL</th>
-                                    <th title='Blocked Shots'>BLK</th>
-                                    <th title='Turnovers'>TOV</th>
-                                    <th title='Personal Fouls'>PF</th>
-                                    <th title='Plus-Minus'>+/-</th>
-                                    <th title='Points'>PTS</th>
-                                </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                                <tr> <td></td><td>00:00</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td> </tr>
-                            </tbody>
-                        </table>
-                        <table id='home_team_stats' class='team-stats-table'>
-                            <tbody>
-                                <tr>
-                                    <th class='u-cursor-default'>Total</th>
-                                    <th class='u-cursor-default'></th>
-                                    <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
-                                    <th title='Field Goal Percentage'>FG%</th>
-                                    <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
-                                    <th title='Three Point Percentage'>3P%</th>
-                                    <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
-                                    <th title='Free Throw Percentage'>FT%</th>
-                                    <th title='Offensive Rebounds'>OREB</th>
-                                    <th title='Defensive Rebounds'>DREB</th>
-                                    <th title='Rebounds'>REB</th>
-                                    <th title='Assists'>AST</th>
-                                    <th title='Steals'>STL</th>
-                                    <th title='Blocked Shots'>BLK</th>
-                                    <th title='Turnovers'>TOV</th>
-                                    <th title='Personal Fouls'>PF</th>
-                                    <th class='u-cursor-default'></th>
-                                    <th title='Points'>PTS</th>
-                                </tr>
-                                <tr><td></td><td></td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0-0</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
-                <div>
-                    <h3>Play By Play</h3>
-                    <div class="tab-content">
-                        <div>
-                            <a class="c-quarter-btn" data-qtr="1">Q1</a>
-                            <a class="c-quarter-btn" data-qtr="2">Q2</a>
-                            <a class="c-quarter-btn" data-qtr="3">Q3</a>
-                            <a class="c-quarter-btn" data-qtr="4">Q4</a>
-                            <a class="c-quarter-btn" data-qtr="5">OT1</a>
-                            <a class="c-quarter-btn" data-qtr="6">OT2</a>
-                            <a class="c-quarter-btn" data-qtr="7">OT3</a>
-                            <a class="c-quarter-btn" data-qtr="8">OT4</a>
-                            <a class="c-quarter-btn" data-qtr="9">OT5</a>
-                            <a class="c-quarter-btn" data-qtr="10">OT6</a>
-                            <a class="c-quarter-btn" data-qtr="11">OT7</a>
-                            <a class="c-quarter-btn" data-qtr="12">OT8</a>
-                            <a class="c-quarter-btn" data-qtr="13">OT9</a>
-                            <a class="c-quarter-btn" data-qtr="14">OT10</a>
-                        </div>
-                        <table id="pbp" class="u-full-width">
-                            <tbody>
-                                <tr><th>Clock</th><th>Team</th><th>Score</th><th>Play</th></tr>
-                            </tbody>
-                        </table>
+
+                <div id='away_tab_content' class="u-flex-column u-center">
+                    <table id="away_box_score" class="team-table">
+                        <tbody>
+                            <tr>
+                                <th title='Player Name (Starter Position)'>Player</th>
+                                <th title='Minutes Played'>MIN</th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th title='Plus-Minus'>+/-</th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id='away_team_stats' class='team-stats-table'>
+                        <tbody>
+                            <tr>
+                                <th class='u-cursor-default'>Total</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td></td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id='home_tab_content' class="u-flex-column u-center">
+                    <table id="home_box_score" class="team-table">
+                        <tbody>
+                            <tr>
+                                <th title='Player Name (Starter Position)'>Player</th>
+                                <th title='Minutes Played'>MIN</th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th title='Plus-Minus'>+/-</th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>00:00</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id='home_team_stats' class='team-stats-table'>
+                        <tbody>
+                            <tr>
+                                <th class='u-cursor-default'>Total</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Field Goals Made - Field Goals Attempted'>FGM-A</th>
+                                <th title='Field Goal Percentage'>FG%</th>
+                                <th title='Three Points Made - Three Points Attempted'>3PM-A</th>
+                                <th title='Three Point Percentage'>3P%</th>
+                                <th title='Free Throws Made - Free Throws Attempted'>FTM-A</th>
+                                <th title='Free Throw Percentage'>FT%</th>
+                                <th title='Offensive Rebounds'>OREB</th>
+                                <th title='Defensive Rebounds'>DREB</th>
+                                <th title='Rebounds'>REB</th>
+                                <th title='Assists'>AST</th>
+                                <th title='Steals'>STL</th>
+                                <th title='Blocked Shots'>BLK</th>
+                                <th title='Turnovers'>TOV</th>
+                                <th title='Personal Fouls'>PF</th>
+                                <th class='u-cursor-default'></th>
+                                <th title='Points'>PTS</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0-0</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td></td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div>
+                <h3>Play By Play</h3>
+                <div class="tab-content">
+                    <div>
+                        <a class="c-quarter-btn" data-qtr="1">Q1</a>
+                        <a class="c-quarter-btn" data-qtr="2">Q2</a>
+                        <a class="c-quarter-btn" data-qtr="3">Q3</a>
+                        <a class="c-quarter-btn" data-qtr="4">Q4</a>
+                        <a class="c-quarter-btn" data-qtr="5">OT1</a>
+                        <a class="c-quarter-btn" data-qtr="6">OT2</a>
+                        <a class="c-quarter-btn" data-qtr="7">OT3</a>
+                        <a class="c-quarter-btn" data-qtr="8">OT4</a>
+                        <a class="c-quarter-btn" data-qtr="9">OT5</a>
+                        <a class="c-quarter-btn" data-qtr="10">OT6</a>
+                        <a class="c-quarter-btn" data-qtr="11">OT7</a>
+                        <a class="c-quarter-btn" data-qtr="12">OT8</a>
+                        <a class="c-quarter-btn" data-qtr="13">OT9</a>
+                        <a class="c-quarter-btn" data-qtr="14">OT10</a>
                     </div>
+                    <table id="pbp" class="u-full-width">
+                        <tbody>
+                            <tr>
+                                <th>Clock</th>
+                                <th>Team</th>
+                                <th>Score</th>
+                                <th>Play</th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <script src="src/vendor/jquery/jquery-3.1.1.min.js"></script>
-        <script src="src/vendor/jquery-ui/jquery-ui.min.js"></script>
-        <script src="src/vendor/moment/moment.min.js"></script>
-        <script src="src/vendor/moment/moment-timezone.min.js"></script>
-        <script src="src/vendor/moment/moment-timezone-data.min.js"></script>
-        <script src="src/js/common/utils.js"></script>
-        <script src="src/js/common/games.js"></script>
-        <script src="src/js/common/logos.js"></script>
-        <script src="src/js/common/format_utility.js"></script>
-        <script src="src/js/common/date_utils.js"></script>
-        <script src="src/js/box_score/pbp.js"></script>
-        <script src="src/js/box_score/bs_utils.js"></script>
-        <script src="src/js/box_score/box_score.js"></script>
-        <script src="src/js/ga.js"></script>
-    </body>
+    </div>
+    <script src="src/vendor/jquery/jquery-3.1.1.min.js"></script>
+    <script src="src/vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="src/vendor/moment/moment.min.js"></script>
+    <script src="src/vendor/moment/moment-timezone.min.js"></script>
+    <script src="src/vendor/moment/moment-timezone-data.min.js"></script>
+    <script src="src/js/common/utils.js"></script>
+    <script src="src/js/common/games.js"></script>
+    <script src="src/js/common/logos.js"></script>
+    <script src="src/js/common/format_utility.js"></script>
+    <script src="src/js/common/date_utils.js"></script>
+    <script src="src/js/box_score/pbp.js"></script>
+    <script src="src/js/box_score/bs_utils.js"></script>
+    <script src="src/js/box_score/box_score.js"></script>
+    <script src="src/js/ga.js"></script>
+</body>
+
 </html>
