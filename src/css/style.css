@@ -8,17 +8,17 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
     /*remove browser padding and margin*/
     padding: 0;
-    margin:0;
+    margin: 0;
     /* reset 1em */
     font-size: 14px;
 }
 
-
-th, td {
+th,
+td {
     min-width: 43px;
     width: 5vw;
     text-align: center;
-    border-bottom: 1px solid hsl(0, 0%, 85%);;
+    border-bottom: 1px solid hsl(0, 0%, 85%);
 }
 
 table tr:first-child th:first-child {
@@ -66,7 +66,7 @@ table tr:first-child th:last-child {
     color: #8f8f8f;
 }
 
-#detail-tables div table{
+#detail-tables div table {
     width: 100%;
 }
 
@@ -115,7 +115,7 @@ table tr:first-child th:last-child {
     border: 2px solid transparent;
 }
 
-.c-card.u-fav::before{
+.c-card.u-fav::before {
     content: '';
     position: absolute;
     top: -2px;
@@ -163,7 +163,7 @@ table tr:first-child th:last-child {
     flex-direction: column;
     flex-basis: 40%;
     text-align: center;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
 }
 
 .c-team-score {
@@ -221,10 +221,11 @@ table tr:first-child th:last-child {
 }
 
 .c-table table {
-    border-collapse:collapse;
+    border-collapse: collapse;
 }
 
-.c-table th, td {
+.c-table th,
+td {
     height: 1.8em;
 }
 
@@ -232,11 +233,14 @@ table tr:first-child th:last-child {
     margin-bottom: 1em;
 }
 
-.team-table th:hover, .team-stats-table th:hover, .detail-box-score th:hover {
+.team-table th:hover,
+.team-stats-table th:hover,
+.detail-box-score th:hover {
     cursor: help;
 }
 
-.team-table th:first-child, .team-stats-table th:first-child {
+.team-table th:first-child,
+.team-stats-table th:first-child {
     min-width: 70px;
     width: 14%;
 }
@@ -287,7 +291,8 @@ table tr:first-child th:last-child {
     justify-content: space-around;
 }
 
-.away-team-section > *, .home-team-section > * {
+.away-team-section > *,
+.home-team-section > * {
     margin: 0px 5px 0px 5px;
 }
 
@@ -322,7 +327,7 @@ table tr:first-child th:last-child {
     cursor: pointer;
 }
 
-.tab .tab-button.active  {
+.tab .tab-button.active {
     background-color: #f9f9f9;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
 }
@@ -369,10 +374,10 @@ table tr:first-child th:last-child {
     border-width: 0;
     outline: none;
     border-radius: 2px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
     background-color: #296ebd;
     color: hsl(0, 0%, 95%);
-    transition: background-color .3s;
+    transition: background-color 0.3s;
     padding: 15px;
 }
 .c-btn:hover {
@@ -446,6 +451,69 @@ table tr:first-child th:last-child {
     padding: 0.5em 0;
 }
 
+.c-playoff-round {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+}
+
+.c-playoff-serie {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2px 2px;
+    position: relative;
+    min-height: 100px;
+    font-size: calc(18px + 0.1vw);
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 2px solid transparent;
+}
+
+.c-playoff-serie .c-playoff-serie-team {
+    display: flex;
+    flex-direction: row;
+    min-height: 50px;
+    width: 100%;
+    height: 100%;
+}
+
+.c-playoff-serie-team__seed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    font-size: calc(12px + 0.1vw);
+}
+
+.c-playoff-serie-team__team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: #f9f9f9;
+}
+
+.c-playoff-serie-team__score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+.c-round-2-top {
+    margin-top: 56px;
+}
+
+.c-round-2-bottom {
+    margin-top: 112px;
+}
+
+.c-round-3 {
+    margin-top: 162px;
+}
+
 /* === utility === */
 .u-display-flex {
     display: flex;
@@ -490,7 +558,7 @@ table tr:first-child th:last-child {
 }
 
 .u-full-width {
-    width: 100%
+    width: 100%;
 }
 
 /*text*/
@@ -503,31 +571,31 @@ table tr:first-child th:last-child {
 }
 
 .u-color-green {
-    color : #00aa00;
+    color: #00aa00;
 }
 
 .u-color-gray {
-    color : #b2b2b2;
+    color: #b2b2b2;
 }
 
 .u-color-red {
-    color: #C60033;
+    color: #c60033;
 }
 
 .u-background-purple {
-    background-color: #724C9F;
+    background-color: #724c9f;
 }
 
-.u-background-blue{
+.u-background-blue {
     background-color: #c1dcf0;
 }
 
-.u-background-green{
+.u-background-green {
     background-color: #008348;
 }
 
-.u-background-orange{
-    background-color: #F7B125;
+.u-background-orange {
+    background-color: #f7b125;
 }
 
 .u-cursor-default {
@@ -553,11 +621,25 @@ table tr:first-child th:last-child {
 }
 
 .u-shadow:hover {
-    box-shadow: 0 6px 9px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.3);
 }
 
 .u-inner-shadow {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+}
+
+.u-live {
+    border: 2px solid red;
+    transition: 0.3s;
+}
+
+.u-live:hover {
+    cursor: pointer;
+}
+
+.u-loser {
+    color: hsl(0, 0%, 60%);
+    opacity: 50%;
 }
 
 /* dark mode */
@@ -580,18 +662,18 @@ table tr:first-child th:last-child {
 }
 
 .u-dark-mode .u-background-purple {
-    background-color: #724C9F;
+    background-color: #724c9f;
 }
 
-.u-dark-mode .u-background-blue{
+.u-dark-mode .u-background-blue {
     background-color: #4c4ca6;
 }
 
-.u-dark-mode .u-background-green{
+.u-dark-mode .u-background-green {
     background-color: #008348;
 }
 
-.u-dark-mode .u-background-orange{
+.u-dark-mode .u-background-orange {
     background-color: #f19132;
 }
 
@@ -603,7 +685,8 @@ table tr:first-child th:last-child {
     background-color: hsl(0, 0%, 60%);
 }
 
-.u-dark-mode th, .u-dark-mode td {
+.u-dark-mode th,
+.u-dark-mode td {
     border-bottom: 1px solid hsl(0, 0%, 50%);
 }
 
@@ -650,7 +733,7 @@ table tr:first-child th:last-child {
     }
 
     .tab-content div:nth-child(1) table {
-        width:100%;
+        width: 100%;
     }
 
     #detail-tables div {
@@ -676,7 +759,7 @@ table tr:first-child th:last-child {
         font-size: calc(15px + 0.1vw);
     }
 
-    .c-calendar-picker input{
+    .c-calendar-picker input {
         font-size: calc(20px + 0.1vw);
     }
 
@@ -689,7 +772,10 @@ table tr:first-child th:last-child {
         font-size: calc(17px + 0.1vw);
     }
 
-    .c-card, .c-time, .c-clock, .c-series {
+    .c-card,
+    .c-time,
+    .c-clock,
+    .c-series {
         font-size: calc(20px + 0.1vw);
     }
 
@@ -709,7 +795,7 @@ table tr:first-child th:last-child {
 }
 
 .ui-tooltip {
-    background-color: #E9EBEE;
+    background-color: #e9ebee;
 }
 
 .ui-datepicker {
@@ -770,7 +856,7 @@ table tr:first-child th:last-child {
     background-image: url(../assets/svg/arrow-left.svg);
 }
 
-.ui-datepicker .ui-datepicker-next span{
+.ui-datepicker .ui-datepicker-next span {
     background-size: contain;
     background-image: url(../assets/svg/arrow-right.svg);
 }
@@ -808,7 +894,7 @@ table tr:first-child th:last-child {
 }
 
 .ui-datepicker td .ui-state-active,
-.ui-datepicker td .ui-state-active.ui-state-hover  {
+.ui-datepicker td .ui-state-active.ui-state-hover {
     background-color: #1b7fb0;
     color: #fff;
 }

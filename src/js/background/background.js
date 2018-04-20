@@ -9,6 +9,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         fetchPlayByPlay(sendResponse, request.gid)
     } else if (request.request === 'schedule') {
         fetchFullSchedule(sendResponse)
+    } else if (request.request === 'playoff') {
+        fetchPlayoff(sendResponse)
     } else if (request.request === 'wakeup') {
         sendResponse('woken');
     }
@@ -83,6 +85,19 @@ function fetchPlayByPlay(sendResponse, gid) {
         type: 'GET',
         contentType: 'application/json',
         url: `https://data.nba.com/data/v2015/json/mobile_teams/nba/2017/scores/pbp/${gid}_full_pbp.json`
+    }).done(function(data){
+        sendResponse(data);
+    }).fail(function(xhr, textStatus, errorThrown) {
+        console.log('Failed to fetch data.');
+        sendResponse({failed: true});
+    });
+}
+
+function fetchPlayoff(sendResponse) {
+    $.ajax({
+        type: 'GET',
+        contentType: 'application/json',
+        url: 'https://data.nba.net/prod/v1/2017/playoffsBracket.json'
     }).done(function(data){
         sendResponse(data);
     }).fail(function(xhr, textStatus, errorThrown) {

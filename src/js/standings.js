@@ -1,10 +1,8 @@
-getConfig().then(function(config) {
-    if (config.nightMode) {
+$(function(){
+    if (CONFIG.nightMode) {
         $('body').toggleClass('u-dark-mode')
     }
-})
 
-$(function(){
     $.ajax({
         type: 'GET',
         contentType: 'application/json',
