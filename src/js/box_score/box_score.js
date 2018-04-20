@@ -16,22 +16,33 @@ $(function() {
         window.close()
     })
 
-    if (CONFIG.nightMode) {
-        $('body').toggleClass('u-dark-mode')
-        $('.c-card').each(function(index, el) {
-            $(el)
+    const toggleMode = function(nightMode) {
+        if (nightMode) {
+            $('body').toggleClass('u-dark-mode')
+            $('.c-card').each(function(index, el) {
+                $(el)
+                    .toggleClass('u-dark-mode')
+                    .toggleClass('u--dark')
+            })
+            $('.tab-content')
                 .toggleClass('u-dark-mode')
                 .toggleClass('u--dark')
+            $('.team-table')
+                .toggleClass('u-dark-mode')
+                .toggleClass('u--dark')
+            $('#pbp_container')
+                .toggleClass('u-dark-mode')
+                .toggleClass('u--dark')
+        }
+    }
+
+    if ($.isEmptyObject(CONFIG)) {
+        getConfig().then(function(savedConfig) {
+            CONFIG = savedConfig
+            toggleMode(savedConfig.nightMode)
         })
-        $('.tab-content')
-            .toggleClass('u-dark-mode')
-            .toggleClass('u--dark')
-        $('.team-table')
-            .toggleClass('u-dark-mode')
-            .toggleClass('u--dark')
-        $('#pbp_container')
-            .toggleClass('u-dark-mode')
-            .toggleClass('u--dark')
+    } else {
+        toggleMode(CONFIG.nightMode)
     }
 
     var SELECTED_GAME_OBJ = {}
@@ -84,59 +95,62 @@ $(function() {
         }
     })
 
-    chrome.storage.local.get(['popupRefreshTime', 'cacheData', 'schedule', 'fetchDataDate'], function(data) {
-        var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
-        var d = new Date()
+    chrome.storage.local.get(
+        ['popupRefreshTime', 'cacheData', 'schedule', 'fetchDataDate'],
+        function(data) {
+            var popupRefreshTime = data && data.popupRefreshTime ? data.popupRefreshTime : 0
+            var d = new Date()
 
-        // probably hasn't change much assign it first
-        DATE_UTILS.setSchedule(data.schedule)
-        // set up the fetch data date and selectedDate for calendar
-        DATE_UTILS.fetchDataDate = data.fetchDataDate
-        const selectedDateET = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
-        const displayDateStr = DATE_UTILS.needNewSchedule(data.fetchDataDate, d)
+            // probably hasn't change much assign it first
+            DATE_UTILS.setSchedule(data.schedule)
+            // set up the fetch data date and selectedDate for calendar
+            DATE_UTILS.fetchDataDate = data.fetchDataDate
+            const selectedDateET = DATE_UTILS.searchGameDateById(window.location.hash.substring(1))
+            const displayDateStr = DATE_UTILS.needNewSchedule(data.fetchDataDate, d)
 
-        if (selectedDateET && selectedDateET !== displayDateStr) {
-            // selected other dates than potential display date
-            DATE_UTILS.selectedDate = moment(selectedDateET).toDate()
-            calendar.datepicker('setDate', selectedDateET)
-            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
-            SELECTED_SCHEDULE.cacheData = data.cacheData
-            updateCards(DATE_UTILS.searchGames(selectedDateET))
-            updateLastUpdate(data.popupRefreshTime)
-            updateBox(window.location.hash.substring(1))
-        } else if (d.getTime() - popupRefreshTime > 60000) {
-            fetchData()
-                .done(function(games, gdte) {
-                    updateBox(getHash())
-                    SELECTED_SCHEDULE.cacheData = games
-                    DATE_UTILS.selectedDate = moment(gdte).toDate()
-                    calendar.datepicker('setDate', gdte)
-                })
-                .fail(function() {
-                    removeBox()
-                    window.location.hash = ''
-                    $('.c-card:not(no-game)').each(function(index, el) {
-                        $(el).addClass('u-hide')
-                    })
-                    $('.no-game')
-                        .removeClass('u-hide')
-                        .text(FETCH_DATA_FAILED)
-                    $('.c-table .over p').html(FETCH_DATA_FAILED)
-                })
-        } else {
-            DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
-            if (selectedDateET) {
+            if (selectedDateET && selectedDateET !== displayDateStr) {
+                // selected other dates than potential display date
+                DATE_UTILS.selectedDate = moment(selectedDateET).toDate()
                 calendar.datepicker('setDate', selectedDateET)
+                SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
+                SELECTED_SCHEDULE.cacheData = data.cacheData
+                updateCards(DATE_UTILS.searchGames(selectedDateET))
+                updateLastUpdate(data.popupRefreshTime)
+                updateBox(window.location.hash.substring(1))
+            } else if (d.getTime() - popupRefreshTime > 60000) {
+                fetchData()
+                    .done(function(games, gdte) {
+                        updateBox(getHash())
+                        SELECTED_SCHEDULE.cacheData = games
+                        DATE_UTILS.selectedDate = moment(gdte).toDate()
+                        calendar.datepicker('setDate', gdte)
+                    })
+                    .fail(function() {
+                        removeBox()
+                        window.location.hash = ''
+                        $('.c-card:not(no-game)').each(function(index, el) {
+                            $(el).addClass('u-hide')
+                        })
+                        $('.no-game')
+                            .removeClass('u-hide')
+                            .text(FETCH_DATA_FAILED)
+                        $('.c-table .over p').html(FETCH_DATA_FAILED)
+                    })
             } else {
-                calendar.datepicker('setDate', displayDateStr)
+                DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
+                if (selectedDateET) {
+                    calendar.datepicker('setDate', selectedDateET)
+                } else {
+                    calendar.datepicker('setDate', displayDateStr)
+                }
+                updateLastUpdate(data.popupRefreshTime)
+                updateCards(data.cacheData)
+                updateBox(getHash())
+                SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
+                SELECTED_SCHEDULE.cacheData = data.cacheData
             }
-            updateLastUpdate(data.popupRefreshTime)
-            updateCards(data.cacheData)
-            updateBox(getHash())
-            SELECTED_SCHEDULE.popupRefreshTime = data.popupRefreshTime
-            SELECTED_SCHEDULE.cacheData = data.cacheData
         }
-    })
+    )
 
     function getHash() {
         if (window.location.hash) {
@@ -185,7 +199,13 @@ $(function() {
         if (gid !== 0) {
             chrome.storage.local.get(['boxScore'], function(gameData) {
                 var d = new Date().getTime()
-                if (gameData && gameData.boxScore && gameData.boxScore[gid] && !$.isEmptyObject(gameData.boxScore[gid].data) && gameData.boxScore[gid].time - d < 60000) {
+                if (
+                    gameData &&
+                    gameData.boxScore &&
+                    gameData.boxScore[gid] &&
+                    !$.isEmptyObject(gameData.boxScore[gid].data) &&
+                    gameData.boxScore[gid].time - d < 60000
+                ) {
                     showBox(gameData.boxScore[gid].data)
                     showQuarter(gid)
                 } else {
