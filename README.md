@@ -1,58 +1,14 @@
+# NBA Browser Extension
 
+This is a browser extension shows the daily box score for NBA games.
 
+## Get NBA Extension
 
+It is available on **Chrome** and **Firefox**.
 
+[Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
 
-                                          .-:://++++//::-.
-                                   `-/oydmNNNMMMMMMMMMMNNNmdyo/-`
-                               .:odmNMMNmdMMMd/::::::/+osydmNMMNmdo:.
-                            -+hNMMNdy+-.``/NMMs           ``.-+ydNMMNh+-
-                         ./hNMMmy/.`       :NMMo                `/MMMMMNh/.
-                       .omMMms:`            :NMM+                `NMMosmMMmo.
-                     .yNMMd/.                +MMN-                dMMo ./dMMNy.
-                   `oNMMh:`                   yMMd                sMMh   `:hMMNo`
-                  :dMMd/                      .NMM:               +MMm      /dMMd:
-                 oNMMy`                        sMMd               /MMN       `oNMNo
-               `yMMMMd-                        .MMM-              -MMN         :mMMy`
-              `hMMmsNMNs`                       hMMy              -MMN          .mMMh`
-              yMMd. :dMMm/`                     /MMN`             /MMN           .dMMy
-             oMMm.   `oNMMh:                     NMM/             +MMm            .MMMo
-            -MMM:      .yNMMy.                   sMMd             oMMh            `MMMM-
-            hMMy         -yMMNs.                 .MMM:            hMMo            +MMMMh
-           -MMM.           :dMMNs.                sMMd`           NMM:           .NMMMMM-
-           sMMh              :yMMMy-              `mMMs          :MMN`          .mMMhdMMs
-           dMMo                -hMMMh/             -NMMs`        yMMy          /NMMh`oMMd
-           NMM:                  .yNMMm+`           .mMMd:      .MMM:       `+dMMN+  :MMN
-          `MMM:                    `+mMMMy:          `sNMMmo-   sMMd    `:odMMMNo`   :MMM`
-           mMM:                       :hMMMmo.         `omMMMNdsMMMyoydNMMMMms:      :MMN
-           dMMo                         .+dMMMd+.         .+ymNMMMMMMMNdyo:.         oMMd
-           oMMd-                           -smMMNd+.          sMMN:-.``              hMMs
-           -MMMMdo-                          `:smMMNdo-      :MMM:                  .MMM-
-            hMMMMMNms:.                         `-sdMMNmy/. :NMM+                   yMMh
-            -MMMoodMMMNds/:.`                      `.+hmMMNmNMMs                   :MMM-
-             oMMm.`./ydNMMNNmdyso+//::--..``           `-oNMMMMmyo:.              .mMMo
-              yMMd.   `.-/shdmNNMMMMNNNNNNmmmdhyo/:.`    oMMNyhmMMMNmho/-.       .dMMy
-              `hMMd.        ``...:://+ossyyhddmNMMMNmho:hMMm/  `./ohmNMMNmmhs+/--dMMh`
-               `yMMm:                       ``..-/oydNMMMMN/`       `.:+shdmNMMNNMMy`
-                `oNMNo`                             :NMMNNMNd+.           `.-/mMMNo
-                  :dMMd/                          -yNMNy.-omMMm/            /dMMd:
-                   `oNMMh:`                    `:yNMNh-    `+NMMs        `:hMMNo`
-                     -yNMMd/.                .+dMMNy:        -NMM/     ./dMMNy.
-                       -omMMms:`          .:ymMMms-           yMMy  `:smMMmo.
-                         ./hNMMmy/.`  `./ymMMNh/`            `dMMy/ymMMNh/.
-                            -+hmMMNdysdNMMNh/.            ``.sMMMMMMNh+-
-                               .:sdmNMMMMMdso+/::::::/+osydmNMMNmdo:.
-                                   `-/oydmNNNMMMMMMMMMMNNNmdyo/-`
-                                          .--:///+++//::-.
-
-
-
-
-
-
-# Box Score Chrome Extension
-
-This is a chrome extension shows the daily box score for NBA games
+[Firefox](https://addons.mozilla.org/en-US/firefox/addon/box-scores-extension/)
 
 ## Motivation
 
@@ -61,6 +17,13 @@ This extension is for people who just want to get the latest update but too lazy
 
 ## Features
 1. Daily box score on the popup page
-2. Full schedule list for the season
+1. Full schedule list for the season
+1. Ability to add favorite team which will be shown on top of the daily list
+1. Playoff bracket for each season
+1. Dark mode
 
-
+## TODOs
+- [] Use build scripts
+- [] Convert into to use React
+- [] Add highlights to box score page
+- [] Add the ability to sort tables
