@@ -23,7 +23,7 @@ This extension is for people who just want to get the latest update but too lazy
 1. Dark mode
 
 ## TODOs
-- [] Use build scripts
-- [] Convert into to use React
-- [] Add highlights to box score page
-- [] Add the ability to sort tables
+- [ ] Use build scripts
+- [ ] Convert into to use React, ES6, SASS
+- [ ] Add highlights to box score page
+- [ ] Add the ability to sort tables
