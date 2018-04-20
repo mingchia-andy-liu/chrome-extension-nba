@@ -98,6 +98,11 @@ $(function(){
         window.close()
     })
 
+    $('#playoffPage').click(function() {
+        chrome.tabs.create({ 'url': "/playoff.html" })
+        window.close()
+    })
+
     $('#prevArrow').click(function(event){
         if (CURRENT_SELECTED_DATE <= -1) return
         if (DATE_UTILS.onArrowClick(-1)) {

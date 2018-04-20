@@ -85,11 +85,11 @@ function updateCardWithGame(card, game) {
         matchinfoEl.find('.c-clock').text(clock).addClass(UTILS.CLOCK).removeClass(UTILS.TIME);
     } else if (game._status === 'prepare'){
         const time = game._localTime || getGameStartTime(game.stt, game.gcode);
-        // if (game.lm && game.lm.seri != '') {
-        //     matchinfoEl.find('.c-series').text(game.lm.seri)
-        // } else if (game.seri != '') {
-        //     matchinfoEl.find('.c-series').text(game.seri)
-        // }
+        if (game.lm && game.lm.seri != '') {
+            matchinfoEl.find('.c-series').text(game.lm.seri)
+        } else if (game.seri != '') {
+            matchinfoEl.find('.c-series').text(game.seri)
+        }
         if (CONFIG.broadcast) {
             matchinfoEl.find('.c-hyphen').text(DATE_UTILS.searchGameBroadcastById(game.gid));
         } else {

@@ -1,6 +1,21 @@
 $(function(){
     'use strict';
 
+    $('#optionsPage').click(function() {
+        chrome.tabs.create({ 'url': "/options.html" })
+        window.close()
+    })
+
+    $('#standingsPage').click(function() {
+        chrome.tabs.create({ 'url': "/standings.html" })
+        window.close()
+    })
+
+    $('#playoffPage').click(function() {
+        chrome.tabs.create({ 'url': "/playoff.html" })
+        window.close()
+    })
+
     if (CONFIG.nightMode) {
         $('body').toggleClass('u-dark-mode')
         $('.c-card').each(function(index, el){
