@@ -26,7 +26,6 @@ $(function() {
     chrome.runtime.sendMessage({ request: 'playoff' }, function(data) {
         if (data && !data.failed) {
             const series = data.series
-            console.log(series)
             series.forEach(element => {
                 const bottom = element.bottomRow
                 const top = element.topRow
@@ -36,22 +35,14 @@ $(function() {
                     const topName = getTeamNameById(top.teamId)
                     const color = getLogoColor(topName)
                     const isLosing =
-                        parseInt(bottom.wins) > parseInt(top.wins) &&
-                        parseInt(bottom.wins) !== 0
-                    content += generateTeamBlock(
-                        top.seedNum,
-                        topName,
-                        top.wins,
-                        color,
-                        isLosing
-                    )
+                        parseInt(bottom.wins) > parseInt(top.wins) && parseInt(bottom.wins) !== 0
+                    content += generateTeamBlock(top.seedNum, topName, top.wins, color, isLosing)
                 }
                 if (bottom.teamId !== '') {
                     const bottomName = getTeamNameById(bottom.teamId)
                     const color = getLogoColor(bottomName)
                     const isLosing =
-                        parseInt(bottom.wins) < parseInt(top.wins) &&
-                        parseInt(top.wins) !== 0
+                        parseInt(bottom.wins) < parseInt(top.wins) && parseInt(top.wins) !== 0
                     content += generateTeamBlock(
                         bottom.seedNum,
                         bottomName,
