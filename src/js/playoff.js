@@ -1,7 +1,8 @@
 const generateTeamBlock = function(seed, name, score, color, losing) {
-    const classes = losing
-        ? 'c-playoff-serie-team u-loser'
-        : 'c-playoff-serie-team'
+    let classes = 'c-playoff-serie-team '
+    if (losing) {
+        classes += 'c-loser '
+    }
     const inline = losing
         ? `background-color: ${color}; color: hsl(0, 0%, 60%);`
         : `background-color: ${color};`
@@ -17,6 +18,9 @@ const generateTeamBlock = function(seed, name, score, color, losing) {
 $(function() {
     if (CONFIG.nightMode) {
         $('body').toggleClass('u-dark-mode')
+        $('.c-playoff-serie')
+            .addClass('u-dark-mode')
+            .addClass('u--dark')
     }
 
     chrome.runtime.sendMessage({ request: 'playoff' }, function(data) {
