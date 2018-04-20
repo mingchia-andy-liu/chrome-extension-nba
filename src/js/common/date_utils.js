@@ -9,8 +9,7 @@ DATE_UTILS.schedule = []
 
 DATE_UTILS.onArrowClick = function(offset) {
     const newDate = moment(this.selectedDate).add(offset, 'days')
-    if (newDate.isBefore(DATE_UTILS.minDate) ||
-        newDate.isAfter(DATE_UTILS.maxDate)) {
+    if (newDate.isBefore(DATE_UTILS.minDate) || newDate.isAfter(DATE_UTILS.maxDate)) {
         return false
     }
     this.selectedDate = newDate.toDate()
@@ -29,37 +28,36 @@ DATE_UTILS.onSelectChange = function(date) {
  *       @property {string} str in string
  */
 DATE_UTILS.setSchedule = function(schedule) {
-    const gamesArray = schedule.map(function(month){
+    const gamesArray = schedule.map(function(month) {
         return month.mscd.g
     })
-    const allGames = gamesArray.reduce(function(total, month){
+    const allGames = gamesArray.reduce(function(total, month) {
         return total.concat(month)
     })
 
     this.schedule = allGames
 }
 
-
 /**
  * A getter method of [{month.mscd.g}, {month.mscd.g}, ...] schedule
  * @returns {array} [{month.mscd.g}, ...]
  */
 DATE_UTILS.getRawSchedule = function() {
-    const group_to_values = this.schedule.reduce(function (obj, item) {
+    const group_to_values = this.schedule.reduce(function(obj, item) {
         const month = item.gdte.substring(5, 7)
         obj[month] = obj[month] || []
         obj[month].push(item)
         return obj
     }, {})
 
-    const groups = Object.keys(group_to_values).map(function (key) {
+    const groups = Object.keys(group_to_values).map(function(key) {
         return {
             mscd: {
                 g: group_to_values[key],
-                month: key
-            }
+                month: key,
+            },
         }
-    });
+    })
 
     // move September to the first element
     groups.unshift(groups.splice(3, 1)[0])
@@ -74,7 +72,7 @@ DATE_UTILS.getRawSchedule = function() {
  * @param {games} games the API's games end versions
  */
 DATE_UTILS.updateScheduleOnDate = function(date, games) {
-    const startIndex = this.schedule.findIndex(function(game){
+    const startIndex = this.schedule.findIndex(function(game) {
         return game.gdte === date
     })
 
@@ -88,12 +86,15 @@ DATE_UTILS.updateScheduleOnDate = function(date, games) {
  */
 DATE_UTILS.updateSchedule = function() {
     return new Promise(function(resolve, reject) {
-        chrome.runtime.sendMessage({request : 'schedule'}, function(data) {
+        chrome.runtime.sendMessage({ request: 'schedule' }, function(data) {
             if (data && !data.failed) {
                 DATE_UTILS.setSchedule(data)
-                chrome.storage.local.set({
-                    'schedule' : data
-                }, resolve())
+                chrome.storage.local.set(
+                    {
+                        schedule: data,
+                    },
+                    resolve()
+                )
             } else {
                 reject()
             }
@@ -114,7 +115,7 @@ DATE_UTILS.searchGames = function(date) {
     const selectedDateStr = selectedDate.format('YYYY-MM-DD')
     const nextDay = selectedDate.add(1, 'day').format('YYYY-MM-DD')
 
-    const startIndex = this.schedule.findIndex(function(game){
+    const startIndex = this.schedule.findIndex(function(game) {
         return game.gdte === selectedDateStr
     })
     if (startIndex === -1) {
@@ -122,7 +123,7 @@ DATE_UTILS.searchGames = function(date) {
     }
     // need to find the last game of the day
     const secondHalf = this.schedule.slice(startIndex).reverse()
-    let lastIndex = secondHalf.findIndex(function(game){
+    let lastIndex = secondHalf.findIndex(function(game) {
         return game.gdte === selectedDateStr
     })
     lastIndex = secondHalf.length - lastIndex + startIndex
@@ -134,7 +135,7 @@ DATE_UTILS.searchGames = function(date) {
  * @param {string} gid of the game
  */
 DATE_UTILS.searchGameDateById = function(gid) {
-    const game = this.schedule.find(function(game){
+    const game = this.schedule.find(function(game) {
         return game.gid === gid
     })
     if (!game) {
@@ -148,7 +149,7 @@ DATE_UTILS.searchGameDateById = function(gid) {
  * @returns {string} the broadcaster's name
  */
 DATE_UTILS.searchGameBroadcastById = function(gid) {
-    const game = this.schedule.find(function(game){
+    const game = this.schedule.find(function(game) {
         return game.gid === gid
     })
     if (!game || !game.bd || !game.bd.b || !game.bd.b[0]) {
@@ -166,9 +167,9 @@ DATE_UTILS.searchGameBroadcastById = function(gid) {
 DATE_UTILS.checkSelectToday = function(newDate) {
     if (newDate) {
         this.selectedDate = newDate
-        return moment(newDate).isSame(this.fetchDataDate, "day")
+        return moment(newDate).isSame(this.fetchDataDate, 'day')
     } else {
-        return moment(this.selectedDate).isSame(this.fetchDataDate, "day")
+        return moment(this.selectedDate).isSame(this.fetchDataDate, 'day')
     }
 }
 
@@ -196,7 +197,9 @@ DATE_UTILS.needNewSchedule = function(dataDate, today) {
             const diffDays = moment(dataDate).diff(today, 'day')
             if (diffDays <= -2) {
                 // in tomorrow
-                return moment(dataDate).add(1, 'day').format('YYYY-MM-DD')
+                return moment(dataDate)
+                    .add(1, 'day')
+                    .format('YYYY-MM-DD')
             } else {
                 // in current
                 return moment(today).format('YYYY-MM-DD')

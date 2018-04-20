@@ -1,5 +1,5 @@
-'use strict';
-chrome.runtime.sendMessage({request : 'wakeup'});
+'use strict'
+chrome.runtime.sendMessage({ request: 'wakeup' })
 
 let CURRENT_SELECTED_DATE = 0
 let CACHED_DATA = {
@@ -15,17 +15,19 @@ const onLoadPopUp = function() {
         // set up the fetch data date and selectedDate for calendar
         DATE_UTILS.fetchDataDate = data.fetchDataDate
 
-        if ((d.getTime() - popupTime) > 60000) {
+        if (d.getTime() - popupTime > 60000) {
             fetchData()
-            .done(function(games, date) {
-                DATE_UTILS.fetchDataDate = date
-                CACHED_DATA.games = games
-                CACHED_DATA.d = d.getTime()
-            })
-            .fail(function(){
-                updateLastUpdate(data.popupRefreshTime);
-                $('.no-game').removeClass('u-hide').text(FETCH_DATA_FAILED);
-            });
+                .done(function(games, date) {
+                    DATE_UTILS.fetchDataDate = date
+                    CACHED_DATA.games = games
+                    CACHED_DATA.d = d.getTime()
+                })
+                .fail(function() {
+                    updateLastUpdate(data.popupRefreshTime)
+                    $('.no-game')
+                        .removeClass('u-hide')
+                        .text(FETCH_DATA_FAILED)
+                })
         } else {
             DATE_UTILS.selectedDate = moment(data.fetchDataDate).toDate()
             updateLastUpdate(data.popupRefreshTime)
@@ -33,7 +35,7 @@ const onLoadPopUp = function() {
             CACHED_DATA.games = data.cacheData
             CACHED_DATA.d = data.popupRefreshTime
         }
-    });
+    })
 }
 
 const onArrowClick = function() {
@@ -62,10 +64,10 @@ const updateArrowVisibility = function() {
     }
 }
 
-$(function(){
+$(function() {
     if (CONFIG.nightMode) {
         $('body').toggleClass('u-dark-mode')
-        $('.c-card').each(function(index, el){
+        $('.c-card').each(function(index, el) {
             $(el).toggleClass('u-dark-mode u--dark')
         })
     }
@@ -77,33 +79,33 @@ $(function(){
         }
     })
 
-    $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function(){
-        let hashedUrl = 'box-score.html#' + $(this).attr('gid');
-        chrome.tabs.create({url: hashedUrl});
+    $('body').on('click', '.' + UTILS.CARD + ':not(.no-game)', function() {
+        let hashedUrl = 'box-score.html#' + $(this).attr('gid')
+        chrome.tabs.create({ url: hashedUrl })
         window.close()
     })
 
     $('#boxScorePage').click(function() {
-        chrome.tabs.create({ 'url': "/box-score.html" })
+        chrome.tabs.create({ url: '/box-score.html' })
         window.close()
     })
 
     $('#optionsPage').click(function() {
-        chrome.tabs.create({ 'url': "/options.html" })
+        chrome.tabs.create({ url: '/options.html' })
         window.close()
     })
 
     $('#standingsPage').click(function() {
-        chrome.tabs.create({ 'url': "/standings.html" })
+        chrome.tabs.create({ url: '/standings.html' })
         window.close()
     })
 
     $('#playoffPage').click(function() {
-        chrome.tabs.create({ 'url': "/playoff.html" })
+        chrome.tabs.create({ url: '/playoff.html' })
         window.close()
     })
 
-    $('#prevArrow').click(function(event){
+    $('#prevArrow').click(function(event) {
         if (CURRENT_SELECTED_DATE <= -1) return
         if (DATE_UTILS.onArrowClick(-1)) {
             CURRENT_SELECTED_DATE -= 1
@@ -112,7 +114,7 @@ $(function(){
         }
     })
 
-    $('#nextArrow').click(function(event){
+    $('#nextArrow').click(function(event) {
         if (CURRENT_SELECTED_DATE >= 1) return
         if (DATE_UTILS.onArrowClick(1)) {
             CURRENT_SELECTED_DATE += 1
@@ -122,4 +124,4 @@ $(function(){
     })
 
     onLoadPopUp()
-});
+})
