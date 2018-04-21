@@ -171,7 +171,7 @@ table tr:first-child th:last-child {
 }
 
 .c-clock {
-    margin-top: 8px;
+    margin-top: 4px;
     font-size: calc(15px + 0.1vw);
 }
 
@@ -184,7 +184,7 @@ table tr:first-child th:last-child {
 }
 
 .c-series {
-    font-size: calc(16px + 0.1vw);
+    font-size: calc(15px + 0.1vw);
 }
 
 .no-game:hover {
