@@ -1,5 +1,8 @@
-const generateTeamBlock = function(seed, name, score, color, losing) {
+const generateTeamBlock = function(isEmpty, seed, name, score, color, losing) {
     let classes = 'c-playoff-serie-team '
+    if (isEmpty) {
+        return `<div class="${classes}"></div>`
+    }
     if (losing) {
         classes += 'c-loser '
     }
@@ -47,7 +50,16 @@ $(function() {
                     const color = getLogoColor(topName)
                     const isLosing =
                         parseInt(bottom.wins) > parseInt(top.wins) && parseInt(bottom.wins) !== 0
-                    content += generateTeamBlock(top.seedNum, topName, top.wins, color, isLosing)
+                    content += generateTeamBlock(
+                        false,
+                        top.seedNum,
+                        topName,
+                        top.wins,
+                        color,
+                        isLosing
+                    )
+                } else {
+                    content += generateTeamBlock(true)
                 }
                 if (bottom.teamId !== '') {
                     const bottomName = getTeamNameById(bottom.teamId)
@@ -55,12 +67,15 @@ $(function() {
                     const isLosing =
                         parseInt(bottom.wins) < parseInt(top.wins) && parseInt(top.wins) !== 0
                     content += generateTeamBlock(
+                        false,
                         bottom.seedNum,
                         bottomName,
                         bottom.wins,
                         color,
                         isLosing
                     )
+                } else {
+                    content += generateTeamBlock(true)
                 }
 
                 const $serie = $(`#${element.seriesId}`).html(content)
