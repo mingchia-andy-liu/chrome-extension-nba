@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
 
-    "name": "Box Scores",
-    "description": "This extension shows you the daily box scores.",
-    "version": "1.2.4",
+    "name": "Basketball Box Scores",
+    "description": "This extension shows you the daily basketball box scores.",
+    "version": "1.2.5",
 
     "icons": {
         "16": "src/assets/png/icon-color-16.png",
