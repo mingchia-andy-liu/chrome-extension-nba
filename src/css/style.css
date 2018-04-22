@@ -75,6 +75,8 @@ table tr:first-child th:last-child {
     padding: 2px 3px 0px 3px;
     cursor: pointer;
     text-decoration: none;
+    border: 0;
+    outline: none;
 }
 
 .over {
