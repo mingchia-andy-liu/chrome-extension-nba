@@ -13,7 +13,8 @@
     "lint:css": "stylelint src/css/*.css",
     "lint:js": "eslint src",
     "test": "npm run lint",
-    "test-watch": "mocha ./test/setup.js test/**/*.test.js --watch"
+    "webpack": "NODE_ENV=production webpack --progress --colors",
+    "webpack:dev": "NODE_ENV=development webpack --progress --colors"
   },
   "license": "MIT",
   "main": "index.js",
@@ -27,12 +28,26 @@
   "homepage": "https://github.com/mingchia-andy-liu/chrome-extension-nba#readme",
   "devDependencies": {
     "addons-linter": "^0.41.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "htmllint-cli": "0.0.7",
     "npm-run-all": "^4.1.2",
     "stylelint": "^9.2.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^0.8.1",
-    "web-ext": "^2.6.0"
+    "web-ext": "^2.6.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15",
+    "webpack-merge": "^4.1.2"
+  },
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0"
   }
 }
