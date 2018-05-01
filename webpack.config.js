@@ -1,24 +1,30 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')    // for webpack dev server
+const path = require('path')
+
 const webpackDevConfig = {
     devtool: 'cheap-module-eval-source-map',
     // https://webpack.js.org/concepts/mode/
-    mode: 'development'
+    mode: 'development',
+    plugins: [
+        new HtmlWebpackPlugin({
+            filename: path.resolve(__dirname, 'src', 'index.html'),
+            template: path.resolve(__dirname, 'src', 'index.html')
+          }),
+    ]
 }
 const webpackProdConfig = {
     // https://webpack.js.org/concepts/mode/
     mode: 'production'
 }
 
-const path = require('path')
 
 let webpackConfig = {
     entry: [
         path.resolve(__dirname, 'src', 'app', 'app.jsx')
     ],
     output: {
-        // filename: path.join('sidebar', 'app.js'),
         filename: '[name].js',
         path: path.resolve(__dirname, 'src'),
     },
@@ -44,6 +50,10 @@ let webpackConfig = {
                 ],
             }
         ],
+    },
+    devServer: {
+        host: 'localhost',
+        contentBase: path.resolve(__dirname, 'src')
     },
 }
 
