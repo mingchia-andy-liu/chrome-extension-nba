@@ -20,13 +20,13 @@ class App extends React.Component {
         return (
             <AppBase>
                 <Switch>
-                    <Route exact path="/popup2.html" component={ PopUp } />
+                    <Route exact path="/index.html" component={ PopUp } />
                     <Route exact path="/box-score2.html" component={ PopUp } />
                     <Route exact path="/changelog2.html" component={ PopUp } />
                     <Route exact path="/options2.html" component={ PopUp } />
                     <Route exact path="/playoff2.html" component={ PopUp } />
                     <Route exact path="/standings2.html" component={ PopUp } />
-                    <Redirect path="*" to="/popup2.html" />
+                    <Redirect path="*" to="/index.html" />
                 </Switch>
             </AppBase>
         )

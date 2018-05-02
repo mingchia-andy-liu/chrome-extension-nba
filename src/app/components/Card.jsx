@@ -1,24 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
+import {Row, RowCSS, AlignCenter} from '../styles'
 import {TeamInfo, TeamLogo} from './TeamInfo'
 import {formatClock} from '../utils/format'
-import {Row, RowCSS, AlignCenter} from '../styles'
 
 
-const CardBase = styled.div`
+const Wrapper = styled.div`
     ${RowCSS}
     ${AlignCenter}
     min-height: 90px;
     width: 100%;
-    margin: 3px 5px 5px 5px;
+    margin: 10px 0;
     font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
     transition: 0.3s;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+
 
     &:hover {
         cursor: pointer;
         border: 2px solid rgb(30, 150, 250);
+        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.3);
     }
 
     border: ${props => props.selected
@@ -57,7 +60,7 @@ class Card extends React.PureComponent {
         } = this.props;
 
         return (
-            <CardBase>
+            <Wrapper>
                 <TeamInfo>
                     <TeamLogo team={vta}>{vta}</TeamLogo>
                     <div>{vtn}</div>
@@ -75,7 +78,7 @@ class Card extends React.PureComponent {
                     <TeamLogo team={hta}>{hta}</TeamLogo>
                     <div>{htn}</div>
                 </TeamInfo>
-            </CardBase>
+            </Wrapper>
         )
     }
 }

@@ -7,7 +7,6 @@ import {formatGames, gamesAPI} from '../utils/format'
 
 const List = stlyed.div`
     ${ColumnCSS}
-    padding: 0 5px;
 `;
 
 
