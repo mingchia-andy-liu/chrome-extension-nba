@@ -10,7 +10,7 @@ const Wrapper = styled.div`
     ${AlignCenter}
     min-height: 90px;
     width: 100%;
-    margin: 10px 0;
+    margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
     border-radius: 5px;
@@ -67,9 +67,9 @@ class Card extends React.PureComponent {
                 </TeamInfo>
                 <MatchInfo>
                     <Row>
-                        <TeamScore winning={vs > hs}> {vs} </TeamScore>
+                        <TeamScore winning={vs > hs ? 1 : 0}> {vs} </TeamScore>
                         -
-                        <TeamScore winning={vs < hs}> {hs} </TeamScore>
+                        <TeamScore winning={vs < hs ? 1 : 0}> {hs} </TeamScore>
                     </Row>
                     {series && <div>{series}</div>}
                     <div>{formatClock(cl, stt)}</div>

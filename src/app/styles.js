@@ -15,22 +15,6 @@ injectGlobal`
         /* reset 1em */
         font-size: 14px;
     }
-
-    th,
-    td {
-        min-width: 43px;
-        width: 5vw;
-        text-align: center;
-        border-bottom: 1px solid hsl(0, 0%, 85%);
-    }
-
-    table tr:first-child th:first-child {
-        border-top-left-radius: 5px;
-    }
-
-    table tr:first-child th:last-child {
-        border-top-right-radius: 5px;
-    }
 `
 
 

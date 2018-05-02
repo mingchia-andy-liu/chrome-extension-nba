@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link as RouterLink, Switch, Route, Redirect, withRouter  } from 'react-router-dom'
+import { Link as RouterLink  } from 'react-router-dom'
 import {RowCSS, AlignCenter, JustifyCenter} from '../styles'
 
 
@@ -28,7 +28,7 @@ class Links extends React.Component {
 
     render() {
         const { location } = this.props
-        const hrefs = ['options', 'standings', 'playoff', 'box-scores']
+        const hrefs = ['options', 'standings', 'playoff', 'box-score2.html']
         const atags = hrefs.map((element, index) => (
             <Link key={`link-${index}`} to={element}>{element}</Link>
         ))
@@ -42,4 +42,4 @@ class Links extends React.Component {
 }
 
 
-export default withRouter(Links)
+export default Links

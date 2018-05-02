@@ -4,18 +4,6 @@ import Card from '../components/Card'
 import CardList from '../components/CardList';
 import Links from '../components/Links'
 
-const game = {
-    hta: "PHI",
-    htn: "76ers",
-    vta: "BOS",
-    vtn: "Boston",
-    hs: 110,
-    vs: 119,
-    series: "BOS leads series 1-0",
-    clk: "00:00.0",
-    stt: "Final",
-}
-
 const Title = styled.h2`
     text-align: center;
 `;

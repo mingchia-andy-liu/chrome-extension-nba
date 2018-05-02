@@ -5,6 +5,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // import * as actions from '../actions'
 import PopUp from './PopUp'
+import BoxScores from './BoxScores'
+
+import 'react-sticky-table/dist/react-sticky-table.css';
 
 
 const AppBase = styled.div``;
@@ -20,8 +23,8 @@ class App extends React.Component {
         return (
             <AppBase>
                 <Switch>
-                    <Route exact path="/index.html" component={ PopUp } />
-                    <Route exact path="/box-score2.html" component={ PopUp } />
+                    <Route exact path="/popup2.html" component={ PopUp } />
+                    <Route exact path="/index.html" component={ BoxScores } />
                     <Route exact path="/changelog2.html" component={ PopUp } />
                     <Route exact path="/options2.html" component={ PopUp } />
                     <Route exact path="/playoff2.html" component={ PopUp } />
