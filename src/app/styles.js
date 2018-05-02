@@ -1,6 +1,4 @@
-import {injectGlobal} from 'styled-components'
-import { css } from 'styled-components'
-
+import styled, {injectGlobal, css} from 'styled-components'
 
 injectGlobal`
     * {
@@ -51,7 +49,94 @@ export const media = {
 /**
  * Flex container
  */
-
-export const flex = {
-    base: (...args) =>  css`display: flex;`
+const align = ({
+    alignCenter,
+    alignStart,
+    alignEnd,
+    alignBaseline,
+    alignStretch,
+    alignSpaceBetween,
+    alignSpaceAround
+}) => {
+    return alignCenter && "center"||
+        alignStart && "flex-start"||
+        alignEnd  && "flex-end"||
+        alignBaseline  && "baseline"||
+        alignStretch && "stretch" ||
+        alignSpaceBetween && "space-between" ||
+        alignSpaceAround && "space-around" ||
+        "center"
 }
+const justify = ({
+    justifyCenter,
+    justifyStart,
+    justifyEnd,
+    justifySpaceBetween,
+    justifySpaceAround
+}) => {
+    return justifyCenter && "center" ||
+        justifyStart && "flex-start" ||
+        justifyEnd &&  "flex-end" ||
+        justifySpaceBetween && "space-between" ||
+        justifySpaceAround && "space-around" ||
+        "center"
+};
+
+const wrap = ({
+    nowrap,
+    wrap,
+    wrapReverse
+    }) => {
+    return nowrap && "nowrap" ||
+        wrap && "wrap" ||
+        wrapReverse && "wrap-reverse" ||
+        "wrap"
+};
+
+export const Base = styled.div`
+    display: flex;
+    align-items: ${props => align(props)};
+    justify-content: ${props => justify(props)};
+    ${props => `flex-wrap: ${wrap(props)}`};
+    ${props => props.flexBasis && `flex-basis: ${props.flexBasis}`};
+    ${props => props.flexGrow && `flex-basis: ${props.flexGrow}`};
+    ${props => props.flexShrink && `flex-shrink: ${props.flexShrink}`};
+`;
+
+export const Flex = styled(Base)`
+    flex-direction: ${props => props.row && "row" || "column" };
+`;
+
+export const Row = styled(Base)`
+    flex-direction: row;
+`;
+
+export const Column = styled(Base)`
+    flex-direction: column;
+`;
+
+export const Center = styled(Base)`
+    justify-content: center;
+    align-items: center;
+`;
+
+/**
+ * Flex mixins
+ */
+export const RowCSS = css`
+    display: flex;
+    flex-direction: row;
+`;
+
+export const ColumnCSS = css`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const JustifyCenter = css`
+    justify-content: center;
+`;
+
+export const AlignCenter = css`
+    align-items: center;
+`

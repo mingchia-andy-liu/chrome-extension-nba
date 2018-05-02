@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import Card from '../components/Card'
+import CardList from '../components/CardList';
 
 const game = {
     hta: "PHI",
@@ -21,7 +22,9 @@ class PopUp extends React.Component {
     }
     render() {
         return (
-            <Card {...game} />
+            <Fragment>
+                <CardList />
+            </Fragment>
         )
     }
 }

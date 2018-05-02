@@ -2,13 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import {TeamInfo, TeamLogo} from './TeamInfo'
 import {formatClock} from '../utils/format'
-import {flex} from '../styles'
+import {Row, RowCSS, AlignCenter} from '../styles'
 
 
 const CardBase = styled.div`
-    display: flex;
-    align-items: center;
-    min-height: 100px;
+    ${RowCSS}
+    ${AlignCenter}
+    min-height: 90px;
+    width: 100%;
     margin: 3px 5px 5px 5px;
     font-size: calc(17px + 0.1vw);
     background-color: #f9f9f9;
@@ -26,8 +27,8 @@ const CardBase = styled.div`
 `;
 
 const MatchInfo = styled.div`
-    text-align: center;
     flex-basis: 40%;
+    text-align: center;
 
     & > * {
         margin-top: 5px;
@@ -36,13 +37,8 @@ const MatchInfo = styled.div`
 
 const TeamScore = styled.div`
     flex-grow: 2;
-    color: ${props => props.winning ? 'green' : 'initial'};
+    ${props => props.winning && 'color: green;'};
 `;
-
-const Scores = styled.div`
-    ${flex.base()}
-`;
-
 
 class Card extends React.PureComponent {
     render() {
@@ -55,7 +51,7 @@ class Card extends React.PureComponent {
             hs,
             vs,
             stt,
-            clk,
+            cl,
             broadcaster,
             series
         } = this.props;
@@ -67,13 +63,13 @@ class Card extends React.PureComponent {
                     <div>{vtn}</div>
                 </TeamInfo>
                 <MatchInfo>
-                    <Scores>
+                    <Row>
                         <TeamScore winning={vs > hs}> {vs} </TeamScore>
                         -
                         <TeamScore winning={vs < hs}> {hs} </TeamScore>
-                    </Scores>
+                    </Row>
                     {series && <div>{series}</div>}
-                    <div>{formatClock(clk, stt)}</div>
+                    <div>{formatClock(cl, stt)}</div>
                 </MatchInfo>
                 <TeamInfo>
                     <TeamLogo team={hta}>{hta}</TeamLogo>
