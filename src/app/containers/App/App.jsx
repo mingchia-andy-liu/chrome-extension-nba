@@ -22,8 +22,8 @@ class App extends React.Component {
         return (
             <AppBase>
                 <Switch>
-                    <Route exact path="/index2.html" component={ PopUp } />
-                    <Route exact path="/index.html" component={ BoxScores } />
+                    <Route exact path="/index.html" component={ PopUp } />
+                    <Route path="/box-scores2.html" component={ BoxScores } />
                     <Route exact path="/changelog2.html" component={ PopUp } />
                     <Route exact path="/options2.html" component={ PopUp } />
                     <Route exact path="/playoff2.html" component={ PopUp } />

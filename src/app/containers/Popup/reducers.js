@@ -12,20 +12,19 @@ export default (state = initState, action) => {
         case types.REQUEST_START:
             return {
                 ...state,
-                loading: true,
+                isLoading: true,
             }
         case types.REQUEST_SUCCESS:
-            console.log(action.payload)
             return {
                 ...state,
-                loading: false,
+                isLoading: false,
                 games: action.payload.g,
                 dateET: new Date(action.payload.gdte)
             }
         case types.REQUEST_ERROR:
             return {
                 ...state,
-                loading: false,
+                isLoading: false,
                 games: []
             }
         default:

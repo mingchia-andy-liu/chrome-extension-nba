@@ -28,9 +28,10 @@ class Links extends React.Component {
 
     render() {
         const { location } = this.props
-        const hrefs = ['options', 'standings', 'playoff', 'box-score2.html']
-        const atags = hrefs.map((element, index) => (
-            <Link key={`link-${index}`} to={element}>{element}</Link>
+        const links = ['options', 'standings', 'playoff', 'box-scores']
+        const hrefs = ['options2.html', 'standings2.html', 'playoff2.html', 'box-scores2.html']
+        const atags = links.map((element, index) => (
+            <Link key={`link-${index}`} to={hrefs[index]}>{element}</Link>
         ))
 
         return (

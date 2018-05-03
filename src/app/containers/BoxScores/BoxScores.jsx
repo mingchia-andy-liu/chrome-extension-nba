@@ -7,13 +7,14 @@ import Links from '../../components/Links'
 import { Tab, TabItem } from '../../components/Tab'
 import { PlayByPlay, Summary } from '../../components/Scores'
 import { Shadow } from '../../styles'
+import * as actions from './actions'
 
 const Wrapper = styled.div`
     display: grid;
     grid-template-areas:    "header header"
                             "cards content";
     grid-template-rows: 50px 1fr;
-    grid-template-columns: minmax(30%, 300px) 1fr;
+    grid-template-columns: minmax(27%, 300px) 1fr;
     grid-gap: 1em 1em;
     padding: 0 10px;
 `;
@@ -107,6 +108,12 @@ class BoxScores extends React.Component {
         super(props)
     }
 
+    componentDidMount() {
+        console.log('[DidMount] fetching BS')
+        this.props.fetchPlayByPlay('0041700222')
+        this.props.fetchLiveGameBox('0041700222')
+    }
+
     render() {
         return (
             <Wrapper>
@@ -127,8 +134,9 @@ class BoxScores extends React.Component {
     }
 }
 
-const mapStateToProps = ({ live }) => ({
-    live
+const mapStateToProps = ({ live, bs }) => ({
+    live,
+    bs
 })
 
-export default connect(mapStateToProps, null)(BoxScores)
+export default connect(mapStateToProps, actions)(BoxScores)
