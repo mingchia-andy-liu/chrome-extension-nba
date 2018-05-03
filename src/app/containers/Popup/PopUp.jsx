@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Card from '../components/Card'
-import CardList from '../components/CardList';
-import Links from '../components/Links'
-import { Column } from '../styles'
+import Card from '../../components/Card'
+import CardList from '../../components/CardList';
+import Links from '../../components/Links'
+import { Column } from '../../styles'
+import * as actions from './actions'
 
 const Wrapper = styled(Column)`
     padding: 0 10px;
@@ -18,6 +19,10 @@ const Title = styled.h2`
 class PopUp extends React.Component {
     constructor(props) {
         super(props)
+    }
+
+    componentDidMount() {
+        this.props.fetchGames()
     }
 
     render() {
@@ -35,4 +40,4 @@ const mapStateToProps = ({ live }) => ({
     live
 })
 
-export default connect(mapStateToProps, null)(PopUp)
+export default connect(mapStateToProps, actions)(PopUp)

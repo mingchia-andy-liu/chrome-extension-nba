@@ -1,9 +1,11 @@
-// import fetch from 'node-fetch'
 import axios from 'axios'
 import types from './types'
 
+/**
+ * Migrate from background.js `fetchGames`
+ */
 
-export const fetchLiveGames = (redirectPath, originalPath) => async (dispatch) => {
+export const fetchGames = (redirectPath, originalPath) => async (dispatch) => {
     try {
         dispatch({ type: types.REQUEST_START })
 

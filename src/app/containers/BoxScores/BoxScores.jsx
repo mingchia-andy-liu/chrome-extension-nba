@@ -1,12 +1,12 @@
 import React, {Fragment} from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Card from '../components/Card'
-import CardList from '../components/CardList';
-import Links from '../components/Links'
-import { Tab, TabItem } from '../components/Tab'
-import { PlayByPlay, Summary } from '../components/Scores'
-import { Shadow } from '../styles'
+import Card from '../../components/Card'
+import CardList from '../../components/CardList';
+import Links from '../../components/Links'
+import { Tab, TabItem } from '../../components/Tab'
+import { PlayByPlay, Summary } from '../../components/Scores'
+import { Shadow } from '../../styles'
 
 const Wrapper = styled.div`
     display: grid;

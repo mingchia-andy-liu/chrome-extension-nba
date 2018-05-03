@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
 
-import liveReducer from './liveReducer'
+import liveReducer from './containers/Popup/reducers'
 
 export const initialState = {}
 

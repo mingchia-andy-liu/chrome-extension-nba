@@ -1,12 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Switch, Route, Redirect, withRouter  } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import * as actions from '../actions'
-import PopUp from './PopUp'
-import BoxScores from './BoxScores'
-import DevTools from './DevTools'
+import PopUp from '../PopUp'
+import BoxScores from '../BoxScores'
+import DevTools from '../DevTools'
 
 import 'react-sticky-table/dist/react-sticky-table.css';
 
@@ -16,10 +14,6 @@ const AppBase = styled.div``;
 class App extends React.Component {
     constructor(props) {
         super(props)
-    }
-
-    componentDidMount() {
-        this.props.fetchLiveGames()
     }
 
     render() {
@@ -45,4 +39,4 @@ App.propTypes = {
 
 }
 
-export default withRouter(connect(null, actions)(App))
+export default withRouter(App)
