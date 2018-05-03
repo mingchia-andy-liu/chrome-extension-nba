@@ -19,3 +19,6 @@ ReactDOM.render(
     </Provider>
     , document.getElementById('app')
 )
+
+import showDevTools from './containers/ShowDevTools'
+showDevTools(store);

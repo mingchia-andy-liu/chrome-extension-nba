@@ -1,13 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Row, RowCSS, AlignCenter} from '../styles'
+import {Row, RowCSS, JustifyCenter, AlignCenter, Shadow} from '../styles'
 import {TeamInfo, TeamLogo} from './TeamInfo'
 import {formatClock} from '../utils/format'
 
 
 const Wrapper = styled.div`
     ${RowCSS}
+    ${JustifyCenter}
     ${AlignCenter}
+    ${Shadow}
     min-height: 90px;
     width: 100%;
     margin-bottom: 15px;
@@ -15,7 +17,6 @@ const Wrapper = styled.div`
     background-color: #f9f9f9;
     border-radius: 5px;
     transition: 0.3s;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
 
 
     &:hover {
@@ -27,6 +28,10 @@ const Wrapper = styled.div`
     border: ${props => props.selected
         ? '2px solid rgb(30, 90, 250)'
         : '2px solid transparent'};
+`;
+
+const NoGame = styled(Wrapper)`
+    ${JustifyCenter}
 `;
 
 const MatchInfo = styled.div`
@@ -56,8 +61,17 @@ class Card extends React.PureComponent {
             stt,
             cl,
             broadcaster,
-            series
+            series,
+            nogame
         } = this.props;
+
+        if (nogame) {
+            return (
+                <Wrapper justifyCenter alignCenter>
+                    No games today ¯\_(ツ)_/¯
+                </Wrapper>
+            )
+        }
 
         return (
             <Wrapper>

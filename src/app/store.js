@@ -4,6 +4,8 @@ import { routerMiddleware } from 'react-router-redux'
 import { createBrowserHistory } from 'history'
 import reducer, { initialState } from './reducers'
 
+import DevTools from './containers/DevTools'
+
 export const history = createBrowserHistory()
 
 const middleware = routerMiddleware(history)
@@ -12,5 +14,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 export const store = createStore(
     reducer,
     initialState,
-    composeEnhancers(applyMiddleware(thunk, middleware))
+    composeEnhancers(
+        applyMiddleware(thunk, middleware),
+        // Required! Enable Redux DevTools with the monitors you chose
+        DevTools.instrument()
+    )
 )

@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import { Switch, Route, Redirect, withRouter  } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-// import * as actions from '../actions'
+import * as actions from '../actions'
 import PopUp from './PopUp'
 import BoxScores from './BoxScores'
+import DevTools from './DevTools'
 
 import 'react-sticky-table/dist/react-sticky-table.css';
 
@@ -17,13 +18,17 @@ class App extends React.Component {
         super(props)
     }
 
+    componentDidMount() {
+        this.props.fetchLiveGames()
+    }
+
     render() {
         const { location, user } = this.props
 
         return (
             <AppBase>
                 <Switch>
-                    <Route exact path="/popup2.html" component={ PopUp } />
+                    <Route exact path="/index2.html" component={ PopUp } />
                     <Route exact path="/index.html" component={ BoxScores } />
                     <Route exact path="/changelog2.html" component={ PopUp } />
                     <Route exact path="/options2.html" component={ PopUp } />
@@ -40,7 +45,4 @@ App.propTypes = {
 
 }
 
-const mapStateToProps = () => ({
-})
-
-export default withRouter(connect(mapStateToProps, null)(App))
+export default withRouter(connect(null, actions)(App))

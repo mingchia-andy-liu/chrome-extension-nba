@@ -1,10 +1,12 @@
 import React, {Fragment} from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Card from '../components/Card'
 import CardList from '../components/CardList';
 import Links from '../components/Links'
 import { Tab, TabItem } from '../components/Tab'
 import { PlayByPlay, Summary } from '../components/Scores'
+import { Shadow } from '../styles'
 
 const Wrapper = styled.div`
     display: grid;
@@ -26,10 +28,12 @@ const Cards = styled.div`
 
 `;
 const Content = styled.div`
+    ${Shadow}
     grid-area: content;
     background-color: #fff;
     overflow-y: scroll !important;
     padding: 10px;
+    border-radius: 5px;
 `;
 
 const Title = styled.h2`
@@ -102,6 +106,7 @@ class BoxScores extends React.Component {
     constructor(props) {
         super(props)
     }
+
     render() {
         return (
             <Wrapper>
@@ -112,7 +117,7 @@ class BoxScores extends React.Component {
                         <TabItem to="/" label="Playoff"/>
                     </Tab>
                  </NavBar>
-                <CardList />
+                <CardList games={this.props.live.games}/>
                 <Content>
                     <Summary home={home} visitor={visitor} />
                     <Summary home={home} visitor={visitor} />
@@ -122,4 +127,8 @@ class BoxScores extends React.Component {
     }
 }
 
-export default BoxScores
+const mapStateToProps = ({ live }) => ({
+    live
+})
+
+export default connect(mapStateToProps, null)(BoxScores)

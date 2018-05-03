@@ -17,7 +17,6 @@ const Row = styled(StickyRow)`
 `;
 
 const renderPBPRow = (play, i) => {
-    console.log(play, i)
     const index = play.de.indexOf(']')
     const name = play.etype < 1 || play.etype > 9 ? '' : play.de.substring(1, 4)
     const color = getLogoColor(name)
@@ -43,27 +42,12 @@ const renderPBPRow = (play, i) => {
 
 class PlayByPlay extends React.PureComponent {
     render() {
-        console.log(this.props.pbp)
         return (
             <div style={{width: '100%', height: '400px'}}>
                 <Table stickyHeaderCount={0} stickyColumnCount={0}>
-                    <Row>
-                        <HeaderCell> Clock </HeaderCell>
-                        <HeaderCell> Team </HeaderCell>
-                        <HeaderCell> Score </HeaderCell>
-                        <HeaderCell> Play </HeaderCell>
-                    </Row>
-                    <Row>
-              <Cell>Cell 1</Cell>
-              <Cell>Cell 2</Cell>
-              <Cell>Cell 2</Cell>
-              <Cell>Cell 2</Cell>
-            </Row>
-                    {/* {this.props.pbp.map((element, index) =>{
-                        console.log(renderPBPRow(element, index))
-                        return renderPBPRow(element, index)
-                    }
-                    )} */}
+                    {this.props.pbp.map((element, index) => (
+                        renderPBPRow(element, index)
+                    ))}
                 </Table>
             </div>
         )

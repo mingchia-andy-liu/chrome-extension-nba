@@ -124,3 +124,7 @@ export const JustifyCenter = css`
 export const AlignCenter = css`
     align-items: center;
 `
+
+export const Shadow = css`
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+`;
