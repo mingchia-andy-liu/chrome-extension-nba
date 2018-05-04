@@ -12,10 +12,11 @@ const PlayerName = styled(Cell)`
     display: flex !important;
     flex-direction: row;
     text-align: left;
+    align-items: center;
     border-right: 1px solid hsl(0, 0%, 95%);
 `
 
-const renderHeaderRow = () => {
+const renderHeaderRow = (num) => {
     const headers = [
         'Player',
         'MIN',
@@ -40,7 +41,7 @@ const renderHeaderRow = () => {
     return (
         <Row>
             {headers.map(element => (
-                <HeaderCell key={`stats-${element}`}>{element}</HeaderCell>
+                <HeaderCell key={`stats-${element}-${num}`}>{element}</HeaderCell>
             ))}
         </Row>
     )
@@ -56,7 +57,7 @@ const renderPlayerRow = (player, isLive) => {
     const ln = player.ln
 
     return (
-        <Row>
+        <Row key={`${player.fn}-${player.ln}`}>
             <PlayerName style={{ minWidth: '120px' }}>
                 {`${fn} ${ln}`}
                 {player.pos && <Sup>{player.pos}</Sup>}
@@ -83,28 +84,31 @@ const renderPlayerRow = (player, isLive) => {
     )
 }
 
-class BoxScore extends React.PureComponent {
+class TeamStats extends React.PureComponent {
     render() {
-        const { players, isLive } = this.props
+        const { htstsg, vtstsg, isLive } = this.props
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
-                    {renderHeaderRow()}
-                    {players.map(player => (renderPlayerRow(player, isLive)))}
+                    {renderHeaderRow(0)}
+                    {htstsg.map(player => (renderPlayerRow(player, isLive)))}
+                    {renderHeaderRow(1)}
+                    {vtstsg.map(player => (renderPlayerRow(player, isLive)))}
                 </StickyTable>
             </Wrapper>
         )
     }
 }
 
-BoxScore.propTypes = {
-    players: PropTypes.object.isRequired,
+TeamStats.propTypes = {
+    htstsg: PropTypes.array.isRequired,
+    vtstsg: PropTypes.array.isRequired,
     isLive: PropTypes.bool,
 }
 
-BoxScore.defaultProps = {
+TeamStats.defaultProps = {
     isLive: false,
 }
 
 
-export default BoxScore
+export default TeamStats

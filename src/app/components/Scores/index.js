@@ -1,5 +1,5 @@
 import PlayByPlay from './PlayByPlay'
 import Summary from './Summary'
-import BoxScore from './BoxScore'
+import PlayerStats from './PlayerStats'
 
-export { PlayByPlay, Summary, BoxScore }
+export { PlayByPlay, Summary, PlayerStats }

@@ -12,6 +12,7 @@ const appReducer = combineReducers({
 
 // combined reducer
 export default combineReducers({
+    routing,
     // app: appReducer,
     live: liveReducer,
     bs: boxScoresReducer,

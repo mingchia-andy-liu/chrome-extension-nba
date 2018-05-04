@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table';
 import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
-import { Flex } from '../../styles'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -14,7 +13,7 @@ const renderTeamRow = (name, scores, otherSocres, final, otherFinal) => (
         <RowHeaderCell>{name}</RowHeaderCell>
         {scores.map((period, index) => (
             <Cell
-                key={`period-${name}-${period.peroid}`}
+                key={`period-${period.peroid}-${index}`}
                 winning={period.score > otherSocres[index].score ? 1 : 0}
             >
                 {period.score}

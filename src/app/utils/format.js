@@ -23,7 +23,8 @@ export const RowHeaderCell = styled(HeaderCell)`
 `
 
 export const Sup = styled.div`
-    font-size: xx-small;
+    font-size: x-small;
+    color: hsl(0, 0%, 30%);
     vertical-align: super;
 `
 

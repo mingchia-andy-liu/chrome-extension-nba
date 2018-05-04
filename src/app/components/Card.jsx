@@ -62,7 +62,8 @@ class Card extends React.PureComponent {
             cl,
             broadcaster,
             series,
-            nogame
+            nogame,
+            onClick,
         } = this.props;
 
         if (nogame) {
@@ -74,7 +75,7 @@ class Card extends React.PureComponent {
         }
 
         return (
-            <Wrapper>
+            <Wrapper onClick={onClick} data-gid={gid}>
                 <TeamInfo>
                     <TeamLogo team={vta}>{vta}</TeamLogo>
                     <div>{vtn}</div>

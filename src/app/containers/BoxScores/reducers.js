@@ -13,8 +13,7 @@ const formatPeroid = (key, score) => ({
     score,
 })
 
-const sanitizeHelper = ({ q1, q2, q3, q4, ot1, ot2, ot3, ot4, ot5, ot6, ot7, ot8, ot9, ot10
-}) => ([
+const sanitizeHelper = ({ q1, q2, q3, q4, ot1, ot2, ot3, ot4, ot5, ot6, ot7, ot8, ot9, ot10 }) => ([
     formatPeroid('Q1', q1),
     formatPeroid('Q2', q2),
     formatPeroid('Q3', q3),

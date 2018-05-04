@@ -24,11 +24,11 @@ const sanitizeGame = (game) => ({
     series: game.stt === 'Final' ? '' : game.lm.seri,
 })
 
-const generateCards = (games) => {
+const generateCards = (games, rest) => {
     return (
         <Fragment>
             {games.map((game, index) =>
-                <Card key={`card-${index}`} {...sanitizeGame(game)} />
+                <Card key={`card-${index}`} {...sanitizeGame(game)} {...rest}/>
             )}
         </Fragment>
     )
@@ -37,17 +37,18 @@ const generateCards = (games) => {
 
 class CardList extends React.PureComponent {
     render() {
-        if (this.props.games.length === 0) {
+        const { games, ...rest} = this.props
+        if (games.length === 0) {
             return (
                 <Wrapper>
-                    <Card nogame/>
+                    <Card nogame {...rest}/>
                 </Wrapper>
             )
         }
 
         return (
             <Wrapper>
-                {generateCards(this.props.games)}
+                {generateCards(games, rest)}
             </Wrapper>
         )
     }

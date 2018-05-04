@@ -29,7 +29,7 @@ class PopUp extends React.Component {
     render() {
         return (
             <Wrapper>
-                <Title>Today's Games</Title>
+                <Title>Today&apos;s Games</Title>
                 <Links />
                 <CardList games={this.props.live.games}/>
             </Wrapper>
