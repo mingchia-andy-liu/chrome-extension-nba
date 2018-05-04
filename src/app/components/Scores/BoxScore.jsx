@@ -1,19 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StickyTable, Row } from 'react-sticky-table';
-import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
-import { Flex } from '../../styles'
+import { StickyTable, Row } from 'react-sticky-table'
+import { Cell, HeaderCell, Sup, formatMinutes, toPercentage } from '../../utils/format'
 
 const Wrapper = styled.div`
     width: 100%;
-`;
+`
 
+const PlayerName = styled(Cell)`
+    display: flex !important;
+    flex-direction: row;
+    text-align: left;
+    border-right: 1px solid hsl(0, 0%, 95%);
+`
 
 const renderHeaderRow = () => {
     const headers = [
         'Player',
         'MIN',
+        'PTS',
         'FGM-A',
         'FG%',
         '3PM-A',
@@ -28,13 +34,16 @@ const renderHeaderRow = () => {
         'BLK',
         'TOV',
         'PF',
-        '+/-',
-        'PTS'
+        '+/-'
     ]
 
-    return headers.map(element => {
-        <HeaderCell>{element}</HeaderCell>
-    })
+    return (
+        <Row>
+            {headers.map(element => (
+                <HeaderCell key={`stats-${element}`}>{element}</HeaderCell>
+            ))}
+        </Row>
+    )
 }
 
 /**
@@ -48,12 +57,13 @@ const renderPlayerRow = (player, isLive) => {
 
     return (
         <Row>
-            <Cell style={{textAlign: 'left'}}>
+            <PlayerName style={{ minWidth: '120px' }}>
                 {`${fn} ${ln}`}
                 {player.pos && <Sup>{player.pos}</Sup>}
                 {isLive && player.court && <img src="assets/png/icon-color-48.png"></img>}
-            </Cell>
+            </PlayerName>
             <Cell>{formatMinutes(player)}</Cell>
+            <Cell>{player.pts}</Cell>
             <Cell>{player.fgm.toString() + '-' + player.fga.toString()}</Cell>
             <Cell>{toPercentage(player.fgm / player.fga)}</Cell>
             <Cell>{player.tpm.toString() + '-' + player.tpa.toString()}</Cell>
@@ -69,19 +79,18 @@ const renderPlayerRow = (player, isLive) => {
             <Cell>{player.tov}</Cell>
             <Cell>{player.pf}</Cell>
             <Cell>{player.pm !== undefined ? player.pm : ''}</Cell>
-            <Cell>{player.pts}</Cell>
         </Row>
     )
 }
 
 class BoxScore extends React.PureComponent {
     render() {
-        const { player, isLive } = this.props
+        const { players, isLive } = this.props
         return (
             <Wrapper>
-                <StickyTable>
+                <StickyTable stickyHeaderCount={0}>
                     {renderHeaderRow()}
-                    {renderPlayerRow(player, isLive)}
+                    {players.map(player => (renderPlayerRow(player, isLive)))}
                 </StickyTable>
             </Wrapper>
         )
@@ -89,7 +98,7 @@ class BoxScore extends React.PureComponent {
 }
 
 BoxScore.propTypes = {
-    player: PropTypes.object.isRequired,
+    players: PropTypes.object.isRequired,
     isLive: PropTypes.bool,
 }
 

@@ -81,9 +81,9 @@ class Card extends React.PureComponent {
                 </TeamInfo>
                 <MatchInfo>
                     <Row>
-                        <TeamScore winning={vs > hs ? 1 : 0}> {vs} </TeamScore>
+                        <TeamScore winning={vs.s > hs.s ? 1 : 0}> {vs.s} </TeamScore>
                         -
-                        <TeamScore winning={vs < hs ? 1 : 0}> {hs} </TeamScore>
+                        <TeamScore winning={vs.s < hs.s ? 1 : 0}> {hs.s} </TeamScore>
                     </Row>
                     {series && <div>{series}</div>}
                     <div>{formatClock(cl, stt)}</div>

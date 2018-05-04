@@ -3,13 +3,12 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { ColumnCSS } from '../styles'
 import Card from './Card'
-import {formatGames, gamesAPI} from '../utils/format'
 
 
 const Wrapper = styled.div`
     ${ColumnCSS}
     width: 100%;
-`;
+`
 
 const sanitizeGame = (game) => ({
     gid: game.gid,
@@ -19,8 +18,8 @@ const sanitizeGame = (game) => ({
     vta: game.v.ta,
     htn: game.h.tn,
     vtn: game.v.tn,
-    hs: game.h.s,
-    vs: game.v.s,
+    hs: game.h,
+    vs: game.v,
     broadcaster: game.bd ? game.bd : '',
     series: game.stt === 'Final' ? '' : game.lm.seri,
 })
@@ -55,7 +54,7 @@ class CardList extends React.PureComponent {
 }
 
 CardList.propTypes = {
-    games: PropTypes.arrayOf(PropTypes.object).isRequired
+    games: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default CardList

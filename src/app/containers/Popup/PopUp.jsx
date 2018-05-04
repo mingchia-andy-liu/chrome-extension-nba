@@ -10,6 +10,7 @@ import * as actions from './actions'
 const Wrapper = styled(Column)`
     padding: 0 10px;
     width: 100%;
+    min-width: 330px;
 `;
 
 const Title = styled.h2`

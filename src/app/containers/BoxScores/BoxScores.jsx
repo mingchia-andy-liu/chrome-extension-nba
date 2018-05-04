@@ -1,11 +1,9 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Card from '../../components/Card'
-import CardList from '../../components/CardList';
-import Links from '../../components/Links'
+import CardList from '../../components/CardList'
 import { Tab, TabItem } from '../../components/Tab'
-import { PlayByPlay, Summary } from '../../components/Scores'
+import { PlayByPlay, Summary, BoxScore } from '../../components/Scores'
 import { Shadow } from '../../styles'
 import * as actions from './actions'
 
@@ -25,8 +23,6 @@ const NavBar = styled.div`
 `;
 const Cards = styled.div`
     grid-area: cards;
-    background-color: blue;
-
 `;
 const Content = styled.div`
     ${Shadow}
@@ -37,84 +33,64 @@ const Content = styled.div`
     border-radius: 5px;
 `;
 
-const Title = styled.h2`
-    text-align: center;
-`;
-
-const home = {
-    name: 'home',
-    summary: [
-        {
-            value: 0,
-            score: 10
-        },
-        {
-            value: 1,
-            score: 10
-        },
-        {
-            value: 2,
-            score: 10
-        },
-        {
-            value: 3,
-            score: 10
-        },
-        {
-            value: 4,
-            score: 10
-        },
-        {
-            value: 5,
-            score: 10
-        }
-    ],
-    score: 20
-}
-
-const visitor = {
-    name: 'asd',
-    summary: [
-        {
-            value: 0,
-            score: 10
-        },
-        {
-            value: 1,
-            score: 10
-        },
-        {
-            value: 2,
-            score: 10
-        },
-        {
-            value: 3,
-            score: 10
-        },
-        {
-            value: 4,
-            score: 10
-        },
-        {
-            value: 5,
-            score: 10
-        }
-    ],
-    score: 21
-}
-
 class BoxScores extends React.Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            gid: '0041700212',
+        }
     }
 
     componentDidMount() {
-        console.log('[DidMount] fetching BS')
-        this.props.fetchPlayByPlay('0041700222')
-        this.props.fetchLiveGameBox('0041700222')
+        this.props.live.games.forEach(({ gid }) => {
+            this.props.fetchPlayByPlay(gid)
+            this.props.fetchLiveGameBox(gid)
+        })
+    }
+
+    renderSummary() {
+        if (Object.keys(this.props.bs.gameDetails).length === 0) {
+
+        } else {
+            if (this.props.bs.gameDetails['0041700212'] &&
+                this.props.bs.gameDetails['0041700212'].bs) {
+                const {
+                    hs,
+                    vs,
+                    htn,
+                    vtn,
+                    hss,
+                    vss,
+                } = this.props.bs.gameDetails['0041700212'].bs
+                return (
+                    <Summary hs={hs} vs={vs} htn={htn} vtn={vtn} vss={vss} hss={hss}/>
+                )
+            }
+        }
+    }
+
+    renderBoxScores() {
+        const { bs } = this.props
+        if (Object.keys(bs.gameDetails).length !== 0 &&
+            bs.gameDetails['0041700212'] &&
+            bs.gameDetails['0041700212'].bs) {
+            return (
+                <React.Fragment>
+                    <BoxScore players={bs.gameDetails['0041700212'].bs.hpstsg} />
+                    <BoxScore players={bs.gameDetails['0041700212'].bs.vpstsg} />
+                </React.Fragment>
+            )
+        }
     }
 
     render() {
+        const { live, bs } = this.props
+        if (bs.isLoading || live.isLoading) {
+            return (
+                <div>Loading...</div>
+            )
+        }
         return (
             <Wrapper>
                 <NavBar>
@@ -123,11 +99,13 @@ class BoxScores extends React.Component {
                         <TabItem to="/" label="Standings"/>
                         <TabItem to="/" label="Playoff"/>
                     </Tab>
-                 </NavBar>
-                <CardList games={this.props.live.games}/>
+                </NavBar>
+                <Cards>
+                    <CardList games={live.games}/>
+                </Cards>
                 <Content>
-                    <Summary home={home} visitor={visitor} />
-                    <Summary home={home} visitor={visitor} />
+                    {this.renderSummary()}
+                    {this.renderBoxScores()}
                 </Content>
             </Wrapper>
         )
@@ -136,7 +114,7 @@ class BoxScores extends React.Component {
 
 const mapStateToProps = ({ live, bs }) => ({
     live,
-    bs
+    bs,
 })
 
 export default connect(mapStateToProps, actions)(BoxScores)

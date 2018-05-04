@@ -9,36 +9,38 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-const renderTeamRow = (team, otherTeam) => (
+const renderTeamRow = (name, scores, otherSocres, final, otherFinal) => (
     <Row>
-        <RowHeaderCell>{team.name}</RowHeaderCell>
-        {team.summary.map((period, index) => (
+        <RowHeaderCell>{name}</RowHeaderCell>
+        {scores.map((period, index) => (
             <Cell
-                key={`period-${period.value}`}
-                winning={period.value > otherTeam.summary[index].value ? 1 : 0}
+                key={`period-${name}-${period.peroid}`}
+                winning={period.score > otherSocres[index].score ? 1 : 0}
             >
                 {period.score}
             </Cell>
         ))}
-        <Cell winning={team.score > otherTeam.score ? 1 : 0}>{team.score}</Cell>
+        <Cell winning={final > otherFinal ? 1 : 0}>{final}</Cell>
     </Row>
 )
 
 class Summary extends React.PureComponent {
     render() {
-        const { home, visitor } = this.props
+        const { hs, vs, htn, vtn, hss, vss } = this.props
+        console.log(this.props)
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
                     <Row>
                         <RowHeaderCell style={{borderTopLeftRadius: '5px'}}> Team </RowHeaderCell>
-                        {home.summary.map((period, index) => (
-                            <HeaderCell key={`peroid-${period.value}`}> {period.name} </HeaderCell>
+                        {hs.map(period => (
+                            // TODO: hides the unstart peroid
+                            <HeaderCell key={`period-${period.period}`}> {period.period} </HeaderCell>
                         ))}
                         <HeaderCell style={{borderTopRightRadius: '5px'}}> Final </HeaderCell>
                     </Row>
-                    {renderTeamRow(home, visitor)}
-                    {renderTeamRow(visitor, home)}
+                    {renderTeamRow(htn, hs, vs, hss, vss)}
+                    {renderTeamRow(vtn, vs, hs, vss, hss)}
                 </StickyTable>
             </Wrapper>
         )
@@ -46,8 +48,12 @@ class Summary extends React.PureComponent {
 }
 
 Summary.propTypes = {
-    home: PropTypes.object.isRequired,
-    visitor: PropTypes.object.isRequired,
+    htn: PropTypes.string.isRequired,
+    vtn: PropTypes.string.isRequired,
+    hss: PropTypes.number.isRequired,
+    vss: PropTypes.number.isRequired,
+    hs: PropTypes.arrayOf(PropTypes.object).isRequired,
+    vs: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 
