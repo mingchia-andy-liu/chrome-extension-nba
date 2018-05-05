@@ -29,8 +29,7 @@
             "js/common/date_utils.js",
             "js/alarms/alarms.js",
             "js/alarms/listeners.js",
-            "js/background/background.js",
-            "js/ga.js"
+            "js/background/background.js"
         ],
         "persistent": false
     },

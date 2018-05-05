@@ -5,10 +5,10 @@ import { Router } from 'react-router-dom'
 import { store, history } from './store'
 import './styles'
 import App from './containers/App'
+import browser from './utils/browser'
 
-// // Create a connection with the background script to handle open and
-// // close events.
-// browser.runtime.connect();
+// Create a connection with the background script to handle open and close events.
+browser.connect()
 
 ReactDOM.render(
     <Provider store={store}>
