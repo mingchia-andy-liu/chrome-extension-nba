@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {Row, RowCSS, JustifyCenter, AlignCenter, Shadow} from '../styles'
-import {TeamInfo, TeamLogo} from './TeamInfo'
-import {formatClock} from '../utils/format'
+import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
+import TeamInfo from './TeamInfo'
+import MatchInfo from './MatchInfo'
 
 
 const Wrapper = styled.div`
@@ -28,74 +29,55 @@ const Wrapper = styled.div`
     border: ${props => props.selected
         ? '2px solid rgb(30, 90, 250)'
         : '2px solid transparent'};
-`;
-
-const NoGame = styled(Wrapper)`
-    ${JustifyCenter}
-`;
-
-const MatchInfo = styled.div`
-    flex-basis: 40%;
-    text-align: center;
-
-    & > * {
-        margin-top: 5px;
-    }
-`;
-
-const TeamScore = styled.div`
-    flex-grow: 2;
-    ${props => props.winning && 'color: green;'};
-`;
+`
 
 class Card extends React.PureComponent {
     render() {
         const {
-            gid,
-            hta,
-            vta,
-            htn,
-            vtn,
-            hs,
-            vs,
-            stt,
-            cl,
-            broadcaster,
-            series,
+            id,
+            home,
+            visitor,
             nogame,
             onClick,
-        } = this.props;
+            ...rest
+        } = this.props
+
 
         if (nogame) {
             return (
-                <Wrapper justifyCenter alignCenter>
+                <Wrapper>
                     No games today ¯\_(ツ)_/¯
                 </Wrapper>
             )
         }
 
+        const {
+            abbreviation: hta,
+            nickname: htn,
+        } = home
+
+        const  {
+            abbreviation: vta,
+            nickname: vtn,
+        } = visitor
+
+
         return (
-            <Wrapper onClick={onClick} data-gid={gid}>
-                <TeamInfo>
-                    <TeamLogo team={vta}>{vta}</TeamLogo>
-                    <div>{vtn}</div>
-                </TeamInfo>
-                <MatchInfo>
-                    <Row>
-                        <TeamScore winning={vs.s > hs.s ? 1 : 0}> {vs.s} </TeamScore>
-                        -
-                        <TeamScore winning={vs.s < hs.s ? 1 : 0}> {hs.s} </TeamScore>
-                    </Row>
-                    {series && <div>{series}</div>}
-                    <div>{formatClock(cl, stt)}</div>
-                </MatchInfo>
-                <TeamInfo>
-                    <TeamLogo team={hta}>{hta}</TeamLogo>
-                    <div>{htn}</div>
-                </TeamInfo>
+            <Wrapper onClick={onClick} data-gid={id}>
+                <TeamInfo ta={vta} tn={vtn} />
+                <MatchInfo home={home} visitor={visitor} {...rest} />
+                <TeamInfo ta={hta} tn={htn} />
             </Wrapper>
         )
     }
+}
+
+Card.PropTypes = {
+    id:PropTypes.string.isRequired,
+    home:PropTypes.object.isRequired,
+    visitor:PropTypes.object.isRequired,
+    nogame:PropTypes.boolean,
+    onClick:PropTypes.func.isRequired,
 }
 
 

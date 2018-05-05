@@ -1,15 +1,13 @@
 import React from 'react'
 import { Switch, Route, Redirect, withRouter  } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import PopUp from '../PopUp'
 import BoxScores from '../BoxScores'
-import DevTools from '../DevTools'
 
-import 'react-sticky-table/dist/react-sticky-table.css';
+import 'react-sticky-table/dist/react-sticky-table.css'
+import 'flatpickr/dist/themes/dark.css'
 
-
-const AppBase = styled.div``;
+const AppBase = styled.div``
 
 class App extends React.Component {
     constructor(props) {
@@ -17,8 +15,6 @@ class App extends React.Component {
     }
 
     render() {
-        const { location, user } = this.props
-
         return (
             <AppBase>
                 <Switch>

@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Card from '../../components/Card'
-import CardList from '../../components/CardList';
+import CardList from '../../components/CardList'
+import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
 import { Column } from '../../styles'
 import * as actions from './actions'
+import getAPIDate from '../../utils/getApiDate'
 
 const Wrapper = styled(Column)`
     padding: 0 10px;
@@ -23,13 +24,13 @@ class PopUp extends React.Component {
     }
 
     componentDidMount() {
-        this.props.fetchGames()
+        this.props.fetchGames(getAPIDate().format('YYYYMMDD'))
     }
 
     render() {
         return (
             <Wrapper>
-                <Title>Today&apos;s Games</Title>
+                <DatePicker />
                 <Links />
                 <CardList games={this.props.live.games}/>
             </Wrapper>

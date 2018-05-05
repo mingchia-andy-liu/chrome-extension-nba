@@ -1,10 +1,36 @@
 import types from './types'
+import moment from 'moment-timezone'
 
 const initState = {
-    dateET: new Date(0),
-    dateTZ: new Date(0),
     isLoading: false,
     games: [],
+}
+
+const sanitizeGame = game => ({
+    id: game.id,
+    date: game.date,
+    time: game.time,
+    state: game.state,
+    arena: {
+        name: game.arena,
+        city: game.city,
+    },
+    broadcasters: game.broadcasters,
+    home: game.home,
+    visitor: game.visitor,
+    playoffs: game.playoffs,
+    periodTime: {
+        // have not start
+        periodStatus: game.period_time.game_status === '1'
+            ? moment.tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York').local().format('hh:mm A')
+            : game.period_time.period_status,
+        gameClock: game.period_time.game_clock,
+        gameStatus: game.period_time.game_status,
+    },
+})
+
+const sanitizeGames = games => {
+    return games.map(game => sanitizeGame(game))
 }
 
 export default (state = initState, action) => {
@@ -18,14 +44,13 @@ export default (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                games: action.payload.g,
-                dateET: new Date(action.payload.gdte)
+                games: sanitizeGames(action.payload),
             }
         case types.REQUEST_ERROR:
             return {
                 ...state,
                 isLoading: false,
-                games: []
+                games: [],
             }
         default:
             return state

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import CardList from '../../components/CardList'
+import DatePicker from '../../containers/DatePicker'
 import { Tab, TabItem } from '../../components/Tab'
 import { PlayByPlay, Summary, PlayerStats } from '../../components/Scores'
 import { Shadow, RowCSS } from '../../styles'
@@ -135,6 +136,7 @@ class BoxScores extends React.Component {
                     </Tab>
                 </NavBar>
                 <Cards>
+                    <DatePicker />
                     <CardList games={live.games} onClick={this.selecteGame.bind(this)}/>
                 </Cards>
                 <Content>

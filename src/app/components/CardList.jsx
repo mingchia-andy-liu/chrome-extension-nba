@@ -10,25 +10,11 @@ const Wrapper = styled.div`
     width: 100%;
 `
 
-const sanitizeGame = (game) => ({
-    gid: game.gid,
-    stt: game.stt,
-    cl: game.cl,
-    hta: game.h.ta,
-    vta: game.v.ta,
-    htn: game.h.tn,
-    vtn: game.v.tn,
-    hs: game.h,
-    vs: game.v,
-    broadcaster: game.bd ? game.bd : '',
-    series: game.stt === 'Final' ? '' : game.lm.seri,
-})
-
 const generateCards = (games, rest) => {
     return (
         <Fragment>
             {games.map((game, index) =>
-                <Card key={`card-${index}`} {...sanitizeGame(game)} {...rest}/>
+                <Card key={`card-${index}`} {...game} {...rest}/>
             )}
         </Fragment>
     )

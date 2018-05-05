@@ -26,7 +26,6 @@ const renderTeamRow = (name, scores, otherSocres, final, otherFinal) => (
 class Summary extends React.PureComponent {
     render() {
         const { hs, vs, htn, vtn, hss, vss } = this.props
-        console.log(this.props)
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
