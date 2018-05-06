@@ -3,6 +3,7 @@ import { routerReducer as routing } from 'react-router-redux'
 
 import liveReducer from './containers/Popup/reducers'
 import boxScoresReducer from './containers/BoxScores/reducers'
+import dateReducer from './containers/DatePicker/reducers'
 
 export const initialState = {}
 
@@ -16,4 +17,5 @@ export default combineReducers({
     // app: appReducer,
     live: liveReducer,
     bs: boxScoresReducer,
+    date: dateReducer,
 })

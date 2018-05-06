@@ -26,6 +26,7 @@ const sanitizeGame = game => ({
             : game.period_time.period_status,
         gameClock: game.period_time.game_clock,
         gameStatus: game.period_time.game_status,
+        periodValue: game.period_time.period_value,
     },
 })
 

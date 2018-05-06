@@ -7,16 +7,16 @@ const webpackDevConfig = {
     devtool: 'cheap-module-eval-source-map',
     // https://webpack.js.org/concepts/mode/
     mode: 'development',
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: path.resolve(__dirname, 'src', 'index.html'),
-            template: path.resolve(__dirname, 'src', 'index.html')
-          }),
-    ]
+    // plugins: [
+    //     new HtmlWebpackPlugin({
+    //         filename: path.resolve(__dirname, 'src', 'index.html'),
+    //         template: path.resolve(__dirname, 'src', 'index.html')
+    //       }),
+    // ]
 }
 const webpackProdConfig = {
     // https://webpack.js.org/concepts/mode/
-    mode: 'production'
+    mode: 'production',
 }
 
 
@@ -53,7 +53,7 @@ let webpackConfig = {
     },
     devServer: {
         host: 'localhost',
-        contentBase: path.resolve(__dirname, 'src')
+        contentBase: path.resolve(__dirname, 'src'),
     },
 }
 

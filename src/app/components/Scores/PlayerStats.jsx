@@ -53,47 +53,56 @@ const renderHeaderRow = (num) => {
  * @param {*} isLive
  */
 const renderPlayerRow = (player, isLive) => {
-    const fn = player && player.fn.trim() ? player.fn.charAt(0) + '.' : ''
-    const ln = player.ln
+    const fn = player && player.first_name.trim() ? player.first_name.charAt(0) + '.' : ''
+    const ln = player.last_name
+    const name = player.last_name !== '' ? `${fn} ${ln}` : player.first_name
 
     return (
         <Row key={`${player.fn}-${player.ln}`}>
             <PlayerName style={{ minWidth: '120px' }}>
-                {`${fn} ${ln}`}
-                {player.pos && <Sup>{player.pos}</Sup>}
-                {isLive && player.court && <img src="assets/png/icon-color-48.png"></img>}
+                {name}
+                {player.starting_position && <Sup>{player.starting_position}</Sup>}
+                {isLive && +player.on_court && <img src="assets/png/icon-color-48.png"></img>}
             </PlayerName>
             <Cell>{formatMinutes(player)}</Cell>
-            <Cell>{player.pts}</Cell>
-            <Cell>{player.fgm.toString() + '-' + player.fga.toString()}</Cell>
-            <Cell>{toPercentage(player.fgm / player.fga)}</Cell>
-            <Cell>{player.tpm.toString() + '-' + player.tpa.toString()}</Cell>
-            <Cell>{toPercentage(player.tpm / player.tpa)}</Cell>
-            <Cell>{player.ftm.toString() + '-' + player.fta.toString()}</Cell>
-            <Cell>{toPercentage(player.ftm / player.fta)}</Cell>
-            <Cell>{player.oreb}</Cell>
-            <Cell>{player.dreb}</Cell>
-            <Cell>{player.reb}</Cell>
-            <Cell>{player.ast}</Cell>
-            <Cell>{player.stl}</Cell>
-            <Cell>{player.blk}</Cell>
-            <Cell>{player.tov}</Cell>
-            <Cell>{player.pf}</Cell>
-            <Cell>{player.pm !== undefined ? player.pm : ''}</Cell>
+            <Cell>{player.points}</Cell>
+            <Cell>{`${player.field_goals_made}-${player.field_goals_attempted}`}</Cell>
+            <Cell>{toPercentage(+player.field_goals_made / +player.field_goals_attempted)}</Cell>
+            <Cell>{`${player.three_pointers_made}-${player.three_pointers_attempted}`}</Cell>
+            <Cell>{toPercentage(+player.three_pointers_made / +player.three_pointers_attempted)}</Cell>
+            <Cell>{`${player.free_throws_made}-${player.free_throws_attempted}`}</Cell>
+            <Cell>{toPercentage(+player.free_throws_made / +player.free_throws_attempted)}</Cell>
+            <Cell>{player.rebounds_offensive}</Cell>
+            <Cell>{player.rebounds_defensive}</Cell>
+            <Cell>{+player.rebounds_offensive + +player.rebounds_defensive}</Cell>
+            <Cell>{player.assists}</Cell>
+            <Cell>{player.steals}</Cell>
+            <Cell>{player.blocks}</Cell>
+            <Cell>{player.turnovers}</Cell>
+            <Cell>{player.fouls}</Cell>
+            <Cell>{player.plus_minus}</Cell>
         </Row>
     )
 }
 
 class PlayerStats extends React.PureComponent {
     render() {
-        const { hpstsg, vpstsg, isLive } = this.props
+        const { hps, vps, isLive } = this.props
+        if ( hps.length === 0 || vps.length === 0) {
+            return (
+                <Wrapper>
+                    No Player Data Avaiable
+                </Wrapper>
+            )
+        }
+
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
                     {renderHeaderRow(0)}
-                    {hpstsg.map(player => (renderPlayerRow(player, isLive)))}
+                    {vps.map(player => (renderPlayerRow(player, isLive)))}
                     {renderHeaderRow(1)}
-                    {vpstsg.map(player => (renderPlayerRow(player, isLive)))}
+                    {hps.map(player => (renderPlayerRow(player, isLive)))}
                 </StickyTable>
             </Wrapper>
         )
@@ -101,8 +110,8 @@ class PlayerStats extends React.PureComponent {
 }
 
 PlayerStats.propTypes = {
-    hpstsg: PropTypes.array.isRequired,
-    vpstsg: PropTypes.array.isRequired,
+    hps: PropTypes.array.isRequired,
+    vps: PropTypes.array.isRequired,
     isLive: PropTypes.bool,
 }
 

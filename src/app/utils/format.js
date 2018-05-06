@@ -71,27 +71,9 @@ export const formatClock = (clock, status) => {
 /**
  * Format Box score table's player minutes.
  * @param {row object} player
- *  @property {string} memo is the player status memo (injury)
- *  @property {string} status is the playing status. I for inactive. active otherwise
- *  @property {string} min is the minutes the player has played
- *
- * @returns {string} mm:ss format minutes OR status of the player
  */
-export const formatMinutes = (player) => {
-    if (player.memo) return player.memo
-    else if (player.status && player.status === 'I') {
-        return 'Inactive'
-    }
-    if (player.min === undefined) return ''
-    let min = player.min
-    let sec = player.sec
-    if (player.min.toString().length === 1) {
-        min = '0' + player.min
-    }
-    if (player.sec.toString().length === 1) {
-        sec = '0' + player.sec
-    }
-    return min + ':' + sec
+export const formatMinutes = ({ minutes, seconds }) => {
+    return `${minutes}:${seconds}`
 }
 
 
@@ -104,4 +86,15 @@ export const formatMinutes = (player) => {
 export const toPercentage = (decimal) => {
     if (Number.isNaN(decimal)) return '-'
     else return (decimal * 100).toFixed().toString() + '%'
+}
+
+/**
+ * determine who is winning
+ */
+export const isWinning = (self, other) => {
+    if (self === '' && other === '') {
+        return true
+    } else {
+        return +self > +other
+    }
 }

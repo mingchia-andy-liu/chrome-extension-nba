@@ -1,12 +1,15 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
-import { createBrowserHistory } from 'history'
+import { createHashHistory } from 'history'
 import reducer, { initialState } from './reducers'
 
 import DevTools from './containers/DevTools'
 
-export const history = createBrowserHistory()
+export const history = createHashHistory({
+    basname: '',
+    hashType: 'slash',
+})
 
 const middleware = routerMiddleware(history)
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

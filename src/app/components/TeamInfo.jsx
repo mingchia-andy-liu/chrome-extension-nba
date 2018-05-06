@@ -8,15 +8,25 @@ export const TeamLogo = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 45px;
-    height: 45px;
-    margin-bottom: 8px;
+    min-width: 45px;
+    min-height: 45px;
     color: white;
     border-radius: 50%;
 
     background-color: ${props => props.team
         ? getLogoColor(props.team)
         : '#000000'};
+
+    opacity: ${props => props.winning
+        ? '1'
+        : '0.5'};
+`
+
+const TeamName = styled.div`
+    margin-top: 8px;
+    opacity: ${props => props.winning
+        ? '1'
+        : '0.5'};
 `
 
 const TeamInfoWrapper = styled.div`
@@ -30,11 +40,11 @@ const TeamInfoWrapper = styled.div`
 
 class TeamInfo extends React.PureComponent {
     render() {
-        const { ta, tn } = this.props
+        const { ta, tn, winning } = this.props
         return (
             <TeamInfoWrapper>
-                <TeamLogo team={ta}>{ta}</TeamLogo>
-                <div>{tn}</div>
+                <TeamLogo winning={winning} team={ta}>{ta}</TeamLogo>
+                <TeamName winning={winning}>{tn}</TeamName>
             </TeamInfoWrapper>
         )
     }
@@ -43,6 +53,11 @@ class TeamInfo extends React.PureComponent {
 TeamInfo.propTypes = {
     ta: PropTypes.string.isRequired,
     tn: PropTypes.string.isRequired,
+    winning: PropTypes.bool,
+}
+
+TeamInfo.defaultProps = {
+    winning: true,
 }
 
 export default TeamInfo

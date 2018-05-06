@@ -15,9 +15,30 @@ const Wrapper = styled.div`
 
 const TeamScore = styled.div`
     flex-grow: 2;
-    ${props => props.winning && 'color: green;'};
+    ${props => props.winning ? 'color: green;' : 'opacity:0.5;'};
 `
 
+const renderScores = (gameStatus, home, visitor) => {
+    if (gameStatus !== '1') {
+        return (
+            <Row>
+                <TeamScore winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
+                -
+                <TeamScore winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
+            </Row>
+        )
+    }
+}
+
+const renderStatusAndClock = (status, clock, totalPeriod ) => {
+    if (status === 'Halftime') {
+        return 'Halftime'
+    } else if (status === 'Final' && totalPeriod > 4 ) {
+        return 'Final/OT'
+    } else {
+        return `${status} ${clock}`
+    }
+}
 
 class MatchInfo extends React.PureComponent {
     render() {
@@ -28,6 +49,7 @@ class MatchInfo extends React.PureComponent {
                 periodStatus,
                 gameClock,
                 gameStatus,
+                periodValue,
             },
             playoffs,
         } = this.props
@@ -48,12 +70,8 @@ class MatchInfo extends React.PureComponent {
 
         return (
             <Wrapper>
-                <Row>
-                    <TeamScore winning={visitor.score > home.score ? 1 : 0}> {visitor.score} </TeamScore>
-                    {gameStatus !== '1' && '-'}
-                    <TeamScore winning={visitor.score < home.score ? 1 : 0}> {home.score} </TeamScore>
-                </Row>
-                <div>{`${periodStatus} ${gameClock}`}</div>
+                {renderScores(gameStatus, home, visitor)}
+                <div>{renderStatusAndClock(periodStatus, gameClock, periodValue)}</div>
                 {series && <div>{series}</div>}
             </Wrapper>
         )

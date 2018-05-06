@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import moment from 'moment-timezone'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
@@ -12,11 +15,7 @@ const Wrapper = styled(Column)`
     padding: 0 10px;
     width: 100%;
     min-width: 330px;
-`;
-
-const Title = styled.h2`
-    text-align: center;
-`;
+`
 
 class PopUp extends React.Component {
     constructor(props) {
@@ -27,19 +26,37 @@ class PopUp extends React.Component {
         this.props.fetchGames(getAPIDate().format('YYYYMMDD'))
     }
 
+    selecteGame(e) {
+        const id = e.currentTarget.dataset.id
+        this.props.history.push(`/boxscores/${id}`)
+    }
+
     render() {
+        const { live } = this.props
         return (
             <Wrapper>
-                <DatePicker />
+                <DatePicker onChange={() => {}}/>
                 <Links />
-                <CardList games={this.props.live.games}/>
+                <CardList isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
             </Wrapper>
         )
     }
 }
 
-const mapStateToProps = ({ live }) => ({
-    live
+PopUp.propTypes = {
+    live: PropTypes.object.isRequired,
+    date: PropTypes.shape({
+        date: PropTypes.object.isRequired,
+    }),
+    fetchGames: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired,
+    }),
+}
+
+const mapStateToProps = ({ live, date }) => ({
+    live,
+    date
 })
 
-export default connect(mapStateToProps, actions)(PopUp)
+export default withRouter(connect(mapStateToProps, actions)(PopUp))

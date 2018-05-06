@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
+import { isWinning } from '../utils/format'
 
 
 const Wrapper = styled.div`
@@ -31,54 +32,54 @@ const Wrapper = styled.div`
         : '2px solid transparent'};
 `
 
-class Card extends React.PureComponent {
+class MatchCard extends React.PureComponent {
     render() {
         const {
             id,
             home,
             visitor,
-            nogame,
             onClick,
+            selected,
             ...rest
         } = this.props
-
-
-        if (nogame) {
-            return (
-                <Wrapper>
-                    No games today ¯\_(ツ)_/¯
-                </Wrapper>
-            )
-        }
 
         const {
             abbreviation: hta,
             nickname: htn,
+            score: hs,
         } = home
 
         const  {
             abbreviation: vta,
             nickname: vtn,
+            score: vs,
         } = visitor
 
-
         return (
-            <Wrapper onClick={onClick} data-gid={id}>
-                <TeamInfo ta={vta} tn={vtn} />
+            <Wrapper onClick={onClick} data-id={id} selected={selected}>
+                <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
                 <MatchInfo home={home} visitor={visitor} {...rest} />
-                <TeamInfo ta={hta} tn={htn} />
+                <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
             </Wrapper>
         )
     }
 }
 
-Card.PropTypes = {
+MatchCard.propTypes = {
     id:PropTypes.string.isRequired,
     home:PropTypes.object.isRequired,
     visitor:PropTypes.object.isRequired,
-    nogame:PropTypes.boolean,
     onClick:PropTypes.func.isRequired,
+    selected:PropTypes.bool,
+}
+
+const TextCard = ({ text }) => (
+    <Wrapper > {text} </Wrapper>
+)
+
+TextCard.propTypes = {
+    text: PropTypes.string.isRequired,
 }
 
 
-export default Card
+export { MatchCard, TextCard }

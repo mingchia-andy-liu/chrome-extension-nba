@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { ColumnCSS } from '../styles'
-import Card from './Card'
+import { TextCard, MatchCard } from './Card'
 
 
 const Wrapper = styled.div`
@@ -14,7 +14,7 @@ const generateCards = (games, rest) => {
     return (
         <Fragment>
             {games.map((game, index) =>
-                <Card key={`card-${index}`} {...game} {...rest}/>
+                <MatchCard key={`card-${index}`} {...game} {...rest}/>
             )}
         </Fragment>
     )
@@ -23,11 +23,18 @@ const generateCards = (games, rest) => {
 
 class CardList extends React.PureComponent {
     render() {
-        const { games, ...rest} = this.props
+        const { games, isLoading, ...rest} = this.props
+        if (isLoading) {
+            return (
+                <Wrapper>
+                    <TextCard text={'Loading...'} />
+                </Wrapper>
+            )
+        }
         if (games.length === 0) {
             return (
                 <Wrapper>
-                    <Card nogame {...rest}/>
+                    <TextCard text={'No games today ¯\\_(ツ)_/¯'} />
                 </Wrapper>
             )
         }
@@ -42,6 +49,11 @@ class CardList extends React.PureComponent {
 
 CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
+    isLoading: PropTypes.bool,
+}
+
+CardList.defaultProps = {
+    isLoading: false,
 }
 
 export default CardList

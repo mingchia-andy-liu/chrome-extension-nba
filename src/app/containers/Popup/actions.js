@@ -19,7 +19,6 @@ export const fetchGames = (dateStr) => async (dispatch) => {
             payload: game,
         })
     } catch (error) {
-        console.log('[FetchLiveGames] fetch error', error)
         dispatch({ type: types.REQUEST_ERROR })
     }
 }

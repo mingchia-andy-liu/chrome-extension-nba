@@ -1,12 +1,20 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
 import { Tab, TabItem } from '../../components/Tab'
 import { PlayByPlay, Summary, PlayerStats } from '../../components/Scores'
-import { Shadow, RowCSS } from '../../styles'
-import * as actions from './actions'
+import TeamInfo from '../../components/TeamInfo'
+import Overlay from '../../components/Overlay'
+import Loader from '../../components/Loader'
+import { Shadow, Row } from '../../styles'
+import { isWinning } from '../../utils/format'
+import getAPIDate from '../../utils/getApiDate'
+import { fetchLiveGameBox } from './actions'
+import { fetchGames } from '../Popup/actions'
 
 const Wrapper = styled.div`
     display: grid;
@@ -33,99 +41,120 @@ const Content = styled.div`
     border-radius: 5px;
 `
 
-const Qtr = styled.div`
-    ${RowCSS}
+const Title = styled(Row)`
+    font-size: calc(12px + 1vw);
 `
 
-const QtrBtn = styled.a`
+const StyledTitleItem = styled.div`
     padding: 0 10px;
-    cursor: pointer;
-    ${props => props.selected && 'background-color: blue; color: white;'}
+    ${props => !props.winning && 'opacity:0.5;'};
 `
 
-const quarters = ['Q1', 'Q2', 'Q3','Q4', 'OT1', 'OT2', 'OT3', 'OT4', 'OT5', 'OT6', 'OT7', 'OT8', 'OT9', 'OT10' ]
+const StyledScore= styled(StyledTitleItem)`
+    padding: 0 10px;
+    ${props => props.winning ? 'color: green;' : 'opacity:0.5;'};
+`
 
 class BoxScores extends React.Component {
     constructor(props) {
         super(props)
 
+        const { match : {params : { id } } } = this.props
         this.state = {
-            gid: '0',
+            id: id ? id : '0',
             quarter: 0,
+            date: getAPIDate().format('YYYYMMDD'),
         }
     }
 
     componentDidMount() {
-        this.props.live.games.forEach(({ gid }) => {
-            this.props.fetchPlayByPlay(gid)
-            this.props.fetchLiveGameBox(gid)
-        })
+        this.props.fetchGames(getAPIDate().format('YYYYMMDD'))
+        if (this.state.id !== '0') {
+            this.props.fetchLiveGameBox(getAPIDate().format('YYYYMMDD'), this.state.id)
+        }
     }
 
-    renderSummary() {
-        const {bs} = this.props
-        const { gid } = this.state
-        if (Object.keys(bs.gameDetails).length !== 0) {
-            if (bs.gameDetails[gid] &&
-                bs.gameDetails[gid].bs) {
-                const { hs, vs, htn, vtn, hss, vss } = bs.gameDetails[gid].bs
-                return <Summary hs={hs} vs={vs} htn={htn} vtn={vtn} vss={vss} hss={hss}/>
+    renderTitle(bsData) {
+        const {
+            home: {
+                abbreviation: hta,
+                nickname: htn,
+                score: hs,
+            },
+            visitor: {
+                abbreviation: vta,
+                nickname: vtn,
+                score: vs,
+            },
+        } = bsData
+        return (
+            <Title>
+                <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
+                <StyledScore winning={isWinning(vs, hs)}> {vs} </StyledScore>
+                -
+                <StyledScore winning={isWinning(hs, vs)}> {hs} </StyledScore>
+                <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
+            </Title>
+        )
+
+    }
+
+    renderSummary(bsData) {
+        const {
+            home,
+            visitor,
+        } = bsData
+        return <Summary home={home} visitor={visitor}/>
+    }
+
+    renderPlyaerStats(bsData) {
+        const {
+            home: { players: { player: homePlayers } },
+            visitor: { players: { player: visitorPlayers } },
+        } = bsData
+        return <PlayerStats hps={homePlayers} vps={visitorPlayers} />
+    }
+
+    renderPlaybyPlay(pbpData) {
+        return <PlayByPlay pbp={pbpData} />
+    }
+
+    renderContent() {
+        const { bs: { bsData, pbpData} } = this.props
+        if (Object.keys(bsData).length !== 0 && pbpData.length !== 0) {
+            return (
+                <React.Fragment>
+                    {this.renderTitle(bsData)}
+                    <h3>Summary</h3>
+                    {this.renderSummary(bsData)}
+                    <h3>Player Stats</h3>
+                    {this.renderPlyaerStats(bsData)}
+                    <h3>Play By Play</h3>
+                    {this.renderPlaybyPlay(pbpData)}
+                </React.Fragment>
+            )
+        } else {
+            if (this.state.id === '0') {
+                return <Overlay text={'Click on a game to view details'}/>
+            } else {
+                return <Overlay />
             }
         }
     }
 
-    renderBoxScores() {
-        const { bs } = this.props
-        const { gid } = this.state
-        if (Object.keys(bs.gameDetails).length !== 0 &&
-            bs.gameDetails[gid] &&
-            bs.gameDetails[gid].bs) {
-            const { hpstsg, vpstsg } = bs.gameDetails[gid].bs
-            return <PlayerStats hpstsg={hpstsg} vpstsg={vpstsg} />
-        }
-    }
-
-    renderPlaybyPlay() {
-        const { bs } = this.props
-        const { gid, quarter } = this.state
-        if (Object.keys(bs.gameDetails).length !== 0 &&
-            bs.gameDetails[gid] &&
-            bs.gameDetails[gid].pd) {
-            return <PlayByPlay pbp={bs.gameDetails[gid].pd} quarter={quarter} />
-        }
-    }
-
-    renderQuarters() {
-        return (
-            <Qtr>
-                {quarters.map((q, i) => (
-                    <QtrBtn
-                        key={`qtr-${q}`}
-                        selected={i === this.state.quarter}
-                        onClick={()=> {
-                            this.setState({ quarter: i })
-                        }}
-                    >
-                        {q}
-                    </QtrBtn>
-                ))}
-            </Qtr>
-        )
-    }
-
     selecteGame(e) {
-        this.setState({
-            gid: e.currentTarget.dataset.gid,
-        })
+        const id = e.currentTarget.dataset.id
+        const { date } = this.state
+        this.props.fetchLiveGameBox(date, id)
+        this.setState({ id })
     }
 
     render() {
-        const { live, bs } = this.props
-        if (bs.isLoading || live.isLoading) {
-            return (
-                <div>Loading...</div>
-            )
-        }
+        const {
+            live,
+            bs,
+        } = this.props
+
         return (
             <Wrapper>
                 <NavBar>
@@ -136,26 +165,50 @@ class BoxScores extends React.Component {
                     </Tab>
                 </NavBar>
                 <Cards>
-                    <DatePicker />
-                    <CardList games={live.games} onClick={this.selecteGame.bind(this)}/>
+                    <DatePicker onChange={(date) =>
+                        this.setState({
+                            id: '0',
+                            date,
+                        })}
+                    />
+                    <CardList isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
                 </Cards>
                 <Content>
-                    <h3>Summary</h3>
-                    {this.renderSummary()}
-                    <h3>Player Stats</h3>
-                    {this.renderBoxScores()}
-                    <h3>Play By Play</h3>
-                    {this.renderQuarters()}
-                    {this.renderPlaybyPlay()}
+                    {bs.isLoading
+                        ? <Loader />
+                        : this.renderContent()
+                    }
                 </Content>
             </Wrapper>
         )
     }
 }
 
-const mapStateToProps = ({ live, bs }) => ({
+BoxScores.propTypes = {
+    live: PropTypes.object,
+    bs: PropTypes.shape({
+        bsData: PropTypes.object.isRequired,
+        pbpData: PropTypes.object.isRequired,
+    }),
+    date: PropTypes.shape({
+        date: PropTypes.object.isRequired,
+    }),
+    match: PropTypes.object.isRequired,
+    fetchLiveGameBox: PropTypes.func.isRequired,
+    fetchGames: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = ({ live, bs, date }) => ({
     live,
     bs,
+    date,
 })
 
-export default connect(mapStateToProps, actions)(BoxScores)
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        fetchLiveGameBox,
+        fetchGames,
+    }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BoxScores)
