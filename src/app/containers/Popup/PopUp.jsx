@@ -23,7 +23,16 @@ class PopUp extends React.Component {
     }
 
     componentDidMount() {
-        this.props.fetchGames(getAPIDate().format('YYYYMMDD'))
+        const {
+            date: {
+                date,
+                isDirty,
+            },
+        } = this.props
+        const dateStr = isDirty
+            ? moment(date).format('YYYYMMDD')
+            : getAPIDate().format('YYYYMMDD')
+        this.props.fetchGames(dateStr)
     }
 
     selecteGame(e) {
@@ -56,7 +65,7 @@ PopUp.propTypes = {
 
 const mapStateToProps = ({ live, date }) => ({
     live,
-    date
+    date,
 })
 
 export default withRouter(connect(mapStateToProps, actions)(PopUp))

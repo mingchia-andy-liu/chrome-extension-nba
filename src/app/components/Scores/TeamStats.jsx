@@ -2,98 +2,64 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell, Sup, formatMinutes, toPercentage } from '../../utils/format'
+import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
 
 const Wrapper = styled.div`
     width: 100%;
 `
-
-const PlayerName = styled(Cell)`
-    display: flex !important;
-    flex-direction: row;
-    text-align: left;
-    align-items: center;
-    border-right: 1px solid hsl(0, 0%, 95%);
-`
-
-const renderHeaderRow = (num) => {
+const renderHeaderRow = () => {
     const headers = [
-        'Player',
-        'MIN',
-        'PTS',
+        'Team',
         'FGM-A',
         'FG%',
         '3PM-A',
         '3P%',
         'FTM-A',
         'FT%',
-        'OREB',
-        'DREB',
         'REB',
         'AST',
         'STL',
         'BLK',
         'TOV',
-        'PF',
-        '+/-'
+        'PF'
     ]
 
     return (
         <Row>
             {headers.map(element => (
-                <HeaderCell key={`stats-${element}-${num}`}>{element}</HeaderCell>
+                <HeaderCell key={`stats-${element}`}>{element}</HeaderCell>
             ))}
         </Row>
     )
 }
 
-/**
- * Migrate from `formatBoxScoreData()`
- * @param {*} player
- * @param {*} isLive
- */
-const renderPlayerRow = (player, isLive) => {
-    const fn = player && player.fn.trim() ? player.fn.charAt(0) + '.' : ''
-    const ln = player.ln
-
-    return (
-        <Row key={`${player.fn}-${player.ln}`}>
-            <PlayerName style={{ minWidth: '120px' }}>
-                {`${fn} ${ln}`}
-                {player.pos && <Sup>{player.pos}</Sup>}
-                {isLive && player.court && <img src="assets/png/icon-color-48.png"></img>}
-            </PlayerName>
-            <Cell>{formatMinutes(player)}</Cell>
-            <Cell>{player.pts}</Cell>
-            <Cell>{player.fgm.toString() + '-' + player.fga.toString()}</Cell>
-            <Cell>{toPercentage(player.fgm / player.fga)}</Cell>
-            <Cell>{player.tpm.toString() + '-' + player.tpa.toString()}</Cell>
-            <Cell>{toPercentage(player.tpm / player.tpa)}</Cell>
-            <Cell>{player.ftm.toString() + '-' + player.fta.toString()}</Cell>
-            <Cell>{toPercentage(player.ftm / player.fta)}</Cell>
-            <Cell>{player.oreb}</Cell>
-            <Cell>{player.dreb}</Cell>
-            <Cell>{player.reb}</Cell>
-            <Cell>{player.ast}</Cell>
-            <Cell>{player.stl}</Cell>
-            <Cell>{player.blk}</Cell>
-            <Cell>{player.tov}</Cell>
-            <Cell>{player.pf}</Cell>
-            <Cell>{player.pm !== undefined ? player.pm : ''}</Cell>
-        </Row>
-    )
-}
+const renderTeamRow = (team, name) => (
+    <Row>
+        <RowHeaderCell style={{ minWidth: '120px' }}> {name} </RowHeaderCell>
+        <Cell>{`${team.field_goals_made}-${team.field_goals_attempted}`}</Cell>
+        <Cell>{team.field_goals_percentage}%</Cell>
+        <Cell>{`${team.three_pointers_made}-${team.three_pointers_attempted}`}</Cell>
+        <Cell>{team.three_pointers_percentage}%</Cell>
+        <Cell>{`${team.free_throws_made}-${team.free_throws_attempted}`}</Cell>
+        <Cell>{team.free_throws_percentage}%</Cell>
+        <Cell>{team.team_rebounds}</Cell>
+        <Cell>{team.assists}</Cell>
+        <Cell>{team.steals}</Cell>
+        <Cell>{team.blocks}</Cell>
+        <Cell>{team.turnovers}</Cell>
+        <Cell>{team.fouls}</Cell>
+    </Row>
+)
 
 class TeamStats extends React.PureComponent {
     render() {
-        const { htstsg, vtstsg, isLive } = this.props
+        const { hts, vts, hta, vta } = this.props
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
                     {renderHeaderRow(0)}
-                    {htstsg.map(player => (renderPlayerRow(player, isLive)))}
-                    {renderHeaderRow(1)}
-                    {vtstsg.map(player => (renderPlayerRow(player, isLive)))}
+                    {renderTeamRow(hts, hta)}
+                    {renderTeamRow(vts, vta)}
                 </StickyTable>
             </Wrapper>
         )
@@ -101,13 +67,10 @@ class TeamStats extends React.PureComponent {
 }
 
 TeamStats.propTypes = {
-    htstsg: PropTypes.array.isRequired,
-    vtstsg: PropTypes.array.isRequired,
-    isLive: PropTypes.bool,
-}
-
-TeamStats.defaultProps = {
-    isLive: false,
+    hts: PropTypes.object.isRequired,
+    vts: PropTypes.object.isRequired,
+    hta: PropTypes.string.isRequired,
+    vta: PropTypes.string.isRequired,
 }
 
 

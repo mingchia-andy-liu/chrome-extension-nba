@@ -22,10 +22,10 @@ const QtrBtn = styled.a`
 
 const renderHeaderRow = () => (
     <Row>
-        <HeaderCell>{'Clock'}</HeaderCell>
-        <HeaderCell>{'Team'}</HeaderCell>
-        <HeaderCell>{'Score'}</HeaderCell>
-        <HeaderCell>{'Play'}</HeaderCell>
+        <HeaderCell style={{padding: '0 3vw'}}>{'Clock'}</HeaderCell>
+        <HeaderCell style={{padding: '0 3vw'}}>{'Team'}</HeaderCell>
+        <HeaderCell style={{padding: '0 3vw'}}>{'Score'}</HeaderCell>
+        <HeaderCell style={{width: '100%'}}>{'Play'}</HeaderCell>
     </Row>
 )
 
@@ -33,7 +33,7 @@ const renderPBPRow = (plays, period) => {
     if (plays && plays.length === 0) {
         return <Row> <Cell> No Data Avaiable </Cell> </Row>
     }
-    const filtered = plays.filter(play => +play.period === period)
+    const filtered = plays.filter(play => +play.period === period).reverse()
 
     return filtered.map((play, i) => {
         const {

@@ -24,8 +24,9 @@ export const RowHeaderCell = styled(HeaderCell)`
 
 export const Sup = styled.div`
     font-size: x-small;
-    color: hsl(0, 0%, 30%);
+    color: hsl(0, 0%, 50%);
     vertical-align: super;
+    padding: 1px;
 `
 
 export const formatGames = (games) => {

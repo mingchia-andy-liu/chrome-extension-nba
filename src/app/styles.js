@@ -13,7 +13,7 @@ injectGlobal`
         padding: 0;
         margin: 0;
         /* reset 1em */
-        font-size: 14px;
+        font-size: calc(14px + 0.1vw);
     }
 `
 

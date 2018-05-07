@@ -1,12 +1,14 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import moment from 'moment-timezone'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
 import { Tab, TabItem } from '../../components/Tab'
-import { PlayByPlay, Summary, PlayerStats } from '../../components/Scores'
+import { PlayByPlay, Summary, PlayerStats, TeamStats } from '../../components/Scores'
 import TeamInfo from '../../components/TeamInfo'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
@@ -19,7 +21,7 @@ import { fetchGames } from '../Popup/actions'
 const Wrapper = styled.div`
     display: grid;
     grid-template-areas:    "header header"
-                            "cards content";
+                            "sidebar content";
     grid-template-rows: 50px 1fr;
     grid-template-columns: minmax(27%, 300px) 1fr;
     grid-gap: 1em 1em;
@@ -29,8 +31,8 @@ const NavBar = styled.div`
     grid-area:    header;
     background-color: red;
 `
-const Cards = styled.div`
-    grid-area: cards;
+const Sidebar = styled.div`
+    grid-area: sidebar;
 `
 const Content = styled.div`
     ${Shadow}
@@ -59,18 +61,28 @@ class BoxScores extends React.Component {
     constructor(props) {
         super(props)
 
-        const { match : {params : { id } } } = this.props
+        const {
+            match : {params : { id } },
+            date: {
+                date,
+                isDirty,
+            },
+        } = this.props
+        const dateStr = isDirty
+            ? moment(date).format('YYYYMMDD')
+            : getAPIDate().format('YYYYMMDD')
         this.state = {
             id: id ? id : '0',
             quarter: 0,
-            date: getAPIDate().format('YYYYMMDD'),
+            date: dateStr,
         }
     }
 
     componentDidMount() {
-        this.props.fetchGames(getAPIDate().format('YYYYMMDD'))
+        const { date } = this.state
+        this.props.fetchGames(date)
         if (this.state.id !== '0') {
-            this.props.fetchLiveGameBox(getAPIDate().format('YYYYMMDD'), this.state.id)
+            this.props.fetchLiveGameBox(date, this.state.id)
         }
     }
 
@@ -107,12 +119,32 @@ class BoxScores extends React.Component {
         return <Summary home={home} visitor={visitor}/>
     }
 
+    renderTeamStats(bsData) {
+        const {
+            home: {
+                abbreviation: hta,
+                stats: hts,
+            },
+            visitor: {
+                abbreviation: vta,
+                stats: vts,
+            },
+        } = bsData
+        return <TeamStats hta={hta} hts={hts} vta={vta} vts={vts} />
+    }
+
     renderPlyaerStats(bsData) {
         const {
-            home: { players: { player: homePlayers } },
-            visitor: { players: { player: visitorPlayers } },
+            home: {
+                abbreviation: hta,
+                players: { player: homePlayers },
+            },
+            visitor: {
+                abbreviation: vta,
+                players: { player: visitorPlayers },
+            },
         } = bsData
-        return <PlayerStats hps={homePlayers} vps={visitorPlayers} />
+        return <PlayerStats hta={hta} hps={homePlayers} vta={vta} vps={visitorPlayers} />
     }
 
     renderPlaybyPlay(pbpData) {
@@ -127,6 +159,8 @@ class BoxScores extends React.Component {
                     {this.renderTitle(bsData)}
                     <h3>Summary</h3>
                     {this.renderSummary(bsData)}
+                    <h3>Team Stats</h3>
+                    {this.renderTeamStats(bsData)}
                     <h3>Player Stats</h3>
                     {this.renderPlyaerStats(bsData)}
                     <h3>Play By Play</h3>
@@ -146,6 +180,7 @@ class BoxScores extends React.Component {
         const id = e.currentTarget.dataset.id
         const { date } = this.state
         this.props.fetchLiveGameBox(date, id)
+        this.props.history.push(`/boxscores/${id}`)
         this.setState({ id })
     }
 
@@ -164,15 +199,20 @@ class BoxScores extends React.Component {
                         <TabItem to="/" label="Playoff"/>
                     </Tab>
                 </NavBar>
-                <Cards>
+                <Sidebar>
                     <DatePicker onChange={(date) =>
                         this.setState({
                             id: '0',
                             date,
                         })}
                     />
-                    <CardList isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
-                </Cards>
+                    <CardList
+                        isLoading={live.isLoading}
+                        games={live.games}
+                        onClick={this.selecteGame.bind(this)}
+                        selected={this.state.id}
+                    />
+                </Sidebar>
                 <Content>
                     {bs.isLoading
                         ? <Loader />
@@ -192,7 +232,9 @@ BoxScores.propTypes = {
     }),
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,
+        isDirty: PropTypes.bool.isRequired,
     }),
+    history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     fetchLiveGameBox: PropTypes.func.isRequired,
     fetchGames: PropTypes.func.isRequired,
@@ -211,4 +253,4 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoxScores)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BoxScores))

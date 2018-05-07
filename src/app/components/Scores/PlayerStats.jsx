@@ -16,9 +16,9 @@ const PlayerName = styled(Cell)`
     border-right: 1px solid hsl(0, 0%, 95%);
 `
 
-const renderHeaderRow = (num) => {
+const renderHeaderRow = (name) => {
     const headers = [
-        'Player',
+        name,
         'MIN',
         'PTS',
         'FGM-A',
@@ -41,7 +41,7 @@ const renderHeaderRow = (num) => {
     return (
         <Row>
             {headers.map(element => (
-                <HeaderCell key={`stats-${element}-${num}`}>{element}</HeaderCell>
+                <HeaderCell key={`stats-${element}-${name}`}>{element}</HeaderCell>
             ))}
         </Row>
     )
@@ -87,7 +87,7 @@ const renderPlayerRow = (player, isLive) => {
 
 class PlayerStats extends React.PureComponent {
     render() {
-        const { hps, vps, isLive } = this.props
+        const { hps, vps, hta, vta, isLive } = this.props
         if ( hps.length === 0 || vps.length === 0) {
             return (
                 <Wrapper>
@@ -99,9 +99,9 @@ class PlayerStats extends React.PureComponent {
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
-                    {renderHeaderRow(0)}
+                    {renderHeaderRow(vta)}
                     {vps.map(player => (renderPlayerRow(player, isLive)))}
-                    {renderHeaderRow(1)}
+                    {renderHeaderRow(hta)}
                     {hps.map(player => (renderPlayerRow(player, isLive)))}
                 </StickyTable>
             </Wrapper>
@@ -112,6 +112,8 @@ class PlayerStats extends React.PureComponent {
 PlayerStats.propTypes = {
     hps: PropTypes.array.isRequired,
     vps: PropTypes.array.isRequired,
+    hta: PropTypes.string.isRequired,
+    vta: PropTypes.string.isRequired,
     isLive: PropTypes.bool,
 }
 

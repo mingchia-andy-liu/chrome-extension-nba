@@ -10,11 +10,11 @@ const Wrapper = styled.div`
     width: 100%;
 `
 
-const generateCards = (games, rest) => {
+const generateCards = (games, selected, rest) => {
     return (
         <Fragment>
             {games.map((game, index) =>
-                <MatchCard key={`card-${index}`} {...game} {...rest}/>
+                <MatchCard selected={game.id === selected} key={`card-${index}`} {...game} {...rest}/>
             )}
         </Fragment>
     )
@@ -23,7 +23,7 @@ const generateCards = (games, rest) => {
 
 class CardList extends React.PureComponent {
     render() {
-        const { games, isLoading, ...rest} = this.props
+        const { games, isLoading, selected, ...rest} = this.props
         if (isLoading) {
             return (
                 <Wrapper>
@@ -41,7 +41,7 @@ class CardList extends React.PureComponent {
 
         return (
             <Wrapper>
-                {generateCards(games, rest)}
+                {generateCards(games, selected, rest)}
             </Wrapper>
         )
     }
@@ -50,6 +50,7 @@ class CardList extends React.PureComponent {
 CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
+    selected: PropTypes.string.isRequired,
 }
 
 CardList.defaultProps = {
