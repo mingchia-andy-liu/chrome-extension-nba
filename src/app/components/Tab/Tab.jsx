@@ -22,28 +22,19 @@ class Tab extends React.Component {
         super(props)
 
         // this.props.children is an opaque data structure. It can be either an array or a single element.
-        let { children, startIndex } = this.props
+        const { index } = this.props
+        let { children } = this.props
         if (!children) {
             throw Error('Must contain at least one tab')
         }
         children = Array.isArray(children) ? children : [children]
-        const index = startIndex > children.length ? 0 : startIndex
         this.state = {
-            selectedIndex: index,
+            selectedIndex: index > children.length ? 0 : index,
         }
     }
 
-    componentWillReceiveProps({ startIndex }) {
-        this.setState({ selectedIndex: startIndex })
-    }
-
-    onTabSelect(selectedIndex) {
-        this.setState({ selectedIndex })
-    }
-
     renderTab() {
-        let children = this.props.children
-        children = Array.isArray(children) ? children : [children]
+        const { children, onTabSelect } = this.props
         return children.map((item, index) => (
             <TabItem
                 key={`tab-bar-item-${index}`}
@@ -51,7 +42,7 @@ class Tab extends React.Component {
                 active={this.state.selectedIndex === index}
                 index={index}
                 label={item.props.label}
-                onClick={() => {this.onTabSelect(index)}}
+                onClick={(index) => onTabSelect(index)}
             />
         ), this)
     }
@@ -71,13 +62,14 @@ Tab.propTypes = {
      */
     children: PropTypes.arrayOf(PropTypes.element).isRequired,
     /**
-     * Start index of the selected tab, start from 0
+     * Start index of the selected tab, starts from 0
      */
-    startIndex: PropTypes.number,
+    index: PropTypes.number,
+    /**
+     * on Tab Select Callback
+     */
+    onTabSelect: PropTypes.func.isRequired,
 }
 
-Tab.defaultProps = {
-    startIndex: 0,
-}
 
 export default Tab

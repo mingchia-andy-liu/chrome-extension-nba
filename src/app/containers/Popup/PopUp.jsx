@@ -12,7 +12,7 @@ import * as actions from './actions'
 import getAPIDate from '../../utils/getApiDate'
 
 const Wrapper = styled(Column)`
-    padding: 0 10px;
+    padding: 10px;
     width: 100%;
     min-width: 330px;
 `
@@ -46,7 +46,7 @@ class PopUp extends React.Component {
             <Wrapper>
                 <DatePicker onChange={() => {}}/>
                 <Links />
-                <CardList isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
+                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
             </Wrapper>
         )
     }

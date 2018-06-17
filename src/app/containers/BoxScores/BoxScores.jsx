@@ -7,11 +7,11 @@ import styled from 'styled-components'
 import moment from 'moment-timezone'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
-import { Tab, TabItem } from '../../components/Tab'
 import { PlayByPlay, Summary, PlayerStats, TeamStats } from '../../components/Scores'
 import TeamInfo from '../../components/TeamInfo'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
+import Layout from '../../components/Layout'
 import { Shadow, Row } from '../../styles'
 import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
@@ -20,17 +20,12 @@ import { fetchGames } from '../Popup/actions'
 
 const Wrapper = styled.div`
     display: grid;
-    grid-template-areas:    "header header"
-                            "sidebar content";
-    grid-template-rows: 50px 1fr;
+    grid-template-areas: "sidebar content";
     grid-template-columns: minmax(27%, 300px) 1fr;
     grid-gap: 1em 1em;
-    padding: 0 10px;
+    padding: 10px 0;
 `
-const NavBar = styled.div`
-    grid-area:    header;
-    background-color: red;
-`
+
 const Sidebar = styled.div`
     grid-area: sidebar;
 `
@@ -54,7 +49,7 @@ const StyledTitleItem = styled.div`
 
 const StyledScore= styled(StyledTitleItem)`
     padding: 0 10px;
-    ${props => props.winning ? 'color: green;' : 'opacity:0.5;'};
+    ${(props) => (props.winning ? 'color: green;' : 'opacity:0.5;')};
 `
 
 class BoxScores extends React.Component {
@@ -191,35 +186,30 @@ class BoxScores extends React.Component {
         } = this.props
 
         return (
-            <Wrapper>
-                <NavBar>
-                    <Tab startIndex={0}>
-                        <TabItem to="/" label="Options"/>
-                        <TabItem to="/" label="Standings"/>
-                        <TabItem to="/" label="Playoff"/>
-                    </Tab>
-                </NavBar>
-                <Sidebar>
-                    <DatePicker onChange={(date) =>
-                        this.setState({
-                            id: '0',
-                            date,
-                        })}
-                    />
-                    <CardList
-                        isLoading={live.isLoading}
-                        games={live.games}
-                        onClick={this.selecteGame.bind(this)}
-                        selected={this.state.id}
-                    />
-                </Sidebar>
-                <Content>
-                    {bs.isLoading
-                        ? <Loader />
-                        : this.renderContent()
-                    }
-                </Content>
-            </Wrapper>
+            <Layout boxscores={
+                <Wrapper>
+                    <Sidebar>
+                        <DatePicker onChange={(date) =>
+                            this.setState({
+                                id: '0',
+                                date,
+                            })}
+                        />
+                        <CardList
+                            isLoading={live.isLoading}
+                            games={live.games}
+                            onClick={this.selecteGame.bind(this)}
+                            selected={this.state.id}
+                        />
+                    </Sidebar>
+                    <Content>
+                        {bs.isLoading
+                            ? <Loader />
+                            : this.renderContent()
+                        }
+                    </Content>
+                </Wrapper>
+            } />
         )
     }
 }

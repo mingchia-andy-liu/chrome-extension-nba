@@ -18,23 +18,20 @@ const Link = styled(RouterLink)`
     }
 
     & label {
-        color: ${props => props.active
-            ? '#fff;'
-            : 'hsl(0, 0%, 85%);'}
-        font-weight: ${props => props.active
-            ? '500;'
-            : '300;'}
+        color: ${(props) => (props.active ? '#fff;' : 'hsl(0, 0%, 85%);')}
+        font-weight: ${(props) => (props.active ? '500;' : '300;')}
         font-size: calc(17px + 0.1vw);
         cursor: pointer;
     }
-`;
+`
 
 class TabItem extends Component {
     render() {
+        const { onClick, label, active, to } = this.props
         return (
-            <Link to={this.props.to} onClick={this.props.onClick} active={this.props.active ? 1 : 0} >
+            <Link to={to} onClick={onClick} active={active ? 1 : 0} >
                 <label>
-                    {this.props.label}
+                    {label}
                 </label>
             </Link>
         )
@@ -45,6 +42,8 @@ TabItem.propTypes = {
     label: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     onClick: PropTypes.func,
+    to: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
 }
 
 TabItem.defaultProps = {
