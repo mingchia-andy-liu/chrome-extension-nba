@@ -68,7 +68,7 @@ class DatePicker extends React.Component {
                     value={date}
                     options={{
                         minDate: '2017-01-01',
-                        maxDate: '2018-08-30',
+                        maxDate: '2019-08-30',
                     }}
                     onChange={date => {
                         const dateStr = moment(date[0]).format('YYYYMMDD')

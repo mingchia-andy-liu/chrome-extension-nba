@@ -13,20 +13,20 @@ export const TeamLogo = styled.div`
     color: white;
     border-radius: 50%;
 
-    background-color: ${props => props.team
+    background-color: ${(props) => (props.team
         ? getLogoColor(props.team)
-        : '#000000'};
+        : '#000000')};
 
-    opacity: ${props => props.winning
+    opacity: ${(props) => (props.winning
         ? '1'
-        : '0.5'};
+        : '0.5')};
 `
 
 const TeamName = styled.div`
     margin-top: 8px;
-    opacity: ${props => props.winning
+    opacity: ${(props) => (props.winning
         ? '1'
-        : '0.5'};
+        : '0.5')};
 `
 
 const TeamInfoWrapper = styled.div`

@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 const TeamScore = styled.div`
     flex-grow: 2;
-    ${props => props.winning ? 'color: green;' : 'opacity:0.5;'};
+    ${(props) => (props.winning ? 'color: green;' : 'opacity:0.5;')};
 `
 
 const renderScores = (gameStatus, home, visitor) => {

@@ -27,9 +27,9 @@ const Wrapper = styled.div`
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.3);
     }
 
-    border: ${props => props.selected
+    border: ${(props) => (props.selected
         ? '2px solid rgb(30, 90, 250)'
-        : '2px solid transparent'};
+        : '2px solid transparent')};
 `
 
 class MatchCard extends React.PureComponent {

@@ -22,11 +22,11 @@ injectGlobal`
  * Media query for mobile device
  */
 export const media = {
-  handheld: (...args) => css`
+    handheld: (...args) => css`
     @media (max-width: 420px) {
-      ${ css(...args) }
+        ${ css(...args) }
     }
-  `
+  `,
 }
 
 
@@ -40,42 +40,42 @@ const align = ({
     alignBaseline,
     alignStretch,
     alignSpaceBetween,
-    alignSpaceAround
+    alignSpaceAround,
 }) => {
-    return alignCenter && "center"||
-        alignStart && "flex-start"||
-        alignEnd  && "flex-end"||
-        alignBaseline  && "baseline"||
-        alignStretch && "stretch" ||
-        alignSpaceBetween && "space-between" ||
-        alignSpaceAround && "space-around" ||
-        "center"
+    return alignCenter && 'center'||
+        alignStart && 'flex-start'||
+        alignEnd  && 'flex-end'||
+        alignBaseline  && 'baseline'||
+        alignStretch && 'stretch' ||
+        alignSpaceBetween && 'space-between' ||
+        alignSpaceAround && 'space-around' ||
+        'center'
 }
 const justify = ({
     justifyCenter,
     justifyStart,
     justifyEnd,
     justifySpaceBetween,
-    justifySpaceAround
+    justifySpaceAround,
 }) => {
-    return justifyCenter && "center" ||
-        justifyStart && "flex-start" ||
-        justifyEnd &&  "flex-end" ||
-        justifySpaceBetween && "space-between" ||
-        justifySpaceAround && "space-around" ||
-        "center"
-};
+    return justifyCenter && 'center' ||
+        justifyStart && 'flex-start' ||
+        justifyEnd &&  'flex-end' ||
+        justifySpaceBetween && 'space-between' ||
+        justifySpaceAround && 'space-around' ||
+        'center'
+}
 
 const wrap = ({
     nowrap,
     wrap,
-    wrapReverse
-    }) => {
-    return nowrap && "nowrap" ||
-        wrap && "wrap" ||
-        wrapReverse && "wrap-reverse" ||
-        "wrap"
-};
+    wrapReverse,
+}) => {
+    return nowrap && 'nowrap' ||
+        wrap && 'wrap' ||
+        wrapReverse && 'wrap-reverse' ||
+        'wrap'
+}
 
 export const Base = styled.div`
     display: flex;
@@ -85,24 +85,24 @@ export const Base = styled.div`
     ${props => props.flexBasis && `flex-basis: ${props.flexBasis}`};
     ${props => props.flexGrow && `flex-basis: ${props.flexGrow}`};
     ${props => props.flexShrink && `flex-shrink: ${props.flexShrink}`};
-`;
+`
 
 export const Flex = styled(Base)`
-    flex-direction: ${props => props.row && "row" || "column" };
-`;
+    flex-direction: ${props => props.row && 'row' || 'column' };
+`
 
 export const Row = styled(Base)`
     flex-direction: row;
-`;
+`
 
 export const Column = styled(Base)`
     flex-direction: column;
-`;
+`
 
 export const Center = styled(Base)`
     justify-content: center;
     align-items: center;
-`;
+`
 
 /**
  * Flex mixins
@@ -110,16 +110,16 @@ export const Center = styled(Base)`
 export const RowCSS = css`
     display: flex;
     flex-direction: row;
-`;
+`
 
 export const ColumnCSS = css`
     display: flex;
     flex-direction: column;
-`;
+`
 
 export const JustifyCenter = css`
     justify-content: center;
-`;
+`
 
 export const AlignCenter = css`
     align-items: center;
@@ -127,4 +127,4 @@ export const AlignCenter = css`
 
 export const Shadow = css`
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
-`;
+`

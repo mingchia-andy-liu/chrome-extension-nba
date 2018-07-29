@@ -14,7 +14,7 @@ const Wrapper = styled.div`
         text-align: center;
         cursor: pointer;
     }
-`;
+`
 
 
 class Tab extends React.Component {

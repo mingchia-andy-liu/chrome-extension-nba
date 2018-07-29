@@ -9,7 +9,7 @@ export const Cell = styled(StickyCell)`
     vertical-align: middle;
     background-color: #fff;
     border-bottom: 1px solid hsl(0, 0%, 95%);
-    color: ${props => props.winning ? 'green' : 'initial'};
+    color: ${(props) => (props.winning ? 'green' : 'initial')};
 `
 
 export const HeaderCell = styled(Cell)`

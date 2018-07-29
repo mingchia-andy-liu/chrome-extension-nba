@@ -14,6 +14,7 @@
     "lint:addon": "addons-linter src --self-hosted",
     "lint:css": "stylelint src/css/*.css",
     "lint:js": "eslint src/app",
+    "lint:js:fix": "eslint src/app --fix",
     "test": "npm run lint",
     "webpack": "NODE_ENV=production webpack --progress --colors",
     "webpack:dev": "NODE_ENV=development webpack --progress --colors"

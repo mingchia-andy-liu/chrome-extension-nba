@@ -31,7 +31,6 @@ class Layout extends React.Component {
     }
 
     onTabSelect(newIndex) {
-        console.log('ontabselect', newIndex)
         this.setState({ selectedIndex: newIndex })
     }
 
@@ -45,8 +44,6 @@ class Layout extends React.Component {
             <Content key={'standings'}> {standings} </Content>,
             <Content key={'playoff'}> {playoff} </Content>
         ]
-        console.log('render', selectedIndex)
-        console.log('render', contents[selectedIndex])
 
         return (
             <Wrapper>
