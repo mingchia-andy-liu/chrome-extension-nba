@@ -1,26 +1,6 @@
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const HtmlWebpackPlugin = require('html-webpack-plugin')    // for webpack dev server
 const path = require('path')
 
-const webpackDevConfig = {
-    devtool: 'cheap-module-eval-source-map',
-    // https://webpack.js.org/concepts/mode/
-    mode: 'development',
-    // plugins: [
-    //     new HtmlWebpackPlugin({
-    //         filename: path.resolve(__dirname, 'src', 'index.html'),
-    //         template: path.resolve(__dirname, 'src', 'index.html')
-    //       }),
-    // ]
-}
-const webpackProdConfig = {
-    // https://webpack.js.org/concepts/mode/
-    mode: 'production',
-}
-
-
-let webpackConfig = {
+const webpackConfig = {
     entry: [
         path.resolve(__dirname, 'src', 'app', 'app.jsx')
     ],
@@ -44,23 +24,18 @@ let webpackConfig = {
                     // creates style nodes from JS strings
                     'style-loader',
                     // translates CSS into CommonJS
-                    'css-loader',
-                    // compiles Sass to CSS
-                    'sass-loader'
+                    'css-loader'
                 ],
             }
         ],
-    },
-    devServer: {
-        host: 'localhost',
-        contentBase: path.resolve(__dirname, 'src'),
-    },
+    }
 }
 
 if (process.env.NODE_ENV === 'production') {
-    webpackConfig = merge(webpackConfig, webpackProdConfig)
+    webpackConfig.mode = 'production'
 } else {
-    webpackConfig = merge(webpackConfig, webpackDevConfig)
+    webpackConfig.mode = 'development'
+    webpackConfig.devtool = 'cheap-module-eval-source-map'
 }
 
 module.exports = webpackConfig

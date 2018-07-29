@@ -1,12 +1,68 @@
 const noop = () => {}
-const browser = {}
+const browserNameSpace = {}
 
-if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-    browser.connect = () => {
+if (typeof browser !== 'undefined') {
+    // Firefox
+    browserNameSpace.connect = () => {
+        browser.runtime.connect()
+    }
+
+    browserNameSpace.getItem = (key, callback) => {
+        browser.storage.local.get(key).then((obj) => {
+            if (obj[key]) {
+                callback(obj[key])
+            } else {
+                callback(browser.runtime.lastError)
+            }
+        })
+    }
+
+    browserNameSpace.setItem = (key, value, callback) => {
+        const obj = { [key]: value }
+        browser.storage.local.set(obj).then(() => {
+            if (callback && browser.runtime.lastError) {
+                callback(key)
+            }
+        })
+    }
+
+    browserNameSpace.removeItem = (key) => {
+        browser.storage.local.remove(key)
+    }
+
+    browserNameSpace.getAll = (callback) => {
+        browser.storage.local.get(null).then((obj) => callback(obj))
+    }
+
+    browserNameSpace.getAllKeys = (callback) => {
+        browser.storage.local.get(null).then((obj) => callback(Object.keys(obj)))
+    }
+
+    browserNameSpace.setBadgeText = (text) => {
+        if (browser.browserNameSpaceAction.setBadgeText) {
+            browser.browserNameSpaceAction.setBadgeText({ text: text })
+        }
+    }
+
+    browserNameSpace.setBadgeBackgroundColor = (color) => {
+        if (browser.browserAction.setBadgeText) {
+            browser.browserAction.setBadgeBackgroundColor({ color: color })
+        }
+    }
+
+    browserNameSpace.tabs = {
+        getCurrent: (callback) => {
+            browser.tabs.getCurrent().then(() => callback())
+        },
+    }
+
+} else if (typeof chrome !== 'undefined') {
+    // Chrome
+    browserNameSpace.connect = () => {
         chrome.runtime.connect()
     }
 
-    browser.getItem = (key, callback) => {
+    browserNameSpace.getItem = (key, callback) => {
         chrome.storage.local.get(key, (obj) => {
             if (obj[key]) {
                 callback(obj[key])
@@ -16,7 +72,7 @@ if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         })
     }
 
-    browser.setItem = (key, value, callback) => {
+    browserNameSpace.setItem = (key, value, callback) => {
         const obj = { [key]: value }
         chrome.storage.local.set(obj, () => {
             if (callback && chrome.runtime.lastError) {
@@ -25,32 +81,32 @@ if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         })
     }
 
-    browser.removeItem = (key) => {
+    browserNameSpace.removeItem = (key) => {
         chrome.storage.local.remove(key)
     }
 
-    browser.getAll = (callback) => {
+    browserNameSpace.getAll = (callback) => {
         chrome.storage.local.get(null, (obj) => callback(obj))
     }
 
-    browser.getAllKeys = (callback) => {
+    browserNameSpace.getAllKeys = (callback) => {
         chrome.storage.local.get(null, (obj) => callback(Object.keys(obj)))
     }
 
-    browser.setBadgeText = (text) => {
-        if (chrome.browserAction.setBadgeText) {
-            chrome.browserAction.setBadgeText({ text: text })
+    browserNameSpace.setBadgeText = (text) => {
+        if (chrome.browserNameSpaceAction.setBadgeText) {
+            chrome.browserNameSpaceAction.setBadgeText({ text: text })
         }
     }
 
 
-    browser.setBadgeBackgroundColor = (color) => {
+    browserNameSpace.setBadgeBackgroundColor = (color) => {
         if (chrome.browserAction.setBadgeText) {
             chrome.browserAction.setBadgeBackgroundColor({ color: color })
         }
     }
 
-    browser.tabs = {
+    browserNameSpace.tabs = {
         getCurrent: (callback) => {
             chrome.tabs.getCurrent(() => callback())
         },
@@ -58,12 +114,12 @@ if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
 
 
 } else {
-    browser.getItem = noop
-    browser.setItem = noop
-    browser.removeItem = noop
-    browser.getAllKeys = noop
-    browser.setBadgeBackgroundColor = noop
-    browser.setBadgeText = noop
+    browserNameSpace.getItem = noop
+    browserNameSpace.setItem = noop
+    browserNameSpace.removeItem = noop
+    browserNameSpace.getAllKeys = noop
+    browserNameSpace.setBadgeBackgroundColor = noop
+    browserNameSpace.setBadgeText = noop
 }
 
-export default browser
+export default browserNameSpace
