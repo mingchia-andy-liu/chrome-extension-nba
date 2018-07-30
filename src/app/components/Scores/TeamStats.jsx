@@ -9,7 +9,6 @@ const Wrapper = styled.div`
 `
 const renderHeaderRow = () => {
     const headers = [
-        'Team',
         'FGM-A',
         'FG%',
         '3PM-A',
@@ -26,6 +25,7 @@ const renderHeaderRow = () => {
 
     return (
         <Row>
+            <RowHeaderCell>Team</RowHeaderCell>
             {headers.map(element => (
                 <HeaderCell key={`stats-${element}`}>{element}</HeaderCell>
             ))}
@@ -35,7 +35,7 @@ const renderHeaderRow = () => {
 
 const renderTeamRow = (team, name) => (
     <Row>
-        <RowHeaderCell style={{ minWidth: '120px' }}> {name} </RowHeaderCell>
+        <RowHeaderCell> {name} </RowHeaderCell>
         <Cell>{`${team.field_goals_made}-${team.field_goals_attempted}`}</Cell>
         <Cell>{team.field_goals_percentage}%</Cell>
         <Cell>{`${team.three_pointers_made}-${team.three_pointers_attempted}`}</Cell>

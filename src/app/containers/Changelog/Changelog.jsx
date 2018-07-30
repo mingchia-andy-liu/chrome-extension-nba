@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Layout from '../../components/Layout'
 
 const Wrapper = styled.div`
 
@@ -14,11 +13,9 @@ class Changelog extends React.Component {
 
     render() {
         return (
-            <Layout boxscores={
-                <Wrapper>
-                    <h3>Changelog</h3>
-                </Wrapper>
-            } />
+            <Wrapper>
+                <h3>Changelog</h3>
+            </Wrapper>
         )
     }
 }

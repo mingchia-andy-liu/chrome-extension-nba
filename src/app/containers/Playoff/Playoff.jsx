@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Layout from '../../components/Layout'
+import Header from '../../components/Header'
 
 const Wrapper = styled.div`
 
@@ -14,11 +15,10 @@ class Playofff extends React.Component {
 
     render() {
         return (
-            <Layout boxscores={
-                <Wrapper>
-                    <h3>Playoff</h3>
-                </Wrapper>
-            } />
+            <Layout>
+                <Layout.Header>{<Header index={3}/>}</Layout.Header>
+                <Layout.Content>Playoff</Layout.Content>
+            </Layout>
         )
     }
 }

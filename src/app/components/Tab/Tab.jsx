@@ -40,7 +40,6 @@ class Tab extends React.Component {
                 key={`tab-bar-item-${index}`}
                 to={item.props.to}
                 active={this.state.selectedIndex === index}
-                index={index}
                 label={item.props.label}
                 onClick={(index) => onTabSelect(index)}
             />

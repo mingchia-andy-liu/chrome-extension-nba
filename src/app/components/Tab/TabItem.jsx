@@ -43,7 +43,6 @@ TabItem.propTypes = {
     active: PropTypes.bool.isRequired,
     onClick: PropTypes.func,
     to: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
 }
 
 TabItem.defaultProps = {

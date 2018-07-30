@@ -12,10 +12,11 @@ import TeamInfo from '../../components/TeamInfo'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
+import Header from '../../components/Header'
 import { Shadow, Row } from '../../styles'
 import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
-import { fetchLiveGameBox } from './actions'
+import { fetchLiveGameBox, resetLiveGameBox } from './actions'
 import { fetchGames } from '../Popup/actions'
 
 const Wrapper = styled.div`
@@ -186,30 +187,35 @@ class BoxScores extends React.Component {
         } = this.props
 
         return (
-            <Layout boxscores={
-                <Wrapper>
-                    <Sidebar>
-                        <DatePicker onChange={(date) =>
-                            this.setState({
-                                id: '0',
-                                date,
-                            })}
-                        />
-                        <CardList
-                            isLoading={live.isLoading}
-                            games={live.games}
-                            onClick={this.selecteGame.bind(this)}
-                            selected={this.state.id}
-                        />
-                    </Sidebar>
-                    <Content>
-                        {bs.isLoading
-                            ? <Loader />
-                            : this.renderContent()
-                        }
-                    </Content>
-                </Wrapper>
-            } />
+            <Layout>
+                <Layout.Header>{<Header index={0}/>}</Layout.Header>
+                <Layout.Content>
+                    <Wrapper>
+                        <Sidebar>
+                            <DatePicker onChange={(date) => {
+                                this.setState({
+                                    id: '0',
+                                    date,
+                                })
+                                this.props.resetLiveGameBox()
+                            }}
+                            />
+                            <CardList
+                                isLoading={live.isLoading}
+                                games={live.games}
+                                onClick={this.selecteGame.bind(this)}
+                                selected={this.state.id}
+                            />
+                        </Sidebar>
+                        <Content>
+                            {bs.isLoading
+                                ? <Loader />
+                                : this.renderContent()
+                            }
+                        </Content>
+                    </Wrapper>
+                </Layout.Content>
+            </Layout>
         )
     }
 }
@@ -228,6 +234,7 @@ BoxScores.propTypes = {
     match: PropTypes.object.isRequired,
     fetchLiveGameBox: PropTypes.func.isRequired,
     fetchGames: PropTypes.func.isRequired,
+    resetLiveGameBox: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ live, bs, date }) => ({
@@ -240,6 +247,7 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         fetchLiveGameBox,
         fetchGames,
+        resetLiveGameBox,
     }, dispatch)
 }
 

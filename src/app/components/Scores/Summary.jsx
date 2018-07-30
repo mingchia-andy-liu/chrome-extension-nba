@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 
 const renderTeamRow = (team, otherTeam) => (
     <Row>
-        <RowHeaderCell style={{ minWidth: '120px' }}>{team.abbreviation}</RowHeaderCell>
+        <RowHeaderCell>{team.abbreviation}</RowHeaderCell>
         {team.linescores.period.map((period, index) => (
             <Cell
                 key={`period-${period.peroid_value}-${index}`}

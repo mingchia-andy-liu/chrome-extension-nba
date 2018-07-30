@@ -30,6 +30,7 @@ export default (state = initState, action) => {
                 pbpData: action.payload.pbpData,
             }
         case types.REQUEST_ERROR:
+        case types.RESET:
             return {
                 isLoading: false,
                 bsData: {},

@@ -71,10 +71,12 @@ class DatePicker extends React.Component {
                         maxDate: '2019-08-30',
                     }}
                     onChange={date => {
-                        const dateStr = moment(date[0]).format('YYYYMMDD')
+                        const d = moment(date[0])
+                        const dateStr = d.format('YYYYMMDD')
                         this.props.fetchGames(dateStr)
                         this.props.onChange(dateStr)
-                        this.props.dispatchChangeDate(moment(date[0]).toDate())
+                        this.props.dispatchChangeDate(d.toDate())
+                        this.setState({date: d.toDate()})
                     }}
                 />
                 <Arrow onClick={this.onClickArrow.bind(this, 1)} src="../../assets/png/arrow-right.png" />

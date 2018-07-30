@@ -20,3 +20,7 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
         dispatch({ type: types.REQUEST_ERROR })
     }
 }
+
+export const resetLiveGameBox = () => (dispatch) => {
+    dispatch({ type: types.RESET })
+}
