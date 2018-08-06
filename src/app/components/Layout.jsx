@@ -8,7 +8,6 @@ const Wrapper = styled.div`
                             "content";
     grid-template-rows: 50px 1fr;
     grid-row-gap: 1em;
-    padding: 0 10px;
 `
 
 const HeaderWrapper = styled.div`
@@ -19,6 +18,7 @@ const HeaderWrapper = styled.div`
 const ContentWrapper = styled.div`
     grid-area: content;
     overflow-y: scroll !important;
+    padding: 0 10px;
 `
 
 const Header = ({children}) => {

@@ -20,6 +20,7 @@ const Link = styled.a`
     border: 0;
     outline: none;
     color: rgb(46, 46, 223);
+    cursor: pointer;
 `
 
 class Links extends React.Component {

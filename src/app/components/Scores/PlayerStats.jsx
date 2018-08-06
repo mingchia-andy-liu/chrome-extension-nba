@@ -169,10 +169,10 @@ class PlayerStats extends React.PureComponent {
         return (
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
-                    {renderHeaderRow(vta)}
-                    {vps.map(player => (renderPlayerRow(player, isLive)))}
                     {renderHeaderRow(hta)}
                     {hps.map(player => (renderPlayerRow(player, isLive)))}
+                    {renderHeaderRow(vta)}
+                    {vps.map(player => (renderPlayerRow(player, isLive)))}
                 </StickyTable>
             </Wrapper>
         )

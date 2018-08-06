@@ -7,7 +7,13 @@ import styled from 'styled-components'
 import moment from 'moment-timezone'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
-import { PlayByPlay, Summary, PlayerStats, TeamStats } from '../../components/Scores'
+import {
+    PlayByPlay,
+    Summary,
+    PlayerStats,
+    TeamStats,
+    AdvancedTeamStats
+} from '../../components/Scores'
 import TeamInfo from '../../components/TeamInfo'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
@@ -143,6 +149,33 @@ class BoxScores extends React.Component {
         return <TeamStats hta={hta} hts={hts || {}} vta={vta} vts={vts || {}} />
     }
 
+    renderAdvancedTeamStats(teamStats, bsData) {
+        const {
+            home,
+            visitor,
+            extra,
+        } = teamStats
+
+        const {
+            home: {
+                abbreviation: hta,
+            },
+            visitor: {
+                abbreviation: vta,
+            },
+        } = bsData
+
+        return (
+            <AdvancedTeamStats
+                home={home}
+                hta={hta}
+                visitor={visitor}
+                vta={vta}
+                extra={extra}
+            />
+        )
+    }
+
     renderPlyaerStats(bsData) {
         const {
             home: {
@@ -163,7 +196,7 @@ class BoxScores extends React.Component {
     }
 
     renderContent() {
-        const { bs: { bsData, pbpData} } = this.props
+        const { bs: { bsData, pbpData, team } } = this.props
         const isEmpty = Object.keys(bsData).length === 0 || Object.keys(pbpData).length === 0
         // Route expects a funciton for component prop
         const contentComponent =  () => (
@@ -173,6 +206,8 @@ class BoxScores extends React.Component {
                 {!isEmpty && this.renderSummary(bsData)}
                 <h3>Team Stats</h3>
                 {!isEmpty && this.renderTeamStats(bsData)}
+                <h4>Advanced</h4>
+                {!isEmpty && this.renderAdvancedTeamStats(team, bsData)}
                 <h3>Player Stats</h3>
                 {!isEmpty && this.renderPlyaerStats(bsData)}
                 <h3>Play By Play</h3>
