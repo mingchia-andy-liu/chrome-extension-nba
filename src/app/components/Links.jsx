@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link as RouterLink  } from 'react-router-dom'
 import {RowCSS, AlignCenter, JustifyCenter} from '../styles'
+import browser from '../utils/browser'
 
 
 const Wrapper = styled.div`
@@ -9,9 +9,10 @@ const Wrapper = styled.div`
     ${AlignCenter}
     ${JustifyCenter}
     width: 100%;
+    margin-bottom: 10px;
 `
 
-const Link = styled(RouterLink)`
+const Link = styled.a`
     ${RowCSS}
     ${AlignCenter}
     padding: 0 5px;
@@ -30,7 +31,14 @@ class Links extends React.Component {
         const links = ['options', 'standings', 'playoff', 'box-scores']
         const hrefs = ['options', 'standings', 'playoff', 'boxscores']
         const atags = links.map((element, index) => (
-            <Link key={`link-${index}`} to={hrefs[index]}>{element}</Link>
+            <Link
+                key={`link-${index}`}
+                onClick={() => {
+                    browser.tabs.create({ url: `/index.html#/${hrefs[index]}` })
+                }}
+            >
+                {element}
+            </Link>
         ))
 
         return (

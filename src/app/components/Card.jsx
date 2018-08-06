@@ -30,6 +30,10 @@ const Wrapper = styled.div`
     border: ${(props) => (props.selected
         ? '2px solid rgb(30, 90, 250)'
         : '2px solid transparent')};
+
+    &:last-child {
+        margin-bottom: 0px;
+    }
 `
 
 class MatchCard extends React.PureComponent {

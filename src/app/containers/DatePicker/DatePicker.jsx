@@ -26,6 +26,16 @@ const StyledFlatpickr = styled(Flatpickr)`
     height: calc(20px + 2vh);
 `
 
+const StyledInput = styled.input`
+    text-align: center;
+    font-size: calc(17px + 0.2vw);
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    height: calc(20px + 2vh);
+`
+
 const Arrow = styled.img`
     height: calc(20px + 2vh);
     cursor: pointer;
@@ -55,30 +65,46 @@ class DatePicker extends React.Component {
         this.setState({ date: date.toDate() })
     }
 
-    render() {
+    renderInput() {
         const { date } = this.state
+        const { hide } = this.props
+
+        if (hide) {
+            return (
+                <StyledInput
+                    readOnly={true}
+                    value={moment(date).format('YYYY-MM-DD')}
+                />
+            )
+        }
+        return (
+            <StyledFlatpickr
+                // prevent chrome default action to auto-focus
+                tabIndex="-1"
+                autoFocus={false}
+
+                value={date}
+                options={{
+                    minDate: '2017-01-01',
+                    maxDate: '2019-08-30',
+                }}
+                onChange={date => {
+                    const d = moment(date[0])
+                    const dateStr = d.format('YYYYMMDD')
+                    this.props.fetchGames(dateStr)
+                    this.props.onChange(dateStr)
+                    this.props.dispatchChangeDate(d.toDate())
+                    this.setState({date: d.toDate()})
+                }}
+            />
+        )
+    }
+
+    render() {
         return (
             <Wrapper>
                 <Arrow onClick={this.onClickArrow.bind(this, -1)} src="../../assets/png/arrow-left.png" />
-                <StyledFlatpickr
-                    // prevent chrome default action to auto-focus
-                    tabIndex="-1"
-                    autoFocus={false}
-
-                    value={date}
-                    options={{
-                        minDate: '2017-01-01',
-                        maxDate: '2019-08-30',
-                    }}
-                    onChange={date => {
-                        const d = moment(date[0])
-                        const dateStr = d.format('YYYYMMDD')
-                        this.props.fetchGames(dateStr)
-                        this.props.onChange(dateStr)
-                        this.props.dispatchChangeDate(d.toDate())
-                        this.setState({date: d.toDate()})
-                    }}
-                />
+                {this.renderInput()}
                 <Arrow onClick={this.onClickArrow.bind(this, 1)} src="../../assets/png/arrow-right.png" />
             </Wrapper>
         )
@@ -91,8 +117,13 @@ DatePicker.propTypes = {
         isDirty: PropTypes.bool.isRequired,
     }),
     onChange: PropTypes.func.isRequired,
-    dispatchChangeDate: PropTypes.func,
-    fetchGames: PropTypes.func,
+    dispatchChangeDate: PropTypes.func.isRequired,
+    fetchGames: PropTypes.func.isRequired,
+    hide: PropTypes.bool,
+}
+
+DatePicker.defaultProps = {
+    hide: false,
 }
 
 const mapStateToProps = ({ date }) => ({

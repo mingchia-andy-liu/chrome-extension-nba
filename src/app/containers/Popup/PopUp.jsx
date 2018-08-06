@@ -11,6 +11,8 @@ import { Column } from '../../styles'
 import * as actions from './actions'
 import getAPIDate from '../../utils/getApiDate'
 
+import browser from '../../utils/browser'
+
 const Wrapper = styled(Column)`
     padding: 10px;
     width: 100%;
@@ -20,6 +22,18 @@ const Wrapper = styled(Column)`
 class PopUp extends React.Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            isPopup: false,
+            date: '',
+        }
+        // check if popup is opened in the "popup" or in a tab
+        // if it is in a popup winodw, there is no tab
+        browser.tabs.getCurrent((tab) => {
+            if (!tab) {
+                this.setState({ isPopup: true })
+            }
+        })
     }
 
     componentDidMount() {
@@ -35,18 +49,27 @@ class PopUp extends React.Component {
         this.props.fetchGames(dateStr)
     }
 
-    selecteGame(e) {
+    selectGame(e) {
+        const { isPopup, date } = this.state
         const id = e.currentTarget.dataset.id
-        this.props.history.push(`/boxscores/${id}`)
+        if (isPopup) {
+            browser.tabs.create({ url: `/index.html#/boxscores/${id}?redirect=true&date=${date}` })
+        } else {
+            this.props.history.push(`/boxscores/${id}`)
+        }
+    }
+
+    selectDate(date) {
+        this.setState({date})
     }
 
     render() {
         const { live } = this.props
         return (
             <Wrapper>
-                <DatePicker onChange={() => {}}/>
+                <DatePicker hide={true} onChange={this.selectDate.bind(this)}/>
                 <Links />
-                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selecteGame.bind(this)}/>
+                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
             </Wrapper>
         )
     }

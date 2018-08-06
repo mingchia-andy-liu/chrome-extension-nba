@@ -66,9 +66,16 @@ class BoxScores extends React.Component {
                 isDirty,
             },
         } = this.props
-        const dateStr = isDirty
+        let dateStr = isDirty
             ? moment(date).format('YYYYMMDD')
             : getAPIDate().format('YYYYMMDD')
+
+        const queryString = require('query-string')
+        const { date: queryDate } = queryString.parse(this.props.location.search)
+        if (queryDate) {
+            dateStr = queryDate
+        }
+
         this.state = {
             id: id ? id : '0',
             quarter: 0,
@@ -80,7 +87,7 @@ class BoxScores extends React.Component {
         const { date, id } = this.state
         this.props.fetchGames(date, (games) => {
             let found = false
-            games.forEach(({ gid }) => {
+            games.forEach(({ id: gid }) => {
                 if (gid === id) {
                     this.props.fetchLiveGameBox(date, this.state.id)
                     found = true
@@ -248,6 +255,7 @@ BoxScores.propTypes = {
     }),
     location: PropTypes.shape({
         pathname: PropTypes.string.isRequired,
+        search: PropTypes.string.isRequired,
     }),
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
