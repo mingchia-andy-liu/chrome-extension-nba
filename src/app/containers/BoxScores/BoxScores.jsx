@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment-timezone'
@@ -18,6 +18,8 @@ import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
 import { fetchLiveGameBox, resetLiveGameBox } from './actions'
 import { fetchGames } from '../Popup/actions'
+
+import './alarm'
 
 const Wrapper = styled.div`
     display: grid;
@@ -75,11 +77,17 @@ class BoxScores extends React.Component {
     }
 
     componentDidMount() {
-        const { date } = this.state
-        this.props.fetchGames(date)
-        if (this.state.id !== '0') {
-            this.props.fetchLiveGameBox(date, this.state.id)
-        }
+        const { date, id } = this.state
+        this.props.fetchGames(date, (games) => {
+            let found = false
+            games.forEach(({ gid }) => {
+                if (gid === id) {
+                    this.props.fetchLiveGameBox(date, this.state.id)
+                    found = true
+                }
+            })
+            if (!found) this.props.history.replace('/boxscores')
+        })
     }
 
     renderTitle(bsData) {
@@ -104,7 +112,6 @@ class BoxScores extends React.Component {
                 <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
             </Title>
         )
-
     }
 
     renderSummary(bsData) {
@@ -126,7 +133,7 @@ class BoxScores extends React.Component {
                 stats: vts,
             },
         } = bsData
-        return <TeamStats hta={hta} hts={hts} vta={vta} vts={vts} />
+        return <TeamStats hta={hta} hts={hts || {}} vta={vta} vts={vts || {}} />
     }
 
     renderPlyaerStats(bsData) {
@@ -140,7 +147,8 @@ class BoxScores extends React.Component {
                 players: { player: visitorPlayers },
             },
         } = bsData
-        return <PlayerStats hta={hta} hps={homePlayers} vta={vta} vps={visitorPlayers} />
+
+        return <PlayerStats hta={hta} hps={homePlayers || []} vta={vta} vps={visitorPlayers || []} />
     }
 
     renderPlaybyPlay(pbpData) {
@@ -149,34 +157,41 @@ class BoxScores extends React.Component {
 
     renderContent() {
         const { bs: { bsData, pbpData} } = this.props
-        if (Object.keys(bsData).length !== 0 && pbpData.length !== 0) {
-            return (
-                <React.Fragment>
-                    {this.renderTitle(bsData)}
-                    <h3>Summary</h3>
-                    {this.renderSummary(bsData)}
-                    <h3>Team Stats</h3>
-                    {this.renderTeamStats(bsData)}
-                    <h3>Player Stats</h3>
-                    {this.renderPlyaerStats(bsData)}
-                    <h3>Play By Play</h3>
-                    {this.renderPlaybyPlay(pbpData)}
-                </React.Fragment>
-            )
-        } else {
-            if (this.state.id === '0') {
-                return <Overlay text={'Click on a game to view details'}/>
-            } else {
-                return <Overlay />
-            }
-        }
+        const isEmpty = Object.keys(bsData).length === 0 || Object.keys(pbpData).length === 0
+        // Route expects a funciton for component prop
+        const contentComponent =  () => (
+            <React.Fragment>
+                {!isEmpty && this.renderTitle(bsData)}
+                <h3>Summary</h3>
+                {!isEmpty && this.renderSummary(bsData)}
+                <h3>Team Stats</h3>
+                {!isEmpty && this.renderTeamStats(bsData)}
+                <h3>Player Stats</h3>
+                {!isEmpty && this.renderPlyaerStats(bsData)}
+                <h3>Play By Play</h3>
+                {!isEmpty && this.renderPlaybyPlay(pbpData)}
+            </React.Fragment>
+        )
+
+        return (
+            <Switch>
+                <Route path="/boxscores/:id" component={ contentComponent } />
+                <Route path="/boxscores" component={ Overlay } />
+            </Switch>
+        )
     }
 
-    selecteGame(e) {
+    selectGame(e) {
         const id = e.currentTarget.dataset.id
         const { date } = this.state
+        const { location: { pathname } } = this.props
         this.props.fetchLiveGameBox(date, id)
-        this.props.history.push(`/boxscores/${id}`)
+        if (pathname.startsWith('/boxscores')) {
+            this.props.history.replace(`/boxscores/${id}`)
+        } else {
+            this.props.history.push(`/boxscores/${id}`)
+        }
+
         this.setState({ id })
     }
 
@@ -198,12 +213,13 @@ class BoxScores extends React.Component {
                                     date,
                                 })
                                 this.props.resetLiveGameBox()
+                                this.props.history.replace('/boxscores')
                             }}
                             />
                             <CardList
                                 isLoading={live.isLoading}
                                 games={live.games}
-                                onClick={this.selecteGame.bind(this)}
+                                onClick={this.selectGame.bind(this)}
                                 selected={this.state.id}
                             />
                         </Sidebar>
@@ -229,6 +245,9 @@ BoxScores.propTypes = {
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,
         isDirty: PropTypes.bool.isRequired,
+    }),
+    location: PropTypes.shape({
+        pathname: PropTypes.string.isRequired,
     }),
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,

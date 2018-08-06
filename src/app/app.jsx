@@ -6,9 +6,10 @@ import { store, history } from './store'
 import './styles'
 import App from './containers/App'
 import browser from './utils/browser'
+import './utils/alarms'
 
 // Create a connection with the background script to handle open and close events.
-browser.connect()
+browser.runtime.connect()
 
 ReactDOM.render(
     <Provider store={store}>
@@ -20,4 +21,4 @@ ReactDOM.render(
 )
 
 import showDevTools from './containers/ShowDevTools'
-showDevTools(store);
+showDevTools(store)

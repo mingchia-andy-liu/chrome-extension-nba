@@ -24,7 +24,7 @@ Overlay.propTypes = {
 }
 
 Overlay.defaultProps = {
-    text: 'Game has not started yet',
+    text: 'Click on a game to see the box scores',
 }
 
 export default Overlay

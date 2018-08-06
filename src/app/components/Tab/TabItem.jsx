@@ -29,7 +29,15 @@ class TabItem extends Component {
     render() {
         const { onClick, label, active, to } = this.props
         return (
-            <Link to={to} onClick={onClick} active={active ? 1 : 0} >
+            <Link
+                to={to}
+                onClick={(e) => {
+                    // Prevent React error, prevent default if the same path
+                    if (to === '') e.preventDefault()
+                    else onClick(e)
+                }}
+                active={active ? 1 : 0}
+            >
                 <label>
                     {label}
                 </label>

@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 const renderTeamRow = (team, otherTeam) => (
     <Row>
         <RowHeaderCell>{team.abbreviation}</RowHeaderCell>
-        {team.linescores.period.map((period, index) => (
+        {team.linescores && team.linescores.period.map((period, index) => (
             <Cell
                 key={`period-${period.peroid_value}-${index}`}
                 winning={+period.score > +otherTeam.linescores.period[index].score ? 1 : 0}
@@ -31,7 +31,7 @@ class Summary extends React.PureComponent {
                 <StickyTable stickyHeaderCount={0}>
                     <Row>
                         <RowHeaderCell> Team </RowHeaderCell>
-                        {home.linescores.period.map(period => (
+                        {home.linescores && home.linescores.period.map(period => (
                             // TODO: hides the unstart peroid
                             <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
                         ))}

@@ -3,8 +3,23 @@ const browserNameSpace = {}
 
 if (typeof browser !== 'undefined') {
     // Firefox
-    browserNameSpace.connect = () => {
-        browser.runtime.connect()
+    browserNameSpace.runtime = {
+        connect: () => {
+            browser.runtime.connect()
+        },
+        onInstalled: {
+            addListener: (callback) => {
+                browser.runtime.onInstalled.addListener(callback)
+            },
+        },
+        onUpdateAvailable: {
+            addListener: (callback) => {
+                browser.runtime.onUpdateAvailable.addListener(callback)
+            },
+        },
+        reload: () => {
+            browser.runtime.reload()
+        },
     }
 
     browserNameSpace.getItem = (key, callback) => {
@@ -51,16 +66,46 @@ if (typeof browser !== 'undefined') {
     }
 
     browserNameSpace.tabs = {
+        create: (options) => {
+            browser.tabs.create(options)
+        },
         getCurrent: (callback) => {
             browser.tabs.getCurrent().then(() => callback())
         },
     }
 
+    browserNameSpace.alarms = {
+        create: (name, options) => (
+            browser.alarms.create(name, options)
+        ),
+
+        onAlarm: {
+            addListener: (listener) => (
+                browser.alarms.onAlarm.addListener(listener)
+            ),
+        },
+    }
 } else if (typeof chrome !== 'undefined') {
     // Chrome
-    browserNameSpace.connect = () => {
-        chrome.runtime.connect()
+    browserNameSpace.runtime = {
+        connect: () => {
+            chrome.runtime.connect()
+        },
+        onInstalled: {
+            addListener: (callback) => {
+                chrome.runtime.onInstalled.addListener(callback)
+            },
+        },
+        onUpdateAvailable: {
+            addListener: (callback) => {
+                chrome.runtime.onUpdateAvailable.addListener(callback)
+            },
+        },
+        reload: () => {
+            chrome.runtime.reload()
+        },
     }
+
 
     browserNameSpace.getItem = (key, callback) => {
         chrome.storage.local.get(key, (obj) => {
@@ -99,7 +144,6 @@ if (typeof browser !== 'undefined') {
         }
     }
 
-
     browserNameSpace.setBadgeBackgroundColor = (color) => {
         if (chrome.browserAction.setBadgeText) {
             chrome.browserAction.setBadgeBackgroundColor({ color: color })
@@ -107,11 +151,25 @@ if (typeof browser !== 'undefined') {
     }
 
     browserNameSpace.tabs = {
+        create: (options) => {
+            chrome.tabs.create(options)
+        },
         getCurrent: (callback) => {
             chrome.tabs.getCurrent(() => callback())
         },
     }
 
+    browserNameSpace.alarms = {
+        create: (name, options) => (
+            chrome.alarms.create(name, options)
+        ),
+
+        onAlarm: {
+            addListener: (listener) => (
+                chrome.alarms.onAlarm.addListener(listener)
+            ),
+        },
+    }
 
 } else {
     browserNameSpace.getItem = noop
@@ -120,6 +178,8 @@ if (typeof browser !== 'undefined') {
     browserNameSpace.getAllKeys = noop
     browserNameSpace.setBadgeBackgroundColor = noop
     browserNameSpace.setBadgeText = noop
+    browserNameSpace.alarms.create = noop
+    browserNameSpace.alarms.onAlarm.addListener = noop
 }
 
 export default browserNameSpace
