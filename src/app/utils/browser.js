@@ -24,21 +24,16 @@ if (typeof browser !== 'undefined') {
 
     browserNameSpace.getItem = (key, callback) => {
         browser.storage.local.get(key).then((obj) => {
-            if (obj[key]) {
-                callback(obj[key])
+            if (obj) {
+                callback(obj)
             } else {
                 callback(browser.runtime.lastError)
             }
         })
     }
 
-    browserNameSpace.setItem = (key, value, callback) => {
-        const obj = { [key]: value }
-        browser.storage.local.set(obj).then(() => {
-            if (callback && browser.runtime.lastError) {
-                callback(key)
-            }
-        })
+    browserNameSpace.setItem = (obj) => {
+        browser.storage.local.set(obj)
     }
 
     browserNameSpace.removeItem = (key) => {
@@ -109,21 +104,16 @@ if (typeof browser !== 'undefined') {
 
     browserNameSpace.getItem = (key, callback) => {
         chrome.storage.local.get(key, (obj) => {
-            if (obj[key]) {
-                callback(obj[key])
+            if (obj) {
+                callback(obj)
             } else {
                 callback(chrome.runtime.lastError)
             }
         })
     }
 
-    browserNameSpace.setItem = (key, value, callback) => {
-        const obj = { [key]: value }
-        chrome.storage.local.set(obj, () => {
-            if (callback && chrome.runtime.lastError) {
-                callback(key)
-            }
-        })
+    browserNameSpace.setItem = (obj) => {
+        chrome.storage.local.set(obj)
     }
 
     browserNameSpace.removeItem = (key) => {

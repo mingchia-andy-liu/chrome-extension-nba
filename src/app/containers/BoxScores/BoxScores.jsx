@@ -19,7 +19,8 @@ import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import { Shadow, Row } from '../../styles'
+import { SettingsConsumer } from '../../components/Context'
+import { Shadow, Theme, Row } from '../../styles'
 import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
 import { fetchLiveGameBox, resetLiveGameBox } from './actions'
@@ -41,24 +42,23 @@ const Sidebar = styled.div`
 const Content = styled.div`
     ${Shadow}
     grid-area: content;
-    background-color: #fff;
     overflow-y: scroll !important;
     padding: 10px;
     border-radius: 5px;
+    background-color: ${(props) => (props.dark ? Theme.dark.blockBackground : '#fff')};
 `
 
 const Title = styled(Row)`
     font-size: calc(12px + 1vw);
 `
 
-const StyledTitleItem = styled.div`
+const StyledScore = styled.div`
     padding: 0 10px;
-    ${props => !props.winning && 'opacity:0.5;'};
-`
-
-const StyledScore= styled(StyledTitleItem)`
-    padding: 0 10px;
-    ${(props) => (props.winning ? 'color: green;' : 'opacity:0.5;')};
+    color: ${(props) => {
+        if (props.dark && props.winning) return Theme.dark.winning
+        if (props.winning) return Theme.light.winning
+    }};
+    ${(props) => (props.winning ? '' : 'opacity: 0.5')};
 `
 
 class BoxScores extends React.Component {
@@ -117,13 +117,17 @@ class BoxScores extends React.Component {
             },
         } = bsData
         return (
-            <Title>
-                <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
-                <StyledScore winning={isWinning(vs, hs)}> {vs} </StyledScore>
-                -
-                <StyledScore winning={isWinning(hs, vs)}> {hs} </StyledScore>
-                <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
-            </Title>
+            <SettingsConsumer>
+                {({state: { dark }}) => (
+                    <Title>
+                        <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
+                        <StyledScore dark={dark} winning={isWinning(vs, hs)}> {vs} </StyledScore>
+                        -
+                        <StyledScore dark={dark} winning={isWinning(hs, vs)}> {hs} </StyledScore>
+                        <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
+                    </Title>
+                )}
+            </SettingsConsumer>
         )
     }
 
@@ -265,12 +269,16 @@ class BoxScores extends React.Component {
                                 selected={this.state.id}
                             />
                         </Sidebar>
-                        <Content>
-                            {bs.isLoading
-                                ? <Loader />
-                                : this.renderContent()
-                            }
-                        </Content>
+                        <SettingsConsumer>
+                            {({ state: { dark } }) => (
+                                <Content dark={dark}>
+                                    {bs.isLoading
+                                        ? <Loader />
+                                        : this.renderContent()
+                                    }
+                                </Content>
+                            )}
+                        </SettingsConsumer>
                     </Wrapper>
                 </Layout.Content>
             </Layout>

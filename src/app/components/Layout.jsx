@@ -12,7 +12,6 @@ const Wrapper = styled.div`
 
 const HeaderWrapper = styled.div`
     grid-area:    header;
-    background-color: #046fdb;
 `
 
 const ContentWrapper = styled.div`

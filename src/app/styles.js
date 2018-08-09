@@ -1,13 +1,18 @@
 import styled, {injectGlobal, css} from 'styled-components'
 
 injectGlobal`
+    :root {
+        --color: hsl(0, 0%, 15%);
+        --bg-color: #e0e0e0;
+    }
+
     * {
         box-sizing: border-box;
     }
 
     body {
-        color: hsl(0, 0%, 15%);
-        background-color: #e0e0e0;
+        color: var(--color);
+        background-color: var(--bg-color);
         font-family: 'Roboto Condensed', sans-serif;
         /*remove browser padding and margin*/
         padding: 0;
@@ -17,6 +22,34 @@ injectGlobal`
     }
 `
 
+export const Theme = {
+    light: {
+        baseBackground: '#e0e0e0',
+        blockBackground: 'white',
+        color: 'hsl(0, 0%, 15%)',
+        winning: '#00aa00',
+        losing: 'red',
+        doubles: {
+            d: '#c1dcf0',
+            t: '#f7b125',
+            q: '#724c9f',
+            p: '#008348',
+        },
+    },
+    dark: {
+        baseBackground: 'hsl(0, 0%, 30%)',
+        blockBackground: 'hsl(0, 0%, 15%)',
+        color: 'hsl(0, 0%, 95%)',
+        winning: '#00ee00',
+        losing: 'red',
+        doubles: {
+            d: '#4c4ca6',
+            t: '#f19132',
+            q: '#724c9f',
+            p: '#008348',
+        },
+    },
+}
 
 /**
  * Media query for mobile device

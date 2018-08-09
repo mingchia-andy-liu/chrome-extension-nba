@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row } from '../styles'
+import { SettingsConsumer } from '../components/Context'
+import { Theme } from '../styles'
 
 
 const Wrapper = styled.div`
@@ -15,17 +17,25 @@ const Wrapper = styled.div`
 
 const TeamScore = styled.div`
     flex-grow: 2;
-    ${(props) => (props.winning ? 'color: green;' : 'opacity:0.5;')};
+    color: ${(props) => {
+        if (props.dark && props.winning) return Theme.dark.winning
+        if (props.winning) return Theme.light.winning
+    }};
+    opacity: ${(props) => (props.winning ? '' : '0.5')};
 `
 
 const renderScores = (gameStatus, home, visitor) => {
     if (gameStatus !== '1') {
         return (
-            <Row>
-                <TeamScore winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
-                -
-                <TeamScore winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
-            </Row>
+            <SettingsConsumer>
+                {({ state: { dark } }) => (
+                    <Row >
+                        <TeamScore dark={dark} winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
+                        -
+                        <TeamScore dark={dark} winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
+                    </Row>
+                )}
+            </SettingsConsumer>
         )
     }
 }

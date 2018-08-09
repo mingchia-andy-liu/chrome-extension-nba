@@ -5,6 +5,8 @@ import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
 import { isWinning } from '../utils/format'
+import { SettingsConsumer } from '../components/Context'
+import { Theme } from '../styles'
 
 
 const Wrapper = styled.div`
@@ -16,7 +18,7 @@ const Wrapper = styled.div`
     width: 100%;
     margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
-    background-color: #f9f9f9;
+    background-color: ${(props) => (props.dark ? Theme.dark.blockBackground: '#f9f9f9')};
     border-radius: 5px;
     transition: 0.3s;
 
@@ -60,11 +62,15 @@ class MatchCard extends React.PureComponent {
         } = visitor
 
         return (
-            <Wrapper onClick={onClick} data-id={id} selected={selected}>
-                <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
-                <MatchInfo home={home} visitor={visitor} {...rest} />
-                <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
-            </Wrapper>
+            <SettingsConsumer>
+                {({ state: { dark } }) => (
+                    <Wrapper dark={dark} onClick={onClick} data-id={id} selected={selected}>
+                        <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
+                        <MatchInfo home={home} visitor={visitor} {...rest} />
+                        <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
+                    </Wrapper>
+                )}
+            </SettingsConsumer>
         )
     }
 }
@@ -78,7 +84,9 @@ MatchCard.propTypes = {
 }
 
 const TextCard = ({ text }) => (
-    <Wrapper > {text} </Wrapper>
+    <SettingsConsumer>
+        {({ state: { dark } }) => <Wrapper dark={dark}> {text} </Wrapper>}
+    </SettingsConsumer>
 )
 
 TextCard.propTypes = {

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import {Cell as StickyCell, Row} from 'react-sticky-table'
+import { Theme } from '../styles'
 
 export const Cell = styled(StickyCell)`
     min-width: 40px;
@@ -7,13 +8,20 @@ export const Cell = styled(StickyCell)`
     height: 1.8em !important;
     text-align: center;
     vertical-align: middle;
-    color: ${(props) => (props.winning ? 'green' : '')};
+    color: ${(props) => {
+        if (props.dark && props.winning) return Theme.dark.winning
+        if (props.winning) return Theme.light.winning
+    }};
 `
 
 export const StatsCell = styled(Cell)`
     color: ${(props) => {
-        if (props.winning) return 'green'
-        if (props.losing) return 'red'
+        if (props.dark) {
+            if (props.winning) return Theme.dark.winning
+            if (props.losing) return Theme.dark.losing
+        }
+        if (props.winning) return Theme.light.winning
+        if (props.losing) return Theme.light.losing
     }};
 `
 
@@ -43,18 +51,19 @@ export const RowWrapper = styled(Row)`
     }
 `
 
-export const rowBGColor = (doubles) => {
+export const rowBGColor = (doubles, isDark) => {
+    const colors = isDark ? Theme.dark.doubles : Theme.light.doubles
     switch (doubles) {
         case 'd':
-            return '#c1dcf0'
+            return colors.d
         case 't':
-            return '#f7b125'
+            return colors.t
         case 'q':
-            return '#724c9f'
+            return colors.q
         case 'p':
-            return '#008348'
+            return colors.p
         default:
-            break
+            return ''
     }
 }
 
