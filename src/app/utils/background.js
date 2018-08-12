@@ -1,4 +1,4 @@
-import browser from '../utils/browser'
+import browser from './browser'
 
 // this will reload the background explicitly to trigger an update as soon as possible if available
 browser.runtime.onUpdateAvailable.addListener(() => {

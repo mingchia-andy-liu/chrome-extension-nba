@@ -38,7 +38,8 @@ class Links extends React.Component {
                     <Link
                         dark={dark}
                         onClick={() => {
-                            browser.tabs.create({ url: `/index.html#/${hrefs[index]}` })
+                            browser.tabs.create({ url: `/index.html#/${hrefs    [index]}` })
+                            window.close()
                         }}
                     >
                         {element}

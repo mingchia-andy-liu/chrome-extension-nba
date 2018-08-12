@@ -20,13 +20,20 @@ const Wrapper = styled.div`
     width: 100%;
 `
 
+const OnCourt = styled.img`
+    width: 20px;
+    height: 20px;
+`
+
 const PlayerName = styled(Cell)`
     display: flex !important;
     flex-direction: row;
     text-align: left;
     align-items: center;
     border-right: 1px solid hsl(0, 0%, 95%);
-    width: 120px;
+    width: 10vw;
+    min-width: 120px;
+    overflow-y: hidden;
 `
 
 const renderHeaderRow = (name) => {
@@ -103,7 +110,7 @@ const renderPlayerRow = (player, isLive, isDark) => {
             <PlayerName>
                 {name}
                 {starting_position && <Sup>{starting_position}</Sup>}
-                {isLive && +on_court && <img src="assets/png/icon-color-48.png"></img>}
+                {isLive && +on_court && <OnCourt src="assets/png/icon-color-128.png" />}
             </PlayerName>
             <Cell>{formatMinutes(player)}</Cell>
             <StatsCell dark={isDark ? 1 : 0} winning={+points >= 10 ? 1 : 0}>{points}</StatsCell>

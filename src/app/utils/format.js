@@ -32,6 +32,7 @@ export const HeaderCell = styled(Cell)`
 `
 
 export const RowHeaderCell = styled(HeaderCell)`
+    width: 10vw;
     min-width: 120px !important;
     border-right: 1px solid hsl(0, 0%, 95%);
 `

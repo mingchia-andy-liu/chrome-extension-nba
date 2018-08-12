@@ -4,12 +4,10 @@ import { routerReducer as routing } from 'react-router-redux'
 import liveReducer from './containers/Popup/reducers'
 import boxScoresReducer from './containers/BoxScores/reducers'
 import dateReducer from './containers/DatePicker/reducers'
+import standingsReducer from './containers/Standings/reducers'
 
 export const initialState = {}
 
-// define app-level reducer
-const appReducer = combineReducers({
-})
 
 // combined reducer
 export default combineReducers({
@@ -18,4 +16,5 @@ export default combineReducers({
     live: liveReducer,
     bs: boxScoresReducer,
     date: dateReducer,
+    standings: standingsReducer,
 })

@@ -56,10 +56,10 @@ export const Theme = {
  */
 export const media = {
     handheld: (...args) => css`
-    @media (max-width: 420px) {
-        ${ css(...args) }
-    }
-  `,
+        @media only screen and (max-width: 800px) {
+            ${ css(...args) }
+        }
+    `,
 }
 
 
