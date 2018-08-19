@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
 import { Cell, HeaderCell } from '../../utils/format'
 import { RowCSS } from '../../styles'
-import { getLogoColor } from '../../utils/logo'
+import { getLogoColorByName } from '../../utils/teams'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -42,7 +42,7 @@ const renderPBPRow = (plays, period) => {
         } = play
         const index = _description.indexOf(']')
         const name = index === -1 ? '' : _description.substring(1, 4)
-        const color = getLogoColor(name)
+        const color = getLogoColorByName(name)
         const LOGO = index !== -1
             ? <Cell style={{color: 'white', backgroundColor: color}}>{name}</Cell>
             : <Cell></Cell>

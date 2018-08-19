@@ -3,7 +3,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
 
-import { teams } from '../../utils/logo'
+import { teams } from '../../utils/teams'
 
 
 class Options extends React.Component {

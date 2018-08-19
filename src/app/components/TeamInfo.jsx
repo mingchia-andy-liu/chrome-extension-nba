@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {getLogoColor} from '../utils/logo'
+import {getLogoColorByName} from '../utils/teams'
 
 export const TeamLogo = styled.div`
     display: flex;
@@ -14,7 +14,7 @@ export const TeamLogo = styled.div`
     border-radius: 50%;
 
     background-color: ${(props) => (props.team
-        ? getLogoColor(props.team)
+        ? getLogoColorByName(props.team)
         : '#000000')};
 
     opacity: ${(props) => (props.winning

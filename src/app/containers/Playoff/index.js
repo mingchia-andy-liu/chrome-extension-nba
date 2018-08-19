@@ -1,3 +1,1 @@
-import Playoff from './Playoff'
-
-export default Playoff
+export { default } from './Playoff'

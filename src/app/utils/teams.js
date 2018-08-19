@@ -110,6 +110,16 @@ export const getTeamNameById = (id) => {
     return name
 }
 
-export const getLogoColor = (name) => {
+export const getLogoColorByName = (name) => {
     return LOGO_COLORS[name] || '#000000'
+}
+
+export const getLogoColorById = (id) => {
+    let name = ''
+    Object.keys(TEAM_ID).forEach(key => {
+        if (TEAM_ID[key] === id) {
+            name = key
+        }
+    })
+    return getLogoColorByName(name)
 }
