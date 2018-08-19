@@ -1,3 +1,1 @@
-import BoxScores from './BoxScores'
-
-export default BoxScores
+export  { default } from './BoxScores'

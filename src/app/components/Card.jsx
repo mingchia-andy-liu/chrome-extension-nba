@@ -8,12 +8,13 @@ import { isWinning } from '../utils/format'
 import { SettingsConsumer } from '../components/Context'
 import { Theme } from '../styles'
 
-
+// position relative for before pseudo element
 const Wrapper = styled.div`
     ${RowCSS}
     ${JustifyCenter}
     ${AlignCenter}
     ${Shadow}
+    position: relative;
     min-height: 90px;
     width: 100%;
     margin-bottom: 15px;
@@ -35,6 +36,20 @@ const Wrapper = styled.div`
 
     &:last-child {
         margin-bottom: 0px;
+    }
+
+    &::before {
+        ${(props) => (props.fav && `
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            border-top-left-radius: 3px;
+            border-top: 10px solid gold;
+            border-left: 5px solid gold;
+            border-right: 10px solid transparent;
+            border-bottom: 5px solid transparent;
+        `)}
     }
 `
 
@@ -63,8 +78,14 @@ class MatchCard extends React.PureComponent {
 
         return (
             <SettingsConsumer>
-                {({ state: { dark } }) => (
-                    <Wrapper dark={dark} onClick={onClick} data-id={id} selected={selected}>
+                {({ state: { dark, team } }) => (
+                    <Wrapper
+                        dark={dark}
+                        onClick={onClick}
+                        data-id={id}
+                        selected={selected}
+                        fav={team === vta || team === hta}
+                    >
                         <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
                         <MatchInfo home={home} visitor={visitor} {...rest} />
                         <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>

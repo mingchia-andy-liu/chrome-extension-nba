@@ -1,3 +1,1 @@
-import Changelog from './Changelog'
-
-export default Changelog
+export { default } from './Changelog'

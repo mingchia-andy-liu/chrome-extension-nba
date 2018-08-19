@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { ColumnCSS } from '../styles'
 import { TextCard, MatchCard } from './Card'
+import { SettingsConsumer } from './Context'
 
 
 const Wrapper = styled.div`
@@ -10,11 +11,27 @@ const Wrapper = styled.div`
     width: 100%;
 `
 
-const generateCards = (games, selected, rest) => {
+const generateCards = (games, selected, favTeam, rest) => {
+    const g = [...games]
+    const favTeamIndex = g.findIndex(({home, visitor}) => home.abbreviation === favTeam || visitor.abbreviation === favTeam)
+    const favTeamMatch = g[favTeamIndex]
+    if (favTeamIndex >= 0) {
+        g.splice(favTeamIndex, 1)
+    }
     return (
         <Fragment>
-            {games.map((game, index) =>
-                <MatchCard selected={game.id === selected} key={`card-${index}`} {...game} {...rest}/>
+            {favTeamMatch && <MatchCard
+                selected={favTeamMatch.id === selected}
+                {...favTeamMatch}
+                {...rest}
+            />}
+            {g.map((game, index) =>
+                <MatchCard
+                    selected={game.id === selected}
+                    key={`card-${index}`}
+                    {...game}
+                    {...rest}
+                />
             )}
         </Fragment>
     )
@@ -40,9 +57,13 @@ class CardList extends React.PureComponent {
         }
 
         return (
-            <Wrapper>
-                {generateCards(games, selected, rest)}
-            </Wrapper>
+            <SettingsConsumer>
+                {({state: { team }}) => (
+                    <Wrapper>
+                        {generateCards(games, selected, team, rest)}
+                    </Wrapper>
+                )}
+            </SettingsConsumer>
         )
     }
 }
