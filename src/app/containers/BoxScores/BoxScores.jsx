@@ -200,24 +200,30 @@ class BoxScores extends React.Component {
     }
 
     renderContent() {
-        const { bs: { bsData, pbpData, team } } = this.props
+        const { bs: { bsData, pbpData, teamStats } } = this.props
         const isEmpty = Object.keys(bsData).length === 0 || Object.keys(pbpData).length === 0
         // Route expects a funciton for component prop
-        const contentComponent =  () => (
-            <React.Fragment>
-                {!isEmpty && this.renderTitle(bsData)}
-                <h3>Summary</h3>
-                {!isEmpty && this.renderSummary(bsData)}
-                <h3>Team Stats</h3>
-                {!isEmpty && this.renderTeamStats(bsData)}
-                <h4>Advanced</h4>
-                {!isEmpty && this.renderAdvancedTeamStats(team, bsData)}
-                <h3>Player Stats</h3>
-                {!isEmpty && this.renderPlyaerStats(bsData)}
-                <h3>Play By Play</h3>
-                {!isEmpty && this.renderPlaybyPlay(pbpData)}
-            </React.Fragment>
-        )
+        const contentComponent = () => {
+            if (isEmpty) {
+                return <Overlay text={'Game has not started'} />
+            } else {
+                return (
+                    <React.Fragment>
+                        {this.renderTitle(bsData)}
+                        <h3>Summary</h3>
+                        {this.renderSummary(bsData)}
+                        <h3>Team Stats</h3>
+                        {this.renderTeamStats(bsData)}
+                        <h4>Advanced</h4>
+                        {this.renderAdvancedTeamStats(teamStats, bsData)}
+                        <h3>Player Stats</h3>
+                        {this.renderPlyaerStats(bsData)}
+                        <h3>Play By Play</h3>
+                        {this.renderPlaybyPlay(pbpData)}
+                    </React.Fragment>
+                )
+            }
+        }
 
         return (
             <Switch>
@@ -289,8 +295,10 @@ class BoxScores extends React.Component {
 BoxScores.propTypes = {
     live: PropTypes.object,
     bs: PropTypes.shape({
+        isLoading: PropTypes.bool.isRequired,
         bsData: PropTypes.object.isRequired,
         pbpData: PropTypes.object.isRequired,
+        teamStats: PropTypes.object.isRequired,
     }),
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,

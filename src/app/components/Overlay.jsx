@@ -6,15 +6,13 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-content: center;
-    /* background-color: rgba(10, 40, 70, 0.9); */
     width: 100%;
     height: 100%;
-    /* color: white; */
 `
 
 
 const Overlay = ({ text }) => (
-    <Wrapper >
+    <Wrapper>
         <h2>{text}</h2>
     </Wrapper>
 )

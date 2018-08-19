@@ -7,7 +7,7 @@ const initState = {
      */
     bsData: {},
     pbpData: {},
-    g: {},
+    teamStats: {},
 }
 
 const sanitizeBS = ({ arena, home, visitor, officials }) => ({
@@ -57,12 +57,13 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
-            const team = teamStatsExtrator(action.payload.g)
+            const { teamStats, boxScoreData, pbpData } = action.payload
+            const team = teamStatsExtrator(teamStats)
             return {
                 isLoading: false,
-                bsData: sanitizeBS(action.payload.boxScoreData),
-                pbpData: action.payload.pbpData,
-                team: {
+                bsData: sanitizeBS(boxScoreData),
+                pbpData: pbpData,
+                teamStats: {
                     home: teamStatsConverter(team.hls),
                     visitor: teamStatsConverter(team.vls),
                     extra: {
@@ -78,7 +79,7 @@ export default (state = initState, action) => {
                 isLoading: false,
                 bsData: {},
                 pbpData: {},
-                team: {},
+                teamStats: {},
             }
         default:
             return state

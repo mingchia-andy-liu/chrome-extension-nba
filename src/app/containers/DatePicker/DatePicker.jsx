@@ -25,6 +25,7 @@ const inputCSS = css`
     border: none;
     width: 100%;
     height: calc(20px + 2vh);
+    cursor: pointer;
 
     background-color: ${(props) => (props.dark
         ? Theme.dark.blockBackground

@@ -45,9 +45,9 @@ const Wrapper = styled.div`
             top: -2px;
             left: -2px;
             border-top-left-radius: 3px;
-            border-top: 10px solid gold;
+            border-top: 20px solid gold;
             border-left: 5px solid gold;
-            border-right: 10px solid transparent;
+            border-right: 20px solid transparent;
             border-bottom: 5px solid transparent;
         `)}
     }

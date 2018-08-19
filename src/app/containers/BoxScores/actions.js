@@ -44,9 +44,9 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
 
         const boxScoreData = await fetchBoxScore(dateStr, gid)
         const pbpData = await fetchPBP(dateStr, gid)
-        const g = await fetchGameDetail(dateStr, gid)
+        const teamStats = await fetchGameDetail(dateStr, gid)
 
-        if (isEmpty(boxScoreData) && isEmpty(pbpData) && isEmpty(g)) {
+        if (isEmpty(boxScoreData) && isEmpty(pbpData) && isEmpty(teamStats)) {
             throw Error()
         }
 
@@ -55,7 +55,7 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
             payload: {
                 boxScoreData,
                 pbpData,
-                g,
+                teamStats,
             },
         })
     } catch (error) {

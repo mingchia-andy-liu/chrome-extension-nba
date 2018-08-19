@@ -36,12 +36,12 @@ const renderHeaderRow = () => {
 const renderTeamRow = (team, name) => (
     <Row>
         <RowHeaderCell> {name} </RowHeaderCell>
-        <Cell>{team.biggest_lead}</Cell>
-        <Cell>{team.bench_points}</Cell>
-        <Cell>{team.second_chance_points}</Cell>
-        <Cell>{team.fast_break_points} ({team.fast_break_points_made}-{team.fast_break_points_attempted})</Cell>
-        <Cell>{team.points_in_paint} ({team.points_in_paint_made}-{team.points_in_paint_attempted})</Cell>
-        <Cell>{team.points_off_turnovers}</Cell>
+        <Cell>{team.biggest_lead || 0}</Cell>
+        <Cell>{team.bench_points || 0}</Cell>
+        <Cell>{team.second_chance_points || 0}</Cell>
+        <Cell>{team.fast_break_points || 0} ({team.fast_break_points_made || 0}-{team.fast_break_points_attempted || 0})</Cell>
+        <Cell>{team.points_in_paint || 0} ({team.points_in_paint_made || 0}-{team.points_in_paint_attempted || 0})</Cell>
+        <Cell>{team.points_off_turnovers || 0}</Cell>
     </Row>
 )
 
