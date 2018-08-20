@@ -4,7 +4,7 @@ import { routerMiddleware } from 'react-router-redux'
 import { createHashHistory } from 'history'
 import reducer, { initialState } from './reducers'
 
-import DevTools from './containers/DevTools'
+import DevTools from './devTools'
 
 export const history = createHashHistory({
     basname: '',

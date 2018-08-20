@@ -20,5 +20,5 @@ ReactDOM.render(
     , document.getElementById('app')
 )
 
-import showDevTools from './containers/ShowDevTools'
+import showDevTools from './showDevTools'
 showDevTools(store)

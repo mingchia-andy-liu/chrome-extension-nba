@@ -6,18 +6,18 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import * as actions from './actions'
-import { media } from '../../styles'
+import { Media } from '../../styles'
 
 const Cell = styled.td`
     width: 10vw;
     height: 1.8em !important;
     text-align: center;
     vertical-align: middle;
-    ${ media.handheld` width: 20vw; `}
+    ${ Media.handheld` width: 20vw; `}
 `
 
 const NonMainCell = styled(Cell)`
-    ${ media.handheld` display: none !important; `}
+    ${ Media.handheld` display: none !important; `}
 `
 
 const HeaderCell = styled(Cell)`
@@ -25,11 +25,11 @@ const HeaderCell = styled(Cell)`
     font-weight: 700;
     background-color: #046fdb;
     color: #fff;
-    ${ media.handheld` width: 20vw; `}
+    ${ Media.handheld` width: 20vw; `}
 `
 
 const NonMainHeaderCell = styled(HeaderCell)`
-    ${ media.handheld` display: none !important; `}
+    ${ Media.handheld` display: none !important; `}
 `
 
 const Row = styled.tr`

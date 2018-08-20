@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import DevTools from './DevTools'
+import DevTools from './devTools'
 
 export default function showDevTools(store) {
     const popup = window.open(null, 'Redux DevTools', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no')

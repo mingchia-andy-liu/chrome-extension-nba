@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route, Redirect, withRouter  } from 'react-router-dom'
 import styled from 'styled-components'
-import PopUp from '../PopUp'
+import PopUp from '../Popup'
 import BoxScores from '../BoxScores'
 import Standings from '../Standings'
 import Options from '../Options'

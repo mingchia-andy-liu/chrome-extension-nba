@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { ColumnCSS } from '../styles'
+import { ColumnCSS, Media } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SettingsConsumer } from './Context'
 
@@ -9,6 +9,10 @@ import { SettingsConsumer } from './Context'
 const Wrapper = styled.div`
     ${ColumnCSS}
     width: 100%;
+
+    ${ Media.handheld`  min-height: 100px;
+                        max-height: 250px;
+                        overflow-y: scroll`}
 `
 
 const generateCards = (games, selected, favTeam, rest) => {

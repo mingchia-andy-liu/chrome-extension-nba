@@ -20,7 +20,7 @@ import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
-import { Shadow, Theme, Row } from '../../styles'
+import { Shadow, Theme, Row, Media } from '../../styles'
 import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
 import { fetchLiveGameBox, resetLiveGameBox } from './actions'
@@ -34,6 +34,10 @@ const Wrapper = styled.div`
     grid-template-columns: minmax(27%, 300px) 1fr;
     grid-gap: 1em 1em;
     padding: 10px 0;
+
+    ${ Media.handheld`  grid-template-areas: "sidebar"
+                                             "content";
+                        grid-template-columns: 1fr;`}
 `
 
 const Sidebar = styled.div`

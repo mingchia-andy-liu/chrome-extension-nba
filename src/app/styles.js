@@ -54,9 +54,9 @@ export const Theme = {
 /**
  * Media query for mobile device
  */
-export const media = {
+export const Media = {
     handheld: (...args) => css`
-        @media only screen and (max-width: 800px) {
+        @media screen and (max-width: 800px) {
             ${ css(...args) }
         }
     `,
