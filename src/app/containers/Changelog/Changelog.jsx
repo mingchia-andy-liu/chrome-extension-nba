@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
+import { RowCSS } from '../../styles'
 
+const Wrapper = styled.div`
+    ${RowCSS}
 `
 
 
