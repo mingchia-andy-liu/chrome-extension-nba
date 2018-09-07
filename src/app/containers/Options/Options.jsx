@@ -42,9 +42,9 @@ class Options extends React.Component {
                 origins: ['https://boxscoresORsomething.net'],
             }, function(granted) {
                 if (granted) {
-                    console.log('granted')
+                    // granted
                 } else {
-                    console.log('no granted')
+                    // not granted
                 }
             })
         })
