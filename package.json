@@ -1,0 +1,70 @@
+{
+  "name": "chrome-extension-nba",
+  "version": "1.2.5",
+  "description": "This is a browser extension shows the daily box score for NBA games.",
+  "author": "Liu, Ming Chia",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "start:dev": "NODE_ENV=development webpack-dev-server --open",
+    "build": "npm test && cd src && web-ext build --overwrite-dest",
+    "lint": "npm-run-all lint:*",
+    "lint:addon": "addons-linter src --self-hosted",
+    "lint:css": "stylelint src/css/*.css",
+    "lint:js": "eslint src/app",
+    "lint:js:fix": "eslint src/app --fix",
+    "test": "npm run lint",
+    "webpack": "NODE_ENV=production webpack --progress --colors",
+    "webpack:dev": "NODE_ENV=development webpack --progress --colors"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mingchia-andy-liu/chrome-extension-nba.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mingchia-andy-liu/chrome-extension-nba/issues"
+  },
+  "homepage": "https://github.com/mingchia-andy-liu/chrome-extension-nba#readme",
+  "devDependencies": {
+    "addons-linter": "^0.41.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.7.0",
+    "npm-run-all": "^4.1.2",
+    "prop-types": "^15.6.1",
+    "redux-devtools-log-monitor": "^1.4.0",
+    "style-loader": "^0.21.0",
+    "stylelint": "^9.2.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-order": "^0.8.1",
+    "web-ext": "^2.6.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "moment-timezone": "^0.5.16",
+    "node-fetch": "^2.1.2",
+    "query-string": "^6.1.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-flatpickr": "^3.6.4",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "react-sticky-table": "^2.0.4",
+    "redux": "^4.0.0",
+    "redux-devtools": "^3.4.1",
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^3.3.3"
+  }
+}
