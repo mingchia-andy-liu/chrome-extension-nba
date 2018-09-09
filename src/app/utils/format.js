@@ -97,6 +97,21 @@ export const hasDoubles = (player) => {
     }
 }
 
+export const getDoublesText = (doubles) => {
+    switch (doubles) {
+        case 'd':
+            return 'Double Doubles'
+        case 't':
+            return 'Triple Doubles'
+        case 'q':
+            return 'Quadruple Doubles'
+        case 'p':
+            return 'Quintuple Doubles'
+        default:
+            return ''
+    }
+}
+
 export const formatGames = (games) => {
     return games.map(element => {
 
@@ -142,6 +157,12 @@ export const formatClock = (clock, status) => {
  * @param {row object} player
  */
 export const formatMinutes = ({ minutes, seconds }) => {
+    if (minutes < 10 || minutes.length === 1) {
+        minutes = `0${minutes}`
+    }
+    if (seconds < 10 || seconds.length === 1) {
+        seconds = `0${seconds}`
+    }
     return `${minutes}:${seconds}`
 }
 
@@ -167,3 +188,6 @@ export const isWinning = (self, other) => {
         return +self > +other
     }
 }
+
+
+export const quarterNames = ['Q1', 'Q2', 'Q3','Q4', 'OT1', 'OT2', 'OT3', 'OT4', 'OT5', 'OT6', 'OT7', 'OT8', 'OT9', 'OT10' ]

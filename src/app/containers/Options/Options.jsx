@@ -1,16 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
+import Checkbox from '../../components/Checkbox'
 import { SettingsConsumer } from '../../components/Context'
 
-import { RowCSS, AlignCenter } from '../../styles'
 import { teams } from '../../utils/teams'
 
-const Link = styled(RouterLink)`
-    ${RowCSS}
-    ${AlignCenter}
+const RouterLink = styled(Link)`
+    padding: 0 5px;
+    text-decoration: none;
+    border: 0;
+    outline: none;
+    color: ${(props) => (props.dark ? '#5188ff' : 'rgb(46, 46, 223)')};
+    cursor: pointer;
+`
+
+const HrefLink = styled.a`
     padding: 0 5px;
     text-decoration: none;
     border: 0;
@@ -24,12 +31,18 @@ class Options extends React.Component {
         super(props)
     }
 
-    renderHeader() {
+    renderHeader(isDark) {
         return (
             <React.Fragment>
-                <Link to="changelog">Changelog</Link>
-                <p>If you have any questions, please email to
-                    <i>box.scores.extension@gmail.com</i>
+                <RouterLink dark={isDark ? 1 : 0} to="changelog">Changelog</RouterLink>
+                <p>If you have any questions, please email to {' '}
+                    <HrefLink
+                        dark={isDark ? 1 : 0}
+                        href={`mailto:box.scores.extension@gmail.com?subject=${encodeURIComponent('Feedback on the Basketball Box Scores extension')}`}
+                    >
+                        Here
+                    </HrefLink>
+                    .
                 </p>
             </React.Fragment>
         )
@@ -53,20 +66,35 @@ class Options extends React.Component {
     renderTeams(favTeam, updateTeam) {
         return (
             <React.Fragment>
-                <label className="u-margin-none">
+                <label>
                     Select your favorite team:
+                    <select value={favTeam} onChange={(e) => updateTeam(e.currentTarget.value)}>
+                        <option value="">Choose here</option>
+                        {Object.keys(teams).map(teamAbbr => (
+                            <option
+                                key={teamAbbr}
+                                value={teamAbbr}
+                            >
+                                {teams[teamAbbr]}
+                            </option>
+                        ))}
+                    </select>
                 </label>
-                <select value={favTeam} onChange={(e) => updateTeam(e.currentTarget.value)}>
-                    <option value="">Choose here</option>
-                    {Object.keys(teams).map(teamAbbr => (
-                        <option
-                            key={teamAbbr}
-                            value={teamAbbr}
-                        >
-                            {teams[teamAbbr]}
-                        </option>
-                    ))}
-                </select>
+            </React.Fragment>
+        )
+    }
+
+    renderContent(context) {
+        const { team, dark, hideZeroRow, broadcast } = context.state
+        const { updateTeam, updateTheme, updateHideZeroRow, updateBroadcast } = context.actions
+
+        return (
+            <React.Fragment>
+                {this.renderHeader(dark)}
+                {this.renderTeams(team, updateTeam)}
+                <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme}/>
+                <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow}/>
+                <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast}/>
             </React.Fragment>
         )
     }
@@ -77,20 +105,7 @@ class Options extends React.Component {
                 <Layout.Header>{<Header index={1}/>}</Layout.Header>
                 <Layout.Content>
                     <SettingsConsumer>
-                        {context => {
-                            const { team, dark } = context.state
-                            const { updateTeam, updateTheme } = context.actions
-
-                            return (
-                                <React.Fragment>
-                                    {this.renderHeader()}
-                                    <p>Current team: {team}</p>
-                                    {this.renderTeams(team, updateTeam)}
-                                    <p>Dark: {`${dark === true}`}</p>
-                                    <button onClick={updateTheme}>update theme</button>
-                                </React.Fragment>
-                            )
-                        }}
+                        {context => this.renderContent(context)}
                     </SettingsConsumer>
                 </Layout.Content>
             </Layout>

@@ -20,7 +20,7 @@ import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
-import { Shadow, Theme, Row, Media } from '../../styles'
+import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
 import { isWinning } from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
 import { fetchLiveGameBox, resetLiveGameBox } from './actions'
@@ -35,9 +35,10 @@ const Wrapper = styled.div`
     grid-gap: 1em 1em;
     padding: 10px 0;
 
-    ${ Media.handheld`  grid-template-areas: "sidebar"
-                                             "content";
-                        grid-template-columns: 1fr;`}
+    ${mediaQuery`
+        grid-template-areas:"sidebar"
+                            "content";
+        grid-template-columns: 1fr;`}
 `
 
 const Sidebar = styled.div`
@@ -63,6 +64,14 @@ const StyledScore = styled.div`
         if (props.winning) return Theme.light.winning
     }};
     ${(props) => (props.winning ? '' : 'opacity: 0.5')};
+`
+
+const Subtitle = styled.span`
+    padding: 0 5px;
+
+    &:first-child {
+        padding-left: 0px;
+    }
 `
 
 class BoxScores extends React.Component {
@@ -123,7 +132,7 @@ class BoxScores extends React.Component {
         return (
             <SettingsConsumer>
                 {({state: { dark }}) => (
-                    <Title>
+                    <Title justifyCenter={true} alignCenter={true}>
                         <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
                         <StyledScore dark={dark} winning={isWinning(vs, hs)}> {vs} </StyledScore>
                         -
@@ -137,10 +146,21 @@ class BoxScores extends React.Component {
 
     renderSummary(bsData) {
         const {
+            officials,
             home,
             visitor,
         } = bsData
-        return <Summary home={home} visitor={visitor}/>
+        return (
+            <Column>
+                <Row>
+                    <Subtitle>OFFICIALS: </Subtitle>
+                    {officials.map(({person_id, first_name, last_name}, i) =>
+                        <Subtitle key={person_id}>{first_name} {last_name}{i !== officials.length - 1 && ','}</Subtitle>
+                    )}
+                </Row>
+                <Summary home={home} visitor={visitor}/>
+            </Column>
+        )
     }
 
     renderTeamStats(bsData) {
@@ -205,10 +225,9 @@ class BoxScores extends React.Component {
 
     renderContent() {
         const { bs: { bsData, pbpData, teamStats } } = this.props
-        const isEmpty = Object.keys(bsData).length === 0 || Object.keys(pbpData).length === 0
         // Route expects a funciton for component prop
         const contentComponent = () => {
-            if (isEmpty) {
+            if (!bsData || Object.keys(bsData).length === 0 || !bsData.st === 1) {
                 return <Overlay text={'Game has not started'} />
             } else {
                 return (

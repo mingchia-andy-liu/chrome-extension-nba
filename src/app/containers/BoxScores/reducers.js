@@ -1,4 +1,5 @@
 import types from './types'
+import convert from './convert'
 
 const initState = {
     isLoading: false,
@@ -10,25 +11,24 @@ const initState = {
     teamStats: {},
 }
 
-const sanitizeBS = ({ arena, home, visitor, officials }) => ({
-    arena,
+const sanitizeBS = ({ home, visitor, officials }) => ({
     home,
     visitor,
-    officials,
+    officials: officials || [],
 })
 
 const teamStatsConverter = (data) => {
     return {
-        biggest_lead: data.ble,
-        bench_points: data.bpts,
-        fast_break_points: data.fbpts,
-        fast_break_points_attempted: data.fbptsa,
-        fast_break_points_made: data.fbptsm,
-        points_in_paint: data.pip,
-        points_in_paint_attempted: data.pipa,
-        points_in_paint_made: data.pipm,
-        points_off_turnovers: data.potov,
-        second_chance_points: data.scp,
+        benchPoints: data.bpts,
+        biggestLead: data.ble,
+        fastBreakPoints: data.fbpts,
+        fastBreakPointsAttempted: data.fbptsa,
+        fastBreakPointsMade: data.fbptsm,
+        pointsInPaint: data.pip,
+        pointsInPaintAttempted: data.pipa,
+        pointsInPaintMade: data.pipm,
+        pointsOffTurnovers: data.potov,
+        secondChancePoints: data.scp,
     }
 }
 
@@ -36,16 +36,16 @@ const teamStatsExtrator = (data) => {
     if (Object.keys(data).length === 0) {
         return {
             hls: {},
-            vls: {},
             lc: 0,
             tt: 0,
+            vls: {},
         }
     }
     return {
         hls: data.hls.tstsg,
-        vls: data.vls.tstsg,
         lc: data.gsts.lc,
         tt: data.gsts.tt,
+        vls: data.vls.tstsg,
     }
 }
 
@@ -57,18 +57,18 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
-            const { teamStats, boxScoreData, pbpData } = action.payload
-            const team = teamStatsExtrator(teamStats)
+            const { boxScoreData, pbpData } = action.payload
+            const team = teamStatsExtrator(boxScoreData)
             return {
                 isLoading: false,
-                bsData: sanitizeBS(boxScoreData),
+                bsData: sanitizeBS(convert(boxScoreData)),
                 pbpData: pbpData,
                 teamStats: {
                     home: teamStatsConverter(team.hls),
                     visitor: teamStatsConverter(team.vls),
                     extra: {
-                        lead_changes: team.lc,
-                        times_tied: team.tt,
+                        leadChanges: team.lc,
+                        timesTied: team.tt,
                     },
                 },
             }

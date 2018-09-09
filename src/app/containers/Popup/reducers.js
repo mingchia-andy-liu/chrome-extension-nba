@@ -6,6 +6,15 @@ const initState = {
     games: [],
 }
 
+const getBroadcaster = (casters) => {
+    if (casters && casters.tv && casters.tv.broadcaster) {
+        const natl = casters.tv.broadcaster.find(caster => caster.scope === 'natl')
+        return (natl && natl.display_name) || ''
+    } else {
+        return ''
+    }
+}
+
 const sanitizeGame = game => ({
     id: game.id,
     date: game.date,
@@ -15,7 +24,7 @@ const sanitizeGame = game => ({
         name: game.arena,
         city: game.city,
     },
-    broadcasters: game.broadcasters,
+    broadcaster: getBroadcaster(game.broadcasters),
     home: game.home,
     visitor: game.visitor,
     playoffs: game.playoffs,

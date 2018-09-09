@@ -1,10 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-import { RowCSS } from '../../styles'
+
+import { Row, ColumnCSS } from '../../styles'
+
+import * as data from '../../assets/changelog.json'
 
 const Wrapper = styled.div`
-    ${RowCSS}
+    ${ColumnCSS}
+    padding: 0 20%;
+`
+
+const RouterLink = styled(Link)`
+    text-decoration: none;
+    border: 0;
+    outline: none;
+    color: ${(props) => (props.dark ? '#5188ff' : 'rgb(46, 46, 223)')};
+    cursor: pointer;
+`
+
+const Arrow = styled.img`
+    width: 50px;
+    height: 50px;
 `
 
 
@@ -16,7 +34,24 @@ class Changelog extends React.Component {
     render() {
         return (
             <Wrapper>
-                <h3>Changelog</h3>
+                <Row alignCenter={true}>
+                    <RouterLink to="options">
+                        <Arrow src="../../assets/png/arrow-left.png" />
+                    </RouterLink>
+                    <h1>Changelog</h1>
+                </Row>
+                {
+                    data.map(({version, updates}) => (
+                        <div key={version}>
+                            <h2>{version}</h2>
+                            <ul>
+                                {updates.map(item => (
+                                    <li key={item}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
             </Wrapper>
         )
     }
