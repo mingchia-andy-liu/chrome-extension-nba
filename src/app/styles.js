@@ -75,8 +75,8 @@ const align = ({
 }) => {
     return (alignCenter && 'center') ||
         (alignStart && 'flex-start') ||
-        (alignEnd  && 'flex-end') ||
-        (alignBaseline  && 'baseline') ||
+        (alignEnd && 'flex-end') ||
+        (alignBaseline && 'baseline') ||
         (alignStretch && 'stretch') ||
         (alignSpaceBetween && 'space-between') ||
         (alignSpaceAround && 'space-around')
@@ -91,7 +91,7 @@ const justify = ({
 }) => {
     return (justifyCenter && 'center') ||
         (justifyStart && 'flex-start') ||
-        (justifyEnd &&  'flex-end') ||
+        (justifyEnd && 'flex-end') ||
         (justifySpaceBetween && 'space-between') ||
         (justifySpaceAround && 'space-around')
 }
