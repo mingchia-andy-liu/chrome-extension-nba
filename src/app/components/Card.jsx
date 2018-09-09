@@ -56,11 +56,13 @@ const Wrapper = styled.div`
 class MatchCard extends React.PureComponent {
     render() {
         const {
+            broadcaster,
             id,
             home,
             visitor,
             onClick,
             selected,
+            showBroadcast,
             ...rest
         } = this.props
 
@@ -87,7 +89,12 @@ class MatchCard extends React.PureComponent {
                         fav={team === vta || team === hta}
                     >
                         <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
-                        <MatchInfo home={home} visitor={visitor} {...rest} />
+                        <MatchInfo
+                            home={home}
+                            visitor={visitor}
+                            broadcaster={showBroadcast ? broadcaster : ''}
+                            {...rest}
+                        />
                         <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
                     </Wrapper>
                 )}
@@ -97,11 +104,13 @@ class MatchCard extends React.PureComponent {
 }
 
 MatchCard.propTypes = {
-    id:PropTypes.string.isRequired,
-    home:PropTypes.object.isRequired,
-    visitor:PropTypes.object.isRequired,
-    onClick:PropTypes.func.isRequired,
-    selected:PropTypes.bool,
+    broadcaster: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    home: PropTypes.object.isRequired,
+    visitor: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
+    selected: PropTypes.bool,
+    showBroadcast: PropTypes.bool,
 }
 
 const TextCard = ({ text }) => (

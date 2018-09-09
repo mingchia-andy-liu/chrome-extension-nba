@@ -53,6 +53,7 @@ const renderStatusAndClock = (status, clock, totalPeriod ) => {
 class MatchInfo extends React.PureComponent {
     render() {
         const {
+            broadcaster,
             home,
             visitor,
             periodTime: {
@@ -63,7 +64,6 @@ class MatchInfo extends React.PureComponent {
             },
             playoffs,
         } = this.props
-
 
         let series = ''
         if (playoffs) {
@@ -83,12 +83,14 @@ class MatchInfo extends React.PureComponent {
                 {renderScores(gameStatus, home, visitor)}
                 <div>{renderStatusAndClock(periodStatus, gameClock, periodValue)}</div>
                 {series && <div>{series}</div>}
+                {gameStatus === '1' && broadcaster !== '' && <div>{broadcaster}</div>}
             </Wrapper>
         )
     }
 }
 
 MatchInfo.propTypes = {
+    broadcaster: PropTypes.string,
     home: PropTypes.shape({
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
@@ -111,7 +113,7 @@ MatchInfo.propTypes = {
 }
 
 MatchInfo.defaultProps = {
-
+    broadcaster: '',
 }
 
 export default MatchInfo

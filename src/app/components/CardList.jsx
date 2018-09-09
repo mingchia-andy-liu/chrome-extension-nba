@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { ColumnCSS, Media } from '../styles'
+import { ColumnCSS, mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SettingsConsumer } from './Context'
 
@@ -10,12 +10,14 @@ const Wrapper = styled.div`
     ${ColumnCSS}
     width: 100%;
 
-    ${ Media.handheld`  min-height: 100px;
-                        max-height: 250px;
-                        overflow-y: scroll`}
+    ${mediaQuery`
+        min-height: 100px;
+        max-height: 250px;
+        overflow-y: scroll;
+    `}
 `
 
-const generateCards = (games, selected, favTeam, rest) => {
+const generateCards = (games, selected, favTeam, broadcast, rest) => {
     const g = [...games]
     const favTeamIndex = g.findIndex(({home, visitor}) => home.abbreviation === favTeam || visitor.abbreviation === favTeam)
     const favTeamMatch = g[favTeamIndex]
@@ -33,6 +35,7 @@ const generateCards = (games, selected, favTeam, rest) => {
                 <MatchCard
                     selected={game.id === selected}
                     key={`card-${index}`}
+                    showBroadcast={broadcast}
                     {...game}
                     {...rest}
                 />
@@ -62,9 +65,9 @@ class CardList extends React.PureComponent {
 
         return (
             <SettingsConsumer>
-                {({state: { team }}) => (
+                {({state: { team, broadcast }}) => (
                     <Wrapper>
-                        {generateCards(games, selected, team, rest)}
+                        {generateCards(games, selected, team, broadcast, rest)}
                     </Wrapper>
                 )}
             </SettingsConsumer>

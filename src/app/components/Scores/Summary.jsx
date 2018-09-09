@@ -41,8 +41,8 @@ class Summary extends React.PureComponent {
                                 ))}
                                 <HeaderCell> Final </HeaderCell>
                             </Row>
-                            {renderTeamRow(home, visitor, dark)}
                             {renderTeamRow(visitor, home, dark)}
+                            {renderTeamRow(home, visitor, dark)}
                         </StickyTable>
                     )}
                 </SettingsConsumer>

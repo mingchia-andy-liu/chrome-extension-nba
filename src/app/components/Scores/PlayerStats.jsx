@@ -12,6 +12,7 @@ import {
     toPercentage,
     RowWrapper,
     hasDoubles,
+    getDoublesText,
     rowBGColor
 } from '../../utils/format'
 import { SettingsConsumer } from '../Context'
@@ -72,7 +73,11 @@ const renderHeaderRow = (name) => {
  * @param {*} player
  * @param {*} isLive
  */
-const renderPlayerRow = (player, isLive, isDark) => {
+const renderPlayerRow = (player, isLive, isDark, hideZeroRow) => {
+    if (hideZeroRow && player.minutes == '0' && player.seconds == '0') {
+        return
+    }
+
     const fn = player && player.first_name.trim() ? player.first_name.charAt(0) + '.' : ''
     const ln = player.last_name
     const name = player.last_name !== '' ? `${fn} ${ln}` : player.first_name
@@ -104,8 +109,9 @@ const renderPlayerRow = (player, isLive, isDark) => {
 
     return (
         <RowWrapper
-            key={`${player.fn}-${player.ln}`}
+            key={name}
             style={{ backgroundColor: rowBGColor(doubles, isDark) }}
+            title={doubles && getDoublesText(doubles)}
         >
             <PlayerName>
                 {name}
@@ -183,12 +189,12 @@ class PlayerStats extends React.PureComponent {
         return (
             <Wrapper>
                 <SettingsConsumer>
-                    {({ state: { dark } }) => (
+                    {({ state: { dark, hideZeroRow } }) => (
                         <StickyTable stickyHeaderCount={0}>
-                            {renderHeaderRow(hta)}
-                            {hps.map(player => (renderPlayerRow(player, isLive, dark)))}
                             {renderHeaderRow(vta)}
-                            {vps.map(player => (renderPlayerRow(player, isLive, dark)))}
+                            {vps.map(player => (renderPlayerRow(player, isLive, dark, hideZeroRow)))}
+                            {renderHeaderRow(hta)}
+                            {hps.map(player => (renderPlayerRow(player, isLive, dark, hideZeroRow)))}
                         </StickyTable>
                     )}
                 </SettingsConsumer>

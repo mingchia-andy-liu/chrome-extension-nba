@@ -52,15 +52,13 @@ export const Theme = {
 }
 
 /**
- * Media query for mobile device
+ * media query for mobile device
  */
-export const Media = {
-    handheld: (...args) => css`
-        @media screen and (max-width: 800px) {
-            ${ css(...args) }
-        }
-    `,
-}
+export const mediaQuery = (...args) => css`
+    @media screen and (max-width: 800px) {
+        ${ css(...args) }
+    }
+`
 
 
 /**
@@ -75,15 +73,15 @@ const align = ({
     alignSpaceBetween,
     alignSpaceAround,
 }) => {
-    return alignCenter && 'center'||
-        alignStart && 'flex-start'||
-        alignEnd  && 'flex-end'||
-        alignBaseline  && 'baseline'||
-        alignStretch && 'stretch' ||
-        alignSpaceBetween && 'space-between' ||
-        alignSpaceAround && 'space-around' ||
-        'center'
+    return (alignCenter && 'center') ||
+        (alignStart && 'flex-start') ||
+        (alignEnd && 'flex-end') ||
+        (alignBaseline && 'baseline') ||
+        (alignStretch && 'stretch') ||
+        (alignSpaceBetween && 'space-between') ||
+        (alignSpaceAround && 'space-around')
 }
+
 const justify = ({
     justifyCenter,
     justifyStart,
@@ -91,12 +89,11 @@ const justify = ({
     justifySpaceBetween,
     justifySpaceAround,
 }) => {
-    return justifyCenter && 'center' ||
-        justifyStart && 'flex-start' ||
-        justifyEnd &&  'flex-end' ||
-        justifySpaceBetween && 'space-between' ||
-        justifySpaceAround && 'space-around' ||
-        'center'
+    return (justifyCenter && 'center') ||
+        (justifyStart && 'flex-start') ||
+        (justifyEnd && 'flex-end') ||
+        (justifySpaceBetween && 'space-between') ||
+        (justifySpaceAround && 'space-around')
 }
 
 const wrap = ({
@@ -104,10 +101,9 @@ const wrap = ({
     wrap,
     wrapReverse,
 }) => {
-    return nowrap && 'nowrap' ||
-        wrap && 'wrap' ||
-        wrapReverse && 'wrap-reverse' ||
-        'wrap'
+    return (nowrap && 'nowrap') ||
+        (wrap && 'wrap') ||
+        (wrapReverse && 'wrap-reverse')
 }
 
 export const Base = styled.div`
@@ -118,10 +114,6 @@ export const Base = styled.div`
     ${props => props.flexBasis && `flex-basis: ${props.flexBasis}`};
     ${props => props.flexGrow && `flex-basis: ${props.flexGrow}`};
     ${props => props.flexShrink && `flex-shrink: ${props.flexShrink}`};
-`
-
-export const Flex = styled(Base)`
-    flex-direction: ${props => props.row && 'row' || 'column' };
 `
 
 export const Row = styled(Base)`

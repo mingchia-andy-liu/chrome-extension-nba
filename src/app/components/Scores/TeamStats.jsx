@@ -58,8 +58,8 @@ class TeamStats extends React.PureComponent {
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
                     {renderHeaderRow(0)}
-                    {renderTeamRow(hts, hta)}
                     {renderTeamRow(vts, vta)}
+                    {renderTeamRow(hts, hta)}
                 </StickyTable>
             </Wrapper>
         )

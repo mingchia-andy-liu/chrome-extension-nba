@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell } from '../../utils/format'
+import { Cell, HeaderCell, quarterNames } from '../../utils/format'
 import { RowCSS } from '../../styles'
 import { getLogoColorByName } from '../../utils/teams'
 
@@ -78,8 +78,6 @@ class PlayByPlay extends React.PureComponent {
     }
 
     renderQuarters(quarter, currentQuarter) {
-        const quarters = ['Q1', 'Q2', 'Q3','Q4', 'OT1', 'OT2', 'OT3', 'OT4', 'OT5', 'OT6', 'OT7', 'OT8', 'OT9', 'OT10' ]
-
         const Btns = []
         for(let i = 0; i < quarter; i++) {
             Btns.push(
@@ -92,7 +90,7 @@ class PlayByPlay extends React.PureComponent {
                         })
                     }}
                 >
-                    {quarters[i]}
+                    {quarterNames[i]}
                 </QtrBtn>
             )
         }

@@ -36,12 +36,12 @@ const renderHeaderRow = () => {
 const renderTeamRow = (team, name) => (
     <Row>
         <RowHeaderCell> {name} </RowHeaderCell>
-        <Cell>{team.biggest_lead || 0}</Cell>
-        <Cell>{team.bench_points || 0}</Cell>
-        <Cell>{team.second_chance_points || 0}</Cell>
-        <Cell>{team.fast_break_points || 0} ({team.fast_break_points_made || 0}-{team.fast_break_points_attempted || 0})</Cell>
-        <Cell>{team.points_in_paint || 0} ({team.points_in_paint_made || 0}-{team.points_in_paint_attempted || 0})</Cell>
-        <Cell>{team.points_off_turnovers || 0}</Cell>
+        <Cell>{team.biggestLead || 0}</Cell>
+        <Cell>{team.benchPoints || 0}</Cell>
+        <Cell>{team.secondChancePoints || 0}</Cell>
+        <Cell>{team.fastBreakPoints || 0} ({team.fastBreakPointsMade || 0}-{team.fastBreakPointsAttempted || 0})</Cell>
+        <Cell>{team.pointsInPaint || 0} ({team.pointsInPaintMade || 0}-{team.pointsInPaintAttempted || 0})</Cell>
+        <Cell>{team.pointsOffTurnovers || 0}</Cell>
     </Row>
 )
 
@@ -52,8 +52,8 @@ class TeamStats extends React.PureComponent {
             <Wrapper>
                 <StickyTable stickyHeaderCount={0}>
                     {renderHeaderRow(0)}
-                    {renderTeamRow(home, hta)}
                     {renderTeamRow(visitor, vta)}
+                    {renderTeamRow(home, hta)}
                 </StickyTable>
                 <div  style={{marginTop: '15px'}}>
                     <StickyTable>
@@ -62,8 +62,8 @@ class TeamStats extends React.PureComponent {
                             <HeaderCell>Times Tied</HeaderCell>
                         </Row>
                         <Row>
-                            <Cell>{extra.lead_changes}</Cell>
-                            <Cell>{extra.times_tied}</Cell>
+                            <Cell>{extra.leadChanges}</Cell>
+                            <Cell>{extra.timesTied}</Cell>
                         </Row>
                     </StickyTable>
                 </div>
@@ -78,8 +78,8 @@ TeamStats.propTypes = {
     visitor: PropTypes.object.isRequired,
     vta: PropTypes.string.isRequired,
     extra: PropTypes.shape({
-        lead_changes: PropTypes.number.isRequired,
-        times_tied: PropTypes.number.isRequired,
+        leadChanges: PropTypes.number.isRequired,
+        timesTied: PropTypes.number.isRequired,
     }),
 }
 
