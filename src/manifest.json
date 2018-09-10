@@ -20,16 +20,7 @@
 
     "background": {
         "scripts": [
-            "vendor/moment/moment.min.js",
-            "vendor/moment/moment-timezone.min.js",
-            "vendor/moment/moment-timezone-data.min.js",
-            "vendor/jquery/jquery-3.1.1.min.js",
-            "js/common/utils.js",
-            "js/common/games.js",
-            "js/common/date_utils.js",
-            "js/alarms/alarms.js",
-            "js/alarms/listeners.js",
-            "js/background/background.js"
+            "app/background.min.js"
         ],
         "persistent": false
     },

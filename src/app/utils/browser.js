@@ -20,6 +20,9 @@ if (typeof browser !== 'undefined') {
         reload: () => {
             browser.runtime.reload()
         },
+        getManifest: () => {
+            return browser.runtime.getManifest()
+        },
     }
 
     browserNameSpace.getItem = (key, callback) => {
@@ -98,6 +101,9 @@ if (typeof browser !== 'undefined') {
         },
         reload: () => {
             chrome.runtime.reload()
+        },
+        getManifest: () => {
+            return chrome.runtime.getManifest()
         },
     }
 

@@ -7,17 +7,18 @@
     "test": "test"
   },
   "scripts": {
-    "start": "webpack-dev-server --open",
-    "start:dev": "NODE_ENV=development webpack-dev-server --open",
     "build": "npm test && cd src && web-ext build --overwrite-dest",
-    "lint": "npm-run-all lint:*",
     "lint:addon": "addons-linter src --self-hosted",
     "lint:css": "stylelint src/css/*.css",
-    "lint:js": "eslint src/app",
     "lint:js:fix": "eslint src/app --fix",
+    "lint:js": "eslint src/app",
+    "lint": "npm-run-all lint:*",
+    "start:dev": "NODE_ENV=development webpack-dev-server --open",
+    "start": "webpack-dev-server --open",
     "test": "npm run lint",
-    "webpack": "NODE_ENV=production webpack --progress --colors",
-    "webpack:dev": "NODE_ENV=development webpack --progress --colors"
+    "webpack:bg": "webpack --config bg.webpack.config.js",
+    "webpack:dev": "NODE_ENV=development webpack --progress --colors",
+    "webpack": "NODE_ENV=production webpack --progress --colors"
   },
   "license": "MIT",
   "main": "index.js",
