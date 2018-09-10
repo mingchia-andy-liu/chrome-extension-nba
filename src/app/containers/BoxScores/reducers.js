@@ -1,12 +1,13 @@
 import types from './types'
 import convert from './convert'
 
+/**
+ * has box scores and playbyplay
+ */
 const initState = {
-    isLoading: false,
-    /**
-     * has box scores and playbyplay
-     */
     bsData: {},
+    gid: '',
+    isLoading: false,
     pbpData: {},
     teamStats: {},
 }
@@ -57,11 +58,12 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
-            const { boxScoreData, pbpData } = action.payload
+            const { boxScoreData, gid, pbpData } = action.payload
             const team = teamStatsExtrator(boxScoreData)
             return {
-                isLoading: false,
                 bsData: sanitizeBS(convert(boxScoreData)),
+                gid,
+                isLoading: false,
                 pbpData: pbpData,
                 teamStats: {
                     home: teamStatsConverter(team.hls),
@@ -76,8 +78,9 @@ export default (state = initState, action) => {
         case types.REQUEST_ERROR:
         case types.RESET:
             return {
-                isLoading: false,
                 bsData: {},
+                gid: '',
+                isLoading: false,
                 pbpData: {},
                 teamStats: {},
             }

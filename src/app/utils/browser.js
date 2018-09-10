@@ -49,14 +49,14 @@ if (typeof browser !== 'undefined') {
     }
 
     browserNameSpace.setBadgeText = (text) => {
-        if (browser.browserNameSpaceAction.setBadgeText) {
-            browser.browserNameSpaceAction.setBadgeText({ text: text })
+        if (browser.browserAction.setBadgeText) {
+            browser.browserAction.setBadgeText(text)
         }
     }
 
     browserNameSpace.setBadgeBackgroundColor = (color) => {
         if (browser.browserAction.setBadgeText) {
-            browser.browserAction.setBadgeBackgroundColor({ color: color })
+            browser.browserAction.setBadgeBackgroundColor(color)
         }
     }
 
@@ -129,14 +129,14 @@ if (typeof browser !== 'undefined') {
     }
 
     browserNameSpace.setBadgeText = (text) => {
-        if (chrome.browserNameSpaceAction.setBadgeText) {
-            chrome.browserNameSpaceAction.setBadgeText({ text: text })
+        if (chrome.browserAction.setBadgeText) {
+            chrome.browserAction.setBadgeText(text)
         }
     }
 
     browserNameSpace.setBadgeBackgroundColor = (color) => {
         if (chrome.browserAction.setBadgeText) {
-            chrome.browserAction.setBadgeBackgroundColor({ color: color })
+            chrome.browserAction.setBadgeBackgroundColor(color)
         }
     }
 

@@ -53,14 +53,14 @@ export default (state = initState, action) => {
         case types.REQUEST_SUCCESS:
             return {
                 ...state,
-                isLoading: false,
                 games: sanitizeGames(action.payload),
+                isLoading: false,
             }
         case types.REQUEST_ERROR:
             return {
                 ...state,
-                isLoading: false,
                 games: [],
+                isLoading: false,
             }
         default:
             return state

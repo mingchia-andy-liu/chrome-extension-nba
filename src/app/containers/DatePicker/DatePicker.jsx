@@ -7,7 +7,6 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment-timezone'
 import { fetchGames } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
-import getAPIDate from '../../utils/getApiDate'
 import { SettingsConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
 
@@ -56,15 +55,10 @@ class DatePicker extends React.Component {
         super(props)
 
         const {
-            date: {
-                date,
-                isDirty,
-            },
+            date: { date },
         } = this.props
 
-        this.state = {
-            date: isDirty ? date : getAPIDate().toDate(),
-        }
+        this.state = { date }
     }
 
     onClickArrow(offset) {
@@ -134,7 +128,6 @@ class DatePicker extends React.Component {
 DatePicker.propTypes = {
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,
-        isDirty: PropTypes.bool.isRequired,
     }),
     onChange: PropTypes.func.isRequired,
     dispatchChangeDate: PropTypes.func.isRequired,
