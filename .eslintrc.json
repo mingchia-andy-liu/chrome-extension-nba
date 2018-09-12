@@ -17,7 +17,6 @@
       "commonjs": true,
       "es6": true,
       "node": true,
-      "jquery": true,
       "webextensions": true
     },
     "root": true,
