@@ -49,10 +49,7 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
         const [
             pbpData,
             boxScoreData
-        ] = await Promise.all([
-            fetchPBP(dateStr, gid),
-            fetchGameDetail(dateStr, gid)
-        ])
+        ] = await fetchRequest(dateStr, gid)
 
         if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
             throw Error()
@@ -62,12 +59,20 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
             type: types.REQUEST_SUCCESS,
             payload: {
                 boxScoreData: boxScoreData,
+                gid,
                 pbpData,
             },
         })
     } catch (error) {
         dispatch({ type: types.REQUEST_ERROR })
     }
+}
+
+export const fetchRequest = async (dateStr, gid) => {
+    return await Promise.all([
+        fetchPBP(dateStr, gid),
+        fetchGameDetail(dateStr, gid)
+    ])
 }
 
 export const resetLiveGameBox = () => (dispatch) => {

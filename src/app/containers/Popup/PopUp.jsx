@@ -9,7 +9,6 @@ import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
 import { Column } from '../../styles'
 import * as actions from './actions'
-import getAPIDate from '../../utils/getApiDate'
 
 import browser from '../../utils/browser'
 
@@ -38,14 +37,9 @@ class PopUp extends React.Component {
 
     componentDidMount() {
         const {
-            date: {
-                date,
-                isDirty,
-            },
+            date: { date },
         } = this.props
-        const dateStr = isDirty
-            ? moment(date).format('YYYYMMDD')
-            : getAPIDate().format('YYYYMMDD')
+        const dateStr = moment(date).format('YYYYMMDD')
         this.props.fetchGames(dateStr)
     }
 

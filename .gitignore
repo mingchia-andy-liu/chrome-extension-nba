@@ -106,3 +106,4 @@ typings/
 
 
 main.js
+src/app/*.min.js

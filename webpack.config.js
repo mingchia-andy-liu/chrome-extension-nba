@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 
 const webpackConfig = {
@@ -28,7 +29,11 @@ const webpackConfig = {
                 ],
             }
         ],
-    }
+    },
+    plugins: [
+        // Ignore all locale files of moment.js
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    ],
 }
 
 if (process.env.NODE_ENV === 'production') {

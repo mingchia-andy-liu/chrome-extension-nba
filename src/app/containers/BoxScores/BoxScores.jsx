@@ -22,11 +22,9 @@ import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
 import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
 import { isWinning } from '../../utils/format'
-import getAPIDate from '../../utils/getApiDate'
 import { fetchLiveGameBox, resetLiveGameBox } from './actions'
 import { fetchGames } from '../Popup/actions'
 
-import './alarm'
 
 const Wrapper = styled.div`
     display: grid;
@@ -79,15 +77,10 @@ class BoxScores extends React.Component {
         super(props)
 
         const {
-            match : {params : { id } },
-            date: {
-                date,
-                isDirty,
-            },
+            match : { params : { id } },
+            date: { date },
         } = this.props
-        let dateStr = isDirty
-            ? moment(date).format('YYYYMMDD')
-            : getAPIDate().format('YYYYMMDD')
+        let dateStr = moment(date).format('YYYYMMDD')
 
         const queryString = require('query-string')
         const { date: queryDate } = queryString.parse(this.props.location.search)
@@ -325,7 +318,6 @@ BoxScores.propTypes = {
     }),
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,
-        isDirty: PropTypes.bool.isRequired,
     }),
     location: PropTypes.shape({
         pathname: PropTypes.string.isRequired,
