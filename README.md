@@ -23,7 +23,26 @@ This extension is for people who just want to get the latest update but too lazy
 1. Dark mode
 
 ## TODOs
-- [ ] Use build scripts
-- [ ] Convert into to use React, ES6, SASS
+- [X] Add build scripts
+- [X] Convert into to use React, ES6, ~~SASS~~
 - [ ] Add highlights to box score page
 - [ ] Add the ability to sort tables
+
+## Dev Quick Start
+`/dist`: previous release
+`/src/app`: react projects
+`/src/build`: files of pre-release
+
+#### running locally
+*Firefox*
+1. Run `./build.sh`. A new zip should be created under the `/dist`
+1. Load the zip file into Firefox
+
+*Chrome*
+1. Run `npm run webpack && npm run webpack:bg`
+1. Load the `/src/build` folder into Chrome
+
+#### third party packages
+* react-sticky-table
+* react-flatpickr
+* moment-timezone: for converting times to local time
