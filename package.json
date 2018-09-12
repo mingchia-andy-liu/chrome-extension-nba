@@ -6,16 +6,18 @@
   "directories": {
     "test": "test"
   },
+  "webExt": {
+    "sourceDir": "src/build",
+    "artifactsDir": "dist"
+  },
   "scripts": {
-    "build": "npm test && cd src && web-ext build --overwrite-dest",
-    "lint:addon": "addons-linter src --self-hosted",
+    "build": "web-ext build --overwrite-dest",
+    "lint:addon": "echo see build.sh",
     "lint:css": "stylelint src/css/*.css",
     "lint:js:fix": "eslint src/app --fix",
     "lint:js": "eslint src/app",
-    "lint": "npm-run-all lint:*",
     "start:dev": "NODE_ENV=development webpack-dev-server --open",
     "start": "webpack-dev-server --open",
-    "test": "npm run lint",
     "webpack:bg": "webpack --config bg.webpack.config.js",
     "webpack:dev": "NODE_ENV=development webpack --progress --colors",
     "webpack": "NODE_ENV=production webpack --progress --colors"
@@ -41,7 +43,6 @@
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
-    "npm-run-all": "^4.1.2",
     "prop-types": "^15.6.1",
     "redux-devtools-log-monitor": "^1.4.0",
     "style-loader": "^0.21.0",

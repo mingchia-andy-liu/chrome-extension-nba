@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { Row, ColumnCSS } from '../../styles'
 
-import * as data from '../../assets/changelog.json'
+import data from './data.js'
 
 const Wrapper = styled.div`
     ${ColumnCSS}
