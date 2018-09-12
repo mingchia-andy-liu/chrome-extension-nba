@@ -3,7 +3,7 @@
 
     "name": "Basketball Box Scores",
     "description": "This extension shows you the daily basketball box scores.",
-    "version": "1.2.5",
+    "version": "1.2.7",
 
     "icons": {
         "16": "assets/png/icon-color-16.png",
@@ -20,7 +20,7 @@
 
     "background": {
         "scripts": [
-            "app/background.min.js"
+            "background.min.js"
         ],
         "persistent": false
     },
@@ -32,7 +32,7 @@
         "*://*.nba.net/"
     ],
 
-    "optional_permissions": ["webRequest", "https://boxscoresORsomething.net" ],
+    "optional_permissions": ["webRequest", "https://boxscoresORsomething.net/" ],
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

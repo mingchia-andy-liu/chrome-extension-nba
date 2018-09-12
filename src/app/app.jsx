@@ -20,5 +20,7 @@ ReactDOM.render(
     , document.getElementById('app')
 )
 
-import showDevTools from './showDevTools'
-showDevTools(store)
+if (process.env.NODE_ENV === 'development') {
+    const showDevTools = require('./showDevTools')
+    showDevTools(store)
+}
