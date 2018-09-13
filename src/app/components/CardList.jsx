@@ -28,6 +28,7 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
         <Fragment>
             {favTeamMatch && <MatchCard
                 selected={favTeamMatch.id === selected}
+                showBroadcast={broadcast}
                 {...favTeamMatch}
                 {...rest}
             />}

@@ -4,22 +4,23 @@ import { routerMiddleware } from 'react-router-redux'
 import { createHashHistory } from 'history'
 import reducer, { initialState } from './reducers'
 
-import DevTools from './devTools'
-
 export const history = createHashHistory({
     basname: '',
     hashType: 'slash',
 })
 
 const middleware = routerMiddleware(history)
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-// Create store and allow for redux devtools to hook onto it
-export const store = createStore(
-    reducer,
-    initialState,
-    composeEnhancers(
+let middlewares
+if (process.env.NODE_ENV === 'development') {
+    const DevTools = require('./devTools')
+    middlewares = compose(
         applyMiddleware(thunk, middleware),
         // Required! Enable Redux DevTools with the monitors you chose
-        DevTools.instrument()
+        DevTools.default.instrument()
     )
-)
+} else {
+    middlewares = compose(applyMiddleware(thunk, middleware))
+}
+
+// Create store
+export const store = createStore(reducer, initialState, middlewares)
