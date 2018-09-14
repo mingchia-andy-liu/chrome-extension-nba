@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# install
+npm install
+
 # test
 npm run lint:js
 
