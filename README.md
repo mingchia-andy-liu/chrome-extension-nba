@@ -33,16 +33,20 @@ This extension is for people who just want to get the latest update but too lazy
 `/src/app`: react projects
 `/src/build`: files of pre-release
 
-#### running locally
-*Firefox*
+### Prerequisite
+You need to have `npm` installed.
+
+### Running locally
 1. Run `./build.sh`. A new zip should be created under the `/dist`
+
+*Firefox*
 1. Load the zip file into Firefox
 
 *Chrome*
-1. Run `npm run webpack && npm run webpack:bg`
+Chrome cannot load zip as extension locally.
 1. Load the `/src/build` folder into Chrome
 
-#### third party packages
+#### Third party packages
 * react-sticky-table
 * react-flatpickr
 * moment-timezone: for converting times to local time
