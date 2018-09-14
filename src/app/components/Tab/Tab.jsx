@@ -2,14 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import TabItem from './TabItem'
-import { SettingsConsumer } from '../Context'
 import {RowCSS} from '../../styles'
 
 const Wrapper = styled.div`
     ${RowCSS}
     width: 100%;
     height: 50px;
-    background-color: ${(props) => (props.dark ? '#0057af' : '#046fdb')};
 
     a {
         text-decoration: none;
@@ -50,15 +48,9 @@ class Tab extends React.Component {
 
     render() {
         return (
-            <SettingsConsumer>
-                {({ state: {dark} }) => {
-                    return (
-                        <Wrapper dark={dark} data-index={this.state.selectedIndex}>
-                            {this.renderTab()}
-                        </Wrapper>
-                    )
-                }}
-            </SettingsConsumer>
+            <Wrapper data-index={this.state.selectedIndex}>
+                {this.renderTab()}
+            </Wrapper>
         )
     }
 }

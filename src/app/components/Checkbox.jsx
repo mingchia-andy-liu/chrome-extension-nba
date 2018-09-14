@@ -71,7 +71,15 @@ const StyledLabel = styled.label`
     }
 
     & > input:disabled + span::before {
-        border-color: hsl(0, 0%, 30%);
+        border-color: hsl(0, 0%, 50%);
+    }
+
+    & > input:checked:disabled + span::before {
+        background-color: #6badff;
+    }
+
+    & > input:disabled + span {
+        cursor: not-allowed;
     }
 
     & > input:checked:disabled + span::before {
@@ -99,20 +107,23 @@ const StyledLabel = styled.label`
 class Checkbox extends React.PureComponent {
     static propTypes = {
         checked: PropTypes.bool,
-        onChange: PropTypes.func.isRequired,
+        disabled: PropTypes.bool,
+        onChange: PropTypes.func,
         text: PropTypes.string,
     }
 
     static defaultProps = {
         checked: false,
+        disabled: false,
+        onChange: () => {},
     }
 
     render() {
-        const {checked, onChange, text} = this.props
+        const {checked, disabled, onChange, text} = this.props
         return (
             <Wrapper>
                 <StyledLabel>
-                    <input checked={checked} type="checkbox" onChange={onChange}/>
+                    <input disabled={disabled} checked={checked} type="checkbox" onChange={onChange}/>
                     <span>{text}</span>
                 </StyledLabel>
             </Wrapper>
