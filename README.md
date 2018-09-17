@@ -42,8 +42,7 @@ You need to have `npm` installed.
 *Firefox*
 1. Load the zip file into Firefox
 
-*Chrome*
-Chrome cannot load zip as extension locally.
+*Chrome* (Chrome cannot load zip as extension locally.)
 1. Load the `/src/build` folder into Chrome
 
 #### Third party packages
