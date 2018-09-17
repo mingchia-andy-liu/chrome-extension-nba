@@ -24,7 +24,7 @@ class PopUp extends React.Component {
 
         this.state = {
             isPopup: false,
-            date: '',
+            date: moment(this.props.date.date).format('YYYYMMDD'),
         }
         // check if popup is opened in the "popup" or in a tab
         // if it is in a popup winodw, there is no tab
@@ -40,14 +40,14 @@ class PopUp extends React.Component {
             date: { date },
         } = this.props
         const dateStr = moment(date).format('YYYYMMDD')
-        this.props.fetchGames(dateStr)
+        this.props.fetchGamesIfNeeded(dateStr, null, true)
     }
 
     selectGame(e) {
         const { isPopup, date } = this.state
         const id = e.currentTarget.dataset.id
         if (isPopup) {
-            browser.tabs.create({ url: `/index.html#/boxscores/${id}?redirect=true&date=${date}` })
+            browser.tabs.create({ url: `/index.html#/boxscores/${id}?date=${date}` })
         } else {
             this.props.history.push(`/boxscores/${id}`)
         }
@@ -74,7 +74,7 @@ PopUp.propTypes = {
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,
     }),
-    fetchGames: PropTypes.func.isRequired,
+    fetchGamesIfNeeded: PropTypes.func.isRequired,
     history: PropTypes.shape({
         push: PropTypes.func.isRequired,
     }),

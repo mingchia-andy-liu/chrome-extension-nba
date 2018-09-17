@@ -14,13 +14,14 @@ const Link = styled(RouterLink)`
     height: 100%;
     padding: 10px;
     background-color: ${(props) => (props.dark ? '#134A9F' : '#046fdb')};
+    border-bottom: 4px solid ${(props) => (props.active ? ((props.dark ? '#92CBF7' : '#E3F2FC')) : (props.dark ? '#134A9F' : '#046fdb'))};
 
     &:hover {
         font-weight: 400;
     }
 
     & > label {
-        color: ${(props) => (props.active ? '#fff;' : 'hsl(0, 0%, 60%);')}
+        color: ${(props) => (props.active ? '#fff' : ((props) => (props.dark ? 'hsl(0, 0%, 40%)' : 'hsl(0, 0%, 70%)')))};
         font-weight: ${(props) => (props.active ? '500;' : '300;')}
         font-size: calc(17px + 0.1vw);
         cursor: pointer;

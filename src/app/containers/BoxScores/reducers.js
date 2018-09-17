@@ -12,9 +12,10 @@ const initState = {
     teamStats: {},
 }
 
-const sanitizeBS = ({ home, visitor, officials }) => ({
+const sanitizeBS = ({ home, visitor, officials, status }) => ({
     home,
     visitor,
+    status,
     officials: officials || [],
 })
 
@@ -44,8 +45,8 @@ const teamStatsExtrator = (data) => {
     }
     return {
         hls: data.hls.tstsg,
-        lc: data.gsts.lc,
-        tt: data.gsts.tt,
+        lc: data.gsts ? data.gsts.lc : 0,
+        tt: data.gsts ? data.gsts.tt : 0,
         vls: data.vls.tstsg,
     }
 }

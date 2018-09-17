@@ -18,7 +18,7 @@ const RouterLink = styled(Link)`
 `
 
 const HrefLink = styled.a`
-    padding: 0 5px;
+    padding-left: 5px;
     text-decoration: none;
     border: 0;
     outline: none;
@@ -35,12 +35,12 @@ class Options extends React.Component {
         return (
             <React.Fragment>
                 <RouterLink dark={isDark ? 1 : 0} to="changelog">Changelog</RouterLink>
-                <p>If you have any questions, please email to {' '}
+                <p>If you have any questions, please email to
                     <HrefLink
                         dark={isDark ? 1 : 0}
                         href={`mailto:box.scores.extension@gmail.com?subject=${encodeURIComponent('Feedback on the Basketball Box Scores extension')}`}
                     >
-                        Here
+                        here
                     </HrefLink>
                     .
                 </p>
@@ -48,20 +48,21 @@ class Options extends React.Component {
         )
     }
 
-    getOptionalPermission() {
-        document.querySelector('#my-button').addEventListener('click', () => {
-            chrome.permissions.request({
-                permissions: ['webRequest'],
-                origins: ['https://boxscoresORsomething.net'],
-            }, function(granted) {
-                if (granted) {
-                    // granted
-                } else {
-                    // not granted
-                }
-            })
-        })
-    }
+    // getOptionalPermission() {
+    //     // for getting the optional permission for the highlight videos in the future
+    //     document.querySelector('#my-button').addEventListener('click', () => {
+    //         chrome.permissions.request({
+    //             permissions: ['webRequest'],
+    //             origins: ['https://boxscoresORsomething.net'],
+    //         }, function(granted) {
+    //             if (granted) {
+    //                 // granted
+    //             } else {
+    //                 // not granted
+    //             }
+    //         })
+    //     })
+    // }
 
     renderTeams(favTeam, updateTeam) {
         return (
@@ -69,7 +70,7 @@ class Options extends React.Component {
                 <label>
                     Select your favorite team:
                     <select value={favTeam} onChange={(e) => updateTeam(e.currentTarget.value)}>
-                        <option value="">Choose here</option>
+                        <option value="">-</option>
                         {Object.keys(teams).map(teamAbbr => (
                             <option
                                 key={teamAbbr}

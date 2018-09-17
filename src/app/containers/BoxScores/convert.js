@@ -82,6 +82,7 @@ export default (old) => {
         hls,
         vls,
         p,
+        st,
     } = old
     let officials = []
     if (offs && offs.off) {
@@ -94,6 +95,7 @@ export default (old) => {
 
     return {
         officials,
+        status: st,
         home: {
             abbreviation: hls.ta,
             linescores: { period: getLinescores(hls, p) },

@@ -22,8 +22,8 @@ import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
 import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
 import { isWinning } from '../../utils/format'
-import { fetchLiveGameBox, resetLiveGameBox } from './actions'
-import { fetchGames } from '../Popup/actions'
+import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
+import { fetchGamesIfNeeded } from '../Popup/actions'
 
 
 const Wrapper = styled.div`
@@ -97,16 +97,19 @@ class BoxScores extends React.Component {
 
     componentDidMount() {
         const { date, id } = this.state
-        this.props.fetchGames(date, (games) => {
-            let found = false
-            games.forEach(({ id: gid }) => {
-                if (gid === id) {
-                    this.props.fetchLiveGameBox(date, this.state.id)
-                    found = true
-                }
-            })
-            if (!found) this.props.history.replace('/boxscores')
-        })
+        this.props.fetchGamesIfNeeded(date, (games) => {
+            const found = games.find(({ id: gid }) => gid === id)
+            if (found) {
+                this.props.fetchLiveGameBoxIfNeeded(date, this.state.id)
+                this.props.history.replace(`/boxscores/${id}`)
+            } else {
+                this.props.history.replace('/boxscores')
+            }
+        }, true)
+    }
+
+    componentWillUnmount() {
+        this.props.resetLiveGameBox()
     }
 
     renderTitle(bsData) {
@@ -253,7 +256,7 @@ class BoxScores extends React.Component {
         const id = e.currentTarget.dataset.id
         const { date } = this.state
         const { location: { pathname } } = this.props
-        this.props.fetchLiveGameBox(date, id)
+        this.props.fetchLiveGameBoxIfNeeded(date, id)
         if (pathname.startsWith('/boxscores')) {
             this.props.history.replace(`/boxscores/${id}`)
         } else {
@@ -264,25 +267,24 @@ class BoxScores extends React.Component {
     }
 
     render() {
-        const {
-            live,
-            bs,
-        } = this.props
-
+        const { live, bs } = this.props
+        const { date } = this.state
         return (
             <Layout>
                 <Layout.Header>{<Header index={0}/>}</Layout.Header>
                 <Layout.Content>
                     <Wrapper>
                         <Sidebar>
-                            <DatePicker onChange={(date) => {
-                                this.setState({
-                                    id: '0',
-                                    date,
-                                })
-                                this.props.resetLiveGameBox()
-                                this.props.history.replace('/boxscores')
-                            }}
+                            <DatePicker
+                                startDate={date}
+                                onChange={(date) => {
+                                    this.setState({
+                                        id: '0',
+                                        date,
+                                    })
+                                    this.props.resetLiveGameBox()
+                                    this.props.history.replace('/boxscores')
+                                }}
                             />
                             <CardList
                                 isLoading={live.isLoading}
@@ -325,8 +327,8 @@ BoxScores.propTypes = {
     }),
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
-    fetchLiveGameBox: PropTypes.func.isRequired,
-    fetchGames: PropTypes.func.isRequired,
+    fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
+    fetchGamesIfNeeded: PropTypes.func.isRequired,
     resetLiveGameBox: PropTypes.func.isRequired,
 }
 
@@ -338,8 +340,8 @@ const mapStateToProps = ({ live, bs, date }) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        fetchLiveGameBox,
-        fetchGames,
+        fetchLiveGameBoxIfNeeded,
+        fetchGamesIfNeeded,
         resetLiveGameBox,
     }, dispatch)
 }

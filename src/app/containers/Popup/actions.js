@@ -1,4 +1,6 @@
+import moment from 'moment'
 import types from './types'
+import {store} from '../../store'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -9,7 +11,7 @@ import types from './types'
  * @param {string} dateStr selected date in string format
  * @param {function} callback callback to see if the 'id' in the URL is valid
  */
-export const fetchGames = (dateStr, callback) => async (dispatch) => {
+const fetchGames = async (dispatch, dateStr, callback) => {
     try {
         dispatch({ type: types.REQUEST_START })
 
@@ -26,7 +28,26 @@ export const fetchGames = (dateStr, callback) => async (dispatch) => {
 }
 
 export const fetchRequest = async (dateStr) => {
-    const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
-    const { sports_content: { games: { game } } } = await res.json()
-    return game
+    try {
+        const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
+        const { sports_content: { games: { game } } } = await res.json()
+        return game
+    } catch (error) {
+        return []
+    }
+}
+
+export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => async (dispatch) => {
+    const { live: { games }, date: { date } } = store.getState()
+    const oldDateStr = moment(date).format('YYYYMMDD')
+    if (oldDateStr === dateStr && !forceUpdate) {
+        const hasPendingOrLiveGame = games.find(game =>
+            game.period_time && game.period_time.game_status !== '3'
+        )
+        if (!hasPendingOrLiveGame) {
+            return games
+        }
+    }
+
+    return await fetchGames(dispatch, dateStr, callback)
 }

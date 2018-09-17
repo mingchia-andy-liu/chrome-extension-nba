@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment-timezone'
-import { fetchGames } from '../Popup/actions'
+import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
 import { SettingsConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
@@ -56,14 +56,19 @@ class DatePicker extends React.Component {
 
         const {
             date: { date },
+            startDate,
         } = this.props
 
-        this.state = { date }
+        if (startDate) {
+            this.state = { date: moment(startDate, 'YYYYMMDD').toDate() }
+        } else {
+            this.state = { date }
+        }
     }
 
     onClickArrow(offset) {
         const date = moment(this.state.date).add(offset, 'day')
-        this.props.fetchGames(date.format('YYYYMMDD'))
+        this.props.fetchGamesIfNeeded(date.format('YYYYMMDD'))
         this.props.onChange(date.format('YYYYMMDD'))
         this.props.dispatchChangeDate(date.toDate())
         this.setState({ date: date.toDate() })
@@ -97,13 +102,13 @@ class DatePicker extends React.Component {
                         dark={dark ? 1 : 0}
                         value={date}
                         options={{
-                            minDate: '2017-01-01',
+                            minDate: '2018-09-01',
                             maxDate: '2019-08-30',
                         }}
                         onChange={date => {
                             const d = moment(date[0])
                             const dateStr = d.format('YYYYMMDD')
-                            this.props.fetchGames(dateStr)
+                            this.props.fetchGamesIfNeeded(dateStr)
                             this.props.onChange(dateStr)
                             this.props.dispatchChangeDate(d.toDate())
                             this.setState({date: d.toDate()})
@@ -131,8 +136,9 @@ DatePicker.propTypes = {
     }),
     onChange: PropTypes.func.isRequired,
     dispatchChangeDate: PropTypes.func.isRequired,
-    fetchGames: PropTypes.func.isRequired,
+    fetchGamesIfNeeded: PropTypes.func.isRequired,
     hide: PropTypes.bool,
+    startDate: PropTypes.string,
 }
 
 DatePicker.defaultProps = {
@@ -146,7 +152,7 @@ const mapStateToProps = ({ date }) => ({
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         dispatchChangeDate,
-        fetchGames,
+        fetchGamesIfNeeded,
     }, dispatch)
 }
 

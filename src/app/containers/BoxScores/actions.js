@@ -1,8 +1,9 @@
 import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
+import {store} from '../../store'
 
-const dataURL = 'https://data.nba.com/data/5s'
+const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`
 const oldBase = (year) => `${dataURL}/v2015/json/mobile_teams/nba/${year}/scores/gamedetail`
 
@@ -41,7 +42,7 @@ const fetchGameDetail = async (dateStr, gid) => {
     }
 }
 
-export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
+const fetchLiveGameBox = async (dispatch, dateStr, gid) => {
     try {
         dispatch({ type: types.REQUEST_START })
 
@@ -49,7 +50,10 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
         const [
             pbpData,
             boxScoreData
-        ] = await fetchRequest(dateStr, gid)
+        ] = await Promise.all([
+            fetchPBP(dateStr, gid),
+            fetchGameDetail(dateStr, gid)
+        ])
 
         if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
             throw Error()
@@ -68,11 +72,13 @@ export const fetchLiveGameBox = (dateStr, gid) => async (dispatch) => {
     }
 }
 
-export const fetchRequest = async (dateStr, gid) => {
-    return await Promise.all([
-        fetchPBP(dateStr, gid),
-        fetchGameDetail(dateStr, gid)
-    ])
+export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch) => {
+    const { bs: { bsData, pbpData, gid: oldGid }, date: { date }} = store.getState()
+    const oldDateStr = moment(date).format('YYYYMMDD')
+    if (oldDateStr === dateStr && oldGid === gid && bsData.status === 3) {
+        return [pbpData, bsData]
+    }
+    return await fetchLiveGameBox(dispatch, dateStr, gid)
 }
 
 export const resetLiveGameBox = () => (dispatch) => {
