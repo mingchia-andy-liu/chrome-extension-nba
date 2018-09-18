@@ -23,6 +23,7 @@ export const TeamLogo = styled.div`
 `
 
 const TeamName = styled.div`
+    text-align: center;
     margin-top: 8px;
     opacity: ${(props) => (props.winning
         ? '1'

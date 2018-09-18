@@ -1,15 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-
-
-import { Row, ColumnCSS } from '../../styles'
+import { Row, ColumnCSS, mediaQuery } from '../../styles'
 
 import data from './data.js'
 
 const Wrapper = styled.div`
     ${ColumnCSS}
     padding: 0 20%;
+    ${mediaQuery`
+        padding: 0 10px;
+    `}
 `
 
 const RouterLink = styled(Link)`
