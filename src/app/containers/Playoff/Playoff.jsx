@@ -48,31 +48,31 @@ class Playoff extends React.Component {
             <React.Fragment>
                 <ColumnWrapper>
                     <PlayoffColumn
-                        title="Round 1"
+                        title="RD1"
                         series={west.first}
                     />
                     <PlayoffColumn
-                        title="Round 2"
+                        title="RD2"
                         series={west.second}
                     />
                     <PlayoffColumn
-                        title="Conf Final"
+                        title="WCF"
                         series={west.final}
                     />
                     <PlayoffColumn
-                        title="Final"
+                        title="FIN"
                         series={final}
                     />
                     <PlayoffColumn
-                        title="Conf Final"
+                        title="ECF"
                         series={east.final}
                     />
                     <PlayoffColumn
-                        title="Round 2"
+                        title="RD2"
                         series={east.second}
                     />
                     <PlayoffColumn
-                        title="Round 1"
+                        title="RD1"
                         series={east.first}
                     />
                 </ColumnWrapper>

@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { getTeamNameById, getLogoColorById } from '../utils/teams'
+import { mediaQuery } from '../styles'
 
 
 const StyledSerieColumn = styled.div`
-    width: 20%;
+    width: 15%;
     text-align: center;
 `
 
@@ -21,6 +22,11 @@ const StyledSerie = styled.div`
     border: ${(props) => (props.live
         ? '2px solid red'
         : '2px solid transparent')};
+    color: white;
+
+    ${mediaQuery`
+        font-size: calc(12px);
+    `}
 
 `
 
@@ -34,6 +40,9 @@ const StyledSerieTeamRow = styled.div`
     height: 50%;
     opacity: ${(props) => (props.winning ? '1' : '0.3') };
     background-color: ${(props) => (props.color ? props.color : '' )};
+    ${mediaQuery`
+        flex-direction: column;
+    `}
 `
 
 const StyledSeries = styled.div`
