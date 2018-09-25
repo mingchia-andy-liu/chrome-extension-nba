@@ -21,7 +21,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { SettingsConsumer } from '../../components/Context'
 import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
-import { isWinning } from '../../utils/format'
+import { DATE_FORMAT, isWinning } from '../../utils/format'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { fetchGamesIfNeeded } from '../Popup/actions'
 
@@ -80,7 +80,7 @@ class BoxScores extends React.Component {
             match : { params : { id } },
             date: { date },
         } = this.props
-        let dateStr = moment(date).format('YYYYMMDD')
+        let dateStr = moment(date).format(DATE_FORMAT)
 
         const queryString = require('query-string')
         const { date: queryDate } = queryString.parse(this.props.location.search)

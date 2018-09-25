@@ -2,7 +2,7 @@ import types from './types'
 import getAPIDate from '../../utils/getApiDate'
 
 const initState = {
-    date: getAPIDate().toDate(),
+    date: getAPIDate(),
 }
 
 export default (state = initState, action) => {

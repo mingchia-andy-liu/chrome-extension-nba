@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
 import {store} from '../../store'
+import {DATE_FORMAT} from '../../utils/format'
 
 const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`
@@ -74,7 +75,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid) => {
 
 export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch) => {
     const { bs: { bsData, pbpData, gid: oldGid }, date: { date }} = store.getState()
-    const oldDateStr = moment(date).format('YYYYMMDD')
+    const oldDateStr = moment(date).format(DATE_FORMAT)
     if (oldDateStr === dateStr && oldGid === gid && bsData.status === 3) {
         return [pbpData, bsData]
     }

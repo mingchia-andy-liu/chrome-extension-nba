@@ -9,6 +9,7 @@ import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
 import { SettingsConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
+import { DATE_FORMAT } from '../../utils/format'
 
 
 const Wrapper = styled.div`
@@ -60,7 +61,7 @@ class DatePicker extends React.Component {
         } = this.props
 
         if (startDate) {
-            this.state = { date: moment(startDate, 'YYYYMMDD').toDate() }
+            this.state = { date: moment(startDate, DATE_FORMAT).toDate() }
         } else {
             this.state = { date }
         }
@@ -68,8 +69,8 @@ class DatePicker extends React.Component {
 
     onClickArrow(offset) {
         const date = moment(this.state.date).add(offset, 'day')
-        this.props.fetchGamesIfNeeded(date.format('YYYYMMDD'))
-        this.props.onChange(date.format('YYYYMMDD'))
+        this.props.fetchGamesIfNeeded(date.format(DATE_FORMAT))
+        this.props.onChange(date.format(DATE_FORMAT))
         this.props.dispatchChangeDate(date.toDate())
         this.setState({ date: date.toDate() })
     }
@@ -107,7 +108,7 @@ class DatePicker extends React.Component {
                         }}
                         onChange={date => {
                             const d = moment(date[0])
-                            const dateStr = d.format('YYYYMMDD')
+                            const dateStr = d.format(DATE_FORMAT)
                             this.props.fetchGamesIfNeeded(dateStr)
                             this.props.onChange(dateStr)
                             this.props.dispatchChangeDate(d.toDate())

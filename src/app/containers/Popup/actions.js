@@ -1,6 +1,7 @@
 import moment from 'moment'
 import types from './types'
 import {store} from '../../store'
+import {DATE_FORMAT} from '../../utils/format'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -39,7 +40,7 @@ export const fetchRequest = async (dateStr) => {
 
 export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => async (dispatch) => {
     const { live: { games }, date: { date } } = store.getState()
-    const oldDateStr = moment(date).format('YYYYMMDD')
+    const oldDateStr = moment(date).format(DATE_FORMAT)
     if (oldDateStr === dateStr && !forceUpdate) {
         const hasPendingOrLiveGame = games.find(game =>
             game.period_time && game.period_time.game_status !== '3'

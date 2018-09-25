@@ -3,38 +3,46 @@ import browser from './utils/browser'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-    delayInMinutes: 0.1,
+    delayInMinutes: 30,
     periodInMinutes: 30,
 })
 
 const getAPIDate = () => {
-    const ET = moment.tz(moment(), 'America/New_York')
+    const ET = moment.tz(new Date(), 'America/New_York')
     const EThour = moment(ET).format('HH')
     // if ET time has not pass 6 am, don't jump ahead
+    const format = 'YYYYMMDD'
     if (+EThour < 6) {
-        return moment(ET).subtract(1, 'day')
+        return moment(ET).subtract(1, 'day').format(format)
     }
-    return ET
+    return ET.format(format)
 }
+
+const liveListener = () => {
+    const dateStr = getAPIDate()
+    fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
+        .then(res => res.json())
+        .then(data => {
+            const { sports_content: { games: { game: live } } } = data
+            const hasLiveGame = live.find(game =>
+                game.period_time && game.period_time.game_status === '2'
+            )
+            if (hasLiveGame) {
+                browser.setBadgeText({ text: 'live' })
+                browser.setBadgeBackgroundColor({ color: '#FC0D1B' })
+            } else {
+                browser.setBadgeText({ text: '' })
+            }
+        })
+        .catch(() => browser.setBadgeText({ text: '' }))
+}
+
+// immediately search for live game
+liveListener()
 
 browser.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === 'live') {
-        const dateStr = getAPIDate().format('YYYYMMDD')
-        fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
-            .then(res => res.json())
-            .then(data => {
-                const { sports_content: { games: { game: live } } } = data
-                const hasLiveGame = live.find(game =>
-                    game.period_time && game.period_time.game_status === '2'
-                )
-                if (hasLiveGame) {
-                    browser.setBadgeText({ text: 'live' })
-                    browser.setBadgeBackgroundColor({ color: '#FC0D1B' })
-                } else {
-                    browser.setBadgeText({ text: '' })
-                }
-            })
-            .catch(() => browser.setBadgeText({ text: '' }))
+        liveListener()
     }
 })
 
@@ -54,5 +62,19 @@ browser.runtime.onInstalled.addListener((details) => {
         if (currentSplit[0] !== previousSplit[0] || currentSplit[1] !== previousSplit[1]) {
             browser.tabs.create({ url: '/index.html#/changelog' })
         }
+
+        // Get rid of the old data
+        // TODO: remove this after few versions
+        browser.getAll((data) => {
+            const newOptions = {
+                favTeam: data.favTeam,
+                nightMode: data.nightMode,
+                hideZeroRow: data.hideZeroRow,
+                broadcast: data.broadcast,
+            }
+            browser.clear(() => {
+                browser.setItem(newOptions)
+            })
+        })
     }
 })

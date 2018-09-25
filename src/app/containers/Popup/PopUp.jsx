@@ -9,6 +9,7 @@ import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
 import { Column } from '../../styles'
 import * as actions from './actions'
+import { DATE_FORMAT } from '../../utils/format'
 
 import browser from '../../utils/browser'
 
@@ -24,7 +25,7 @@ class PopUp extends React.Component {
 
         this.state = {
             isPopup: false,
-            date: moment(this.props.date.date).format('YYYYMMDD'),
+            date: moment(this.props.date.date).format(DATE_FORMAT),
         }
         // check if popup is opened in the "popup" or in a tab
         // if it is in a popup winodw, there is no tab
@@ -39,7 +40,7 @@ class PopUp extends React.Component {
         const {
             date: { date },
         } = this.props
-        const dateStr = moment(date).format('YYYYMMDD')
+        const dateStr = moment(date).format(DATE_FORMAT)
         this.props.fetchGamesIfNeeded(dateStr, null, true)
     }
 

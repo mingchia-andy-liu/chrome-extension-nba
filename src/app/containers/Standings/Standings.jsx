@@ -25,11 +25,11 @@ const HeaderCell = styled(Cell)`
     font-weight: 700;
     background-color: #046fdb;
     color: #fff;
-    ${mediaQuery` width: 20vw;`}
+    ${mediaQuery`width: 20vw;`}
 `
 
 const NonMainHeaderCell = styled(HeaderCell)`
-    ${mediaQuery` display: none !important;`}
+    ${mediaQuery`display: none !important;`}
 `
 
 const Row = styled.tr`

@@ -35,6 +35,10 @@ if (typeof browser !== 'undefined') {
         })
     }
 
+    browserNameSpace.clear = (callback) => {
+        browser.storage.local.clear(callback)
+    }
+
     browserNameSpace.setItem = (obj) => {
         browser.storage.local.set(obj)
     }
@@ -118,6 +122,10 @@ if (typeof browser !== 'undefined') {
         })
     }
 
+    browserNameSpace.clear = (callback) => {
+        chrome.storage.local.clear(callback)
+    }
+
     browserNameSpace.setItem = (obj) => {
         chrome.storage.local.set(obj)
     }
@@ -168,14 +176,15 @@ if (typeof browser !== 'undefined') {
     }
 
 } else {
-    browserNameSpace.getItem = noop
-    browserNameSpace.setItem = noop
-    browserNameSpace.removeItem = noop
-    browserNameSpace.getAllKeys = noop
-    browserNameSpace.setBadgeBackgroundColor = noop
-    browserNameSpace.setBadgeText = noop
     browserNameSpace.alarms.create = noop
     browserNameSpace.alarms.onAlarm.addListener = noop
+    browserNameSpace.clear = noop
+    browserNameSpace.getAllKeys = noop
+    browserNameSpace.getItem = noop
+    browserNameSpace.removeItem = noop
+    browserNameSpace.setBadgeBackgroundColor = noop
+    browserNameSpace.setBadgeText = noop
+    browserNameSpace.setItem = noop
 }
 
 export default browserNameSpace
