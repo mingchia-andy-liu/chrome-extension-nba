@@ -24,23 +24,31 @@ const TeamScore = styled.div`
     opacity: ${(props) => (props.winning ? '' : '0.5')};
 `
 
-const renderScores = (gameStatus, home, visitor) => {
+const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
     if (gameStatus !== '1') {
+        if (spoiler) {
+            return (
+                <Row>
+                    <TeamScore> --- </TeamScore>
+                    -
+                    <TeamScore> --- </TeamScore>
+                </Row>
+            )
+        }
         return (
-            <SettingsConsumer>
-                {({ state: { dark } }) => (
-                    <Row >
-                        <TeamScore dark={dark} winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
-                        -
-                        <TeamScore dark={dark} winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
-                    </Row>
-                )}
-            </SettingsConsumer>
+            <Row>
+                <TeamScore dark={dark} winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
+                -
+                <TeamScore dark={dark} winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
+            </Row>
         )
     }
 }
 
-const renderStatusAndClock = (status, clock, totalPeriod ) => {
+const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) => {
+    if (spoiler && gameStatus !== '1') {
+        return ''
+    }
     if (status === 'Halftime') {
         return 'Halftime'
     } else if (status === 'Final' && totalPeriod > 4 ) {
@@ -79,12 +87,18 @@ class MatchInfo extends React.PureComponent {
 
 
         return (
-            <Wrapper>
-                {renderScores(gameStatus, home, visitor)}
-                <div>{renderStatusAndClock(periodStatus, gameClock, periodValue)}</div>
-                {series && <div>{series}</div>}
-                {gameStatus === '1' && broadcaster !== '' && <div>{broadcaster}</div>}
-            </Wrapper>
+            <SettingsConsumer>
+                {({state: {dark, spoiler}}) => (
+                    <Wrapper>
+                        {renderScores(dark, spoiler, gameStatus, home, visitor)}
+                        <div>
+                            {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
+                        </div>
+                        {!spoiler && series && <div>{series}</div>}
+                        {gameStatus === '1' && broadcaster !== '' && <div>{broadcaster}</div>}
+                    </Wrapper>
+                )}
+            </SettingsConsumer>
         )
     }
 }

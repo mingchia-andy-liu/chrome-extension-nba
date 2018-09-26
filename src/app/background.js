@@ -67,10 +67,11 @@ browser.runtime.onInstalled.addListener((details) => {
         // TODO: remove this after few versions
         browser.getAll((data) => {
             const newOptions = {
-                favTeam: data.favTeam,
-                nightMode: data.nightMode,
-                hideZeroRow: data.hideZeroRow,
                 broadcast: data.broadcast,
+                favTeam: data.favTeam,
+                hideZeroRow: data.hideZeroRow,
+                nightMode: data.nightMode,
+                spoiler: data.spoiler,
             }
             browser.clear(() => {
                 browser.setItem(newOptions)

@@ -86,8 +86,14 @@ class Options extends React.Component {
     }
 
     renderContent(context) {
-        const { team, dark, hideZeroRow, broadcast } = context.state
-        const { updateTeam, updateTheme, updateHideZeroRow, updateBroadcast } = context.actions
+        const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
+        const {
+            updateBroadcast,
+            updateHideZeroRow,
+            updateNoSpoiler,
+            updateTeam,
+            updateTheme,
+        } = context.actions
 
         return (
             <React.Fragment>
@@ -96,6 +102,7 @@ class Options extends React.Component {
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />
+                <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
             </React.Fragment>
         )
     }

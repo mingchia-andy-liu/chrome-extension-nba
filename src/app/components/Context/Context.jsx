@@ -12,18 +12,20 @@ export class SettingsProvider extends React.Component {
         super(props)
 
         this.state = {
-            dark: false,
-            team: '',
-            hideZeroRow: false,
             broadcast: false,
+            dark: false,
+            hideZeroRow: false,
+            spoiler: false,
+            team: '',
         }
 
-        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast'], (data) => {
+        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast', 'spoiler'], (data) => {
             this.setState({
-                dark: data.nightMode ? data.nightMode : false,
-                team: data.favTeam ? data.favTeam : '',
-                hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
                 broadcast: data.broadcast ? data.broadcast : false,
+                dark: data.nightMode ? data.nightMode : false,
+                hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
+                spoiler: data.spoiler ? data.spoiler : false,
+                team: data.favTeam ? data.favTeam : '',
             })
             if (data.nightMode) {
                 document.documentElement.style.setProperty('--bg-color', Theme.dark.baseBackground)
@@ -65,15 +67,22 @@ export class SettingsProvider extends React.Component {
         })
     }
 
+    updateNoSpoiler = () => {
+        this.setState({ spoiler: !this.state.spoiler }, () => {
+            browser.setItem({ spoiler: this.state.spoiler })
+        })
+    }
+
     render() {
         return (
             <Context.Provider value={{
                 state: this.state,
                 actions: {
-                    updateTheme: this.updateTheme,
-                    updateTeam: this.updateFavouriteTeam,
-                    updateHideZeroRow: this.updateHideZeroRow,
                     updateBroadcast: this.updateBroadcast,
+                    updateHideZeroRow: this.updateHideZeroRow,
+                    updateNoSpoiler: this.updateNoSpoiler,
+                    updateTeam: this.updateFavouriteTeam,
+                    updateTheme: this.updateTheme,
                 },
             }}>
                 {this.props.children}

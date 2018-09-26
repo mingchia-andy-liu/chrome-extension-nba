@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {getLogoColorByName} from '../utils/teams'
+import {SettingsConsumer} from './Context'
 
 export const TeamLogo = styled.div`
     display: flex;
@@ -43,10 +44,14 @@ class TeamInfo extends React.PureComponent {
     render() {
         const { ta, tn, winning } = this.props
         return (
-            <TeamInfoWrapper>
-                <TeamLogo winning={winning} team={ta}>{ta}</TeamLogo>
-                <TeamName winning={winning}>{tn}</TeamName>
-            </TeamInfoWrapper>
+            <SettingsConsumer>
+                {({state: {spoiler}}) => (
+                    <TeamInfoWrapper>
+                        <TeamLogo winning={spoiler ? true : winning} team={ta}>{ta}</TeamLogo>
+                        <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
+                    </TeamInfoWrapper>
+                )}
+            </SettingsConsumer>
         )
     }
 }

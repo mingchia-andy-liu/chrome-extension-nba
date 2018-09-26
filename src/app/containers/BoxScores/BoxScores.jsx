@@ -19,6 +19,7 @@ import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
+import Checkbox from '../../components/Checkbox'
 import { SettingsConsumer } from '../../components/Context'
 import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
 import { DATE_FORMAT, isWinning } from '../../utils/format'
@@ -71,6 +72,14 @@ const Subtitle = styled.span`
         padding-left: 0px;
     }
 `
+
+const SpoilerCheckbox = () => (
+    <SettingsConsumer>
+        {({state: { spoiler }, actions: {updateNoSpoiler}}) => (
+            <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
+        )}
+    </SettingsConsumer>
+)
 
 class BoxScores extends React.Component {
     constructor(props) {
@@ -219,13 +228,20 @@ class BoxScores extends React.Component {
         return <PlayByPlay pbp={pbpData} />
     }
 
-    renderContent() {
+    renderContent(spoiler) {
         const { bs: { bsData, pbpData, teamStats } } = this.props
         // Route expects a funciton for component prop
         const contentComponent = () => {
             if (!bsData || Object.keys(bsData).length === 0 || !bsData.st === 1) {
                 return <Overlay text={'Game has not started'} />
             } else {
+                if (spoiler) {
+                    return (
+                        <Overlay text="Turn off no spoiler">
+                            <SpoilerCheckbox />
+                        </Overlay>
+                    )
+                }
                 return (
                     <React.Fragment>
                         {this.renderTitle(bsData)}
@@ -294,11 +310,11 @@ class BoxScores extends React.Component {
                             />
                         </Sidebar>
                         <SettingsConsumer>
-                            {({ state: { dark } }) => (
+                            {({ state: { dark, spoiler } }) => (
                                 <Content dark={dark}>
                                     {bs.isLoading
                                         ? <Loader />
-                                        : this.renderContent()
+                                        : this.renderContent(spoiler)
                                     }
                                 </Content>
                             )}
