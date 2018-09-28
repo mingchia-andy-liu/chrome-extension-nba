@@ -69,6 +69,9 @@ class DatePicker extends React.Component {
 
     onClickArrow(offset) {
         const date = moment(this.state.date).add(offset, 'day')
+        if (date.isAfter('2019-09-01') || date.isBefore('2018-09-01')) {
+            return
+        }
         this.props.fetchGamesIfNeeded(date.format(DATE_FORMAT))
         this.props.onChange(date.format(DATE_FORMAT))
         this.props.dispatchChangeDate(date.toDate())
