@@ -1,5 +1,14 @@
 module.exports = [
     {
+        version: '1.2.7 Updates: (2018-09-27)',
+        updates: [
+            'A redesign on the app.',
+            'Add no spoiler option',
+            'Add hide players with 0 minute in box score option',
+            'Add navigation header'
+        ],
+    },
+    {
         version: '1.2.6 Updates: (2018-06-17)',
         updates: [
             'End of season update'
