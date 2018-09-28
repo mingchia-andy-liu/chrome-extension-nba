@@ -51,6 +51,27 @@ const teamStatsExtrator = (data) => {
     }
 }
 
+const pbpDecorater = (pbp) => {
+    let prev = null
+    return {
+        ...pbp,
+        play: pbp.play.map(play => {
+            const curr = +play.home_score - +play.visitor_score
+            let next
+            if (curr !== 0) {
+                next = (curr > 0 && prev < 0) || (curr < 0 && prev > 0)
+                    ? true
+                    : null
+                prev = curr
+            }
+            return {
+                ...play,
+                changes: next,
+            }
+        }),
+    }
+}
+
 export default (state = initState, action) => {
     switch (action.type) {
         case types.REQUEST_START:
@@ -65,7 +86,7 @@ export default (state = initState, action) => {
                 bsData: sanitizeBS(convert(boxScoreData)),
                 gid,
                 isLoading: false,
-                pbpData: pbpData,
+                pbpData: pbpDecorater(pbpData),
                 teamStats: {
                     home: teamStatsConverter(team.hls),
                     visitor: teamStatsConverter(team.vls),

@@ -9,15 +9,26 @@ import { getLogoColorByName } from '../../utils/teams'
 const Wrapper = styled.div`
     width: 100%;
 `
-const Qtr = styled.div`
+
+const Title = styled.div`
     ${RowCSS}
-    padding: 10px 0;
+    padding: 5px 0;
+`
+
+const Hint = styled.div`
+    padding: 0 10px;
+    color: white;
 `
 
 const QtrBtn = styled.a`
     padding: 0 10px;
     cursor: pointer;
     ${props => props.selected && 'background-color: #046fdb; color: white;'}
+`
+
+const ScoreCell = styled(Cell)`
+    background-color: ${(props) => (props.changes && '#1b5e20') || (props.tied && '#7c4dff')};
+    color: ${(props) => (props.changes || props.tied) && 'white'};
 `
 
 const renderHeaderRow = () => (
@@ -38,16 +49,19 @@ const renderPBPRow = (plays, period) => {
     return filtered.map((play, i) => {
         const {
             clock,
+            team_abr,
+            home_score,
+            visitor_score,
+            changes,
             description: _description,
         } = play
         const index = _description.indexOf(']')
-        const name = index === -1 ? '' : _description.substring(1, 4)
-        const color = getLogoColorByName(name)
+        const color = getLogoColorByName(team_abr)
         const LOGO = index !== -1
-            ? <Cell style={{color: 'white', backgroundColor: color}}>{name}</Cell>
+            ? <Cell style={{color: 'white', backgroundColor: color}}>{team_abr}</Cell>
             : <Cell></Cell>
         const SCORE = index > 4
-            ? <Cell>{_description.substring(5, index)}</Cell>
+            ? <ScoreCell changes={changes ? 1 : 0} tied={home_score === visitor_score ? 1 : 0}>{_description.substring(5, index)}</ScoreCell>
             : <Cell></Cell>
 
         const description = _description.replace(/\[.*\]/i, '').trim()
@@ -96,7 +110,7 @@ class PlayByPlay extends React.PureComponent {
         }
 
         return (
-            <Qtr> {Btns} </Qtr>
+            <Title> {Btns} </Title>
         )
     }
 
@@ -107,6 +121,10 @@ class PlayByPlay extends React.PureComponent {
         return (
             <Wrapper>
                 {this.renderQuarters(quarter, currentQuarter)}
+                <Title>
+                    <Hint style={{backgroundColor: '#1b5e20'}}> Lead Changes </Hint>
+                    <Hint style={{backgroundColor: '#7c4dff'}}> Tied </Hint>
+                </Title>
                 <StickyTable stickyHeaderCount={0} stickyColumnCount={0}>
                     {renderHeaderRow()}
                     {renderPBPRow(play, currentQuarter)}
