@@ -5,7 +5,7 @@ module.exports = [
             'A redesign on the app.',
             'Add no spoiler option',
             'Add hide players with 0 minute in box score option',
-            'Add navgation header'
+            'Add navigation header'
         ],
     },
     {
