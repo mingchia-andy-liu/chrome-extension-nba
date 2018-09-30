@@ -12,14 +12,17 @@ const initState = {
     teamStats: {},
 }
 
-const sanitizeBS = ({ home, visitor, officials, status }) => ({
+const sanitizeBS = ({ home, visitor, officials, periodTime }) => ({
     home,
     visitor,
-    status,
+    periodTime,
     officials: officials || [],
 })
 
 const teamStatsConverter = (data) => {
+    if (!data) {
+        return {}
+    }
     return {
         benchPoints: data.bpts,
         biggestLead: data.ble,
@@ -55,7 +58,7 @@ const pbpDecorater = (pbp) => {
     let prev = null
     return {
         ...pbp,
-        play: pbp.play.map(play => {
+        play: (pbp.play || []).map(play => {
             const curr = +play.home_score - +play.visitor_score
             let next
             if (curr !== 0) {

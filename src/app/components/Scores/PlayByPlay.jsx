@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell, quarterNames } from '../../utils/format'
+import { SettingsConsumer } from '../Context'
+import { Cell, getOddRowColor, HeaderCell, quarterNames } from '../../utils/format'
 import { RowCSS } from '../../styles'
 import { getLogoColorByName } from '../../utils/teams'
 
@@ -40,7 +41,7 @@ const renderHeaderRow = () => (
     </Row>
 )
 
-const renderPBPRow = (plays, period) => {
+const renderPBPRow = (plays, period, isDark) => {
     if (plays && plays.length === 0) {
         return <Row> <Cell> No Data Avaiable </Cell> </Row>
     }
@@ -67,7 +68,7 @@ const renderPBPRow = (plays, period) => {
         const description = _description.replace(/\[.*\]/i, '').trim()
 
         return (
-            <Row key={`pbp-${period}-${i}`}>
+            <Row key={`pbp-${period}-${i}`} style={{backgroundColor: getOddRowColor(i, isDark)}}>
                 <Cell> {clock} </Cell>
                 {LOGO}
                 {SCORE}
@@ -125,10 +126,14 @@ class PlayByPlay extends React.PureComponent {
                     <Hint style={{backgroundColor: '#1b5e20'}}> Lead Changes </Hint>
                     <Hint style={{backgroundColor: '#7c4dff'}}> Tied </Hint>
                 </Title>
-                <StickyTable stickyHeaderCount={0} stickyColumnCount={0}>
-                    {renderHeaderRow()}
-                    {renderPBPRow(play, currentQuarter)}
-                </StickyTable>
+                <SettingsConsumer>
+                    {({state: {dark}}) => (
+                        <StickyTable stickyHeaderCount={0} stickyColumnCount={0}>
+                            {renderHeaderRow()}
+                            {renderPBPRow(play, currentQuarter, dark)}
+                        </StickyTable>
+                    )}
+                </SettingsConsumer>
             </Wrapper>
         )
     }

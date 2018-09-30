@@ -20,6 +20,7 @@ import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Checkbox from '../../components/Checkbox'
+import MatchInfo from '../../components/MatchInfo'
 import { SettingsConsumer } from '../../components/Context'
 import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
 import { DATE_FORMAT, isWinning } from '../../utils/format'
@@ -54,15 +55,6 @@ const Content = styled.div`
 
 const Title = styled(Row)`
     font-size: calc(12px + 1vw);
-`
-
-const StyledScore = styled.div`
-    padding: 0 10px;
-    color: ${(props) => {
-        if (props.dark && props.winning) return Theme.dark.winning
-        if (props.winning) return Theme.light.winning
-    }};
-    ${(props) => (props.winning ? '' : 'opacity: 0.5')};
 `
 
 const Subtitle = styled.span`
@@ -123,29 +115,37 @@ class BoxScores extends React.Component {
 
     renderTitle(bsData) {
         const {
-            home: {
-                abbreviation: hta,
-                nickname: htn,
-                score: hs,
-            },
-            visitor: {
-                abbreviation: vta,
-                nickname: vtn,
-                score: vs,
-            },
+            home,
+            visitor,
+            periodTime,
         } = bsData
+        const {
+            abbreviation: hta,
+            nickname: htn,
+            score: hs,
+        } = home
+        const {
+            abbreviation: vta,
+            nickname: vtn,
+            score: vs,
+        } = visitor
+
         return (
-            <SettingsConsumer>
-                {({state: { dark }}) => (
-                    <Title justifyCenter={true} alignCenter={true}>
-                        <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
-                        <StyledScore dark={dark} winning={isWinning(vs, hs)}> {vs} </StyledScore>
-                        -
-                        <StyledScore dark={dark} winning={isWinning(hs, vs)}> {hs} </StyledScore>
-                        <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
-                    </Title>
-                )}
-            </SettingsConsumer>
+            <Title justifyCenter={true} alignCenter={true}>
+                <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
+                <MatchInfo
+                    home={{
+                        ...home,
+                        score: `${home.score}`,
+                    }}
+                    visitor={{
+                        ...visitor,
+                        score: `${visitor.score}`,
+                    }}
+                    periodTime={periodTime}
+                />
+                <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
+            </Title>
         )
     }
 
@@ -219,9 +219,12 @@ class BoxScores extends React.Component {
                 abbreviation: vta,
                 players: { player: visitorPlayers },
             },
+            periodTime: {
+                gameStatus,
+            },
         } = bsData
 
-        return <PlayerStats hta={hta} hps={homePlayers || []} vta={vta} vps={visitorPlayers || []} />
+        return <PlayerStats hta={hta} hps={homePlayers || []} vta={vta} vps={visitorPlayers || []} isLive={gameStatus === '2'}/>
     }
 
     renderPlaybyPlay(pbpData) {
@@ -232,7 +235,7 @@ class BoxScores extends React.Component {
         const { bs: { bsData, pbpData, teamStats } } = this.props
         // Route expects a funciton for component prop
         const contentComponent = () => {
-            if (!bsData || Object.keys(bsData).length === 0 || !bsData.st === 1) {
+            if (!bsData || Object.keys(bsData).length === 0 || (bsData.periodTime && bsData.periodTime.gameStatus === '1')) {
                 return <Overlay text={'Game has not started'} />
             } else {
                 if (spoiler) {
@@ -247,12 +250,12 @@ class BoxScores extends React.Component {
                         {this.renderTitle(bsData)}
                         <h3>Summary</h3>
                         {this.renderSummary(bsData)}
+                        <h3>Player Stats</h3>
+                        {this.renderPlyaerStats(bsData)}
                         <h3>Team Stats</h3>
                         {this.renderTeamStats(bsData)}
                         <h4>Advanced</h4>
                         {this.renderAdvancedTeamStats(teamStats, bsData)}
-                        <h3>Player Stats</h3>
-                        {this.renderPlyaerStats(bsData)}
                         <h3>Play By Play</h3>
                         {this.renderPlaybyPlay(pbpData)}
                     </React.Fragment>

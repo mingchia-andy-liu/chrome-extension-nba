@@ -95,7 +95,7 @@ class Standings extends React.Component {
                 <Cell>{team.win}</Cell>
                 <Cell>{team.loss}</Cell>
                 <Cell>{(Math.round(team.percentage * 100))}%</Cell>
-                <NonMainCell>{team.gamesBehind}</NonMainCell>
+                <Cell>{team.gamesBehind}</Cell>
                 <NonMainCell>{team.homeRecord}</NonMainCell>
                 <NonMainCell>{team.awayRecord}</NonMainCell>
                 <NonMainCell>{team.lastTenRecord}</NonMainCell>
@@ -149,7 +149,7 @@ class Standings extends React.Component {
     render() {
         return (
             <Layout>
-                <Layout.Header>{<Header index={2}/>}</Layout.Header>
+                <Layout.Header>{<Header index={1}/>}</Layout.Header>
                 <Layout.Content>
                     {this.renderContent()}
                 </Layout.Content>

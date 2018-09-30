@@ -24,14 +24,10 @@ const Link = styled.a`
     cursor: pointer;
 `
 
-class Links extends React.Component {
-    renderLinks() {
-
-    }
-
+class Links extends React.PureComponent {
     render() {
-        const links = ['options', 'standings', 'playoff', 'box-scores']
-        const hrefs = ['options', 'standings', 'playoff', 'boxscores']
+        const links = ['box-scores', 'standings', 'playoff', 'options']
+        const hrefs = ['boxscores', 'standings', 'playoff', 'options']
         const atags = links.map((element, index) => (
             <SettingsConsumer key={`link-${index}`}>
                 {({ state: { dark } }) => (

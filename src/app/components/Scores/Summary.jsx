@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, getOddRowColor, HeaderCell, RowHeaderCell } from '../../utils/format'
 import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
 `
 
-const renderTeamRow = (team, otherTeam, isDark) => (
-    <Row>
+const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
+    <Row style={{backgroundColor: getOddRowColor(i, isDark)}}>
         <RowHeaderCell>{team.abbreviation}</RowHeaderCell>
         {team.linescores && team.linescores.period.map((period, index) => (
             <Cell
@@ -42,7 +42,7 @@ class Summary extends React.PureComponent {
                                 <HeaderCell> Final </HeaderCell>
                             </Row>
                             {renderTeamRow(visitor, home, dark)}
-                            {renderTeamRow(home, visitor, dark)}
+                            {renderTeamRow(home, visitor, dark, 1)}
                         </StickyTable>
                     )}
                 </SettingsConsumer>

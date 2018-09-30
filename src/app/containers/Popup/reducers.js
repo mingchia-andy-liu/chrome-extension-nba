@@ -4,6 +4,7 @@ import moment from 'moment-timezone'
 const initState = {
     isLoading: false,
     games: [],
+    lastUpdate: new Date(0),
 }
 
 const getBroadcaster = (casters) => {
@@ -55,12 +56,14 @@ export default (state = initState, action) => {
                 ...state,
                 games: sanitizeGames(action.payload),
                 isLoading: false,
+                lastUpdate: new Date(),
             }
         case types.REQUEST_ERROR:
             return {
                 ...state,
                 games: [],
                 isLoading: false,
+                lastUpdate: new Date(0),
             }
         default:
             return state

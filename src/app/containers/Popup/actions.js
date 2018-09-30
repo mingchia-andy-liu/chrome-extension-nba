@@ -1,6 +1,5 @@
 import moment from 'moment'
 import types from './types'
-import {store} from '../../store'
 import {DATE_FORMAT} from '../../utils/format'
 
 /**
@@ -12,9 +11,11 @@ import {DATE_FORMAT} from '../../utils/format'
  * @param {string} dateStr selected date in string format
  * @param {function} callback callback to see if the 'id' in the URL is valid
  */
-const fetchGames = async (dispatch, dateStr, callback) => {
+const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     try {
-        dispatch({ type: types.REQUEST_START })
+        if (!isBackground) {
+            dispatch({ type: types.REQUEST_START })
+        }
 
         const games = await fetchRequest(dateStr)
         dispatch({
@@ -38,17 +39,21 @@ export const fetchRequest = async (dateStr) => {
     }
 }
 
-export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => async (dispatch) => {
-    const { live: { games }, date: { date } } = store.getState()
+export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => async (dispatch, getState) => {
+    const { live: { games, lastUpdate }, date: { date } } = getState()
     const oldDateStr = moment(date).format(DATE_FORMAT)
+    const updateDiff = moment().diff(lastUpdate, 'seconds')
+
+    // if it's different day, or force update, fetch new
     if (oldDateStr === dateStr && !forceUpdate) {
         const hasPendingOrLiveGame = games.find(game =>
-            game.period_time && game.period_time.game_status !== '3'
+            game.periodTime && game.periodTime.gameStatus !== '3'
         )
-        if (!hasPendingOrLiveGame) {
-            return games
+
+        if (!hasPendingOrLiveGame || updateDiff < 60) {
+            return
         }
     }
 
-    return await fetchGames(dispatch, dateStr, callback)
+    return await fetchGames(dispatch, dateStr, callback, oldDateStr === dateStr )
 }

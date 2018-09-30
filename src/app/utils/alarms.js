@@ -14,9 +14,9 @@ browser.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === 'minute') {
         const { bs, date: {date}} = store.getState()
         const dateStr = moment(date).format(DATE_FORMAT)
-        fetchGamesIfNeeded(dateStr)(store.dispatch)
+        fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState)
         if (bs && bs.gid !== '') {
-            fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch)
+            fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch, store.getState)
         }
     }
 })

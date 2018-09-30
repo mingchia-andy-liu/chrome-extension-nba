@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { ColumnCSS, mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SettingsConsumer } from './Context'
+import browser from '../utils/browser'
 
 
 const Wrapper = styled.div`
@@ -12,7 +13,8 @@ const Wrapper = styled.div`
 
     ${mediaQuery`
         min-height: 100px;
-        max-height: 250px;
+        padding: 0 5px 10px 5px;
+        ${(props) => (props.isPopup && 'max-height: 250px;')}
         overflow-y: scroll;
     `}
 `
@@ -47,8 +49,20 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
 
 
 class CardList extends React.PureComponent {
+    constructor() {
+        super()
+        this.state = { isPopup: false }
+    }
+
+    componentDidMount() {
+        browser.tabs.getCurrent((tab) => {
+            this.setState({ isPopup: !tab })
+        })
+    }
+
     render() {
         const { games, isLoading, selected, ...rest} = this.props
+        const { isPopup } = this.state
         if (isLoading) {
             return (
                 <Wrapper>
@@ -67,7 +81,7 @@ class CardList extends React.PureComponent {
         return (
             <SettingsConsumer>
                 {({state: { team, broadcast }}) => (
-                    <Wrapper>
+                    <Wrapper isPopup={isPopup}>
                         {generateCards(games, selected, team, broadcast, rest)}
                     </Wrapper>
                 )}

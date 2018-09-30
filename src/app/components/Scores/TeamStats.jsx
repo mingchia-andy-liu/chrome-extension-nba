@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, getOddRowColor, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -33,8 +34,8 @@ const renderHeaderRow = () => {
     )
 }
 
-const renderTeamRow = (team, name) => (
-    <Row>
+const renderTeamRow = (team, name, isDark, i = 0) => (
+    <Row style={{backgroundColor: getOddRowColor(i, isDark)}}>
         <RowHeaderCell> {name} </RowHeaderCell>
         <Cell>{`${team.field_goals_made}-${team.field_goals_attempted}`}</Cell>
         <Cell>{team.field_goals_percentage}%</Cell>
@@ -56,11 +57,15 @@ class TeamStats extends React.PureComponent {
         const { hts, vts, hta, vta } = this.props
         return (
             <Wrapper>
-                <StickyTable stickyHeaderCount={0}>
-                    {renderHeaderRow(0)}
-                    {renderTeamRow(vts, vta)}
-                    {renderTeamRow(hts, hta)}
-                </StickyTable>
+                <SettingsConsumer>
+                    {({state: { dark }})=> (
+                        <StickyTable stickyHeaderCount={0}>
+                            {renderHeaderRow(0)}
+                            {renderTeamRow(vts, vta, dark)}
+                            {renderTeamRow(hts, hta, dark, 1)}
+                        </StickyTable>
+                    )}
+                </SettingsConsumer>
             </Wrapper>
         )
     }

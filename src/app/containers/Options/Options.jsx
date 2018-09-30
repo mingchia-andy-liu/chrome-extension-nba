@@ -110,7 +110,7 @@ class Options extends React.Component {
     render() {
         return (
             <Layout>
-                <Layout.Header>{<Header index={1}/>}</Layout.Header>
+                <Layout.Header>{<Header index={3}/>}</Layout.Header>
                 <Layout.Content>
                     <SettingsConsumer>
                         {context => this.renderContent(context)}
