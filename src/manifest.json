@@ -1,0 +1,46 @@
+{
+    "manifest_version": 2,
+
+    "name": "Basketball Box Scores",
+    "description": "This extension shows you the daily basketball box scores.",
+    "version": "1.2.6",
+
+    "icons": {
+        "16": "assets/png/icon-color-16.png",
+        "48": "assets/png/icon-color-48.png",
+        "128": "assets/png/icon-color-128.png"
+    },
+
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "48": "assets/png/icon-color-48.png"
+        }
+    },
+
+    "background": {
+        "scripts": [
+            "vendor/moment/moment.min.js",
+            "vendor/moment/moment-timezone.min.js",
+            "vendor/moment/moment-timezone-data.min.js",
+            "vendor/jquery/jquery-3.1.1.min.js",
+            "js/common/utils.js",
+            "js/common/games.js",
+            "js/common/date_utils.js",
+            "js/alarms/alarms.js",
+            "js/alarms/listeners.js",
+            "js/background/background.js",
+            "js/ga.js"
+        ],
+        "persistent": false
+    },
+
+    "permissions": [
+        "storage",
+        "alarms",
+        "*://*.nba.com/",
+        "*://*.nba.net/"
+    ],
+
+    "content_security_policy": "script-src 'self' https://www.google-analytics.com/analytics.js; object-src 'self'"
+}
