@@ -6,15 +6,15 @@
     "version": "1.2.7",
 
     "icons": {
-        "16": "assets/png/icon-color-16.png",
-        "48": "assets/png/icon-color-48.png",
-        "128": "assets/png/icon-color-128.png"
+        "16": "assets/png/icon-2-color-16.png",
+        "48": "assets/png/icon-2-color-48.png",
+        "128": "assets/png/icon-2-color-128.png"
     },
 
     "browser_action": {
         "default_popup": "index.html",
         "default_icon": {
-            "48": "assets/png/icon-color-48.png"
+            "48": "assets/png/icon-2-color-48.png"
         }
     },
 

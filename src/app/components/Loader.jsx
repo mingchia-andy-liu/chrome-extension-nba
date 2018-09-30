@@ -40,7 +40,7 @@ class Loader extends React.PureComponent {
     render() {
         return (
             <Wrapper >
-                <StyledLoader src="assets/png/icon-color-128.png"/>
+                <StyledLoader src="assets/png/icon-2-color-512.png"/>
                 <h2>Loading...</h2>
             </Wrapper>
         )
