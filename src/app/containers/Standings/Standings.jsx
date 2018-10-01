@@ -63,7 +63,6 @@ class Standings extends React.Component {
 
     renderHeader(conf) {
         const headers = [
-            'GB',
             'Home Record',
             'Road Record',
             'L10 Streak',
@@ -80,6 +79,7 @@ class Standings extends React.Component {
                 <HeaderCell>Win</HeaderCell>
                 <HeaderCell>Loss</HeaderCell>
                 <HeaderCell>Win %</HeaderCell>
+                <HeaderCell>GB</HeaderCell>
                 {headers.map(element => (
                     <NonMainHeaderCell key={`stats-${element}-${conf}`}>{element}</NonMainHeaderCell>
                 ))}

@@ -22,7 +22,7 @@ const TeamScore = styled.div`
         if (props.dark && props.winning) return Theme.dark.winning
         if (props.winning) return Theme.light.winning
     }};
-    opacity: ${(props) => (props.winning ? '' : '0.5')};
+    opacity: ${(props) => (props.losing ? '0.5' : '')};
 `
 
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
@@ -38,9 +38,21 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
         }
         return (
             <Row>
-                <TeamScore dark={dark} winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
-                -
-                <TeamScore dark={dark} winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
+                <TeamScore
+                    dark={dark}
+                    winning={+visitor.score > +home.score}
+                    losing={+visitor.score < +home.score}
+                >
+                    {visitor.score}
+                </TeamScore>
+            -
+                <TeamScore
+                    dark={dark}
+                    winning={+visitor.score < +home.score}
+                    losing={+visitor.score > +home.score}
+                >
+                    {home.score}
+                </TeamScore>
             </Row>
         )
     }
