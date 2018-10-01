@@ -40,8 +40,16 @@ const sanitizeGame = game => ({
     },
 })
 
+
+/**
+ * Migrated from preprocessData()
+ */
 const sanitizeGames = games => {
-    return games.map(game => sanitizeGame(game))
+    const sanitized = games.map(game => sanitizeGame(game))
+    const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '1')
+    const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '2')
+    const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '3')
+    return live.concat(finish.concat(prepare))
 }
 
 export default (state = initState, action) => {
