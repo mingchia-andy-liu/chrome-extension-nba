@@ -2,11 +2,11 @@
   <img src="src/build/assets/png/icon-2-color-128.png">
 </p>
 
-# NBA Browser Extension
+# Basketball Box Scores Extension
 
 This is a browser extension shows the daily box score for NBA games.
 
-## Get NBA Extension
+## Get Basketball Box Scores Extension
 
 It is available on **Chrome** and **Firefox**.
 
