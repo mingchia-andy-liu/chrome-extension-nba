@@ -39,6 +39,7 @@ class Playoff extends React.Component {
 
     componentDidMount() {
         this.props.fetchPlayoff()
+        document.title = 'Box Scores | Playoff'
     }
 
     renderContent() {

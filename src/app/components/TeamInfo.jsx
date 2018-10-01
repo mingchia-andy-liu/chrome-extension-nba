@@ -20,7 +20,7 @@ export const TeamLogo = styled.div`
 
     opacity: ${(props) => (props.winning
         ? '1'
-        : '0.5')};
+        : '0.4')};
 `
 
 const TeamName = styled.div`
@@ -28,7 +28,7 @@ const TeamName = styled.div`
     margin-top: 8px;
     opacity: ${(props) => (props.winning
         ? '1'
-        : '0.5')};
+        : '0.4')};
 `
 
 const TeamInfoWrapper = styled.div`

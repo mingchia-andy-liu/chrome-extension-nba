@@ -22,7 +22,7 @@ const TeamScore = styled.div`
         if (props.dark && props.winning) return Theme.dark.winning
         if (props.winning) return Theme.light.winning
     }};
-    opacity: ${(props) => (props.losing ? '0.5' : '')};
+    opacity: ${(props) => (props.losing ? '0.4' : '')};
 `
 
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {

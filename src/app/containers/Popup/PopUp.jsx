@@ -42,6 +42,7 @@ class PopUp extends React.Component {
         } = this.props
         const dateStr = moment(date).format(DATE_FORMAT)
         this.props.fetchGamesIfNeeded(dateStr, null, true)
+        document.title = 'Box Scores | Popup'
     }
 
     selectGame(e) {

@@ -31,6 +31,10 @@ class Options extends React.Component {
         super(props)
     }
 
+    componentDidMount() {
+        document.title = 'Box Scores | Options'
+    }
+
     renderHeader(isDark) {
         return (
             <React.Fragment>

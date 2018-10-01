@@ -59,6 +59,7 @@ class Standings extends React.Component {
 
     componentDidMount() {
         this.props.fetchStandings()
+        document.title = 'Box Scores | Standings'
     }
 
     renderHeader(conf) {

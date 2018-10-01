@@ -20,7 +20,7 @@ browser.alarms.onAlarm.addListener((alarm) => {
         }
 
         const hasLiveGame = games.find(game =>
-            game.period_time && game.period_time.game_status === '2'
+            game && game.periodTime && game.periodTime.gameStatus === '2'
         )
         if (hasLiveGame) {
             browser.setBadgeText({ text: 'live' })

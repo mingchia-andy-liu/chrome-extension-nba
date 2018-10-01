@@ -25,7 +25,7 @@ const liveListener = () => {
         .then(data => {
             const { sports_content: { games: { game: live } } } = data
             const hasLiveGame = live.find(game =>
-                game.period_time && game.period_time.game_status === '2'
+                game && game.period_time && game.period_time.game_status === '2'
             )
             if (hasLiveGame) {
                 browser.setBadgeText({ text: 'live' })

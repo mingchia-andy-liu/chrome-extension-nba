@@ -107,6 +107,7 @@ class BoxScores extends React.Component {
                 this.props.history.replace('/boxscores')
             }
         }, true)
+        document.title = 'Box Scores | BoxScores'
     }
 
     componentWillUnmount() {

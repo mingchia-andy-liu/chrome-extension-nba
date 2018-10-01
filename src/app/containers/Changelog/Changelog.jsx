@@ -32,6 +32,10 @@ class Changelog extends React.Component {
         super(props)
     }
 
+    componentDidMount() {
+        document.title = 'Box Scores | Options'
+    }
+
     render() {
         return (
             <Wrapper>
