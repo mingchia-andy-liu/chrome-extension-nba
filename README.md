@@ -33,6 +33,7 @@ This extension is for people who just want to get the latest update but too lazy
 1. Full schedule list for the season
 1. Ability to add favorite team which will be shown on top of the daily list
 1. Playoff bracket for each season
+1. Standings
 1. Dark mode
 
 ## TODOs
