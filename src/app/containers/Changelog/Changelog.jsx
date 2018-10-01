@@ -33,7 +33,7 @@ class Changelog extends React.Component {
     }
 
     componentDidMount() {
-        document.title = 'Box Scores | Options'
+        document.title = 'Box Scores | Changelog'
     }
 
     render() {
