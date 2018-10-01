@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { StickyTable } from 'react-sticky-table'
 import {
     Cell,
+    getOddRowColor,
     HeaderCell,
     RowHeaderCell,
     Sup,
@@ -73,7 +74,7 @@ const renderHeaderRow = (name) => {
  * @param {*} player
  * @param {*} isLive
  */
-const renderPlayerRow = (player, isLive, isDark, hideZeroRow) => {
+const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
     if (hideZeroRow && player.minutes == '0' && player.seconds == '0') {
         return
     }
@@ -110,13 +111,13 @@ const renderPlayerRow = (player, isLive, isDark, hideZeroRow) => {
     return (
         <RowWrapper
             key={name}
-            style={{ backgroundColor: rowBGColor(doubles, isDark) }}
+            style={{ backgroundColor: doubles ? rowBGColor(doubles, isDark) : getOddRowColor(i, isDark) }}
             title={doubles && getDoublesText(doubles)}
         >
             <PlayerName>
                 {name}
                 {starting_position && <Sup>{starting_position}</Sup>}
-                {isLive && +on_court && <OnCourt src="assets/png/icon-color-128.png" />}
+                {isLive && on_court === 1 && <OnCourt src="assets/png/icon-color-128.png" />}
             </PlayerName>
             <Cell>{formatMinutes(player)}</Cell>
             <StatsCell dark={isDark ? 1 : 0} winning={+points >= 10 ? 1 : 0}>{points}</StatsCell>
@@ -192,9 +193,9 @@ class PlayerStats extends React.PureComponent {
                     {({ state: { dark, hideZeroRow } }) => (
                         <StickyTable stickyHeaderCount={0}>
                             {renderHeaderRow(vta)}
-                            {vps.map(player => (renderPlayerRow(player, isLive, dark, hideZeroRow)))}
+                            {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
                             {renderHeaderRow(hta)}
-                            {hps.map(player => (renderPlayerRow(player, isLive, dark, hideZeroRow)))}
+                            {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
                         </StickyTable>
                     )}
                 </SettingsConsumer>

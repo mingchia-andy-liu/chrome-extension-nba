@@ -39,14 +39,6 @@ class Layout extends React.Component {
     static Header = Header
     static Content = Content
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            selectedIndex: 0,
-        }
-    }
-
     render() {
         const children = React.Children.map(
             this.props.children,
@@ -65,8 +57,5 @@ Layout.propTypes = {
     children: PropTypes.node,
 }
 
-Layout.defaultProps = {
-    playoff: <React.Fragment />,
-}
 
 export default Layout

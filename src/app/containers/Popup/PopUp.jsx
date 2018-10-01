@@ -16,7 +16,7 @@ import browser from '../../utils/browser'
 const Wrapper = styled(Column)`
     padding: 10px;
     width: 100%;
-    min-width: 330px;
+    min-width: 360px;
 `
 
 class PopUp extends React.Component {
@@ -62,7 +62,7 @@ class PopUp extends React.Component {
         const { live } = this.props
         return (
             <Wrapper>
-                <DatePicker hide={true} onChange={this.selectDate.bind(this)}/>
+                <DatePicker hide={this.state.isPopup} onChange={this.selectDate.bind(this)}/>
                 <Links />
                 <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
             </Wrapper>

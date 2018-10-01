@@ -72,7 +72,7 @@ if (typeof browser !== 'undefined') {
             browser.tabs.create(options)
         },
         getCurrent: (callback) => {
-            browser.tabs.getCurrent().then(() => callback())
+            browser.tabs.getCurrent().then((tab) => callback(tab))
         },
     }
 
@@ -159,7 +159,7 @@ if (typeof browser !== 'undefined') {
             chrome.tabs.create(options)
         },
         getCurrent: (callback) => {
-            chrome.tabs.getCurrent(() => callback())
+            chrome.tabs.getCurrent((tab) => callback(tab))
         },
     }
 

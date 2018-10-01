@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
-import {store} from '../../store'
 import {DATE_FORMAT} from '../../utils/format'
+import getAPIDate from '../../utils/getApiDate'
 
 const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`
@@ -43,9 +43,11 @@ const fetchGameDetail = async (dateStr, gid) => {
     }
 }
 
-const fetchLiveGameBox = async (dispatch, dateStr, gid) => {
+const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     try {
-        dispatch({ type: types.REQUEST_START })
+        if (!isBackground) {
+            dispatch({ type: types.REQUEST_START })
+        }
 
         // Promise all starts all the requests at the same time
         const [
@@ -63,7 +65,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid) => {
         dispatch({
             type: types.REQUEST_SUCCESS,
             payload: {
-                boxScoreData: boxScoreData,
+                boxScoreData,
                 gid,
                 pbpData,
             },
@@ -73,13 +75,33 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid) => {
     }
 }
 
-export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch) => {
-    const { bs: { bsData, pbpData, gid: oldGid }, date: { date }} = store.getState()
-    const oldDateStr = moment(date).format(DATE_FORMAT)
-    if (oldDateStr === dateStr && oldGid === gid && bsData.status === 3) {
-        return [pbpData, bsData]
+export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getState) => {
+    const apiDate = getAPIDate()
+    // if the date is in the future, then exit early
+    if (moment(dateStr).isAfter(apiDate)) {
+        return
     }
-    return await fetchLiveGameBox(dispatch, dateStr, gid)
+
+    const {
+        bs: {
+            bsData,
+            gid: oldGid,
+        },
+        date: { date },
+        live: { lastUpdate },
+    } = getState()
+    const oldDateStr = moment(date).format(DATE_FORMAT)
+    const updateDiff = moment().diff(lastUpdate, 'seconds')
+
+    // if it's different day and different id, fetch new
+    if (oldDateStr === dateStr && oldGid === gid) {
+        // if it's same game but the game is finished, use old
+        // if it's less than 60 seconds from the last update, use old
+        if ((bsData.periodTime && bsData.periodTime.gameStatus === '3') || updateDiff < 60) {
+            return
+        }
+    }
+    return await fetchLiveGameBox(dispatch, dateStr, gid, oldGid === gid)
 }
 
 export const resetLiveGameBox = () => (dispatch) => {

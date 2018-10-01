@@ -1,6 +1,9 @@
 import {toPercentage, quarterNames} from '../../utils/format'
 
 const getStats = (old, points) => {
+    if (!old) {
+        return {}
+    }
     return {
         assists: old.ast,
         blocks: old.blk,
@@ -25,7 +28,7 @@ const getStats = (old, points) => {
     }
 }
 
-const getPlayers = (players) => {
+const getPlayers = (players = []) => {
     return players.map(player => ({
         assists: player.ast,
         blocks: player.blk,
@@ -78,11 +81,13 @@ const getLinescores = (stats, p) => {
 
 export default (old) => {
     const {
-        offs,
+        cl,
         hls,
-        vls,
+        offs,
         p,
         st,
+        stt,
+        vls,
     } = old
     let officials = []
     if (offs && offs.off) {
@@ -95,9 +100,15 @@ export default (old) => {
 
     return {
         officials,
-        status: st,
+        periodTime: {
+            periodValue: `${p}`,
+            periodStatus: `${stt}`,
+            gameClock: cl,
+            gameStatus: `${st}`,
+        },
         home: {
             abbreviation: hls.ta,
+            city: hls.tc,
             linescores: { period: getLinescores(hls, p) },
             nickname: hls.tn,
             players: { player: getPlayers(hls.pstsg) },
@@ -106,6 +117,7 @@ export default (old) => {
         },
         visitor: {
             abbreviation: vls.ta,
+            city: vls.tc,
             linescores: { period: getLinescores(vls, p) },
             nickname: vls.tn,
             players: { player: getPlayers(vls.pstsg) },

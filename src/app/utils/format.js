@@ -182,10 +182,20 @@ export const toPercentage = (decimal) => {
  * determine who is winning
  */
 export const isWinning = (self, other) => {
-    if (self === '' && other === '') {
+    if ((!self && !other) || (self === other)) {
         return true
     } else {
         return +self > +other
+    }
+}
+
+/**
+ * get background color for odd number rows
+ */
+export const getOddRowColor = (i, isDark) => {
+    if (i % 2 === 1) {
+        if (isDark) return 'hsl(0, 0%, 25%)'
+        else return 'hsl(0, 0%, 95%)'
     }
 }
 

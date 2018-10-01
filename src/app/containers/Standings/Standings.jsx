@@ -63,7 +63,6 @@ class Standings extends React.Component {
 
     renderHeader(conf) {
         const headers = [
-            'GB',
             'Home Record',
             'Road Record',
             'L10 Streak',
@@ -80,6 +79,7 @@ class Standings extends React.Component {
                 <HeaderCell>Win</HeaderCell>
                 <HeaderCell>Loss</HeaderCell>
                 <HeaderCell>Win %</HeaderCell>
+                <HeaderCell>GB</HeaderCell>
                 {headers.map(element => (
                     <NonMainHeaderCell key={`stats-${element}-${conf}`}>{element}</NonMainHeaderCell>
                 ))}
@@ -95,7 +95,7 @@ class Standings extends React.Component {
                 <Cell>{team.win}</Cell>
                 <Cell>{team.loss}</Cell>
                 <Cell>{(Math.round(team.percentage * 100))}%</Cell>
-                <NonMainCell>{team.gamesBehind}</NonMainCell>
+                <Cell>{team.gamesBehind}</Cell>
                 <NonMainCell>{team.homeRecord}</NonMainCell>
                 <NonMainCell>{team.awayRecord}</NonMainCell>
                 <NonMainCell>{team.lastTenRecord}</NonMainCell>
@@ -149,7 +149,7 @@ class Standings extends React.Component {
     render() {
         return (
             <Layout>
-                <Layout.Header>{<Header index={2}/>}</Layout.Header>
+                <Layout.Header>{<Header index={1}/>}</Layout.Header>
                 <Layout.Content>
                     {this.renderContent()}
                 </Layout.Content>

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Row } from '../styles'
 import { SettingsConsumer } from '../components/Context'
 import { Theme } from '../styles'
+import {formatClock} from '../utils/format'
 
 
 const Wrapper = styled.div`
@@ -21,7 +22,7 @@ const TeamScore = styled.div`
         if (props.dark && props.winning) return Theme.dark.winning
         if (props.winning) return Theme.light.winning
     }};
-    opacity: ${(props) => (props.winning ? '' : '0.5')};
+    opacity: ${(props) => (props.losing ? '0.5' : '')};
 `
 
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
@@ -37,9 +38,21 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
         }
         return (
             <Row>
-                <TeamScore dark={dark} winning={+visitor.score > +home.score ? 1 : 0}> {visitor.score} </TeamScore>
-                -
-                <TeamScore dark={dark} winning={+visitor.score < +home.score ? 1 : 0}> {home.score} </TeamScore>
+                <TeamScore
+                    dark={dark}
+                    winning={+visitor.score > +home.score}
+                    losing={+visitor.score < +home.score}
+                >
+                    {visitor.score}
+                </TeamScore>
+            -
+                <TeamScore
+                    dark={dark}
+                    winning={+visitor.score < +home.score}
+                    losing={+visitor.score > +home.score}
+                >
+                    {home.score}
+                </TeamScore>
             </Row>
         )
     }
@@ -49,13 +62,7 @@ const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) =
     if (spoiler && gameStatus !== '1') {
         return ''
     }
-    if (status === 'Halftime') {
-        return 'Halftime'
-    } else if (status === 'Final' && totalPeriod > 4 ) {
-        return 'Final/OT'
-    } else {
-        return `${status} ${clock}`
-    }
+    return formatClock(clock, status) || status
 }
 
 class MatchInfo extends React.PureComponent {
@@ -109,17 +116,17 @@ MatchInfo.propTypes = {
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         score: PropTypes.string,
-    }),
+    }).isRequired,
     visitor: PropTypes.shape({
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         score: PropTypes.string,
-    }),
+    }).isRequired,
     periodTime: PropTypes.shape({
         periodStatus: PropTypes.string.isRequired,
         gameClock: PropTypes.string.isRequired,
         gameStatus: PropTypes.string.isRequired,
-    }),
+    }).isRequired,
     playoffs: PropTypes.shape({
         home_wins: PropTypes.string,
         visitor_wins: PropTypes.string,

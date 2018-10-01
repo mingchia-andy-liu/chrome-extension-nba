@@ -25,16 +25,16 @@ class Header extends React.Component {
                         label="Boxscores"
                     />
                     <TabItem
-                        to={getDestPath(pathname, '/options')}
-                        label="Options"
-                    />
-                    <TabItem
                         to={getDestPath(pathname, '/standings')}
                         label="Standings"
                     />
                     <TabItem
                         to={getDestPath(pathname, '/playoff')}
                         label="Playoff"
+                    />
+                    <TabItem
+                        to={getDestPath(pathname, '/options')}
+                        label="Options"
                     />
                 </Tab>
             </React.Fragment>
