@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="src/build/assets/png/icon-2-color-128.png">
+</p>
+
 # NBA Browser Extension
 
 This is a browser extension shows the daily box score for NBA games.
@@ -9,6 +13,15 @@ It is available on **Chrome** and **Firefox**.
 [Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
 
 [Firefox](https://addons.mozilla.org/en-US/firefox/addon/box-scores-extension/)
+
+## Screenshots
+<img style="height:300px" src="screenshots/popup.png">
+<br />
+<img style="width:40%" src="screenshots/box_score.png">
+<img style="width:40%" src="screenshots/box_score_dark_mode.png">
+<img style="width:40%" src="screenshots/standings.png">
+<img style="width:40%" src="screenshots/playoff.png">
+
 
 ## Motivation
 
