@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     ${mediaQuery`
         min-height: 100px;
         padding: 0 5px 10px 5px;
-        ${(props) => (props.isPopup && 'max-height: 250px;')}
+        ${(props) => (props.isPopup && 'max-height: 350px;')}
         overflow-y: scroll;
     `}
 `
