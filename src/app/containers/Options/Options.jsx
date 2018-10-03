@@ -52,21 +52,31 @@ class Options extends React.Component {
         )
     }
 
-    // getOptionalPermission() {
-    //     // for getting the optional permission for the highlight videos in the future
-    //     document.querySelector('#my-button').addEventListener('click', () => {
-    //         chrome.permissions.request({
-    //             permissions: ['webRequest'],
-    //             origins: ['https://boxscoresORsomething.net'],
-    //         }, function(granted) {
-    //             if (granted) {
-    //                 // granted
-    //             } else {
-    //                 // not granted
-    //             }
-    //         })
-    //     })
-    // }
+    toggleNotificationPermission(updateNotification) {
+        // for getting the optional permission for the highlight videos in the future
+        chrome.permissions.contains({
+            permissions: ['notifications'],
+        }, (hasIt) => {
+            if (!hasIt) {
+                chrome.permissions.request({
+                    permissions: ['notifications'],
+                }, function(granted) {
+                    if (granted) {
+                        // granted
+                        updateNotification()
+                    }
+                })
+            } else {
+                chrome.permissions.remove({
+                    permissions: ['notifications'],
+                }, function(success) {
+                    if (success) {
+                        updateNotification()
+                    }
+                })
+            }
+        })
+    }
 
     renderTeams(favTeam, updateTeam) {
         return (
@@ -90,11 +100,12 @@ class Options extends React.Component {
     }
 
     renderContent(context) {
-        const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
+        const { team, dark, hideZeroRow, broadcast, spoiler, notification } = context.state
         const {
             updateBroadcast,
             updateHideZeroRow,
             updateNoSpoiler,
+            updateNotification,
             updateTeam,
             updateTheme,
         } = context.actions
@@ -103,6 +114,7 @@ class Options extends React.Component {
             <React.Fragment>
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
+                <Checkbox checked={notification === true} text="Send a notification when the favorite game starts. (You will need to grant the notification permission)." onChange={this.toggleNotificationPermission.bind(this, updateNotification)} />
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />

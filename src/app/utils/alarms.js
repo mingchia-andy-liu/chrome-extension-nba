@@ -6,7 +6,7 @@ import { fetchGamesIfNeeded } from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/format'
 
 browser.alarms.create('minute', {
-    delayInMinutes: 1,
+    when: moment().startOf('day').valueOf(),
     periodInMinutes: 1,
 })
 

@@ -19,11 +19,12 @@ export class SettingsProvider extends React.Component {
             team: '',
         }
 
-        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast', 'spoiler'], (data) => {
+        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast', 'spoiler', 'notification'], (data) => {
             this.setState({
                 broadcast: data.broadcast ? data.broadcast : false,
                 dark: data.nightMode ? data.nightMode : false,
                 hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
+                notification: data.notification ? data.notification : false,
                 spoiler: data.spoiler ? data.spoiler : false,
                 team: data.favTeam ? data.favTeam : '',
             })
@@ -73,6 +74,12 @@ export class SettingsProvider extends React.Component {
         })
     }
 
+    updateNotification = () => {
+        this.setState({ notification: !this.state.notification }, () => {
+            browser.setItem({ notification: this.state.notification })
+        })
+    }
+
     render() {
         return (
             <Context.Provider value={{
@@ -81,6 +88,7 @@ export class SettingsProvider extends React.Component {
                     updateBroadcast: this.updateBroadcast,
                     updateHideZeroRow: this.updateHideZeroRow,
                     updateNoSpoiler: this.updateNoSpoiler,
+                    updateNotification: this.updateNotification,
                     updateTeam: this.updateFavouriteTeam,
                     updateTheme: this.updateTheme,
                 },

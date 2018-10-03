@@ -3,7 +3,7 @@ import browser from './utils/browser'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-    delayInMinutes: 30,
+    when: moment().startOf('day').valueOf(),
     periodInMinutes: 30,
 })
 
@@ -18,12 +18,47 @@ const getAPIDate = () => {
     return ET.format(format)
 }
 
-const liveListener = () => {
+const nearestMinutes = (interval, momentDate) => {
+    const roundedMinutes = Math.round(momentDate.clone().minute() / interval) * interval
+    return momentDate.clone().minute(roundedMinutes).second(0)
+}
+
+const fireFavTeamNotifictionIfNeeded = (games) => {
+    browser.getItem(['favTeam'], (data) => {
+        if (data && data.favTeam && !data.notification) {
+            const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
+            if (favTeamGame) {
+                const format = 'hhmm'
+                const roundedDate = nearestMinutes(30, moment()).format(format)
+                const favTeamMoment = moment.tz(favTeamGame.time, format, 'America/New_York').local()
+
+                if (roundedDate === favTeamMoment.format(format)) {
+                    const options = {
+                        type: 'basic',
+                        title: 'You favourite team is about to play',
+                        message: `${favTeamGame.home.abbreviation} vs ${favTeamGame.visitor.abbreviation} @ ${favTeamMoment.format('hh:mm A')}`,
+                        iconUrl: 'assets/png/icon-2-color-512.png',
+                    }
+
+                    chrome.notifications.create(options)
+                    browser.setItem({ notification: true })
+                }
+            }
+        }
+    })
+}
+
+const liveListener = (checkFavTeam) => {
     const dateStr = getAPIDate()
     fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
         .then(res => res.json())
         .then(data => {
             const { sports_content: { games: { game: live } } } = data
+
+            if (!checkFavTeam) {
+                fireFavTeamNotifictionIfNeeded(live)
+            }
+
             const hasLiveGame = live.find(game =>
                 game && game.period_time && game.period_time.game_status === '2'
             )
@@ -38,9 +73,14 @@ const liveListener = () => {
 }
 
 // immediately search for live game
-liveListener()
+liveListener(true)
 
 browser.alarms.onAlarm.addListener((alarm) => {
+    // when the chrome is reopened, alarms get ran even though the time has passed
+    if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
+        return
+    }
+
     if (alarm.name === 'live') {
         liveListener()
     }
