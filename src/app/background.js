@@ -1,31 +1,17 @@
 import moment from 'moment-timezone'
 import browser from './utils/browser'
+import getAPIDate from './utils/getApiDate'
+import { checkLiveGame, nextNearestMinutes, nearestMinutes } from './utils/common'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-    when: moment().startOf('day').valueOf(),
+    when: nextNearestMinutes(30, moment()).valueOf(),
     periodInMinutes: 30,
 })
 
-const getAPIDate = () => {
-    const ET = moment.tz(new Date(), 'America/New_York')
-    const EThour = moment(ET).format('HH')
-    // if ET time has not pass 6 am, don't jump ahead
-    const format = 'YYYYMMDD'
-    if (+EThour < 6) {
-        return moment(ET).subtract(1, 'day').format(format)
-    }
-    return ET.format(format)
-}
-
-const nearestMinutes = (interval, momentDate) => {
-    const roundedMinutes = Math.round(momentDate.clone().minute() / interval) * interval
-    return momentDate.clone().minute(roundedMinutes).second(0)
-}
-
-const fireFavTeamNotifictionIfNeeded = (games) => {
+const fireFavTeamNotificationIfNeeded = (games) => {
     browser.getItem(['favTeam'], (data) => {
-        if (data && data.favTeam && !data.notification) {
+        if (data && data.favTeam) {
             const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
             if (favTeamGame) {
                 const format = 'hhmm'
@@ -41,7 +27,6 @@ const fireFavTeamNotifictionIfNeeded = (games) => {
                     }
 
                     chrome.notifications.create(options)
-                    browser.setItem({ notification: true })
                 }
             }
         }
@@ -49,25 +34,17 @@ const fireFavTeamNotifictionIfNeeded = (games) => {
 }
 
 const liveListener = (checkFavTeam) => {
-    const dateStr = getAPIDate()
+    const dateStr = moment(getAPIDate()).format('YYYYMMDD')
     fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
         .then(res => res.json())
         .then(data => {
             const { sports_content: { games: { game: live } } } = data
 
             if (!checkFavTeam) {
-                fireFavTeamNotifictionIfNeeded(live)
+                fireFavTeamNotificationIfNeeded(live)
             }
 
-            const hasLiveGame = live.find(game =>
-                game && game.period_time && game.period_time.game_status === '2'
-            )
-            if (hasLiveGame) {
-                browser.setBadgeText({ text: 'live' })
-                browser.setBadgeBackgroundColor({ color: '#FC0D1B' })
-            } else {
-                browser.setBadgeText({ text: '' })
-            }
+            checkLiveGame(live)
         })
         .catch(() => browser.setBadgeText({ text: '' }))
 }

@@ -5,6 +5,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Checkbox from '../../components/Checkbox'
 import { SettingsConsumer } from '../../components/Context'
+import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
 
@@ -29,10 +30,16 @@ const HrefLink = styled.a`
 class Options extends React.Component {
     constructor(props) {
         super(props)
+        this.state = { hasNotificationPermission: false }
     }
 
     componentDidMount() {
         document.title = 'Box Scores | Options'
+        browser.permissions.contains({
+            permissions: ['notifications'],
+        }, (hasNotificationPermission) => {
+            this.setState({ hasNotificationPermission })
+        })
     }
 
     renderHeader(isDark) {
@@ -52,29 +59,19 @@ class Options extends React.Component {
         )
     }
 
-    toggleNotificationPermission(updateNotification) {
-        // for getting the optional permission for the highlight videos in the future
-        chrome.permissions.contains({
+    requestNotification() {
+        browser.permissions.request({
             permissions: ['notifications'],
-        }, (hasIt) => {
-            if (!hasIt) {
-                chrome.permissions.request({
-                    permissions: ['notifications'],
-                }, function(granted) {
-                    if (granted) {
-                        // granted
-                        updateNotification()
-                    }
-                })
-            } else {
-                chrome.permissions.remove({
-                    permissions: ['notifications'],
-                }, function(success) {
-                    if (success) {
-                        updateNotification()
-                    }
-                })
-            }
+        }, (granted) => {
+            this.setState({ hasNotificationPermission: granted })
+        })
+    }
+
+    removeNotification() {
+        browser.permissions.remove({
+            permissions: ['notifications'],
+        }, (removed) => {
+            this.setState({ hasNotificationPermission: !removed })
         })
     }
 
@@ -100,12 +97,12 @@ class Options extends React.Component {
     }
 
     renderContent(context) {
-        const { team, dark, hideZeroRow, broadcast, spoiler, notification } = context.state
+        const { hasNotificationPermission } = this.state
+        const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
         const {
             updateBroadcast,
             updateHideZeroRow,
             updateNoSpoiler,
-            updateNotification,
             updateTeam,
             updateTheme,
         } = context.actions
@@ -114,7 +111,13 @@ class Options extends React.Component {
             <React.Fragment>
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
-                <Checkbox checked={notification === true} text="Send a notification when the favorite game starts. (You will need to grant the notification permission)." onChange={this.toggleNotificationPermission.bind(this, updateNotification)} />
+                {hasNotificationPermission
+                    ? <button onClick={this.removeNotification.bind(this)}>Remove permission</button>
+                    : <React.Fragment>
+                        <p>You can get notified when your favorite starts a game!</p>
+                        <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
+                    </React.Fragment>
+                }
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />

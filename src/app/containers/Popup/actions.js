@@ -1,6 +1,7 @@
 import moment from 'moment'
 import types from './types'
 import {DATE_FORMAT} from '../../utils/format'
+import {checkLiveGame} from '../../utils/common'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -22,6 +23,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
             type: types.REQUEST_SUCCESS,
             payload: games,
         })
+        checkLiveGame(games)
         if (callback) callback(games)
     } catch (error) {
         if (callback) callback([])
