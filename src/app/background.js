@@ -26,7 +26,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
                         iconUrl: 'assets/png/icon-2-color-512.png',
                     }
 
-                    chrome.notifications.create(options)
+                    browser.notifications.create(options)
                 }
             }
         }
