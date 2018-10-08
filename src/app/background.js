@@ -33,14 +33,14 @@ const fireFavTeamNotificationIfNeeded = (games) => {
     })
 }
 
-const liveListener = (checkFavTeam) => {
+const liveListener = (initCheck) => {
     const dateStr = moment(getAPIDate()).format('YYYYMMDD')
     fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
         .then(res => res.json())
         .then(data => {
             const { sports_content: { games: { game: live } } } = data
 
-            if (!checkFavTeam) {
+            if (!initCheck) {
                 fireFavTeamNotificationIfNeeded(live)
             }
 

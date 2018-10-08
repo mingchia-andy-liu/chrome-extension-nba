@@ -102,7 +102,9 @@ if (typeof browser !== 'undefined') {
 
     browserNameSpace.notifications = {
         create: (options) => {
-            browser.notifications.create(options)
+            if (browser.notifications && browser.notifications.create) {
+                browser.notifications.create(options)
+            }
         },
     }
 
@@ -208,7 +210,9 @@ if (typeof browser !== 'undefined') {
 
     browserNameSpace.notifications = {
         create: (options) => {
-            chrome.notifications.create(options)
+            if (chrome.notifications && chrome.notifications.create) {
+                chrome.notifications.create(options)
+            }
         },
     }
 

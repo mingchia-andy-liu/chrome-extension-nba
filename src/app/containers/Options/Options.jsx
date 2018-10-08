@@ -27,6 +27,15 @@ const HrefLink = styled.a`
     cursor: pointer;
 `
 
+const NotificationWrapper = styled.div`
+    padding: 5px 0;
+`
+
+const NotificationParagraph = styled.p`
+    padding: 5px 0;
+    margin: 0;
+`
+
 class Options extends React.Component {
     constructor(props) {
         super(props)
@@ -112,11 +121,13 @@ class Options extends React.Component {
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
                 {hasNotificationPermission
-                    ? <button onClick={this.removeNotification.bind(this)}>Remove permission</button>
-                    : <React.Fragment>
-                        <p>You can get notified when your favorite starts a game!</p>
+                    ? <NotificationWrapper>
+                        <button onClick={this.removeNotification.bind(this)}>Remove permission</button>
+                    </NotificationWrapper>
+                    : <NotificationWrapper>
+                        <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
                         <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
-                    </React.Fragment>
+                    </NotificationWrapper>
                 }
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
