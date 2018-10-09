@@ -22,15 +22,15 @@ class Header extends React.Component {
                 <Tab onTabSelect={() => {}} index={index}>
                     <TabItem
                         to={getDestPath(pathname, '/boxscores')}
-                        label="Boxscores"
+                        label="Box-scores"
                     />
                     <TabItem
                         to={getDestPath(pathname, '/standings')}
                         label="Standings"
                     />
                     <TabItem
-                        to={getDestPath(pathname, '/playoff')}
-                        label="Playoff"
+                        to={getDestPath(pathname, '/playoffs')}
+                        label="Playoffs"
                     />
                     <TabItem
                         to={getDestPath(pathname, '/options')}

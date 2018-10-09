@@ -37,8 +37,8 @@ export const Theme = {
         },
     },
     dark: {
-        baseBackground: 'hsl(0, 0%, 30%)',
-        blockBackground: 'hsl(0, 0%, 15%)',
+        baseBackground: 'hsl(0, 0%, 40%)',
+        blockBackground: 'hsl(0, 0%, 17%)',
         color: 'hsl(0, 0%, 95%)',
         winning: '#00ee00',
         losing: 'red',

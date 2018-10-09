@@ -20,14 +20,14 @@ const Link = styled.a`
     text-decoration: none;
     border: 0;
     outline: none;
-    color: ${(props) => (props.dark ? '#5188ff' : 'rgb(46, 46, 223)')};
+    color: ${(props) => (props.dark ? '#7cc7f1' : 'rgb(46, 46, 223)')};
     cursor: pointer;
 `
 
 class Links extends React.PureComponent {
     render() {
-        const links = ['box-scores', 'standings', 'playoff', 'options']
-        const hrefs = ['boxscores', 'standings', 'playoff', 'options']
+        const links = ['Box-scores', 'Standings', 'Playoffs', 'Options']
+        const hrefs = ['boxscores', 'standings', 'playoffs', 'options']
         const atags = links.map((element, index) => (
             <SettingsConsumer key={`link-${index}`}>
                 {({ state: { dark } }) => (

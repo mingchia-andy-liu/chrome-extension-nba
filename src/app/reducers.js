@@ -5,7 +5,7 @@ import liveReducer from './containers/Popup/reducers'
 import boxScoresReducer from './containers/BoxScores/reducers'
 import dateReducer from './containers/DatePicker/reducers'
 import standingsReducer from './containers/Standings/reducers'
-import playoffReducer from './containers/Playoff/reducers'
+import playoffReducer from './containers/Playoffs/reducers'
 
 export const initialState = {}
 

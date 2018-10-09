@@ -18,7 +18,7 @@ const ColumnWrapper = styled.div`
     flex-direction: row;
 `
 
-class Playoff extends React.Component {
+class Playoffs extends React.Component {
     static propTypes = {
         fetchPlayoff: PropTypes.func.isRequired,
         isLoading: PropTypes.bool.isRequired,
@@ -39,7 +39,7 @@ class Playoff extends React.Component {
 
     componentDidMount() {
         this.props.fetchPlayoff()
-        document.title = 'Box Scores | Playoff'
+        document.title = 'Box Scores | Playoffs'
     }
 
     renderContent() {
@@ -98,4 +98,4 @@ const mapStateToProps = ({ playoff: {isLoading, series }}) => ({
     final: finalSelector(series),
 })
 
-export default connect(mapStateToProps, actions)(Playoff)
+export default connect(mapStateToProps, actions)(Playoffs)

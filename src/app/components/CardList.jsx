@@ -1,14 +1,14 @@
 import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { ColumnCSS, mediaQuery } from '../styles'
+import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SettingsConsumer } from './Context'
 import browser from '../utils/browser'
 
 
 const Wrapper = styled.div`
-    ${ColumnCSS}
+    display: block;
     width: 100%;
 
     ${mediaQuery`

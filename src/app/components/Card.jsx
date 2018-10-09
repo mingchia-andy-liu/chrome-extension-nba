@@ -15,8 +15,9 @@ const Wrapper = styled.div`
     ${AlignCenter}
     ${Shadow}
     position: relative;
-    min-height: 95px;
+    min-height: 90px;
     width: 100%;
+    padding: 2px 0;
     margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
     background-color: ${(props) => (props.dark ? Theme.dark.blockBackground: '#f9f9f9')};

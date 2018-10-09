@@ -16,7 +16,7 @@ import browser from '../../utils/browser'
 const Wrapper = styled(Column)`
     padding: 10px;
     width: 100%;
-    min-width: 360px;
+    min-width: 350px;
 `
 
 class PopUp extends React.Component {
