@@ -14,7 +14,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
         if (data && data.favTeam) {
             const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
             if (favTeamGame) {
-                const format = 'hhmm'
+                const format = 'HHmm'
                 const roundedDate = nearestMinutes(30, moment()).format(format)
                 const favTeamMoment = moment.tz(favTeamGame.time, format, 'America/New_York').local()
 
