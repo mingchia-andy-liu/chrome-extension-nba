@@ -1,38 +1,50 @@
 import moment from 'moment-timezone'
 import browser from './utils/browser'
+import getAPIDate from './utils/getApiDate'
+import { checkLiveGame, nextNearestMinutes/*, nearestMinutes */} from './utils/common'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-    delayInMinutes: 30,
+    when: nextNearestMinutes(30, moment()).valueOf(),
     periodInMinutes: 30,
 })
 
-const getAPIDate = () => {
-    const ET = moment.tz(new Date(), 'America/New_York')
-    const EThour = moment(ET).format('HH')
-    // if ET time has not pass 6 am, don't jump ahead
-    const format = 'YYYYMMDD'
-    if (+EThour < 6) {
-        return moment(ET).subtract(1, 'day').format(format)
-    }
-    return ET.format(format)
-}
+// const fireFavTeamNotificationIfNeeded = (games) => {
+//     browser.getItem(['favTeam'], (data) => {
+//         if (data && data.favTeam) {
+//             const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
+//             if (favTeamGame) {
+//                 const format = 'HHmm'
+//                 const roundedDate = nearestMinutes(30, moment()).format(format)
+//                 const favTeamMoment = moment.tz(favTeamGame.time, format, 'America/New_York').local()
+
+//                 if (roundedDate === favTeamMoment.format(format)) {
+//                     const options = {
+//                         type: 'basic',
+//                         title: 'You favourite team is about to play',
+//                         message: `${favTeamGame.home.abbreviation} vs ${favTeamGame.visitor.abbreviation} @ ${favTeamMoment.format('hh:mm A')}`,
+//                         iconUrl: 'assets/png/icon-2-color-512.png',
+//                     }
+
+//                     browser.notifications.create(options)
+//                 }
+//             }
+//         }
+//     })
+// }
 
 const liveListener = () => {
-    const dateStr = getAPIDate()
+    const dateStr = moment(getAPIDate()).format('YYYYMMDD')
     fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
         .then(res => res.json())
         .then(data => {
             const { sports_content: { games: { game: live } } } = data
-            const hasLiveGame = live.find(game =>
-                game && game.period_time && game.period_time.game_status === '2'
-            )
-            if (hasLiveGame) {
-                browser.setBadgeText({ text: 'live' })
-                browser.setBadgeBackgroundColor({ color: '#FC0D1B' })
-            } else {
-                browser.setBadgeText({ text: '' })
-            }
+
+            // if (!initCheck) {
+            //     fireFavTeamNotificationIfNeeded(live)
+            // }
+
+            checkLiveGame(live)
         })
         .catch(() => browser.setBadgeText({ text: '' }))
 }
@@ -41,6 +53,11 @@ const liveListener = () => {
 liveListener()
 
 browser.alarms.onAlarm.addListener((alarm) => {
+    // when the chrome is reopened, alarms get ran even though the time has passed
+    if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
+        return
+    }
+
     if (alarm.name === 'live') {
         liveListener()
     }

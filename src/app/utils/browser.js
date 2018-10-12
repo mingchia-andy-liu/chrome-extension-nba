@@ -87,6 +87,27 @@ if (typeof browser !== 'undefined') {
             ),
         },
     }
+
+    browserNameSpace.permissions = {
+        contains: (permissions, callback) => {
+            browser.permissions.contains(permissions).then((result) => callback(result))
+        },
+        request: (permissions, callback) => {
+            browser.permissions.request(permissions).then((result) => callback(result))
+        },
+        remove: (permissions, callback) => {
+            browser.permissions.remove(permissions).then((result) => callback(result))
+        },
+    }
+
+    browserNameSpace.notifications = {
+        create: (options) => {
+            if (browser.notifications && browser.notifications.create) {
+                browser.notifications.create(options)
+            }
+        },
+    }
+
 } else if (typeof chrome !== 'undefined') {
     // Chrome
     browserNameSpace.runtime = {
@@ -172,6 +193,26 @@ if (typeof browser !== 'undefined') {
             addListener: (listener) => (
                 chrome.alarms.onAlarm.addListener(listener)
             ),
+        },
+    }
+
+    browserNameSpace.permissions = {
+        contains: (permissions, callback) => {
+            chrome.permissions.contains(permissions, callback)
+        },
+        request: (permissions, callback) => {
+            chrome.permissions.request(permissions, callback)
+        },
+        remove: (permissions, callback) => {
+            chrome.permissions.remove(permissions, callback)
+        },
+    }
+
+    browserNameSpace.notifications = {
+        create: (options) => {
+            if (chrome.notifications && chrome.notifications.create) {
+                chrome.notifications.create(options)
+            }
         },
     }
 

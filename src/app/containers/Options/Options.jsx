@@ -5,6 +5,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Checkbox from '../../components/Checkbox'
 import { SettingsConsumer } from '../../components/Context'
+import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
 
@@ -26,13 +27,28 @@ const HrefLink = styled.a`
     cursor: pointer;
 `
 
+// const NotificationWrapper = styled.div`
+//     padding: 5px 0;
+// `
+
+// const NotificationParagraph = styled.p`
+//     padding: 5px 0;
+//     margin: 0;
+// `
+
 class Options extends React.Component {
     constructor(props) {
         super(props)
+        this.state = { hasNotificationPermission: false }
     }
 
     componentDidMount() {
         document.title = 'Box Scores | Options'
+        browser.permissions.contains({
+            permissions: ['notifications'],
+        }, (hasNotificationPermission) => {
+            this.setState({ hasNotificationPermission })
+        })
     }
 
     renderHeader(isDark) {
@@ -52,21 +68,21 @@ class Options extends React.Component {
         )
     }
 
-    // getOptionalPermission() {
-    //     // for getting the optional permission for the highlight videos in the future
-    //     document.querySelector('#my-button').addEventListener('click', () => {
-    //         chrome.permissions.request({
-    //             permissions: ['webRequest'],
-    //             origins: ['https://boxscoresORsomething.net'],
-    //         }, function(granted) {
-    //             if (granted) {
-    //                 // granted
-    //             } else {
-    //                 // not granted
-    //             }
-    //         })
-    //     })
-    // }
+    requestNotification() {
+        browser.permissions.request({
+            permissions: ['notifications'],
+        }, (granted) => {
+            this.setState({ hasNotificationPermission: granted })
+        })
+    }
+
+    removeNotification() {
+        browser.permissions.remove({
+            permissions: ['notifications'],
+        }, (removed) => {
+            this.setState({ hasNotificationPermission: !removed })
+        })
+    }
 
     renderTeams(favTeam, updateTeam) {
         return (
@@ -90,6 +106,7 @@ class Options extends React.Component {
     }
 
     renderContent(context) {
+        // const { hasNotificationPermission } = this.state
         const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
         const {
             updateBroadcast,
@@ -103,6 +120,15 @@ class Options extends React.Component {
             <React.Fragment>
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
+                {/* {hasNotificationPermission
+                    ? <NotificationWrapper>
+                        <button onClick={this.removeNotification.bind(this)}>Remove permission</button>
+                    </NotificationWrapper>
+                    : <NotificationWrapper>
+                        <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
+                        <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
+                    </NotificationWrapper>
+                } */}
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />
