@@ -27,14 +27,14 @@ const HrefLink = styled.a`
     cursor: pointer;
 `
 
-const NotificationWrapper = styled.div`
-    padding: 5px 0;
-`
+// const NotificationWrapper = styled.div`
+//     padding: 5px 0;
+// `
 
-const NotificationParagraph = styled.p`
-    padding: 5px 0;
-    margin: 0;
-`
+// const NotificationParagraph = styled.p`
+//     padding: 5px 0;
+//     margin: 0;
+// `
 
 class Options extends React.Component {
     constructor(props) {
@@ -106,7 +106,7 @@ class Options extends React.Component {
     }
 
     renderContent(context) {
-        const { hasNotificationPermission } = this.state
+        // const { hasNotificationPermission } = this.state
         const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
         const {
             updateBroadcast,
@@ -120,7 +120,7 @@ class Options extends React.Component {
             <React.Fragment>
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
-                {hasNotificationPermission
+                {/* {hasNotificationPermission
                     ? <NotificationWrapper>
                         <button onClick={this.removeNotification.bind(this)}>Remove permission</button>
                     </NotificationWrapper>
@@ -128,7 +128,7 @@ class Options extends React.Component {
                         <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
                         <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
                     </NotificationWrapper>
-                }
+                } */}
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />
