@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
-import {DATE_FORMAT} from '../../utils/format'
 import getAPIDate from '../../utils/getApiDate'
+import { DATE_FORMAT } from '../../utils/constant'
 
 const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`

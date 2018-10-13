@@ -4,18 +4,20 @@ import styled from 'styled-components'
 import { StickyTable } from 'react-sticky-table'
 import {
     Cell,
-    getOddRowColor,
     HeaderCell,
+    rowBGColor,
     RowHeaderCell,
-    Sup,
-    StatsCell,
-    formatMinutes,
-    toPercentage,
     RowWrapper,
-    hasDoubles,
-    getDoublesText,
-    rowBGColor
+    StatsCell,
+    Sup
 } from '../../utils/format'
+import {
+    formatMinutes,
+    getDoublesText,
+    getOddRowColor,
+    hasDoubles,
+    toPercentage
+} from '../../utils/common'
 import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`

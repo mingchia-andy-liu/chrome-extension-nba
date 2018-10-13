@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, getOddRowColor, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { getOddRowColor } from '../../utils/common'
 import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`

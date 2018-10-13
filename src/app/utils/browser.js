@@ -228,4 +228,17 @@ if (typeof browser !== 'undefined') {
     browserNameSpace.setItem = noop
 }
 
+export const checkLiveGame = (games) => {
+    const hasLiveGame = games.find(game =>
+        game && game.period_time && game.period_time.game_status === '2'
+    )
+    if (hasLiveGame) {
+        browserNameSpace.setBadgeText({ text: 'live' })
+        browserNameSpace.setBadgeBackgroundColor({ color: '#FC0D1B' })
+    } else {
+        browserNameSpace.setBadgeText({ text: '' })
+    }
+}
+
+
 export default browserNameSpace

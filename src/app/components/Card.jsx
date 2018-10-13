@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
-import { isWinning } from '../utils/format'
+import { isWinning } from '../utils/common'
 import { SettingsConsumer } from '../components/Context'
 import { Theme } from '../styles'
 
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     position: relative;
     min-height: 90px;
     width: 100%;
-    padding: 2px 0;
+    padding: 2px 5px;
     margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
     background-color: ${(props) => (props.dark ? Theme.dark.blockBackground: '#f9f9f9')};

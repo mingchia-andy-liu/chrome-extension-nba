@@ -9,7 +9,7 @@ import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
 import { SettingsConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
-import { DATE_FORMAT } from '../../utils/format'
+import { DATE_FORMAT } from '../../utils/constant'
 
 
 const Wrapper = styled.div`

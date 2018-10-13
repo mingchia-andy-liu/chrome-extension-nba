@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
 import { SettingsConsumer } from '../Context'
-import { Cell, getOddRowColor, HeaderCell, quarterNames } from '../../utils/format'
+import { Cell, HeaderCell } from '../../utils/format'
+import { getOddRowColor } from '../../utils/common'
+import { QUARTER_NAMES } from '../../utils/constant'
 import { RowCSS } from '../../styles'
 import { getLogoColorByName } from '../../utils/teams'
 
@@ -105,7 +107,7 @@ class PlayByPlay extends React.PureComponent {
                         })
                     }}
                 >
-                    {quarterNames[i]}
+                    {QUARTER_NAMES[i]}
                 </QtrBtn>
             )
         }

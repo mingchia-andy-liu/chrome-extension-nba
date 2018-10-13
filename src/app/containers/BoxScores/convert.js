@@ -1,4 +1,5 @@
-import {toPercentage, quarterNames} from '../../utils/format'
+import { toPercentage } from '../../utils/common'
+import { QUARTER_NAMES } from '../../utils/constant'
 
 const getStats = (old, points) => {
     if (!old) {
@@ -73,7 +74,7 @@ const getLinescores = (stats, p) => {
         ot10
     ])
     return pluck(stats).slice(0, p).map((period, i) => ({
-        period_name: quarterNames[i],
+        period_name: QUARTER_NAMES[i],
         period_value: i.toString(),
         score: period.toString(),
     }))

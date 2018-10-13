@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Row } from '../styles'
 import { SettingsConsumer } from '../components/Context'
 import { Theme } from '../styles'
-import {formatClock} from '../utils/format'
+import { formatClock } from '../utils/common'
 
 
 const Wrapper = styled.div`

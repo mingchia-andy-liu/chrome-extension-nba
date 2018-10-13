@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { DATE_FORMAT } from '../utils/format'
+import { DATE_FORMAT } from '../utils/constant'
 
 
 // returns the date string YYYYMMDD
