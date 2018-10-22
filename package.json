@@ -39,30 +39,31 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-react": "^6.24.1",
+    "cryptiles": ">=4.1.2",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-react": "^7.11.1",
     "prop-types": "^15.6.1",
+    "redux-devtools": "^3.4.1",
     "redux-devtools-log-monitor": "^1.4.0",
-    "style-loader": "^0.23.0",
-    "web-ext": "^2.6.0",
-    "webpack": "^4.19.0",
-    "webpack-cli": "^3.1.0"
+    "style-loader": "^0.23.1",
+    "web-ext": "^2.9.1",
+    "webpack": "^4.22.0",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
     "moment-timezone": "^0.5.16",
     "node-fetch": "^2.1.2",
-    "query-string": "^6.1.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "query-string": "^6.2.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-flatpickr": "^3.6.4",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "react-sticky-table": "^2.0.4",
-    "redux": "^4.0.0",
-    "redux-devtools": "^3.4.1",
+    "redux": "^4.0.1",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^3.3.3"
+    "styled-components": "^3.4.10"
   }
 }
