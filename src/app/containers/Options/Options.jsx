@@ -54,10 +54,10 @@ class Options extends React.Component {
     renderHeader(isDark) {
         return (
             <React.Fragment>
-                <RouterLink dark={isDark ? 1 : 0} to="changelog">Changelog</RouterLink>
+                <RouterLink dark={isDark ? 1 : undefined} to="changelog">Changelog</RouterLink>
                 <p>If you have any questions, please email to
                     <HrefLink
-                        dark={isDark ? 1 : 0}
+                        dark={isDark ? 1 : undefined}
                         href={`mailto:box.scores.extension@gmail.com?subject=${encodeURIComponent('Feedback on the Basketball Box Scores extension')}`}
                     >
                         here
@@ -131,7 +131,7 @@ class Options extends React.Component {
                 } */}
                 <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
-                <Checkbox checked={broadcast === true} text="Show US Broadcaster" onChange={updateBroadcast} />
+                <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
                 <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
             </React.Fragment>
         )

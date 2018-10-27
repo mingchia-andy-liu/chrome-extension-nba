@@ -64,7 +64,7 @@ const renderPBPRow = (plays, period, isDark) => {
             ? <Cell style={{color: 'white', backgroundColor: color}}>{team_abr}</Cell>
             : <Cell></Cell>
         const SCORE = index > 4
-            ? <ScoreCell changes={changes ? 1 : 0} tied={home_score === visitor_score ? 1 : 0}>{_description.substring(5, index)}</ScoreCell>
+            ? <ScoreCell changes={changes ? 1 : undefined} tied={home_score === visitor_score ? 1 : undefined}>{_description.substring(5, index)}</ScoreCell>
             : <Cell></Cell>
 
         const description = _description.replace(/\[.*\]/i, '').trim()

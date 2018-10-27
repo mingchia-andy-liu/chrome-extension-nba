@@ -87,7 +87,7 @@ class DatePicker extends React.Component {
                 <SettingsConsumer>
                     {({ state: { dark } }) => (
                         <StyledInput
-                            dark={dark ? 1 : 0}
+                            dark={dark ? 1 : undefined}
                             readOnly={true}
                             value={moment(date).format('YYYY-MM-DD')}
                         />
@@ -103,7 +103,7 @@ class DatePicker extends React.Component {
                         tabIndex="-1"
                         autoFocus={false}
 
-                        dark={dark ? 1 : 0}
+                        dark={dark ? 1 : undefined}
                         value={date}
                         options={{
                             minDate: '2018-09-01',

@@ -92,8 +92,8 @@ export const formatGames = (games) => {
  * @param {string} clock
  * @param {string} status
  */
-export const formatClock = (clock, status) => {
-    if (status.includes('Halftime') || status.includes('Tipoff') || status.includes('Final')) {
+export const formatClock = (clock, status, totalPeriod) => {
+    if (status.includes('Halftime') || status.includes('Tipoff')) {
         // game started, clock stopped
         return status
     } else if (status === 'PPD') {
@@ -112,6 +112,11 @@ export const formatClock = (clock, status) => {
     } else if (status && status.includes('OT')) {
         // game start being played over over time
         return 'OT' + status.charAt(0) + ' ' + clock
+    } else if (status.includes('Final')) {
+        if (+totalPeriod > 4) {
+            return `${status}/OT ${+totalPeriod - 4}`
+        }
+        return status
     }
     return clock
 }
