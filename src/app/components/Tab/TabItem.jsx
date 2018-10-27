@@ -41,8 +41,8 @@ class TabItem extends Component {
                             if (to === '') e.preventDefault()
                             else onClick(e)
                         }}
-                        active={active ? 1 : 0}
-                        dark={dark ? 1 : 0}
+                        active={active ? 1 : undefined}
+                        dark={dark ? 1 : undefined}
                     >
                         <label>
                             {label}

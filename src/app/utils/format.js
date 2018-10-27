@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Cell as StickyCell, Row } from 'react-sticky-table'
 import { Theme } from '../styles'
 
@@ -14,7 +14,7 @@ export const Cell = styled(StickyCell)`
     }};
 `
 
-export const StatsCell = styled(Cell)`
+export const winLoseCSS = css`
     color: ${(props) => {
         if (props.dark) {
             if (props.winning) return Theme.dark.winning
@@ -23,6 +23,10 @@ export const StatsCell = styled(Cell)`
         if (props.winning) return Theme.light.winning
         if (props.losing) return Theme.light.losing
     }};
+`
+
+export const StatsCell = styled(Cell)`
+    ${winLoseCSS}
 `
 
 export const HeaderCell = styled(Cell)`

@@ -25,6 +25,11 @@ const TeamScore = styled.div`
     opacity: ${(props) => (props.losing ? '0.4' : '')};
 `
 
+const SubText = styled.div`
+    font-size: calc(12px + 0.1vw);
+    color: hsl(0, 0%, 50%);
+`
+
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
     if (gameStatus !== '1') {
         if (spoiler) {
@@ -62,13 +67,26 @@ const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) =
     if (spoiler && gameStatus !== '1') {
         return ''
     }
-    return formatClock(clock, status) || status
+    return formatClock(clock, status, totalPeriod) || status
+}
+
+const renderBroadcasters = (broadcasters) => {
+    return broadcasters.map(broadcaster => {
+        if (broadcaster.scope === 'natl') {
+            return (
+                <div key={broadcaster.display_name}>{broadcaster.display_name}</div>
+            )
+        }
+        return (
+            <SubText key={broadcaster.display_name}>{broadcaster.display_name}</SubText>
+        )
+    })
 }
 
 class MatchInfo extends React.PureComponent {
     render() {
         const {
-            broadcaster,
+            broadcasters,
             home,
             visitor,
             periodTime: {
@@ -102,7 +120,7 @@ class MatchInfo extends React.PureComponent {
                             {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
                         </div>
                         {!spoiler && series && <div>{series}</div>}
-                        {gameStatus === '1' && broadcaster !== '' && <div>{broadcaster}</div>}
+                        {gameStatus === '1' && broadcasters !== '' && renderBroadcasters(broadcasters)}
                     </Wrapper>
                 )}
             </SettingsConsumer>
@@ -111,7 +129,7 @@ class MatchInfo extends React.PureComponent {
 }
 
 MatchInfo.propTypes = {
-    broadcaster: PropTypes.string,
+    broadcasters: PropTypes.array,
     home: PropTypes.shape({
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
@@ -134,7 +152,7 @@ MatchInfo.propTypes = {
 }
 
 MatchInfo.defaultProps = {
-    broadcaster: '',
+    broadcasters: [],
 }
 
 export default MatchInfo

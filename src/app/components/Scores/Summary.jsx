@@ -15,14 +15,14 @@ const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
         <RowHeaderCell>{team.abbreviation}</RowHeaderCell>
         {team.linescores && team.linescores.period.map((period, index) => (
             <Cell
-                dark={isDark ? 1 : 0}
+                dark={isDark ? 1 : undefined}
                 key={`period-${period.peroid_value}-${index}`}
-                winning={+period.score > +otherTeam.linescores.period[index].score ? 1 : 0}
+                winning={+period.score > +otherTeam.linescores.period[index].score ? 1 : undefined}
             >
                 {period.score}
             </Cell>
         ))}
-        <Cell dark={isDark ? 1 : 0} winning={+team.score > +otherTeam.score ? 1 : 0}>{team.score}</Cell>
+        <Cell dark={isDark ? 1 : undefined} winning={+team.score > +otherTeam.score ? 1 : undefined}>{team.score}</Cell>
     </Row>
 )
 
