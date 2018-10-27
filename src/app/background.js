@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
-import browser from './utils/browser'
+import browser, { checkLiveGame } from './utils/browser'
 import getAPIDate from './utils/getApiDate'
-import { checkLiveGame, nextNearestMinutes/*, nearestMinutes */} from './utils/common'
+import { nextNearestMinutes/*, nearestMinutes */} from './utils/common'
 
 // tracks any live game in the background
 browser.alarms.create('live', {

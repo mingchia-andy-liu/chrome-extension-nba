@@ -9,14 +9,14 @@ import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
 import { Column } from '../../styles'
 import * as actions from './actions'
-import { DATE_FORMAT } from '../../utils/format'
+import { DATE_FORMAT } from '../../utils/constant'
 
 import browser from '../../utils/browser'
 
 const Wrapper = styled(Column)`
     padding: 10px;
     width: 100%;
-    min-width: 350px;
+    min-width: 360px;
 `
 
 class PopUp extends React.Component {

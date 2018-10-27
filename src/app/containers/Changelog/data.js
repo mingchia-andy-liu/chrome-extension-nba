@@ -1,5 +1,18 @@
 module.exports = [
     {
+        version: '1.2.8 Updates: (2018-10-12)',
+        updates: [
+            'Add new extension logo 🏀',
+            'Add missing on court status',
+            'Add missing match status to box score',
+            'Change the order of tabs',
+            'Update overall styles. Dark theme, popup, card, titles',
+            'Fix card list will not reload issue',
+            'Fix card list order',
+            'Fix other issues'
+        ],
+    },
+    {
         version: '1.2.7 Updates: (2018-09-27)',
         updates: [
             'A redesign on the app.',

@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, getOddRowColor, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, HeaderCell, RowHeaderCell, StatsCell } from '../../utils/format'
+import { getOddRowColor } from '../../utils/common'
 import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`
@@ -16,6 +17,7 @@ const renderHeaderRow = () => {
         '3P%',
         'FTM-A',
         'FT%',
+        'TREB',
         'REB',
         'AST',
         'STL',
@@ -34,23 +36,50 @@ const renderHeaderRow = () => {
     )
 }
 
-const renderTeamRow = (team, name, isDark, i = 0) => (
-    <Row style={{backgroundColor: getOddRowColor(i, isDark)}}>
-        <RowHeaderCell> {name} </RowHeaderCell>
-        <Cell>{`${team.field_goals_made}-${team.field_goals_attempted}`}</Cell>
-        <Cell>{team.field_goals_percentage}%</Cell>
-        <Cell>{`${team.three_pointers_made}-${team.three_pointers_attempted}`}</Cell>
-        <Cell>{team.three_pointers_percentage}%</Cell>
-        <Cell>{`${team.free_throws_made}-${team.free_throws_attempted}`}</Cell>
-        <Cell>{team.free_throws_percentage}%</Cell>
-        <Cell>{team.team_rebounds}</Cell>
-        <Cell>{team.assists}</Cell>
-        <Cell>{team.steals}</Cell>
-        <Cell>{team.blocks}</Cell>
-        <Cell>{team.turnovers}</Cell>
-        <Cell>{team.fouls}</Cell>
-    </Row>
-)
+const renderTeamRow = (team, name, isDark, i = 0) => {
+    return (
+        <Row style={{backgroundColor: getOddRowColor(i, isDark)}}>
+            <RowHeaderCell> {name} </RowHeaderCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.field_goals_percentage >= 50 ? 1 : undefined}
+                losing={team.field_goals_percentage <= 30 ? 1 : undefined}
+            >{`${team.field_goals_made}-${team.field_goals_attempted}`}</StatsCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.field_goals_percentage >= 50 ? 1 : undefined}
+                losing={team.field_goals_percentage <= 30 ? 1 : undefined}
+            >{team.field_goals_percentage}%</StatsCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.three_pointers_percentage >= 50 ? 1 : undefined}
+                losing={team.three_pointers_percentage <= 30 ? 1 : undefined}
+            >{`${team.three_pointers_made}-${team.three_pointers_attempted}`}</StatsCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.three_pointers_percentage >= 50 ? 1 : undefined}
+                losing={team.three_pointers_percentage <= 30 ? 1 : undefined}
+            >{team.three_pointers_percentage}%</StatsCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.free_throws_percentage >= 90 ? 1 : undefined}
+                losing={team.free_throws_percentage <= 60 ? 1 : undefined}
+            >{`${team.free_throws_made}-${team.free_throws_attempted}`}</StatsCell>
+            <StatsCell
+                dark={isDark ? 1 : undefined}
+                winning={team.free_throws_percentage >= 90 ? 1 : undefined}
+                losing={team.free_throws_percentage <= 60 ? 1 : undefined}
+            >{team.free_throws_percentage}%</StatsCell>
+            <Cell>{team.team_rebounds}</Cell>
+            <Cell>{team.rebounds_defensive + team.rebounds_offensive}</Cell>
+            <Cell>{team.assists}</Cell>
+            <Cell>{team.steals}</Cell>
+            <Cell>{team.blocks}</Cell>
+            <Cell>{team.turnovers}</Cell>
+            <Cell>{team.fouls}</Cell>
+        </Row>
+    )
+}
 
 class TeamStats extends React.PureComponent {
     render() {

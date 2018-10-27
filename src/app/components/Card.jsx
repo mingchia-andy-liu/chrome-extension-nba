@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
-import { isWinning } from '../utils/format'
+import { isWinning } from '../utils/common'
 import { SettingsConsumer } from '../components/Context'
 import { Theme } from '../styles'
 
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     position: relative;
     min-height: 90px;
     width: 100%;
-    padding: 2px 0;
+    padding: 2px 5px;
     margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
     background-color: ${(props) => (props.dark ? Theme.dark.blockBackground: '#f9f9f9')};
@@ -57,7 +57,7 @@ const Wrapper = styled.div`
 class MatchCard extends React.PureComponent {
     render() {
         const {
-            broadcaster,
+            broadcasters,
             id,
             home,
             visitor,
@@ -93,7 +93,7 @@ class MatchCard extends React.PureComponent {
                         <MatchInfo
                             home={home}
                             visitor={visitor}
-                            broadcaster={showBroadcast ? broadcaster : ''}
+                            broadcasters={showBroadcast ? broadcasters : undefined}
                             {...rest}
                         />
                         <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
@@ -105,7 +105,7 @@ class MatchCard extends React.PureComponent {
 }
 
 MatchCard.propTypes = {
-    broadcaster: PropTypes.string.isRequired,
+    broadcasters: PropTypes.array,
     id: PropTypes.string.isRequired,
     home: PropTypes.object.isRequired,
     visitor: PropTypes.object.isRequired,

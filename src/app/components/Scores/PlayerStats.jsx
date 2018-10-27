@@ -4,18 +4,20 @@ import styled from 'styled-components'
 import { StickyTable } from 'react-sticky-table'
 import {
     Cell,
-    getOddRowColor,
     HeaderCell,
+    rowBGColor,
     RowHeaderCell,
-    Sup,
-    StatsCell,
-    formatMinutes,
-    toPercentage,
     RowWrapper,
-    hasDoubles,
-    getDoublesText,
-    rowBGColor
+    StatsCell,
+    Sup
 } from '../../utils/format'
+import {
+    formatMinutes,
+    getDoublesText,
+    getOddRowColor,
+    hasDoubles,
+    toPercentage
+} from '../../utils/common'
 import { SettingsConsumer } from '../Context'
 
 const Wrapper = styled.div`
@@ -120,57 +122,57 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
                 {isLive && on_court === 1 && <OnCourt src="assets/png/icon-color-128.png" />}
             </PlayerName>
             <Cell>{formatMinutes(player)}</Cell>
-            <StatsCell dark={isDark ? 1 : 0} winning={+points >= 10 ? 1 : 0}>{points}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} winning={+points >= 10 ? 1 : undefined}>{points}</StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+fgp >= 60 && +field_goals_attempted >= 5)? 1 : 0}
-                losing={(+fgp <= 30 && +field_goals_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+fgp >= 60 && +field_goals_attempted >= 5)? 1 : undefined}
+                losing={(+fgp <= 30 && +field_goals_attempted >= 5)? 1 : undefined}
             >
                 {`${field_goals_made}-${field_goals_attempted}`}
             </StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+fgp >= 60 && +field_goals_attempted >= 5)? 1 : 0}
-                losing={(+fgp <= 30 && +field_goals_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+fgp >= 60 && +field_goals_attempted >= 5)? 1 : undefined}
+                losing={(+fgp <= 30 && +field_goals_attempted >= 5)? 1 : undefined}
             >
                 {fgp}{fgp !== '-' && '%'}
             </StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+tpp >= 60 && +three_pointers_attempted >= 5)? 1 : 0}
-                losing={(+tpp <= 30 && +three_pointers_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+tpp >= 60 && +three_pointers_attempted >= 5)? 1 : undefined}
+                losing={(+tpp <= 30 && +three_pointers_attempted >= 5)? 1 : undefined}
             >
                 {`${three_pointers_made}-${three_pointers_attempted}`}
             </StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+tpp >= 60 && +three_pointers_attempted >= 5)? 1 : 0}
-                losing={(+tpp <= 30 && +three_pointers_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+tpp >= 60 && +three_pointers_attempted >= 5)? 1 : undefined}
+                losing={(+tpp <= 30 && +three_pointers_attempted >= 5)? 1 : undefined}
             >
                 {tpp}{tpp !== '-' && '%'}
             </StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+ftp >= 90 && +free_throws_attempted >= 5)? 1 : 0}
-                losing={(+ftp <= 60 && +free_throws_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+ftp >= 90 && +free_throws_attempted >= 5)? 1 : undefined}
+                losing={(+ftp <= 60 && +free_throws_attempted >= 5)? 1 : undefined}
             >
                 {`${free_throws_made}-${free_throws_attempted}`}
             </StatsCell>
             <StatsCell
-                dark={isDark ? 1 : 0}
-                winning={(+ftp >= 90 && +free_throws_attempted >= 5)? 1 : 0}
-                losing={(+ftp <= 60 && +free_throws_attempted >= 5)? 1 : 0}
+                dark={isDark ? 1 : undefined}
+                winning={(+ftp >= 90 && +free_throws_attempted >= 5)? 1 : undefined}
+                losing={(+ftp <= 60 && +free_throws_attempted >= 5)? 1 : undefined}
             >
                 {ftp}{ftp !== '-' && '%'}
             </StatsCell>
             <Cell>{rebounds_offensive}</Cell>
             <Cell>{rebounds_defensive}</Cell>
-            <StatsCell dark={isDark ? 1 : 0} winning={+rebounds_offensive + +rebounds_defensive >= 10 ? 1 : 0}>{+rebounds_offensive + +rebounds_defensive}</StatsCell>
-            <StatsCell dark={isDark ? 1 : 0} winning={+assists >= 5 ? 1 : 0}>{assists}</StatsCell>
-            <StatsCell dark={isDark ? 1 : 0} winning={+steals >= 5 ? 1 : 0}>{steals}</StatsCell>
-            <StatsCell dark={isDark ? 1 : 0} winning={+steals >= 5 ? 1 : 0}>{blocks}</StatsCell>
-            <StatsCell dark={isDark ? 1 : 0} losing={+turnovers >= 5 ? 1 : 0}>{turnovers}</StatsCell>
-            <StatsCell dark={isDark ? 1 : 0} losing={+fouls === 6 ? 1 : 0}>{fouls}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} winning={+rebounds_offensive + +rebounds_defensive >= 10 ? 1 : undefined}>{+rebounds_offensive + +rebounds_defensive}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} winning={+assists >= 5 ? 1 : undefined}>{assists}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} winning={+steals >= 5 ? 1 : undefined}>{steals}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} winning={+steals >= 5 ? 1 : undefined}>{blocks}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} losing={+turnovers >= 5 ? 1 : undefined}>{turnovers}</StatsCell>
+            <StatsCell dark={isDark ? 1 : undefined} losing={+fouls === 6 ? 1 : undefined}>{fouls}</StatsCell>
             <Cell>{plus_minus}</Cell>
         </RowWrapper>
     )

@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
 import { SettingsConsumer } from '../Context'
-import { Cell, getOddRowColor, HeaderCell, quarterNames } from '../../utils/format'
+import { Cell, HeaderCell } from '../../utils/format'
+import { getOddRowColor } from '../../utils/common'
+import { QUARTER_NAMES } from '../../utils/constant'
 import { RowCSS } from '../../styles'
 import { getLogoColorByName } from '../../utils/teams'
 
@@ -62,7 +64,7 @@ const renderPBPRow = (plays, period, isDark) => {
             ? <Cell style={{color: 'white', backgroundColor: color}}>{team_abr}</Cell>
             : <Cell></Cell>
         const SCORE = index > 4
-            ? <ScoreCell changes={changes ? 1 : 0} tied={home_score === visitor_score ? 1 : 0}>{_description.substring(5, index)}</ScoreCell>
+            ? <ScoreCell changes={changes ? 1 : undefined} tied={home_score === visitor_score ? 1 : undefined}>{_description.substring(5, index)}</ScoreCell>
             : <Cell></Cell>
 
         const description = _description.replace(/\[.*\]/i, '').trim()
@@ -105,7 +107,7 @@ class PlayByPlay extends React.PureComponent {
                         })
                     }}
                 >
-                    {quarterNames[i]}
+                    {QUARTER_NAMES[i]}
                 </QtrBtn>
             )
         }

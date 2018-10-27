@@ -108,7 +108,7 @@ if (typeof browser !== 'undefined') {
         },
     }
 
-} else if (typeof chrome !== 'undefined') {
+} else if (typeof chrome !== 'undefined' && chrome.runtime !== undefined) {
     // Chrome
     browserNameSpace.runtime = {
         connect: () => {
@@ -217,8 +217,10 @@ if (typeof browser !== 'undefined') {
     }
 
 } else {
-    browserNameSpace.alarms.create = noop
-    browserNameSpace.alarms.onAlarm.addListener = noop
+    browserNameSpace.alarms = {
+        create: noop,
+        onAlarm: { addListener: noop },
+    }
     browserNameSpace.clear = noop
     browserNameSpace.getAllKeys = noop
     browserNameSpace.getItem = noop
@@ -226,6 +228,20 @@ if (typeof browser !== 'undefined') {
     browserNameSpace.setBadgeBackgroundColor = noop
     browserNameSpace.setBadgeText = noop
     browserNameSpace.setItem = noop
+    browserNameSpace.tabs = { getCurrent: noop }
 }
+
+export const checkLiveGame = (games) => {
+    const hasLiveGame = games.find(game =>
+        game && game.period_time && game.period_time.game_status === '2'
+    )
+    if (hasLiveGame) {
+        browserNameSpace.setBadgeText({ text: 'live' })
+        browserNameSpace.setBadgeBackgroundColor({ color: '#FC0D1B' })
+    } else {
+        browserNameSpace.setBadgeText({ text: '' })
+    }
+}
+
 
 export default browserNameSpace
