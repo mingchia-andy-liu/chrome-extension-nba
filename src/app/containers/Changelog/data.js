@@ -1,5 +1,14 @@
 module.exports = [
     {
+        version: '1.2.9 Updates: (2018-11-05)',
+        updates: [
+            'Add local broadcasters',
+            'Add color coded to team stats and standings page',
+            'Add OT suffix to OT games',
+            'Add team rebounds and total rebounds to team stats'
+        ],
+    },
+    {
         version: '1.2.8 Updates: (2018-10-12)',
         updates: [
             'Add new extension logo 🏀',
