@@ -236,7 +236,7 @@ export const checkLiveGame = (games) => {
         game && game.period_time && game.period_time.game_status === '2'
     )
     if (hasLiveGame) {
-        browserNameSpace.setBadgeText({ text: 'live' })
+        browserNameSpace.setBadgeText({ text: 'LIVE' })
         browserNameSpace.setBadgeBackgroundColor({ color: '#FC0D1B' })
     } else {
         browserNameSpace.setBadgeText({ text: '' })
