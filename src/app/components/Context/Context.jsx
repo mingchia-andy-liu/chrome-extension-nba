@@ -19,7 +19,10 @@ export class SettingsProvider extends React.Component {
             team: '',
         }
 
-        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast', 'spoiler'], (data) => {
+        browser.getItem(['favTeam', 'nightMode', 'hideZeroRow', 'broadcast', 'spoiler'], (data, err) => {
+            if (err || !data) {
+                return
+            }
             this.setState({
                 broadcast: data.broadcast ? data.broadcast : false,
                 dark: data.nightMode ? data.nightMode : false,

@@ -2,7 +2,10 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 import { createHashHistory } from 'history'
-import reducer, { initialState } from './reducers'
+import reducer from './reducers'
+import throttle from 'lodash.throttle'
+import { loadState, saveState } from './utils/browser'
+import { isEmpty } from './utils/common'
 
 export const history = createHashHistory({
     basname: '',
@@ -22,5 +25,44 @@ if (process.env.NODE_ENV === 'development') {
     middlewares = compose(applyMiddleware(thunk, middleware))
 }
 
+
+const mergeWithPersistedState = (persistedState) => {
+    if (isEmpty(persistedState)) {
+        return {}
+    }
+
+    return {
+        live: {
+            games: persistedState.games,
+            isLoading: false,
+            lastUpdate: persistedState.lastUpdate,
+        },
+    }
+}
+
 // Create store
-export const store = createStore(reducer, initialState, middlewares)
+let store = null
+export const getStore = () => {
+    return new Promise((res) => {
+        if (store != null) {
+            return res(store)
+        }
+        loadState().then((persistedState) => {
+            const initialState = mergeWithPersistedState(persistedState)
+            store = createStore(reducer, initialState, middlewares)
+
+            store.subscribe(throttle(() => {
+                const state = store.getState()
+                if (isEmpty(state) || isEmpty(state.live) || state.live.isLoading) {
+                    return
+                }
+                saveState({
+                    games: state.live.games,
+                    lastUpdate: state.live.lastUpdate,
+                })
+            }), 3000)
+
+            return res(store)
+        })
+    })
+}

@@ -1,7 +1,10 @@
 #!/bin/sh
 
+# remove modules
+rm -rf node_modules
+
 # install
-npm install
+npm install --production
 
 # test
 npm run lint:js

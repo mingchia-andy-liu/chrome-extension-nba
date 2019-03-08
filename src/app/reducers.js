@@ -7,8 +7,6 @@ import dateReducer from './containers/DatePicker/reducers'
 import standingsReducer from './containers/Standings/reducers'
 import playoffReducer from './containers/Playoffs/reducers'
 
-export const initialState = {}
-
 
 // combined reducer
 export default combineReducers({

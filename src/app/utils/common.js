@@ -166,3 +166,15 @@ export const getOddRowColor = (i, isDark) => {
         else return 'hsl(0, 0%, 95%)'
     }
 }
+
+
+/**
+ * @param data the object to check aginst
+ * @returns true if the object is empty
+ */
+export const isEmpty = (data) => {
+    if (data == null || Object.keys(data).length === 0) {
+        return true
+    }
+    return false
+}

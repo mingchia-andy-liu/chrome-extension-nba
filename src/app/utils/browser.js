@@ -30,7 +30,7 @@ if (typeof browser !== 'undefined') {
             if (obj) {
                 callback(obj)
             } else {
-                callback(browser.runtime.lastError)
+                callback(null, browser.runtime.lastError)
             }
         })
     }
@@ -39,8 +39,8 @@ if (typeof browser !== 'undefined') {
         browser.storage.local.clear(callback)
     }
 
-    browserNameSpace.setItem = (obj) => {
-        browser.storage.local.set(obj)
+    browserNameSpace.setItem = (obj, callback) => {
+        browser.storage.local.set(obj).then(callback)
     }
 
     browserNameSpace.removeItem = (key) => {
@@ -147,8 +147,8 @@ if (typeof browser !== 'undefined') {
         chrome.storage.local.clear(callback)
     }
 
-    browserNameSpace.setItem = (obj) => {
-        chrome.storage.local.set(obj)
+    browserNameSpace.setItem = (obj, callback) => {
+        chrome.storage.local.set(obj, callback)
     }
 
     browserNameSpace.removeItem = (key) => {
@@ -243,5 +243,36 @@ export const checkLiveGame = (games) => {
     }
 }
 
+/**
+ * get the redux state from the localstorage
+ * @returns Promise<Object>
+ */
+export const loadState = () => {
+    return new Promise((res) => {
+        try {
+            browserNameSpace.getItem('state', (data, err) => {
+                if (err || !data || !data.state) {
+                    return res({})
+                }
+                const state = JSON.parse(data.state)
+                if (!state || Object.keys(state) === 0) {
+                    return res({})
+                }
+
+                return res(state)
+            })
+        } catch (err) {
+            return res({})
+        }
+    })
+}
+
+export const saveState = (state) => {
+    return new Promise((res) => {
+        browserNameSpace.setItem({state: JSON.stringify(state)}, () => {
+            res()
+        })
+    })
+}
 
 export default browserNameSpace

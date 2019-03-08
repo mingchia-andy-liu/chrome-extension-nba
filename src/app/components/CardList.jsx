@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import moment from 'moment-timezone'
 import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SettingsConsumer } from './Context'
@@ -61,7 +62,7 @@ class CardList extends React.PureComponent {
     }
 
     render() {
-        const { games, isLoading, selected, ...rest} = this.props
+        const { games, isLoading, selected, lastUpdate, ...rest} = this.props
         const { isPopup } = this.state
         if (isLoading) {
             return (
@@ -82,6 +83,9 @@ class CardList extends React.PureComponent {
             <SettingsConsumer>
                 {({state: { team, broadcast }}) => (
                     <Wrapper isPopup={isPopup}>
+                        <div>
+                            {moment().diff(lastUpdate, 'seconds')}
+                        </div>
                         {generateCards(games, selected, team, broadcast, rest)}
                     </Wrapper>
                 )}
@@ -94,6 +98,7 @@ CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
     selected: PropTypes.string.isRequired,
+    lastUpdate: PropTypes.any.isRequired,
 }
 
 CardList.defaultProps = {

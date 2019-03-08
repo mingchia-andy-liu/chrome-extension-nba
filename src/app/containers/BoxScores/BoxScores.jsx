@@ -312,6 +312,7 @@ class BoxScores extends React.Component {
                                 games={live.games}
                                 onClick={this.selectGame.bind(this)}
                                 selected={this.state.id}
+                                lastUpdate={live.lastUpdate}
                             />
                         </Sidebar>
                         <SettingsConsumer>

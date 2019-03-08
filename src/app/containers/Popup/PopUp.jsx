@@ -41,7 +41,7 @@ class PopUp extends React.Component {
             date: { date },
         } = this.props
         const dateStr = moment(date).format(DATE_FORMAT)
-        this.props.fetchGamesIfNeeded(dateStr, null, true)
+        this.props.fetchGamesIfNeeded(dateStr, null)
         document.title = 'Box Scores | Popup'
     }
 
@@ -65,7 +65,7 @@ class PopUp extends React.Component {
             <Wrapper>
                 <DatePicker hide={this.state.isPopup} onChange={this.selectDate.bind(this)}/>
                 <Links />
-                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
+                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)} lastUpdate={live.lastUpdate}/>
             </Wrapper>
         )
     }
