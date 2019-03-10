@@ -97,7 +97,7 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getSt
     if (oldDateStr === dateStr && oldGid === gid) {
         // if it's same game but the game is finished, use old
         // if it's less than 60 seconds from the last update, use old
-        if ((bsData.periodTime && bsData.periodTime.gameStatus === '3') || updateDiff < 60) {
+        if ((bsData.periodTime && bsData.periodTime.gameStatus === '3') || updateDiff < 55) {
             return
         }
     }

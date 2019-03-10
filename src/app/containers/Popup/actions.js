@@ -55,7 +55,7 @@ export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => as
             game.periodTime && game.periodTime.gameStatus !== '3'
         )
 
-        if (!hasPendingOrLiveGame || updateDiff < 60) {
+        if (!hasPendingOrLiveGame || updateDiff < 55) {
             return
         }
     }
