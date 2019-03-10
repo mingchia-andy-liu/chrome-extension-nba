@@ -15,6 +15,7 @@ import { checkLiveGame } from '../../utils/browser'
  */
 const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     try {
+        // has the UI been shown yet, if so, don't show the loading spinner
         if (!isBackground) {
             dispatch({ type: types.REQUEST_START })
         }

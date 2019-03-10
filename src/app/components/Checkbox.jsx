@@ -1,11 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-
-
-const Wrapper = styled.div`
-    padding: 10px 0;
-`
+import { SettingsConsumer, ThemeConsumer } from './Context'
 
 const StyledLabel = styled.label`
     position: relative;
@@ -18,26 +14,9 @@ const StyledLabel = styled.label`
         left: -16px;
         top: -19px;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        width: 20px;
+        height: 20px;
         outline: none;
-        opacity: 0;
-        transform: scale(1);
-        transition: opacity 1s, transform 1s;
-    }
-
-    & > input:checked {
-        background-color: #046fdb;
-    }
-
-    &:active > input {
-        opacity: 1;
-        transform: scale(0);
-        transition: opacity 0s, transform 0s;
-    }
-
-    & > input:disabled {
-        opacity: 0;
     }
 
     & > input:disabled + span {
@@ -50,10 +29,10 @@ const StyledLabel = styled.label`
         display: inline-block;
         border: solid 2px hsl(0, 0%, 50%);
         border-radius: 2px;
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         margin-right: 10px;
-        vertical-align: -5px;
+        vertical-align: -3px;
         transition: border-color 1s;
     }
 
@@ -90,10 +69,10 @@ const StyledLabel = styled.label`
         content: "";
         display: inline-block;
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 7px;
-        height: 14px;
+        top: 4px;
+        left: -2px;
+        width: 5px;
+        height: 9px;
         border-right: solid 2px transparent;
         border-bottom: solid 2px transparent;
         transform: translate(8px, -4px) rotate(45deg);
@@ -121,14 +100,51 @@ class Checkbox extends React.PureComponent {
     render() {
         const {checked, disabled, onChange, text} = this.props
         return (
-            <Wrapper>
+            <div>
                 <StyledLabel>
-                    <input disabled={disabled} checked={checked} type="checkbox" onChange={onChange}/>
+                    <input
+                        disabled={disabled}
+                        checked={checked}
+                        type="checkbox"
+                        onChange={onChange}
+                    />
                     <span>{text}</span>
                 </StyledLabel>
-            </Wrapper>
+            </div>
         )
     }
 }
+
+export const DarkModeCheckbox = () => (
+    <ThemeConsumer>
+        {({state: { dark }, actions: {updateTheme}}) => (
+            <Checkbox checked={dark === true} text="Dark mode" onChange={updateTheme} />
+        )}
+    </ThemeConsumer>
+)
+
+export const NoSpoilerCheckbox = () => (
+    <SettingsConsumer>
+        {({state: { spoiler }, actions: {updateNoSpoiler}}) => (
+            <Checkbox checked={spoiler === true} text="No spoiler" onChange={updateNoSpoiler} />
+        )}
+    </SettingsConsumer>
+)
+
+export const HideZeroRowCheckbox = () => (
+    <SettingsConsumer>
+        {({state: { hideZeroRow }, actions: {updateHideZeroRow}}) => (
+            <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
+        )}
+    </SettingsConsumer>
+)
+
+export const BroadcastCheckbox = () => (
+    <SettingsConsumer>
+        {({state: { broadcast}, actions: {updateBroadcast}}) => (
+            <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
+        )}
+    </SettingsConsumer>
+)
 
 export default Checkbox

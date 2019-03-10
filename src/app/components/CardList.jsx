@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
     ${mediaQuery`
         min-height: 100px;
-        padding: 0 5px 10px 5px;
+        margin-bottom: 10px;
         ${(props) => (props.isPopup && 'max-height: 350px;')}
         overflow-y: scroll;
     `}
@@ -46,7 +46,6 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
         </Fragment>
     )
 }
-
 
 class CardList extends React.PureComponent {
     constructor() {

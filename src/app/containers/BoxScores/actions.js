@@ -45,6 +45,7 @@ const fetchGameDetail = async (dateStr, gid) => {
 
 const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     try {
+        // has the UI been shown yet, if so, don't show the loading spinner
         if (!isBackground) {
             dispatch({ type: types.REQUEST_START })
         }

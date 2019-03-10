@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
 import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
-import { SettingsConsumer } from '../Context'
+import { ThemeConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -31,7 +31,7 @@ class Summary extends React.PureComponent {
         const { home, visitor } = this.props
         return (
             <Wrapper>
-                <SettingsConsumer>
+                <ThemeConsumer>
                     {({ state: { dark } }) => (
                         <StickyTable stickyHeaderCount={0}>
                             <Row>
@@ -46,7 +46,7 @@ class Summary extends React.PureComponent {
                             {renderTeamRow(home, visitor, dark, 1)}
                         </StickyTable>
                     )}
-                </SettingsConsumer>
+                </ThemeConsumer>
             </Wrapper>
         )
     }

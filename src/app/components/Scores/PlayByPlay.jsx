@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
-import { SettingsConsumer } from '../Context'
+import { ThemeConsumer } from '../Context'
 import { Cell, HeaderCell } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { QUARTER_NAMES } from '../../utils/constant'
@@ -19,8 +19,13 @@ const Title = styled.div`
 `
 
 const Hint = styled.div`
-    padding: 0 10px;
+    padding: 0 5px;
     color: white;
+    background-color:${(props) => props.backgroundColor};
+
+    &:not(:first-child) {
+        margin: 0 5px;
+    }
 `
 
 const QtrBtn = styled.a`
@@ -125,17 +130,17 @@ class PlayByPlay extends React.PureComponent {
             <Wrapper>
                 {this.renderQuarters(quarter, currentQuarter)}
                 <Title>
-                    <Hint style={{backgroundColor: '#1b5e20'}}> Lead Changes </Hint>
-                    <Hint style={{backgroundColor: '#7c4dff'}}> Tied </Hint>
+                    <Hint backgroundColor={'#1b5e20'}>Lead Changes</Hint>
+                    <Hint backgroundColor={'#7c4dff'}>Tied</Hint>
                 </Title>
-                <SettingsConsumer>
+                <ThemeConsumer>
                     {({state: {dark}}) => (
                         <StickyTable stickyHeaderCount={0} stickyColumnCount={0}>
                             {renderHeaderRow()}
                             {renderPBPRow(play, currentQuarter, dark)}
                         </StickyTable>
                     )}
-                </SettingsConsumer>
+                </ThemeConsumer>
             </Wrapper>
         )
     }

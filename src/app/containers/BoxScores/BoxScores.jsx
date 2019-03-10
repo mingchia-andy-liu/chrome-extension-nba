@@ -3,76 +3,34 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import moment from 'moment-timezone'
 import CardList from '../../components/CardList'
 import DatePicker from '../../containers/DatePicker'
-import {
-    PlayByPlay,
-    Summary,
-    PlayerStats,
-    TeamStats,
-    AdvancedTeamStats
-} from '../../components/Scores'
-import TeamInfo from '../../components/TeamInfo'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import Checkbox from '../../components/Checkbox'
-import MatchInfo from '../../components/MatchInfo'
-import { SettingsConsumer } from '../../components/Context'
-import { Shadow, Theme, Row, Column, mediaQuery } from '../../styles'
-import { isWinning } from '../../utils/common'
+import { DarkModeCheckbox, NoSpoilerCheckbox, BroadcastCheckbox } from '../../components/Checkbox'
+import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
+import { ButtonsWrapper } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { fetchGamesIfNeeded } from '../Popup/actions'
+import {
+    Content,
+    Sidebar,
+    Wrapper
+} from './styles'
+import {
+    renderTitle,
+    renderSummary,
+    renderHints,
+    renderPlayerStats,
+    renderTeamStats,
+    renderAdvancedTeamStats,
+    renderPlaybyPlay
+} from './helpers'
 
-
-const Wrapper = styled.div`
-    display: grid;
-    grid-template-areas: "sidebar content";
-    grid-template-columns: minmax(27%, 300px) 1fr;
-    grid-gap: 1em 1em;
-    padding: 10px 0;
-
-    ${mediaQuery`
-        grid-template-areas:"sidebar"
-                            "content";
-        grid-template-columns: 1fr;`}
-`
-
-const Sidebar = styled.div`
-    grid-area: sidebar;
-`
-const Content = styled.div`
-    ${Shadow}
-    grid-area: content;
-    overflow-y: scroll !important;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: ${(props) => (props.dark ? Theme.dark.blockBackground : '#fff')};
-`
-
-const Title = styled(Row)`
-    font-size: calc(12px + 1vw);
-`
-
-const Subtitle = styled.span`
-    padding: 0 5px;
-
-    &:first-child {
-        padding-left: 0px;
-    }
-`
-
-const SpoilerCheckbox = () => (
-    <SettingsConsumer>
-        {({state: { spoiler }, actions: {updateNoSpoiler}}) => (
-            <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
-        )}
-    </SettingsConsumer>
-)
 
 class BoxScores extends React.Component {
     constructor(props) {
@@ -115,151 +73,38 @@ class BoxScores extends React.Component {
         this.props.resetLiveGameBox()
     }
 
-    renderTitle(bsData) {
-        const {
-            home,
-            visitor,
-            periodTime,
-        } = bsData
-        const {
-            abbreviation: hta,
-            nickname: htn,
-            score: hs,
-        } = home
-        const {
-            abbreviation: vta,
-            nickname: vtn,
-            score: vs,
-        } = visitor
-
-        return (
-            <Title justifyCenter={true} alignCenter={true}>
-                <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
-                <MatchInfo
-                    home={{
-                        ...home,
-                        score: `${home.score}`,
-                    }}
-                    visitor={{
-                        ...visitor,
-                        score: `${visitor.score}`,
-                    }}
-                    periodTime={periodTime}
-                />
-                <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
-            </Title>
-        )
-    }
-
-    renderSummary(bsData) {
-        const {
-            officials,
-            home,
-            visitor,
-        } = bsData
-        return (
-            <Column>
-                <Row>
-                    <Subtitle>OFFICIALS: </Subtitle>
-                    {officials.map(({person_id, first_name, last_name}, i) =>
-                        <Subtitle key={person_id}>{first_name} {last_name}{i !== officials.length - 1 && ','}</Subtitle>
-                    )}
-                </Row>
-                <Summary home={home} visitor={visitor}/>
-            </Column>
-        )
-    }
-
-    renderTeamStats(bsData) {
-        const {
-            home: {
-                abbreviation: hta,
-                stats: hts,
-            },
-            visitor: {
-                abbreviation: vta,
-                stats: vts,
-            },
-        } = bsData
-        return <TeamStats hta={hta} hts={hts || {}} vta={vta} vts={vts || {}} />
-    }
-
-    renderAdvancedTeamStats(teamStats, bsData) {
-        const {
-            home,
-            visitor,
-            extra,
-        } = teamStats
-
-        const {
-            home: {
-                abbreviation: hta,
-            },
-            visitor: {
-                abbreviation: vta,
-            },
-        } = bsData
-
-        return (
-            <AdvancedTeamStats
-                home={home}
-                hta={hta}
-                visitor={visitor}
-                vta={vta}
-                extra={extra}
-            />
-        )
-    }
-
-    renderPlyaerStats(bsData) {
-        const {
-            home: {
-                abbreviation: hta,
-                players: { player: homePlayers },
-            },
-            visitor: {
-                abbreviation: vta,
-                players: { player: visitorPlayers },
-            },
-            periodTime: {
-                gameStatus,
-            },
-        } = bsData
-
-        return <PlayerStats hta={hta} hps={homePlayers || []} vta={vta} vps={visitorPlayers || []} isLive={gameStatus === '2'}/>
-    }
-
-    renderPlaybyPlay(pbpData) {
-        return <PlayByPlay pbp={pbpData} />
-    }
-
-    renderContent(spoiler) {
+    renderContent(spoiler, dark) {
         const { bs: { bsData, pbpData, teamStats } } = this.props
-        // Route expects a funciton for component prop
+        // Route expects a function for component prop
         const contentComponent = () => {
-            if (!bsData || Object.keys(bsData).length === 0 || (bsData.periodTime && bsData.periodTime.gameStatus === '1')) {
+            if (
+                !bsData ||
+                Object.keys(bsData).length === 0 ||
+                (bsData.periodTime && bsData.periodTime.gameStatus === '1')
+            ) {
                 return <Overlay text={'Game has not started'} />
             } else {
                 if (spoiler) {
                     return (
                         <Overlay text="Turn off no spoiler">
-                            <SpoilerCheckbox />
+                            <NoSpoilerCheckbox />
                         </Overlay>
                     )
                 }
                 return (
                     <React.Fragment>
-                        {this.renderTitle(bsData)}
+                        {renderTitle(bsData)}
                         <h3>Summary</h3>
-                        {this.renderSummary(bsData)}
+                        {renderSummary(bsData)}
                         <h3>Player Stats</h3>
-                        {this.renderPlyaerStats(bsData)}
+                        {renderHints(dark)}
+                        {renderPlayerStats(bsData)}
                         <h3>Team Stats</h3>
-                        {this.renderTeamStats(bsData)}
+                        {renderTeamStats(bsData)}
                         <h4>Advanced</h4>
-                        {this.renderAdvancedTeamStats(teamStats, bsData)}
+                        {renderAdvancedTeamStats(teamStats, bsData)}
                         <h3>Play By Play</h3>
-                        {this.renderPlaybyPlay(pbpData)}
+                        {renderPlaybyPlay(pbpData)}
                     </React.Fragment>
                 )
             }
@@ -307,6 +152,11 @@ class BoxScores extends React.Component {
                                     this.props.history.replace('/boxscores')
                                 }}
                             />
+                            <ButtonsWrapper>
+                                <DarkModeCheckbox />
+                                <NoSpoilerCheckbox />
+                                <BroadcastCheckbox />
+                            </ButtonsWrapper>
                             <CardList
                                 isLoading={live.isLoading}
                                 games={live.games}
@@ -314,16 +164,20 @@ class BoxScores extends React.Component {
                                 selected={this.state.id}
                             />
                         </Sidebar>
-                        <SettingsConsumer>
-                            {({ state: { dark, spoiler } }) => (
-                                <Content dark={dark}>
-                                    {bs.isLoading
-                                        ? <Loader />
-                                        : this.renderContent(spoiler)
-                                    }
-                                </Content>
+                        <ThemeConsumer>
+                            {({state: { dark }}) =>(
+                                <SettingsConsumer>
+                                    {({ state: {spoiler} }) => (
+                                        <Content dark={dark}>
+                                            {bs.isLoading
+                                                ? <Loader />
+                                                : this.renderContent(spoiler, dark)
+                                            }
+                                        </Content>
+                                    )}
+                                </SettingsConsumer>
                             )}
-                        </SettingsConsumer>
+                        </ThemeConsumer>
                     </Wrapper>
                 </Layout.Content>
             </Layout>

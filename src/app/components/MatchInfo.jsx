@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row } from '../styles'
-import { SettingsConsumer } from '../components/Context'
+import { SettingsConsumer, ThemeConsumer } from '../components/Context'
 import { Theme } from '../styles'
 import { formatClock } from '../utils/common'
 
@@ -50,7 +50,7 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
                 >
                     {visitor.score}
                 </TeamScore>
-            -
+                -
                 <TeamScore
                     dark={dark}
                     winning={+visitor.score < +home.score}
@@ -64,18 +64,22 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
 }
 
 const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) => {
-    if (spoiler && gameStatus !== '1') {
+    // Show the final status for games
+    if (spoiler && gameStatus === '2') {
         return ''
     }
     return formatClock(clock, status, totalPeriod) || status
 }
 
-const renderBroadcasters = (broadcasters) => {
+const renderBroadcasters = (broadcasters, gameStatus) => {
     return broadcasters.map(broadcaster => {
         if (broadcaster.scope === 'natl') {
             return (
                 <div key={broadcaster.display_name}>{broadcaster.display_name}</div>
             )
+        }
+        if (gameStatus !== '1' ) {
+            return null
         }
         return (
             <SubText key={broadcaster.display_name}>{broadcaster.display_name}</SubText>
@@ -112,18 +116,22 @@ class MatchInfo extends React.PureComponent {
 
 
         return (
-            <SettingsConsumer>
-                {({state: {dark, spoiler}}) => (
-                    <Wrapper>
-                        {renderScores(dark, spoiler, gameStatus, home, visitor)}
-                        <div>
-                            {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
-                        </div>
-                        {!spoiler && series && <div>{series}</div>}
-                        {gameStatus === '1' && broadcasters !== '' && renderBroadcasters(broadcasters)}
-                    </Wrapper>
+            <ThemeConsumer>
+                {({ state: {dark} }) => (
+                    <SettingsConsumer>
+                        {({state: {spoiler}}) => (
+                            <Wrapper>
+                                {renderScores(dark, spoiler, gameStatus, home, visitor)}
+                                <div>
+                                    {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
+                                </div>
+                                {!spoiler && series && <div>{series}</div>}
+                                {broadcasters != null  && renderBroadcasters(broadcasters, gameStatus)}
+                            </Wrapper>
+                        )}
+                    </SettingsConsumer>
                 )}
-            </SettingsConsumer>
+            </ThemeConsumer>
         )
     }
 }

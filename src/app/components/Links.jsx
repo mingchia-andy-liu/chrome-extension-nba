@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {RowCSS, AlignCenter, JustifyCenter} from '../styles'
 import browser from '../utils/browser'
-import { SettingsConsumer } from './Context'
+import { ThemeConsumer } from './Context'
 
 
 const Wrapper = styled.div`
@@ -29,19 +29,19 @@ class Links extends React.PureComponent {
         const links = ['Box-scores', 'Standings', 'Playoffs', 'Options']
         const hrefs = ['boxscores', 'standings', 'playoffs', 'options']
         const atags = links.map((element, index) => (
-            <SettingsConsumer key={`link-${index}`}>
+            <ThemeConsumer key={`link-${index}`}>
                 {({ state: { dark } }) => (
                     <Link
                         dark={dark}
                         onClick={() => {
-                            browser.tabs.create({ url: `/index.html#/${hrefs    [index]}` })
+                            browser.tabs.create({ url: `/index.html#/${hrefs[index]}` })
                             window.close()
                         }}
                     >
                         {element}
                     </Link>
                 )}
-            </SettingsConsumer>
+            </ThemeConsumer>
         ))
 
         return (

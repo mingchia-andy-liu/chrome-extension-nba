@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { StickyTable, Row } from 'react-sticky-table'
 import { Cell, HeaderCell, RowHeaderCell, StatsCell } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
-import { SettingsConsumer } from '../Context'
+import { ThemeConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -86,7 +86,7 @@ class TeamStats extends React.PureComponent {
         const { hts, vts, hta, vta } = this.props
         return (
             <Wrapper>
-                <SettingsConsumer>
+                <ThemeConsumer>
                     {({state: { dark }})=> (
                         <StickyTable stickyHeaderCount={0}>
                             {renderHeaderRow(0)}
@@ -94,7 +94,7 @@ class TeamStats extends React.PureComponent {
                             {renderTeamRow(hts, hta, dark, 1)}
                         </StickyTable>
                     )}
-                </SettingsConsumer>
+                </ThemeConsumer>
             </Wrapper>
         )
     }

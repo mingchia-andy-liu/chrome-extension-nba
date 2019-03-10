@@ -7,7 +7,7 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment-timezone'
 import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
-import { SettingsConsumer } from '../../components/Context'
+import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 
@@ -84,7 +84,7 @@ class DatePicker extends React.Component {
 
         if (hide) {
             return (
-                <SettingsConsumer>
+                <ThemeConsumer>
                     {({ state: { dark } }) => (
                         <StyledInput
                             dark={dark ? 1 : undefined}
@@ -92,11 +92,11 @@ class DatePicker extends React.Component {
                             value={moment(date).format('YYYY-MM-DD')}
                         />
                     )}
-                </SettingsConsumer>
+                </ThemeConsumer>
             )
         }
         return (
-            <SettingsConsumer>
+            <ThemeConsumer>
                 {({ state: { dark } }) => (
                     <StyledFlatpickr
                         // prevent chrome default action to auto-focus
@@ -119,7 +119,7 @@ class DatePicker extends React.Component {
                         }}
                     />
                 )}
-            </SettingsConsumer>
+            </ThemeConsumer>
         )
     }
 
