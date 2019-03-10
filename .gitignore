@@ -105,3 +105,4 @@ typings/
 # End of https://www.gitignore.io/api/sass,node,macos,visualstudiocode
 
 src/build/*.js
+dist/
