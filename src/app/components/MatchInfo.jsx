@@ -64,7 +64,7 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
 }
 
 const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) => {
-    // Show the final status for games
+    // if no spoiler is on, show the final status for games.
     if (spoiler && gameStatus === '2') {
         return ''
     }
@@ -78,6 +78,7 @@ const renderBroadcasters = (broadcasters, gameStatus) => {
                 <div key={broadcaster.display_name}>{broadcaster.display_name}</div>
             )
         }
+        // don't show local broadcaster if the game has started/over
         if (gameStatus !== '1' ) {
             return null
         }
