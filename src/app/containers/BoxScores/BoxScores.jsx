@@ -16,6 +16,7 @@ import { ButtonsWrapper } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { fetchGamesIfNeeded } from '../Popup/actions'
+import { dispatchChangeDate } from '../DatePicker/actions'
 import {
     Content,
     Sidebar,
@@ -57,6 +58,8 @@ class BoxScores extends React.Component {
 
     componentDidMount() {
         const { date, id } = this.state
+        // TODO: when sync store, read the proper date from the localStorage
+        this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
         this.props.fetchGamesIfNeeded(date, (games) => {
             const found = games.find(({ id: gid }) => gid === id)
             if (found) {
@@ -205,6 +208,7 @@ BoxScores.propTypes = {
     fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
     fetchGamesIfNeeded: PropTypes.func.isRequired,
     resetLiveGameBox: PropTypes.func.isRequired,
+    dispatchChangeDate: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ live, bs, date }) => ({
@@ -218,6 +222,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchLiveGameBoxIfNeeded,
         fetchGamesIfNeeded,
         resetLiveGameBox,
+        dispatchChangeDate,
     }, dispatch)
 }
 
