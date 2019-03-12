@@ -5,7 +5,7 @@ import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
 import { isWinning } from '../utils/common'
-import { SettingsConsumer } from '../components/Context'
+import { SettingsConsumer, ThemeConsumer } from '../components/Context'
 import { Theme } from '../styles'
 
 // position relative for before pseudo element
@@ -80,26 +80,30 @@ class MatchCard extends React.PureComponent {
         } = visitor
 
         return (
-            <SettingsConsumer>
-                {({ state: { dark, team } }) => (
-                    <Wrapper
-                        dark={dark}
-                        onClick={onClick}
-                        data-id={id}
-                        selected={selected}
-                        fav={team === vta || team === hta}
-                    >
-                        <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
-                        <MatchInfo
-                            home={home}
-                            visitor={visitor}
-                            broadcasters={showBroadcast ? broadcasters : undefined}
-                            {...rest}
-                        />
-                        <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
-                    </Wrapper>
+            <ThemeConsumer>
+                {({ state: {dark} }) => (
+                    <SettingsConsumer>
+                        {({ state: { team } }) => (
+                            <Wrapper
+                                dark={dark}
+                                onClick={onClick}
+                                data-id={id}
+                                selected={selected}
+                                fav={team === vta || team === hta}
+                            >
+                                <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
+                                <MatchInfo
+                                    home={home}
+                                    visitor={visitor}
+                                    broadcasters={showBroadcast ? broadcasters : undefined}
+                                    {...rest}
+                                />
+                                <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
+                            </Wrapper>
+                        )}
+                    </SettingsConsumer>
                 )}
-            </SettingsConsumer>
+            </ThemeConsumer>
         )
     }
 }
@@ -115,9 +119,9 @@ MatchCard.propTypes = {
 }
 
 const TextCard = ({ text }) => (
-    <SettingsConsumer>
+    <ThemeConsumer>
         {({ state: { dark } }) => <Wrapper dark={dark}> {text} </Wrapper>}
-    </SettingsConsumer>
+    </ThemeConsumer>
 )
 
 TextCard.propTypes = {

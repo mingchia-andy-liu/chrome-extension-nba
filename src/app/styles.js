@@ -153,3 +153,11 @@ export const AlignCenter = css`
 export const Shadow = css`
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
 `
+
+export const ButtonsWrapper = styled(Row)`
+    padding-bottom: 5px;
+
+    > :not(:first-child) {
+        padding-left: 10px;
+    }
+`

@@ -18,7 +18,7 @@ import {
     hasDoubles,
     toPercentage
 } from '../../utils/common'
-import { SettingsConsumer } from '../Context'
+import { SettingsConsumer, ThemeConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -38,6 +38,7 @@ const PlayerName = styled(Cell)`
     width: 10vw;
     min-width: 120px;
     overflow-y: hidden;
+    padding-left: 5px;
 `
 
 const renderHeaderRow = (name) => {
@@ -191,16 +192,20 @@ class PlayerStats extends React.PureComponent {
 
         return (
             <Wrapper>
-                <SettingsConsumer>
-                    {({ state: { dark, hideZeroRow } }) => (
-                        <StickyTable stickyHeaderCount={0}>
-                            {renderHeaderRow(vta)}
-                            {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                            {renderHeaderRow(hta)}
-                            {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                        </StickyTable>
+                <ThemeConsumer>
+                    {({ state: {dark} }) => (
+                        <SettingsConsumer>
+                            {({ state: { hideZeroRow } }) => (
+                                <StickyTable stickyHeaderCount={0}>
+                                    {renderHeaderRow(vta)}
+                                    {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                                    {renderHeaderRow(hta)}
+                                    {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                                </StickyTable>
+                            )}
+                        </SettingsConsumer>
                     )}
-                </SettingsConsumer>
+                </ThemeConsumer>
             </Wrapper>
         )
     }

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
-import { SettingsConsumer } from './Context'
+import { SettingsConsumer, BroadcastConsumer } from './Context'
 import browser from '../utils/browser'
 
 
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
     ${mediaQuery`
         min-height: 100px;
-        padding: 0 5px 10px 5px;
+        padding-bottom: 10px;
         ${(props) => (props.isPopup && 'max-height: 350px;')}
         overflow-y: scroll;
     `}
@@ -47,7 +47,6 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
     )
 }
 
-
 class CardList extends React.PureComponent {
     constructor() {
         super()
@@ -79,13 +78,17 @@ class CardList extends React.PureComponent {
         }
 
         return (
-            <SettingsConsumer>
-                {({state: { team, broadcast }}) => (
-                    <Wrapper isPopup={isPopup}>
-                        {generateCards(games, selected, team, broadcast, rest)}
-                    </Wrapper>
+            <BroadcastConsumer>
+                {({state: { broadcast }}) => (
+                    <SettingsConsumer>
+                        {({state: { team }}) => (
+                            <Wrapper isPopup={isPopup}>
+                                {generateCards(games, selected, team, broadcast, rest)}
+                            </Wrapper>
+                        )}
+                    </SettingsConsumer>
                 )}
-            </SettingsConsumer>
+            </BroadcastConsumer>
         )
     }
 }

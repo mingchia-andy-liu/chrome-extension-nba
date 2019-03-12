@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { SettingsConsumer } from '../Context'
+import { ThemeConsumer } from '../Context'
 import { ColumnCSS, AlignCenter, JustifyCenter } from '../../styles'
 
 
@@ -32,7 +32,7 @@ class TabItem extends Component {
     render() {
         const { onClick, label, active, to } = this.props
         return (
-            <SettingsConsumer>
+            <ThemeConsumer>
                 {({state: {dark}}) => (
                     <Link
                         to={to}
@@ -49,7 +49,7 @@ class TabItem extends Component {
                         </label>
                     </Link>
                 )}
-            </SettingsConsumer>
+            </ThemeConsumer>
         )
     }
 }

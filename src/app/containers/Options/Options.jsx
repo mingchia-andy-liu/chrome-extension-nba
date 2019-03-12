@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Checkbox from '../../components/Checkbox'
-import { SettingsConsumer } from '../../components/Context'
+import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
@@ -25,6 +25,12 @@ const HrefLink = styled.a`
     outline: none;
     color: ${(props) => (props.dark ? '#5188ff' : 'rgb(46, 46, 223)')};
     cursor: pointer;
+`
+
+const ButtonsWrapper = styled.div`
+    > * {
+        padding: 10px 0;
+    }
 `
 
 // const NotificationWrapper = styled.div`
@@ -105,19 +111,20 @@ class Options extends React.Component {
         )
     }
 
-    renderContent(context) {
+    renderContent(settingsContext, themeContext) {
         // const { hasNotificationPermission } = this.state
-        const { team, dark, hideZeroRow, broadcast, spoiler } = context.state
+        const { team, hideZeroRow, broadcast, spoiler } = settingsContext.state
+        const { dark } = themeContext.state
         const {
             updateBroadcast,
             updateHideZeroRow,
             updateNoSpoiler,
             updateTeam,
-            updateTheme,
-        } = context.actions
+        } = settingsContext.actions
+        const { updateTheme } = themeContext.actions
 
         return (
-            <React.Fragment>
+            <ButtonsWrapper>
                 {this.renderHeader(dark)}
                 {this.renderTeams(team, updateTeam)}
                 {/* {hasNotificationPermission
@@ -133,7 +140,7 @@ class Options extends React.Component {
                 <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
                 <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
                 <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
-            </React.Fragment>
+            </ButtonsWrapper>
         )
     }
 
@@ -142,9 +149,13 @@ class Options extends React.Component {
             <Layout>
                 <Layout.Header>{<Header index={3}/>}</Layout.Header>
                 <Layout.Content>
-                    <SettingsConsumer>
-                        {context => this.renderContent(context)}
-                    </SettingsConsumer>
+                    <ThemeConsumer>
+                        {themeContext => (
+                            <SettingsConsumer>
+                                {settingsContext => this.renderContent(settingsContext, themeContext)}
+                            </SettingsConsumer>
+                        )}
+                    </ThemeConsumer>
                 </Layout.Content>
             </Layout>
         )

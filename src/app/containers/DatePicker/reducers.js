@@ -2,6 +2,9 @@ import types from './types'
 import getAPIDate from '../../utils/getApiDate'
 
 const initState = {
+    /**
+     * JavaScript Date object
+     */
     date: getAPIDate(),
 }
 

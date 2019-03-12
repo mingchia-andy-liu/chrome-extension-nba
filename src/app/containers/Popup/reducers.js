@@ -2,7 +2,7 @@ import types from './types'
 import moment from 'moment-timezone'
 
 const initState = {
-    isLoading: false,
+    isLoading: true,
     games: [],
     lastUpdate: new Date(0),
 }
