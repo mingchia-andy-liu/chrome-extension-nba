@@ -49,9 +49,8 @@ export const Hint = styled.div`
 
 export const HintText = (dark, doubles, text) => {
     const backgroundColor = dark ? Theme.dark.doubles[doubles] : Theme.light.doubles[doubles]
-    const color = dark ? Theme.dark.color : Theme.light.color
 
     return (
-        <Hint backgroundColor={backgroundColor} color={color}>{text}</Hint>
+        <Hint backgroundColor={backgroundColor} color={Theme.light.color}>{text}</Hint>
     )
 }
