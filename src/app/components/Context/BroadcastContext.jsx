@@ -30,7 +30,6 @@ export class BroadcastProvider extends React.Component {
     }
 
     render() {
-        console.log('broadcast render')
         return (
             <Context.Provider value={{
                 state: this.state,
