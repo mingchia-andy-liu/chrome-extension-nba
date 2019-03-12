@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { SettingsConsumer, ThemeConsumer } from './Context'
+import { SettingsConsumer, ThemeConsumer, BroadcastConsumer } from './Context'
 
 const StyledLabel = styled.label`
     position: relative;
@@ -30,10 +30,12 @@ const StyledLabel = styled.label`
         display: inline-block;
         border: solid 2px hsl(0, 0%, 50%);
         border-radius: 2px;
-        width: 15px;
-        height: 15px;
+        /* width: calc(12px + 0.1vw);
+        height: calc(12px + 0.1vw); */
+        width: 10px;
+        height: 10px;
         margin-right: 10px;
-        vertical-align: -3px;
+        vertical-align: -2px;
         transition: border-color 1s;
     }
 
@@ -70,10 +72,10 @@ const StyledLabel = styled.label`
         content: "";
         display: inline-block;
         position: absolute;
-        top: 4px;
-        left: -2px;
-        width: 5px;
-        height: 9px;
+        top: 6px;
+        left: -4px;
+        width: 4px;
+        height: 8px;
         border-right: solid 2px transparent;
         border-bottom: solid 2px transparent;
         transform: translate(8px, -4px) rotate(45deg);
@@ -141,11 +143,11 @@ export const HideZeroRowCheckbox = () => (
 )
 
 export const BroadcastCheckbox = () => (
-    <SettingsConsumer>
-        {({state: { broadcast}, actions: {updateBroadcast}}) => (
+    <BroadcastConsumer>
+        {({state: { broadcast }, actions: {updateBroadcast}}) => (
             <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
         )}
-    </SettingsConsumer>
+    </BroadcastConsumer>
 )
 
 export default Checkbox

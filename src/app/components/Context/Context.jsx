@@ -11,15 +11,13 @@ export class SettingsProvider extends React.Component {
         super(props)
 
         this.state = {
-            broadcast: false,
             hideZeroRow: false,
             spoiler: false,
             team: '',
         }
 
-        browser.getItem(['favTeam', 'hideZeroRow', 'broadcast', 'spoiler'], (data) => {
+        browser.getItem(['favTeam', 'hideZeroRow', 'spoiler'], (data) => {
             this.setState({
-                broadcast: data.broadcast ? data.broadcast : false,
                 hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
                 spoiler: data.spoiler ? data.spoiler : false,
                 team: data.favTeam ? data.favTeam : '',
@@ -41,12 +39,6 @@ export class SettingsProvider extends React.Component {
         })
     }
 
-    updateBroadcast = () => {
-        this.setState({ broadcast: !this.state.broadcast }, () => {
-            browser.setItem({ broadcast: this.state.broadcast })
-        })
-    }
-
     updateNoSpoiler = () => {
         this.setState({ spoiler: !this.state.spoiler }, () => {
             browser.setItem({ spoiler: this.state.spoiler })
@@ -58,7 +50,6 @@ export class SettingsProvider extends React.Component {
             <Context.Provider value={{
                 state: this.state,
                 actions: {
-                    updateBroadcast: this.updateBroadcast,
                     updateHideZeroRow: this.updateHideZeroRow,
                     updateNoSpoiler: this.updateNoSpoiler,
                     updateTeam: this.updateFavouriteTeam,

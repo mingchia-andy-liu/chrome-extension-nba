@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
-import { SettingsConsumer } from './Context'
+import { SettingsConsumer, BroadcastConsumer } from './Context'
 import browser from '../utils/browser'
 
 
@@ -78,13 +78,17 @@ class CardList extends React.PureComponent {
         }
 
         return (
-            <SettingsConsumer>
-                {({state: { team, broadcast }}) => (
-                    <Wrapper isPopup={isPopup}>
-                        {generateCards(games, selected, team, broadcast, rest)}
-                    </Wrapper>
+            <BroadcastConsumer>
+                {({state: { broadcast }}) => (
+                    <SettingsConsumer>
+                        {({state: { team }}) => (
+                            <Wrapper isPopup={isPopup}>
+                                {generateCards(games, selected, team, broadcast, rest)}
+                            </Wrapper>
+                        )}
+                    </SettingsConsumer>
                 )}
-            </SettingsConsumer>
+            </BroadcastConsumer>
         )
     }
 }
