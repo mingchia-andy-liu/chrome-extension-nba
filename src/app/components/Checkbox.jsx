@@ -6,6 +6,7 @@ import { SettingsConsumer, ThemeConsumer } from './Context'
 const StyledLabel = styled.label`
     position: relative;
     cursor: pointer;
+    user-select: none;
 
     & > input {
         appearance: none;

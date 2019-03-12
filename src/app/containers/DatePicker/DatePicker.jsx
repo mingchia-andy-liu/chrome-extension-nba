@@ -24,7 +24,7 @@ const inputCSS = css`
     border-radius: 5px;
     border: none;
     width: 100%;
-    height: calc(20px + 2vh);
+    height: 30px;
     cursor: pointer;
 
     background-color: ${(props) => (props.dark
@@ -47,7 +47,8 @@ const StyledInput = styled.input`
 `
 
 const Arrow = styled.img`
-    height: calc(20px + 2vh);
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 `
 
