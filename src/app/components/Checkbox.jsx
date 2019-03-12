@@ -12,8 +12,8 @@ const StyledLabel = styled.label`
         appearance: none;
         position: absolute;
         z-index: -1;
-        left: -16px;
-        top: -19px;
+        left: -6px;
+        top: -5px;
         border-radius: 50%;
         width: 20px;
         height: 20px;
