@@ -155,9 +155,9 @@ export const Shadow = css`
 `
 
 export const ButtonsWrapper = styled(Row)`
-    padding-bottom: 5px;
+    padding: 0 5px 5px 5px;
 
     > :not(:first-child) {
-        padding-left: 10px;
+        margin-left: 10px;
     }
 `

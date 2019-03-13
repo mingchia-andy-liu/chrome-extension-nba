@@ -15,7 +15,7 @@ import { DATE_FORMAT } from '../../utils/constant'
 import browser from '../../utils/browser'
 
 const Wrapper = styled(Column)`
-    padding: 10px 15px;
+    padding: 10px;
     width: 100%;
     min-width: 370px;
 `
