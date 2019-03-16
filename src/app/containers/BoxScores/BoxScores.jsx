@@ -12,11 +12,14 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { DarkModeCheckbox, NoSpoilerCheckbox, BroadcastCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
+import Video from '../../components/Video'
+import Modal from '../Modal/Modal'
 import { ButtonsWrapper } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
+import { toggleModal } from '../Modal/actions'
 import {
     Content,
     Sidebar,
@@ -53,6 +56,7 @@ class BoxScores extends React.Component {
             id: id ? id : '0',
             quarter: 0,
             date: dateStr,
+            showModal: false,
         }
     }
 
@@ -76,8 +80,19 @@ class BoxScores extends React.Component {
         this.props.resetLiveGameBox()
     }
 
+    toggleModal = (showToggleGlobal = true) => {
+        if (showToggleGlobal) {
+            this.props.toggleModal()
+        }
+        this.setState({
+            showModal: !this.state.showModal,
+        })
+    }
+
     renderContent(spoiler, dark) {
         const { bs: { bsData, pbpData, teamStats } } = this.props
+        const { showModal } = this.state
+
         // Route expects a function for component prop
         const contentComponent = () => {
             if (
@@ -96,6 +111,13 @@ class BoxScores extends React.Component {
                 }
                 return (
                     <React.Fragment>
+                        <Modal
+                            active={showModal}
+                            onClick={() => (this.toggleModal(false))}
+                        >
+                            <Video />
+                        </Modal>
+                        <button onClick={() => this.toggleModal()}>click me</button>
                         {renderTitle(bsData)}
                         <h3>Summary</h3>
                         {renderSummary(bsData)}
@@ -209,6 +231,7 @@ BoxScores.propTypes = {
     fetchGamesIfNeeded: PropTypes.func.isRequired,
     resetLiveGameBox: PropTypes.func.isRequired,
     dispatchChangeDate: PropTypes.func.isRequired,
+    toggleModal: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ live, bs, date }) => ({
@@ -223,6 +246,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchGamesIfNeeded,
         resetLiveGameBox,
         dispatchChangeDate,
+        toggleModal,
     }, dispatch)
 }
 
