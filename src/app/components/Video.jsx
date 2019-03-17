@@ -14,7 +14,6 @@ const IFrame = styled.iframe`
     `}
 `
 
-
 class Video extends React.Component {
     static propTypes = {
         src: PropTypes.string.isRequired,
@@ -27,6 +26,5 @@ class Video extends React.Component {
         )
     }
 }
-
 
 export default Video

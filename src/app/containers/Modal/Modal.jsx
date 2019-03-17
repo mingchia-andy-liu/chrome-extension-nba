@@ -37,8 +37,6 @@ const Wrapper = styled.div`
         left: 0;
         width: 100%;
         height: 100%;
-        /* background-color: #000;
-        opacity: 0.7; */
         animation: ${(props) => (props.active ? fadeIn : 'none')} 1s forwards;
     }
 `
@@ -97,7 +95,7 @@ class Modal extends Component {
     }
 
     render() {
-        let content = (<Wrapper active={this.props.active} />)
+        let content = (<div />)
         if (this.props.active) {
             content = (
                 <Wrapper

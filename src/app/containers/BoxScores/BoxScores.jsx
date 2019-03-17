@@ -95,7 +95,6 @@ class BoxScores extends React.Component {
 
     renderContent(spoiler, dark) {
         const { bs: { bsData, pbpData, teamStats, urls } } = this.props
-        const { id, showModal } = this.state
 
         // Route expects a function for component prop
         const contentComponent = () => {
@@ -113,6 +112,7 @@ class BoxScores extends React.Component {
                         </Overlay>
                     )
                 }
+                const { id, showModal } = this.state
                 const url = urls[id]
                 return (
                     <React.Fragment>

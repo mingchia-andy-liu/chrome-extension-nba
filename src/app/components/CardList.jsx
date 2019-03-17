@@ -61,7 +61,7 @@ class CardList extends React.PureComponent {
     }
 
     render() {
-        const { games, isLoading, selected, style, ...rest} = this.props
+        const { games, isLoading, selected, ...rest} = this.props
         const { isPopup } = this.state
         if (isLoading) {
             return (
@@ -98,12 +98,10 @@ CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
     selected: PropTypes.string.isRequired,
-    style: PropTypes.object,
 }
 
 CardList.defaultProps = {
     isLoading: false,
-    style: {},
 }
 
 export default CardList
