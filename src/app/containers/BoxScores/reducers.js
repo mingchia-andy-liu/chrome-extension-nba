@@ -10,6 +10,7 @@ const initState = {
     isLoading: false,
     pbpData: {},
     teamStats: {},
+    urls: {},
 }
 
 const sanitizeBS = ({ home, visitor, officials, periodTime }) => ({
@@ -83,7 +84,7 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
-            const { boxScoreData, gid, pbpData } = action.payload
+            const { boxScoreData, gid, pbpData, url } = action.payload
             const team = teamStatsExtrator(boxScoreData)
             return {
                 bsData: sanitizeBS(convert(boxScoreData)),
@@ -98,6 +99,10 @@ export default (state = initState, action) => {
                         timesTied: team.tt,
                     },
                 },
+                urls: {
+                    ...state.urls,
+                    [gid]: url,
+                },
             }
         }
         case types.REQUEST_ERROR:
@@ -108,6 +113,7 @@ export default (state = initState, action) => {
                 isLoading: false,
                 pbpData: {},
                 teamStats: {},
+                urls: {},
             }
         default:
             return state

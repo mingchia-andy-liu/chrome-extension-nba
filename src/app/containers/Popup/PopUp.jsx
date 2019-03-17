@@ -63,16 +63,22 @@ class PopUp extends React.Component {
 
     render() {
         const { live } = this.props
+        const { isPopup } = this.state
         return (
             <Wrapper>
-                <DatePicker hide={this.state.isPopup} onChange={this.selectDate.bind(this)}/>
+                <DatePicker hide={isPopup} onChange={this.selectDate.bind(this)}/>
                 <Links />
                 <ButtonsWrapper>
                     <DarkModeCheckbox />
                     <NoSpoilerCheckbox />
                     <BroadcastCheckbox />
                 </ButtonsWrapper>
-                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
+                <CardList
+                    selected={'0'}
+                    isLoading={live.isLoading}
+                    games={live.games}
+                    onClick={this.selectGame.bind(this)}
+                />
             </Wrapper>
         )
     }

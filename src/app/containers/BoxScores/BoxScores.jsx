@@ -80,18 +80,22 @@ class BoxScores extends React.Component {
         this.props.resetLiveGameBox()
     }
 
-    toggleModal = (showToggleGlobal = true) => {
-        if (showToggleGlobal) {
-            this.props.toggleModal()
-        }
+    toggleModal = () => {
+        this.setState({
+            showModal: !this.state.showModal,
+        })
+    }
+
+    clickHighlight = () => {
+        this.props.toggleModal()
         this.setState({
             showModal: !this.state.showModal,
         })
     }
 
     renderContent(spoiler, dark) {
-        const { bs: { bsData, pbpData, teamStats } } = this.props
-        const { showModal } = this.state
+        const { bs: { bsData, pbpData, teamStats, urls } } = this.props
+        const { id, showModal } = this.state
 
         // Route expects a function for component prop
         const contentComponent = () => {
@@ -109,15 +113,16 @@ class BoxScores extends React.Component {
                         </Overlay>
                     )
                 }
+                const url = urls[id]
                 return (
                     <React.Fragment>
                         <Modal
                             active={showModal}
-                            onClick={() => (this.toggleModal(false))}
+                            onClick={this.toggleModal}
                         >
-                            <Video />
+                            <Video src={`https://youtube.com/embed/${url}`} />
                         </Modal>
-                        <button onClick={() => this.toggleModal()}>click me</button>
+                        {url && <button onClick={this.clickHighlight}>click me</button>}
                         {renderTitle(bsData)}
                         <h3>Summary</h3>
                         {renderSummary(bsData)}
@@ -217,6 +222,7 @@ BoxScores.propTypes = {
         bsData: PropTypes.object.isRequired,
         pbpData: PropTypes.object.isRequired,
         teamStats: PropTypes.object.isRequired,
+        urls: PropTypes.object.isRequired,
     }),
     date: PropTypes.shape({
         date: PropTypes.object.isRequired,

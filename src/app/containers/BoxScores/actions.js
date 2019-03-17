@@ -43,7 +43,17 @@ const fetchGameDetail = async (dateStr, gid) => {
     }
 }
 
-const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
+const fetchGameHighlight = async (gid) => {
+    try {
+        const res = await fetch(`http://boxscores.site/.netlify/functions/video/${gid}`)
+        const {url} = await res.json()
+        return url
+    } catch (error) {
+        return null
+    }
+}
+
+const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground, urls) => {
     try {
         // has the UI been shown yet, if so, don't show the loading spinner
         if (!isBackground) {
@@ -59,6 +69,11 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
             fetchGameDetail(dateStr, gid)
         ])
 
+        let url = null
+        if (urls[gid] == null) {
+            url = await fetchGameHighlight(gid)
+        }
+
         if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
             throw Error()
         }
@@ -69,6 +84,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
                 boxScoreData,
                 gid,
                 pbpData,
+                url,
             },
         })
     } catch (error) {
@@ -87,6 +103,7 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getSt
         bs: {
             bsData,
             gid: oldGid,
+            urls,
         },
         date: { date },
         live: { lastUpdate },
@@ -102,7 +119,8 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getSt
             return
         }
     }
-    return await fetchLiveGameBox(dispatch, dateStr, gid, oldGid === gid)
+
+    return await fetchLiveGameBox(dispatch, dateStr, gid, oldGid === gid, urls)
 }
 
 export const resetLiveGameBox = () => (dispatch) => {

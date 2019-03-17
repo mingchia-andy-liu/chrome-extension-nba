@@ -1,14 +1,27 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled,{ keyframes } from 'styled-components'
 import * as actions from './actions'
+
+
+const fadeIn = keyframes`
+  from {
+    background-color: transparent;
+    opacity: 0;
+  }
+  to {
+    background-color: #000;
+    opacity: 0.7;
+  }
+`
 
 const Wrapper = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: ${(props) => (props.active ? 100 : -1)};
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -24,15 +37,28 @@ const Wrapper = styled.div`
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #000;
-        opacity: 0.7;
+        /* background-color: #000;
+        opacity: 0.7; */
+        animation: ${(props) => (props.active ? fadeIn : 'none')} 1s forwards;
     }
 `
 
 const Content = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 500;
 `
 
+const Close = styled.div`
+    color: #fff;
+    position: fixed;
+    top: 1%;
+    right: 3%;
+    font-size: calc(12px + 1vw);
+    z-index: 500;
+    cursor: pointer;
+`
 
 class Modal extends Component {
     static propTypes = {
@@ -47,6 +73,19 @@ class Modal extends Component {
         active: false,
     };
 
+    constructor(props) {
+        super(props)
+        this.el = document.createElement('div')
+    }
+
+    componentDidMount() {
+        document.body.appendChild(this.el)
+    }
+
+    componentWillUnmount() {
+        document.body.removeChild(this.el)
+    }
+
     handleClick = (event) => {
         event.preventDefault()
         event.stopPropagation()
@@ -58,15 +97,24 @@ class Modal extends Component {
     }
 
     render() {
-        if (!this.props.active) return null
-        return (
-            <Wrapper
-                onClick={this.handleClick}
-            >
-                <Content>
-                    {this.props.children}
-                </Content>
-            </Wrapper>
+        let content = (<Wrapper active={this.props.active} />)
+        if (this.props.active) {
+            content = (
+                <Wrapper
+                    onClick={this.handleClick}
+                    active={this.props.active}
+                >
+                    <Close onClick={this.handleClick}>X</Close>
+                    <Content>
+                        {this.props.children}
+                    </Content>
+                </Wrapper>
+            )
+        }
+
+        return ReactDOM.createPortal(
+            content,
+            this.el,
         )
     }
 }
