@@ -12,8 +12,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import { DarkModeCheckbox, NoSpoilerCheckbox, BroadcastCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
-import Video from '../../components/Video'
-import Modal from '../Modal/Modal'
+import modalType from '../Modal/modal-types'
 import { ButtonsWrapper } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
@@ -36,7 +35,7 @@ import {
 } from './helpers'
 
 
-class BoxScores extends React.Component {
+class BoxScores extends React.PureComponent {
     constructor(props) {
         super(props)
 
@@ -56,7 +55,6 @@ class BoxScores extends React.Component {
             id: id ? id : '0',
             quarter: 0,
             date: dateStr,
-            showModal: false,
         }
     }
 
@@ -80,16 +78,13 @@ class BoxScores extends React.Component {
         this.props.resetLiveGameBox()
     }
 
-    toggleModal = () => {
-        this.setState({
-            showModal: !this.state.showModal,
-        })
-    }
-
     clickHighlight = () => {
-        this.props.toggleModal()
-        this.setState({
-            showModal: !this.state.showModal,
+        const { bs: { urls } } = this.props
+        const { id } = this.state
+        const url = urls[id]
+        this.props.toggleModal({
+            modalType: modalType.HIGHLIGH_VIDEO,
+            src: `https://youtube.com/embed/${url}`,
         })
     }
 
@@ -112,16 +107,10 @@ class BoxScores extends React.Component {
                         </Overlay>
                     )
                 }
-                const { id, showModal } = this.state
+                const { id } = this.state
                 const url = urls[id]
                 return (
                     <React.Fragment>
-                        <Modal
-                            active={showModal}
-                            onClick={this.toggleModal}
-                        >
-                            <Video src={`https://youtube.com/embed/${url}`} />
-                        </Modal>
                         {url && <button onClick={this.clickHighlight}>click me</button>}
                         {renderTitle(bsData)}
                         <h3>Summary</h3>

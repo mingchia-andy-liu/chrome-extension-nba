@@ -14,12 +14,13 @@ const IFrame = styled.iframe`
     `}
 `
 
-class Video extends React.Component {
+class Video extends React.PureComponent {
     static propTypes = {
         src: PropTypes.string.isRequired,
     }
 
     render() {
+
         return (
             <IFrame src={this.props.src} allowFullScreen={true} frameBorder="0"></IFrame>
 

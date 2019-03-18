@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import styled,{ keyframes } from 'styled-components'
 import * as actions from './actions'
+import modal from './modal'
 
 
 const fadeIn = keyframes`
@@ -37,7 +38,7 @@ const Wrapper = styled.div`
         left: 0;
         width: 100%;
         height: 100%;
-        animation: ${(props) => (props.active ? fadeIn : 'none')} 1s forwards;
+        animation: ${(props) => (props.active ? fadeIn : 'none')} 250ms forwards;
     }
 `
 
@@ -58,18 +59,14 @@ const Close = styled.div`
     cursor: pointer;
 `
 
-class Modal extends Component {
+class ModalManager extends PureComponent {
+    static findModal = (type) => modal[type] || null
+
     static propTypes = {
         toggleModal: PropTypes.func.isRequired,
-        active: PropTypes.bool,
-        children: PropTypes.node,
-        onClick: PropTypes.func,
-        modal: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        active: false,
-    };
+        isOpen: PropTypes.bool.isRequired,
+        type: PropTypes.object.isRequired,
+    }
 
     constructor(props) {
         super(props)
@@ -87,24 +84,30 @@ class Modal extends Component {
     handleClick = (event) => {
         event.preventDefault()
         event.stopPropagation()
-        this.props.toggleModal()
-
-        if (this.props.onClick) {
-            this.props.onClick(event)
-        }
+        this.props.toggleModal({})
     }
 
     render() {
+        const {isOpen, type: {modalType, payload: {...customProps}}} = this.props
+        const modalConstants = ModalManager.findModal(modalType)
+        if (modalConstants == null) return null
+        const { template: ModalComponent, ...modalProps} = modalConstants
+        if (ModalComponent == null) return null
+
+
         let content = (<div />)
-        if (this.props.active) {
+        if (isOpen) {
             content = (
                 <Wrapper
                     onClick={this.handleClick}
-                    active={this.props.active}
+                    active={isOpen}
                 >
                     <Close onClick={this.handleClick}>X</Close>
                     <Content>
-                        {this.props.children}
+                        <ModalComponent
+                            {...modalProps}
+                            {...customProps}
+                        />
                     </Content>
                 </Wrapper>
             )
@@ -117,4 +120,9 @@ class Modal extends Component {
     }
 }
 
-export default connect(null, actions)(Modal)
+const mapStateToProps = ({ modal: {isOpen, type}}) => ({
+    isOpen,
+    type,
+})
+
+export default connect(mapStateToProps, actions)(ModalManager)

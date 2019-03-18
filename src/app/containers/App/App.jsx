@@ -7,6 +7,7 @@ import Standings from '../Standings'
 import Options from '../Options'
 import Changelog from '../Changelog'
 import Playoffs from '../Playoffs'
+import Modal from '../Modal'
 import { BroadcastProvider, SettingsProvider, ThemeProvider  } from '../../components/Context'
 
 import 'react-sticky-table/dist/react-sticky-table.css'
@@ -35,6 +36,7 @@ class App extends React.Component {
                                 <Route exact path="/standings" component={ Standings } />
                                 <Redirect path="*" to="/popup" />
                             </Switch>
+                            <Modal />
                         </AppBase>
                     </SettingsProvider>
                 </BroadcastProvider>
