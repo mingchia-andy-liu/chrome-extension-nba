@@ -5,12 +5,12 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment-timezone'
-import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from './actions'
 import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
-
+import {noop} from '../../utils/common'
+import { resetLiveGameBox } from '../BoxScoresDetails/actions'
 
 const Wrapper = styled.div`
     display: flex;
@@ -53,6 +53,22 @@ const Arrow = styled.img`
 `
 
 class DatePicker extends React.Component {
+    static propTypes = {
+        date: PropTypes.shape({
+            date: PropTypes.object.isRequired,
+        }),
+        onChange: PropTypes.func,
+        hide: PropTypes.bool,
+        startDate: PropTypes.string,
+        dispatchChangeDate: PropTypes.func.isRequired,
+        resetLiveGameBox: PropTypes.func.isRequired,
+    }
+
+    static defaultProps = {
+        hide: false,
+        onChange: noop,
+    }
+
     constructor(props) {
         super(props)
 
@@ -68,15 +84,32 @@ class DatePicker extends React.Component {
         }
     }
 
+    onClickNextDay = () => {
+        this.onClickArrow(1)
+    }
+
+    onClickPrevDay = () => {
+        this.onClickArrow(-1)
+    }
+
     onClickArrow(offset) {
         const date = moment(this.state.date).add(offset, 'day')
         if (date.isAfter('2019-09-01') || date.isBefore('2018-09-01')) {
             return
         }
-        this.props.fetchGamesIfNeeded(date.format(DATE_FORMAT))
-        this.props.onChange(date.format(DATE_FORMAT))
         this.props.dispatchChangeDate(date.toDate())
+        this.props.onChange(date.format(DATE_FORMAT))
+        this.props.resetLiveGameBox()
         this.setState({ date: date.toDate() })
+    }
+
+    onDateChange = (date) => {
+        const d = moment(date[0])
+        const dateObj = d.toDate()
+        this.props.dispatchChangeDate(dateObj)
+        this.props.onChange(dateObj)
+        this.props.resetLiveGameBox()
+        this.setState({date: dateObj})
     }
 
     renderInput() {
@@ -104,20 +137,13 @@ class DatePicker extends React.Component {
                         tabIndex="-1"
                         autoFocus={false}
 
-                        dark={dark ? 1 : undefined}
+                        dark={dark ? 1: undefined}
                         value={date}
                         options={{
                             minDate: '2018-09-01',
                             maxDate: '2019-08-30',
                         }}
-                        onChange={date => {
-                            const d = moment(date[0])
-                            const dateStr = d.format(DATE_FORMAT)
-                            this.props.fetchGamesIfNeeded(dateStr)
-                            this.props.onChange(dateStr)
-                            this.props.dispatchChangeDate(d.toDate())
-                            this.setState({date: d.toDate()})
-                        }}
+                        onChange={this.onDateChange}
                     />
                 )}
             </ThemeConsumer>
@@ -127,27 +153,12 @@ class DatePicker extends React.Component {
     render() {
         return (
             <Wrapper>
-                <Arrow onClick={this.onClickArrow.bind(this, -1)} src="../../assets/png/arrow-left.png" />
+                <Arrow onClick={this.onClickPrevDay} src="../../assets/png/arrow-left.png" />
                 {this.renderInput()}
-                <Arrow onClick={this.onClickArrow.bind(this, 1)} src="../../assets/png/arrow-right.png" />
+                <Arrow onClick={this.onClickNextDay} src="../../assets/png/arrow-right.png" />
             </Wrapper>
         )
     }
-}
-
-DatePicker.propTypes = {
-    date: PropTypes.shape({
-        date: PropTypes.object.isRequired,
-    }),
-    onChange: PropTypes.func.isRequired,
-    dispatchChangeDate: PropTypes.func.isRequired,
-    fetchGamesIfNeeded: PropTypes.func.isRequired,
-    hide: PropTypes.bool,
-    startDate: PropTypes.string,
-}
-
-DatePicker.defaultProps = {
-    hide: false,
 }
 
 const mapStateToProps = ({ date }) => ({
@@ -157,7 +168,7 @@ const mapStateToProps = ({ date }) => ({
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         dispatchChangeDate,
-        fetchGamesIfNeeded,
+        resetLiveGameBox,
     }, dispatch)
 }
 

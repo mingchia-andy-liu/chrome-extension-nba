@@ -45,7 +45,7 @@ export const fetchRequest = async (dateStr) => {
     }
 }
 
-export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => async (dispatch, getState) => {
+export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false, isBackground = null) => async (dispatch, getState) => {
     const { live: { games, lastUpdate }, date: { date } } = getState()
     const oldDateStr = moment(date).format(DATE_FORMAT)
     const updateDiff = moment().diff(lastUpdate, 'seconds')
@@ -61,5 +61,6 @@ export const fetchGamesIfNeeded = (dateStr, callback, forceUpdate = false) => as
         }
     }
 
-    return await fetchGames(dispatch, dateStr, callback, oldDateStr === dateStr )
+    isBackground = isBackground === false ? false : oldDateStr === dateStr
+    return await fetchGames(dispatch, dateStr, callback, isBackground)
 }

@@ -97,11 +97,12 @@ class CardList extends React.PureComponent {
 CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
-    selected: PropTypes.string.isRequired,
+    selected: PropTypes.string,
 }
 
 CardList.defaultProps = {
     isLoading: false,
+    selected: '',
 }
 
 export default CardList

@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect, withRouter  } from 'react-router-dom'
 import styled from 'styled-components'
 import PopUp from '../Popup'
-import BoxScoresDetails from '../BoxScoresDetails'
+import BoxScores from '../BoxScores'
 import Standings from '../Standings'
 import Options from '../Options'
 import Changelog from '../Changelog'
@@ -33,8 +33,8 @@ class App extends React.Component {
                             <AppBase>
                                 <Switch>
                                     <Route exact path="/popup" component={ PopUp } />
-                                    <Route path="/boxscores/:id" component={ BoxScoresDetails } />
-                                    <Route path="/boxscores" component={ BoxScoresDetails } />
+                                    <Route path="/boxscores/:id" component={ BoxScores } />
+                                    <Route path="/boxscores" component={ BoxScores } />
                                     <Route exact path="/changelog" component={ Changelog } />
                                     <Route exact path="/options" component={ Options } />
                                     <Route exact path="/playoffs" component={ Playoffs } />
