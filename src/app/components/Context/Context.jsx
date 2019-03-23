@@ -12,10 +12,9 @@ export class SettingsProvider extends React.Component {
 
         this.state = {
             spoiler: false,
-            team: '',
         }
 
-        browser.getItem(['favTeam', 'spoiler'], (data) => {
+        browser.getItem(['spoiler'], (data) => {
             this.setState({
                 spoiler: data.spoiler ? data.spoiler : false,
                 team: data.favTeam ? data.favTeam : '',
@@ -24,12 +23,6 @@ export class SettingsProvider extends React.Component {
     }
 
     static propTypes = { children: PropTypes.node }
-
-    updateFavouriteTeam = (team) => {
-        this.setState({team}, () => {
-            browser.setItem({ favTeam: this.state.team })
-        })
-    }
 
     updateNoSpoiler = () => {
         this.setState({ spoiler: !this.state.spoiler }, () => {
@@ -43,7 +36,6 @@ export class SettingsProvider extends React.Component {
                 state: this.state,
                 actions: {
                     updateNoSpoiler: this.updateNoSpoiler,
-                    updateTeam: this.updateFavouriteTeam,
                 },
             }}>
                 {this.props.children}

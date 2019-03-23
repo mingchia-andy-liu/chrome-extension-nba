@@ -97,7 +97,12 @@ class PopUp extends React.Component {
                     <NoSpoilerCheckbox />
                     <BroadcastCheckbox />
                 </ButtonsWrapper>
-                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
+                <CardList
+                    selected={'0'}
+                    isLoading={live.isLoading}
+                    games={live.games}
+                    onClick={this.selectGame.bind(this)}
+                />
             </Wrapper>
         )
     }

@@ -8,7 +8,7 @@ import Options from '../Options'
 import Changelog from '../Changelog'
 import Playoffs from '../Playoffs'
 import {
-    BroadcastProvider,
+    SidebarProvider,
     SettingsProvider,
     ThemeProvider,
     BoxScoreProvider
@@ -27,7 +27,7 @@ class App extends React.Component {
     render() {
         return (
             <ThemeProvider>
-                <BroadcastProvider>
+                <SidebarProvider>
                     <BoxScoreProvider>
                         <SettingsProvider>
                             <AppBase>
@@ -44,7 +44,7 @@ class App extends React.Component {
                             </AppBase>
                         </SettingsProvider>
                     </BoxScoreProvider>
-                </BroadcastProvider>
+                </SidebarProvider>
             </ThemeProvider>
         )
     }

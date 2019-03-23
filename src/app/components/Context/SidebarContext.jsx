@@ -6,17 +6,19 @@ import browser from '../../utils/browser'
 
 const Context = React.createContext()
 
-export class BroadcastProvider extends React.Component {
+export class SidebarProvider extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             broadcast: false,
+            team: '',
         }
 
-        browser.getItem(['broadcast'], (data) => {
+        browser.getItem(['favTeam', 'broadcast'], (data) => {
             this.setState({
                 broadcast: data.broadcast ? data.broadcast : false,
+                team: data.favTeam ? data.favTeam : '',
             })
         })
     }
@@ -29,12 +31,20 @@ export class BroadcastProvider extends React.Component {
         })
     }
 
+    updateFavouriteTeam = (team) => {
+        this.setState({team}, () => {
+            browser.setItem({ favTeam: this.state.team })
+        })
+    }
+
+
     render() {
         return (
             <Context.Provider value={{
                 state: this.state,
                 actions: {
                     updateBroadcast: this.updateBroadcast,
+                    updateTeam: this.updateFavouriteTeam,
                 },
             }}>
                 {this.props.children}
@@ -43,4 +53,4 @@ export class BroadcastProvider extends React.Component {
     }
 }
 
-export const BroadcastConsumer = Context.Consumer
+export const SidebarConsumer = Context.Consumer

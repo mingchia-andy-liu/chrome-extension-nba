@@ -5,7 +5,7 @@ import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
 import { isWinning } from '../utils/common'
-import { SettingsConsumer, ThemeConsumer } from '../components/Context'
+import { SidebarConsumer, ThemeConsumer } from '../components/Context'
 import { Theme } from '../styles'
 
 // position relative for before pseudo element
@@ -82,7 +82,7 @@ class MatchCard extends React.PureComponent {
         return (
             <ThemeConsumer>
                 {({ state: {dark} }) => (
-                    <SettingsConsumer>
+                    <SidebarConsumer>
                         {({ state: { team } }) => (
                             <Wrapper
                                 dark={dark}
@@ -101,7 +101,7 @@ class MatchCard extends React.PureComponent {
                                 <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
                             </Wrapper>
                         )}
-                    </SettingsConsumer>
+                    </SidebarConsumer>
                 )}
             </ThemeConsumer>
         )
