@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { SettingsConsumer, ThemeConsumer, BroadcastConsumer } from './Context'
+import { SettingsConsumer, ThemeConsumer, SidebarConsumer, BoxScoreConsumer } from './Context'
 
 const StyledLabel = styled.label`
     position: relative;
@@ -135,19 +135,19 @@ export const NoSpoilerCheckbox = () => (
 )
 
 export const HideZeroRowCheckbox = () => (
-    <SettingsConsumer>
+    <BoxScoreConsumer>
         {({state: { hideZeroRow }, actions: {updateHideZeroRow}}) => (
             <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
         )}
-    </SettingsConsumer>
+    </BoxScoreConsumer>
 )
 
 export const BroadcastCheckbox = () => (
-    <BroadcastConsumer>
+    <SidebarConsumer>
         {({state: { broadcast }, actions: {updateBroadcast}}) => (
             <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
         )}
-    </BroadcastConsumer>
+    </SidebarConsumer>
 )
 
 export default Checkbox

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
 
 import liveReducer from './containers/Popup/reducers'
-import boxScoresReducer from './containers/BoxScores/reducers'
+import boxScoresDetailsReducer from './containers/BoxScoresDetails/reducers'
 import dateReducer from './containers/DatePicker/reducers'
 import standingsReducer from './containers/Standings/reducers'
 import playoffReducer from './containers/Playoffs/reducers'
@@ -14,7 +14,7 @@ export const initialState = {}
 export default combineReducers({
     routing,
     live: liveReducer,
-    bs: boxScoresReducer,
+    bs: boxScoresDetailsReducer,
     date: dateReducer,
     standings: standingsReducer,
     playoff: playoffReducer,

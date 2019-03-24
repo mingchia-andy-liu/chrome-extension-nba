@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import browser from './browser'
 import { store } from '../store'
-import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScores/actions'
+import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScoresDetails/actions'
 import { fetchGamesIfNeeded } from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/constant'
 

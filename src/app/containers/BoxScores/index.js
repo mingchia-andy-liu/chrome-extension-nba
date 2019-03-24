@@ -1,1 +1,1 @@
-export  { default } from './BoxScores'
+export { default } from './BoxScores'

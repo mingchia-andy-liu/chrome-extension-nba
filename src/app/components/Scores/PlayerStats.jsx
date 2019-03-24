@@ -18,7 +18,7 @@ import {
     hasDoubles,
     toPercentage
 } from '../../utils/common'
-import { SettingsConsumer, ThemeConsumer } from '../Context'
+import { BoxScoreConsumer, ThemeConsumer } from '../Context'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -194,7 +194,7 @@ class PlayerStats extends React.PureComponent {
             <Wrapper>
                 <ThemeConsumer>
                     {({ state: {dark} }) => (
-                        <SettingsConsumer>
+                        <BoxScoreConsumer>
                             {({ state: { hideZeroRow } }) => (
                                 <StickyTable stickyHeaderCount={0}>
                                     {renderHeaderRow(vta)}
@@ -203,7 +203,7 @@ class PlayerStats extends React.PureComponent {
                                     {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
                                 </StickyTable>
                             )}
-                        </SettingsConsumer>
+                        </BoxScoreConsumer>
                     )}
                 </ThemeConsumer>
             </Wrapper>

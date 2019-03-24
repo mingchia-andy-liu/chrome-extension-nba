@@ -7,7 +7,12 @@ import Standings from '../Standings'
 import Options from '../Options'
 import Changelog from '../Changelog'
 import Playoffs from '../Playoffs'
-import { BroadcastProvider, SettingsProvider, ThemeProvider  } from '../../components/Context'
+import {
+    SidebarProvider,
+    SettingsProvider,
+    ThemeProvider,
+    BoxScoreProvider
+} from '../../components/Context'
 
 import 'react-sticky-table/dist/react-sticky-table.css'
 import 'flatpickr/dist/flatpickr.min.css'
@@ -22,22 +27,24 @@ class App extends React.Component {
     render() {
         return (
             <ThemeProvider>
-                <BroadcastProvider>
-                    <SettingsProvider>
-                        <AppBase>
-                            <Switch>
-                                <Route exact path="/popup" component={ PopUp } />
-                                <Route path="/boxscores/:id" component={ BoxScores } />
-                                <Route path="/boxscores" component={ BoxScores } />
-                                <Route exact path="/changelog" component={ Changelog } />
-                                <Route exact path="/options" component={ Options } />
-                                <Route exact path="/playoffs" component={ Playoffs } />
-                                <Route exact path="/standings" component={ Standings } />
-                                <Redirect path="*" to="/popup" />
-                            </Switch>
-                        </AppBase>
-                    </SettingsProvider>
-                </BroadcastProvider>
+                <SidebarProvider>
+                    <BoxScoreProvider>
+                        <SettingsProvider>
+                            <AppBase>
+                                <Switch>
+                                    <Route exact path="/popup" component={ PopUp } />
+                                    <Route path="/boxscores/:id" component={ BoxScores } />
+                                    <Route path="/boxscores" component={ BoxScores } />
+                                    <Route exact path="/changelog" component={ Changelog } />
+                                    <Route exact path="/options" component={ Options } />
+                                    <Route exact path="/playoffs" component={ Playoffs } />
+                                    <Route exact path="/standings" component={ Standings } />
+                                    <Redirect path="*" to="/popup" />
+                                </Switch>
+                            </AppBase>
+                        </SettingsProvider>
+                    </BoxScoreProvider>
+                </SidebarProvider>
             </ThemeProvider>
         )
     }

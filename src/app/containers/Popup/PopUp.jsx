@@ -21,6 +21,17 @@ const Wrapper = styled(Column)`
 `
 
 class PopUp extends React.Component {
+    static propTypes = {
+        live: PropTypes.object.isRequired,
+        date: PropTypes.shape({
+            date: PropTypes.object.isRequired,
+        }),
+        fetchGamesIfNeeded: PropTypes.func.isRequired,
+        history: PropTypes.shape({
+            push: PropTypes.func.isRequired,
+        }),
+    }
+
     constructor(props) {
         super(props)
 
@@ -46,6 +57,20 @@ class PopUp extends React.Component {
         document.title = 'Box Scores | Popup'
     }
 
+    componentDidUpdate(prevProps) {
+        const prevDate = prevProps.date.date
+        const {
+            fetchGamesIfNeeded,
+            date: {
+                date: currDate,
+            },
+        } = this.props
+        if(!moment(currDate).isSame(prevDate)) {
+            // props is already updated date, force update.
+            fetchGamesIfNeeded(moment(currDate).format(DATE_FORMAT), null, true, false)
+        }
+    }
+
     selectGame(e) {
         const { isPopup, date } = this.state
         const id = e.currentTarget.dataset.id
@@ -57,7 +82,7 @@ class PopUp extends React.Component {
         }
     }
 
-    selectDate(date) {
+    selectDate = (date) => {
         this.setState({date})
     }
 
@@ -65,28 +90,22 @@ class PopUp extends React.Component {
         const { live } = this.props
         return (
             <Wrapper>
-                <DatePicker hide={this.state.isPopup} onChange={this.selectDate.bind(this)}/>
+                <DatePicker hide={this.state.isPopup} onChange={this.selectDate}/>
                 <Links />
                 <ButtonsWrapper>
                     <DarkModeCheckbox />
                     <NoSpoilerCheckbox />
                     <BroadcastCheckbox />
                 </ButtonsWrapper>
-                <CardList selected={'0'} isLoading={live.isLoading} games={live.games} onClick={this.selectGame.bind(this)}/>
+                <CardList
+                    selected={'0'}
+                    isLoading={live.isLoading}
+                    games={live.games}
+                    onClick={this.selectGame.bind(this)}
+                />
             </Wrapper>
         )
     }
-}
-
-PopUp.propTypes = {
-    live: PropTypes.object.isRequired,
-    date: PropTypes.shape({
-        date: PropTypes.object.isRequired,
-    }),
-    fetchGamesIfNeeded: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-        push: PropTypes.func.isRequired,
-    }),
 }
 
 const mapStateToProps = ({ live, date }) => ({

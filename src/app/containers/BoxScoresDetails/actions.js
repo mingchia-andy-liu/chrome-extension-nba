@@ -76,7 +76,11 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     }
 }
 
-export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getState) => {
+export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => async (dispatch, getState) => {
+    if (gid == null || gid === '') {
+        return
+    }
+
     const apiDate = getAPIDate()
     // if the date is in the future, then exit early
     if (moment(dateStr).isAfter(apiDate)) {
@@ -102,7 +106,9 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid) => async (dispatch, getSt
             return
         }
     }
-    return await fetchLiveGameBox(dispatch, dateStr, gid, oldGid === gid)
+    // make sure to show the loading screen when in didUpdate()
+    isBackground = isBackground === false ? false : oldGid === gid
+    return await fetchLiveGameBox(dispatch, dateStr, gid, isBackground)
 }
 
 export const resetLiveGameBox = () => (dispatch) => {
