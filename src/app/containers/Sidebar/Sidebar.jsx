@@ -90,6 +90,7 @@ class Sidebar extends React.Component {
 
     dateOnChange = () => {
         this.props.history.replace('/boxscores')
+        this.setState({id: ''})
     }
 
     render() {
