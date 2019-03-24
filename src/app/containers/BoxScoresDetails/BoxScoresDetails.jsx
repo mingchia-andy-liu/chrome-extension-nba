@@ -54,7 +54,7 @@ class BoxScoresDetails extends React.Component {
             date: {date},
         } = this.props
         const dateStr = moment(date).format(DATE_FORMAT)
-        const queryDate = getDateFromQuery(this.props.location.search)
+        const queryDate = getDateFromQuery(this.props)
 
         this.state = {
             id: id ? id : '',

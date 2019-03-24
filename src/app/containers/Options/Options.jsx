@@ -144,10 +144,10 @@ class Options extends React.Component {
                         <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
                     </NotificationWrapper>
                 } */}
+                <DarkModeCheckbox />
+                <HideZeroRowCheckbox />
                 <BroadcastCheckbox />
                 <NoSpoilerCheckbox />
-                <HideZeroRowCheckbox />
-                <DarkModeCheckbox />
             </ButtonsWrapper>
         )
     }
