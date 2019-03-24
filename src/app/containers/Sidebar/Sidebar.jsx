@@ -83,7 +83,8 @@ class Sidebar extends React.Component {
         } else {
             this.props.history.push(`/boxscores/${id}`)
         }
-
+        const { date } = this.state
+        this.props.fetchLiveGameBoxIfNeeded(date, id)
         this.setState({ id })
     }
 

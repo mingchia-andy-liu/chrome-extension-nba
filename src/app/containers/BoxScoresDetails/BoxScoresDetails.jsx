@@ -21,6 +21,7 @@ import {
     renderAdvancedTeamStats,
     renderPlaybyPlay
 } from './helpers'
+import { getDateFromQuery } from '../../utils/common'
 
 
 class BoxScoresDetails extends React.Component {
@@ -52,17 +53,12 @@ class BoxScoresDetails extends React.Component {
             match : { params : { id } },
             date: {date},
         } = this.props
-        let dateStr = moment(date).format(DATE_FORMAT)
-
-        const queryString = require('query-string')
-        const { date: queryDate } = queryString.parse(this.props.location.search)
-        if (queryDate) {
-            dateStr = queryDate
-        }
+        const dateStr = moment(date).format(DATE_FORMAT)
+        const queryDate = getDateFromQuery(this.props.location.search)
 
         this.state = {
             id: id ? id : '',
-            date: dateStr,
+            date: queryDate == null ? dateStr : queryDate,
         }
     }
 
@@ -71,18 +67,6 @@ class BoxScoresDetails extends React.Component {
         // TODO: when sync store, read the proper date from the localStorage
         this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
         this.props.fetchLiveGameBoxIfNeeded(date, id, false)
-    }
-
-    componentDidUpdate(prevProps) {
-        const {
-            date: {date},
-            match: { params: {id} },
-            fetchLiveGameBoxIfNeeded,
-        } = this.props
-        if (id !== prevProps.match.params.id) {
-            const dateStr = moment(date).format(DATE_FORMAT)
-            fetchLiveGameBoxIfNeeded(dateStr, id, false)
-        }
     }
 
     componentWillUnmount() {
