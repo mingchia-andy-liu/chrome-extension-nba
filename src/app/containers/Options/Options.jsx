@@ -3,8 +3,13 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import Checkbox from '../../components/Checkbox'
-import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
+import {
+    BroadcastCheckbox,
+    NoSpoilerCheckbox,
+    HideZeroRowCheckbox,
+    DarkModeCheckbox
+} from '../../components/Checkbox'
+import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
 import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
@@ -57,20 +62,28 @@ class Options extends React.Component {
         })
     }
 
-    renderHeader(isDark) {
+    renderHeader() {
         return (
-            <React.Fragment>
-                <RouterLink dark={isDark ? 1 : undefined} to="changelog">Changelog</RouterLink>
-                <p>If you have any questions, please email to
-                    <HrefLink
-                        dark={isDark ? 1 : undefined}
-                        href={`mailto:box.scores.extension@gmail.com?subject=${encodeURIComponent('Feedback on the Basketball Box Scores extension')}`}
-                    >
-                        here
-                    </HrefLink>
-                    .
-                </p>
-            </React.Fragment>
+            <ThemeConsumer>
+                {({ state: {dark}}) => (
+                    <React.Fragment>
+                        <RouterLink
+                            dark={dark ? 1 : undefined} to="changelog"
+                        >
+                        Changelog
+                        </RouterLink>
+                        <p>If you have any questions, please email to
+                            <HrefLink
+                                dark={dark ? 1 : undefined}
+                                href={`mailto:box.scores.extension@gmail.com?subject=${encodeURIComponent('Feedback on the Basketball Box Scores extension')}`}
+                            >
+                            here
+                            </HrefLink>
+                        .
+                        </p>
+                    </React.Fragment>
+                )}
+            </ThemeConsumer>
         )
     }
 
@@ -111,21 +124,16 @@ class Options extends React.Component {
         )
     }
 
-    renderContent(settingsContext, themeContext) {
+    renderContent(sidebarContext) {
         // const { hasNotificationPermission } = this.state
-        const { team, hideZeroRow, broadcast, spoiler } = settingsContext.state
-        const { dark } = themeContext.state
+        const { team } = sidebarContext.state
         const {
-            updateBroadcast,
-            updateHideZeroRow,
-            updateNoSpoiler,
             updateTeam,
-        } = settingsContext.actions
-        const { updateTheme } = themeContext.actions
+        } = sidebarContext.actions
 
         return (
             <ButtonsWrapper>
-                {this.renderHeader(dark)}
+                {this.renderHeader()}
                 {this.renderTeams(team, updateTeam)}
                 {/* {hasNotificationPermission
                     ? <NotificationWrapper>
@@ -136,10 +144,10 @@ class Options extends React.Component {
                         <button onClick={this.requestNotification.bind(this)}>Grant Permission</button>
                     </NotificationWrapper>
                 } */}
-                <Checkbox checked={dark === true} text="Dark Theme" onChange={updateTheme} />
-                <Checkbox checked={hideZeroRow === true} text="Hide Player Who Has Not Played" onChange={updateHideZeroRow} />
-                <Checkbox checked={broadcast === true} text="Show Broadcasters" onChange={updateBroadcast} />
-                <Checkbox checked={spoiler === true} text="No Spoiler" onChange={updateNoSpoiler} />
+                <DarkModeCheckbox />
+                <HideZeroRowCheckbox />
+                <BroadcastCheckbox />
+                <NoSpoilerCheckbox />
             </ButtonsWrapper>
         )
     }
@@ -149,13 +157,11 @@ class Options extends React.Component {
             <Layout>
                 <Layout.Header>{<Header index={3}/>}</Layout.Header>
                 <Layout.Content>
-                    <ThemeConsumer>
-                        {themeContext => (
-                            <SettingsConsumer>
-                                {settingsContext => this.renderContent(settingsContext, themeContext)}
-                            </SettingsConsumer>
+                    <SidebarConsumer>
+                        {sidebarContext => (
+                            this.renderContent( sidebarContext)
                         )}
-                    </ThemeConsumer>
+                    </SidebarConsumer>
                 </Layout.Content>
             </Layout>
         )

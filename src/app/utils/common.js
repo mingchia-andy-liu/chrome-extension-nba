@@ -166,3 +166,16 @@ export const getOddRowColor = (i, isDark) => {
         else return 'hsl(0, 0%, 95%)'
     }
 }
+
+/**
+ * noop
+ */
+export const noop = () => {}
+
+const queryString = require('query-string')
+export const getDateFromQuery = (props) => {
+    const { date: queryDate } = queryString.parse(props.location.search)
+    if (queryDate) {
+        return queryDate
+    }
+}

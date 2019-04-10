@@ -6,26 +6,26 @@ import browser from '../../utils/browser'
 
 const Context = React.createContext()
 
-export class BroadcastProvider extends React.Component {
+export class BoxScoreProvider extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            broadcast: false,
+            hideZeroRow: false,
         }
 
-        browser.getItem(['broadcast'], (data) => {
+        browser.getItem(['hideZeroRow'], (data) => {
             this.setState({
-                broadcast: data.broadcast ? data.broadcast : false,
+                hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
             })
         })
     }
 
     static propTypes = { children: PropTypes.node }
 
-    updateBroadcast = () => {
-        this.setState({ broadcast: !this.state.broadcast }, () => {
-            browser.setItem({ broadcast: this.state.broadcast })
+    updateHideZeroRow = () => {
+        this.setState({ hideZeroRow: !this.state.hideZeroRow }, () => {
+            browser.setItem({ hideZeroRow: this.state.hideZeroRow })
         })
     }
 
@@ -34,7 +34,7 @@ export class BroadcastProvider extends React.Component {
             <Context.Provider value={{
                 state: this.state,
                 actions: {
-                    updateBroadcast: this.updateBroadcast,
+                    updateHideZeroRow: this.updateHideZeroRow,
                 },
             }}>
                 {this.props.children}
@@ -43,4 +43,4 @@ export class BroadcastProvider extends React.Component {
     }
 }
 
-export const BroadcastConsumer = Context.Consumer
+export const BoxScoreConsumer = Context.Consumer

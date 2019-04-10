@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
-import { SettingsConsumer, BroadcastConsumer } from './Context'
+import { SidebarConsumer } from './Context'
 import browser from '../utils/browser'
 
 
@@ -79,17 +79,13 @@ class CardList extends React.PureComponent {
         }
 
         return (
-            <BroadcastConsumer>
-                {({state: { broadcast }}) => (
-                    <SettingsConsumer>
-                        {({state: { team }}) => (
-                            <Wrapper isPopup={isPopup}>
-                                {generateCards(games, selected, team, broadcast, rest)}
-                            </Wrapper>
-                        )}
-                    </SettingsConsumer>
+            <SidebarConsumer>
+                {({state: { broadcast, team }}) => (
+                    <Wrapper isPopup={isPopup}>
+                        {generateCards(games, selected, team, broadcast, rest)}
+                    </Wrapper>
                 )}
-            </BroadcastConsumer>
+            </SidebarConsumer>
         )
     }
 }
@@ -97,11 +93,12 @@ class CardList extends React.PureComponent {
 CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
-    selected: PropTypes.string.isRequired,
+    selected: PropTypes.string,
 }
 
 CardList.defaultProps = {
     isLoading: false,
+    selected: '',
 }
 
 export default CardList
