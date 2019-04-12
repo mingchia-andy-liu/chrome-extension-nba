@@ -179,3 +179,14 @@ export const getDateFromQuery = (props) => {
         return queryDate
     }
 }
+
+export const delay = (t = 500) => new Promise((res) => (setTimeout(res, t)))
+
+export const waitUntilFinish = async (getValue, expected, ms = 500, tries = 10) => {
+    for (let i = 0; i < tries; i++) {
+        await delay(ms)
+        if (getValue() === expected) {
+            break
+        }
+    }
+}
