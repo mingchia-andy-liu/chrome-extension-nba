@@ -45,7 +45,7 @@ const fetchGameDetail = async (dateStr, gid) => {
 
 const fetchGameHighlight = async (gid) => {
     try {
-        const res = await fetch(`http://boxscores.site/.netlify/functions/video/${gid}`)
+        const res = await fetch(`https://boxscores.site/v/${gid}`)
         const {url} = await res.json()
         return url
     } catch (error) {
@@ -72,6 +72,8 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground, urls) => {
         let url = null
         if (urls[gid] == null) {
             url = await fetchGameHighlight(gid)
+        } else {
+            url = urls[gid]
         }
 
         if (isEmpty(boxScoreData) && isEmpty(pbpData)) {

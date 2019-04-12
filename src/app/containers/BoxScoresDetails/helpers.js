@@ -14,7 +14,9 @@ import { isWinning } from '../../utils/common'
 import {
     HintText,
     Subtitle,
-    Title
+    Title,
+    HighlightButton,
+    HighlightWrapper
 } from './styles'
 
 export const renderTitle = (bsData) => {
@@ -143,4 +145,20 @@ export const renderHints = (dark) => {
             {HintText(dark, 't', 'Triple Doubles')}
         </Row>
     )
+}
+
+export const renderHighlightButton = (url, dark, callback) => {
+    if (url) {
+        return (
+            <HighlightWrapper onClick={callback}>
+                <HighlightButton
+                    src={dark ? 'assets/png/video-light.png' : 'assets/png/video-dark.png'}
+                    alt="YouTube Highlight Video"
+                    dark={dark}
+                />
+                <span>YouTube Highligh Video</span>
+            </HighlightWrapper>
+        )
+    }
+    return undefined
 }

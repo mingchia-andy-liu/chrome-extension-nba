@@ -19,10 +19,12 @@ import {
     renderPlayerStats,
     renderTeamStats,
     renderAdvancedTeamStats,
-    renderPlaybyPlay
+    renderPlaybyPlay,
+    renderHighlightButton
 } from './helpers'
 import { getDateFromQuery } from '../../utils/common'
-
+import modalType from '../Modal/modal-types'
+import { toggleModal } from '../Modal/actions'
 
 class BoxScoresDetails extends React.Component {
     static propTypes = {
@@ -31,6 +33,7 @@ class BoxScoresDetails extends React.Component {
             bsData: PropTypes.object.isRequired,
             pbpData: PropTypes.object.isRequired,
             teamStats: PropTypes.object.isRequired,
+            urls: PropTypes.object.isRequired,
         }),
         date: PropTypes.shape({
             date: PropTypes.object.isRequired,
@@ -43,27 +46,40 @@ class BoxScoresDetails extends React.Component {
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
         resetLiveGameBox: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
+        toggleModal: PropTypes.func.isRequired,
     }
-
 
     constructor(props) {
         super(props)
 
         const {
-            match : { params : { id } },
             date: {date},
         } = this.props
         const dateStr = moment(date).format(DATE_FORMAT)
         const queryDate = getDateFromQuery(this.props)
 
         this.state = {
-            id: id ? id : '',
             date: queryDate == null ? dateStr : queryDate,
         }
     }
 
+    clickHighlight = () => {
+        const { bs: { urls } } = this.props
+        const id = this.getIdFromProps()
+        const url = urls[id]
+        this.props.toggleModal({
+            modalType: modalType.HIGHLIGH_VIDEO,
+            src: `https://youtube.com/embed/${url}`,
+        })
+    }
+
+    getIdFromProps = () => {
+        return this.props.match.params.id
+    }
+
     componentDidMount() {
-        const { date, id } = this.state
+        const { date } = this.state
+        const id = this.getIdFromProps()
         // TODO: when sync store, read the proper date from the localStorage
         this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
         this.props.fetchLiveGameBoxIfNeeded(date, id, false)
@@ -74,7 +90,7 @@ class BoxScoresDetails extends React.Component {
     }
 
     renderContent(spoiler, dark) {
-        const { bs: { bsData, pbpData, teamStats } } = this.props
+        const { bs: { bsData, pbpData, teamStats, urls } } = this.props
         // Route expects a function for component prop
         const contentComponent = () => {
             if (
@@ -91,9 +107,12 @@ class BoxScoresDetails extends React.Component {
                         </Overlay>
                     )
                 }
+                const id = this.getIdFromProps()
+                const url = urls[id]
                 return (
                     <React.Fragment>
                         {renderTitle(bsData)}
+                        {renderHighlightButton(url, dark, this.clickHighlight)}
                         <h3>Summary</h3>
                         {renderSummary(bsData)}
                         <h3>Player Stats</h3>
@@ -150,6 +169,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchLiveGameBoxIfNeeded,
         resetLiveGameBox,
         dispatchChangeDate,
+        toggleModal,
     }, dispatch)
 }
 
