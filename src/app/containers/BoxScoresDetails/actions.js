@@ -82,11 +82,9 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
         return
     }
 
-    const momentDate = moment(dateStr)
-
     const apiDate = getAPIDate()
     // if the date is in the future, then exit early
-    if (momentDate.isAfter(apiDate)) {
+    if (moment(dateStr).isAfter(apiDate)) {
         return
     }
 
@@ -97,8 +95,7 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
     // if live is loading, wait to see if game exists
     if (isLiveLoading) {
         await waitUntilFinish(() => {
-            const {live} = getState()
-            return live.isLoading
+            return getState().live.isLoading
         }, false)
     }
 
