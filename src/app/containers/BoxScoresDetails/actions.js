@@ -3,6 +3,7 @@ import moment from 'moment'
 import types from './types'
 import getAPIDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
+import { waitUntilFinish } from '../../utils/common'
 
 const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`
@@ -106,14 +107,31 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
     }
 
     const {
+        live: { isLoading: isLiveLoading},
+    } = getState()
+
+    // if live is loading, wait to see if game exists
+    if (isLiveLoading) {
+        await waitUntilFinish(() => {
+            return getState().live.isLoading
+        }, false)
+    }
+
+    const {
         bs: {
             bsData,
             gid: oldGid,
             urls,
         },
         date: { date },
-        live: { lastUpdate },
+        live: { lastUpdate, games: liveGames },
     } = getState()
+
+    const isFound = liveGames.find((game) => game.id === gid)
+    if (!isFound) {
+        return
+    }
+
     const oldDateStr = moment(date).format(DATE_FORMAT)
     const updateDiff = moment().diff(lastUpdate, 'seconds')
 

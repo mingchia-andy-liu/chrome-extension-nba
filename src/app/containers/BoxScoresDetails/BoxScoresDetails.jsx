@@ -42,6 +42,9 @@ class BoxScoresDetails extends React.Component {
             pathname: PropTypes.string.isRequired,
             search: PropTypes.string.isRequired,
         }),
+        history: PropTypes.shape({
+            push: PropTypes.func.isRequired,
+        }),
         match: PropTypes.object.isRequired,
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
         resetLiveGameBox: PropTypes.func.isRequired,
@@ -83,6 +86,11 @@ class BoxScoresDetails extends React.Component {
         // TODO: when sync store, read the proper date from the localStorage
         this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
         this.props.fetchLiveGameBoxIfNeeded(date, id, false)
+        if (this.props.location.search !== '') {
+            this.props.history.push({
+                search: '',
+            })
+        }
     }
 
     componentWillUnmount() {
