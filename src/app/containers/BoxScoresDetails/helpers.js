@@ -156,7 +156,7 @@ export const renderHighlightButton = (url, dark, callback) => {
                     alt="YouTube Highlight Video"
                     dark={dark}
                 />
-                <span>YouTube Highligh Video</span>
+                <span>YouTube Highligh Video(beta)</span>
             </HighlightWrapper>
         )
     }

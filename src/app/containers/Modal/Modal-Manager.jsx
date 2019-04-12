@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import styled,{ keyframes } from 'styled-components'
 import * as actions from './actions'
 import modal from './modal'
+import { mediaQuery } from '../../styles'
 
 
 const fadeIn = keyframes`
@@ -57,6 +58,10 @@ const Close = styled.div`
     font-size: calc(12px + 1vw);
     z-index: 500;
     cursor: pointer;
+
+    ${mediaQuery`
+        font-size: calc(20px + 1vw);
+    `}
 `
 
 class ModalManager extends PureComponent {
