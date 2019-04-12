@@ -13,9 +13,9 @@ const Wrapper = styled.div`
 
     ${mediaQuery`
         min-height: 100px;
-        max-height: 250px;
         padding: 0 5px 10px 5px;
         ${(props) => (props.isPopup && 'max-height: 350px;')}
+        ${(props) => (props.isSidebar && 'max-height: 250px;')}
         overflow-y: scroll;
     `}
 `
@@ -61,7 +61,7 @@ class CardList extends React.PureComponent {
     }
 
     render() {
-        const { games, isLoading, selected, ...rest} = this.props
+        const { games, isLoading, selected, isSidebar, ...rest} = this.props
         const { isPopup } = this.state
         if (isLoading) {
             return (
@@ -81,7 +81,7 @@ class CardList extends React.PureComponent {
         return (
             <SidebarConsumer>
                 {({state: { broadcast, team }}) => (
-                    <Wrapper isPopup={isPopup}>
+                    <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
                         {generateCards(games, selected, team, broadcast, rest)}
                     </Wrapper>
                 )}
@@ -94,10 +94,15 @@ CardList.propTypes = {
     games: PropTypes.arrayOf(PropTypes.object).isRequired,
     isLoading: PropTypes.bool,
     selected: PropTypes.string,
+    /**
+     * is card list loading in sidebar of bs. If so, need custom css
+     */
+    isSidebar: PropTypes.bool,
 }
 
 CardList.defaultProps = {
     isLoading: false,
+    isSidebar: false,
     selected: '',
 }
 
