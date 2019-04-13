@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
+import Loader from '../../components/Loader'
 import Sidebar from '../Sidebar'
 import BoxScoresDetails from '../BoxScoresDetails'
 import { Wrapper } from './styles'
@@ -44,6 +45,7 @@ class BoxScores extends React.PureComponent {
         const queryDate = getDateFromQuery(this.props)
 
         this.state = {
+            isLoading: true,
             date: queryDate == null ? dateStr : queryDate,
         }
 
@@ -53,12 +55,16 @@ class BoxScores extends React.PureComponent {
     componentDidMount() {
         const { date } = this.state
         // TODO: when sync store, read the proper date from the localStorage
-        this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
-        if (this.props.location.search !== '') {
-            this.props.history.push({
-                search: '',
+        this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate()).then(() => {
+            if (this.props.location.search !== '') {
+                this.props.history.push({
+                    search: '',
+                })
+            }
+            this.setState({
+                isLoading: false,
             })
-        }
+        })
     }
 
     getIdFromProps = () => {
@@ -68,15 +74,22 @@ class BoxScores extends React.PureComponent {
     render() {
         const id = this.getIdFromProps()
         const {date: {date}} = this.props
+        const {isLoading} = this.state
 
         return (
             <Layout>
                 <Layout.Header>{<Header index={0}/>}</Layout.Header>
                 <Layout.Content>
-                    <Wrapper>
-                        <Sidebar id={id} date={date}/>
-                        <BoxScoresDetails id={id} date={date}/>
-                    </Wrapper>
+                    {
+                        isLoading
+                            ? <Loader />
+                            : (
+                                <Wrapper>
+                                    <Sidebar id={id} date={date}/>
+                                    <BoxScoresDetails id={id} date={date}/>
+                                </Wrapper>
+                            )
+                    }
                 </Layout.Content>
             </Layout>
         )

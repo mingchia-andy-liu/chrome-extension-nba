@@ -105,6 +105,16 @@ export default (state = initState, action) => {
                 },
             }
         }
+        case types.UPDATE_VID: {
+            const { gid, url } = action.payload
+            return {
+                ...state,
+                urls: {
+                    ...state.urls,
+                    [gid]: url,
+                },
+            }
+        }
         case types.REQUEST_ERROR:
         case types.RESET:
             return {

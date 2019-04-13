@@ -12,7 +12,7 @@ import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
 import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
-import { fetchLiveGameBoxIfNeeded } from '../BoxScoresDetails/actions'
+import { fetchLiveGameBoxIfNeeded, fetchGameHighlightIfNeeded } from '../BoxScoresDetails/actions'
 
 
 const Wrapper = styled.div`
@@ -27,6 +27,7 @@ class Sidebar extends React.Component {
 
         fetchGamesIfNeeded: PropTypes.func.isRequired,
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
+        fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
 
         history: PropTypes.object.isRequired,
@@ -70,7 +71,9 @@ class Sidebar extends React.Component {
             this.props.history.push(`/boxscores/${id}`)
         }
         const dateStr = moment(date).format(DATE_FORMAT)
-        this.props.fetchLiveGameBoxIfNeeded(dateStr, id)
+        this.props.fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
+            this.props.fetchGameHighlightIfNeeded(id)
+        })
         this.setState({ id })
     }
 
@@ -110,6 +113,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchGamesIfNeeded,
         dispatchChangeDate,
         fetchLiveGameBoxIfNeeded,
+        fetchGameHighlightIfNeeded,
     }, dispatch)
 }
 

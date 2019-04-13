@@ -7,7 +7,7 @@ import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
-import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
+import { fetchLiveGameBoxIfNeeded, resetLiveGameBox, fetchGameHighlightIfNeeded } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
 import { Content } from './styles'
 import {
@@ -33,18 +33,12 @@ class BoxScoresDetails extends React.Component {
             urls: PropTypes.object.isRequired,
         }),
         date: PropTypes.object.isRequired,
-        // location: PropTypes.shape({
-        //     pathname: PropTypes.string.isRequired,
-        //     search: PropTypes.string.isRequired,
-        // }),
-        // history: PropTypes.shape({
-        //     push: PropTypes.func.isRequired,
-        // }),
-        // match: PropTypes.object.isRequired,
+
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
         resetLiveGameBox: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
+        fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
         id: PropTypes.string,
     }
 
@@ -65,7 +59,9 @@ class BoxScoresDetails extends React.Component {
     componentDidMount() {
         const {date} = this.props
         const id = this.getIdFromProps()
-        this.props.fetchLiveGameBoxIfNeeded(date, id, false)
+        this.props.fetchLiveGameBoxIfNeeded(date, id, false).then(() => {
+            this.props.fetchGameHighlightIfNeeded(id)
+        })
     }
 
     componentWillUnmount() {
@@ -152,6 +148,7 @@ const mapDispatchToProps = (dispatch) => {
         resetLiveGameBox,
         dispatchChangeDate,
         toggleModal,
+        fetchGameHighlightIfNeeded,
     }, dispatch)
 }
 

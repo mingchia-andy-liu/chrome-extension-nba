@@ -1,3 +1,4 @@
+import { push } from 'react-router-redux'
 import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
@@ -54,7 +55,7 @@ const fetchGameHighlight = async (gid) => {
     }
 }
 
-const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground, urls) => {
+const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     try {
         // has the UI been shown yet, if so, don't show the loading spinner
         if (!isBackground) {
@@ -70,13 +71,6 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground, urls) => {
             fetchGameDetail(dateStr, gid)
         ])
 
-        let url = null
-        if (urls[gid] == null) {
-            url = await fetchGameHighlight(gid)
-        } else {
-            url = urls[gid]
-        }
-
         if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
             throw Error()
         }
@@ -87,11 +81,36 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground, urls) => {
                 boxScoreData,
                 gid,
                 pbpData,
-                url,
             },
         })
     } catch (error) {
         dispatch({ type: types.REQUEST_ERROR })
+    }
+}
+
+export const fetchGameHighlightIfNeeded = (gid) => async (dispatch, getState) => {
+    const {
+        bs: {
+            bsData,
+            urls,
+        },
+    } = getState()
+
+    if (bsData && bsData.periodTime && bsData.periodTime.gameStatus === '3') {
+        let url = null
+        if (urls[gid] == null) {
+            url = await fetchGameHighlight(gid)
+        } else {
+            url = urls[gid]
+        }
+
+        dispatch({
+            type: types.UPDATE_VID,
+            payload: {
+                gid,
+                url,
+            },
+        })
     }
 }
 
@@ -121,7 +140,6 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
         bs: {
             bsData,
             gid: oldGid,
-            urls,
         },
         date: { date },
         live: { lastUpdate, games: liveGames },
@@ -129,6 +147,7 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
 
     const selectedGame = liveGames.find((game) => game.id === gid)
     if (!selectedGame) {
+        dispatch(push('/boxscores'))
         return
     }
 
@@ -150,7 +169,7 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
     }
     // make sure to show the loading screen when in didUpdate()
     isBackground = isBackground === false ? false : oldGid === gid
-    return await fetchLiveGameBox(dispatch, dateStr, gid, isBackground, urls)
+    return await fetchLiveGameBox(dispatch, dateStr, gid, isBackground)
 }
 
 export const resetLiveGameBox = () => (dispatch) => {
