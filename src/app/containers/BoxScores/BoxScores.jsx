@@ -21,7 +21,6 @@ class BoxScores extends React.PureComponent {
             date: PropTypes.object.isRequired,
         }),
         location: PropTypes.shape({
-            pathname: PropTypes.string.isRequired,
             search: PropTypes.string.isRequired,
         }),
         history: PropTypes.shape({

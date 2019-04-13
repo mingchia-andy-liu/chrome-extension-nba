@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import browser from './browser'
 import { store } from '../store'
-import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScoresDetails/actions'
+import { fetchLiveGameBoxIfNeeded, fetchGameHighlightIfNeeded } from '../containers/BoxScoresDetails/actions'
 import { fetchGamesIfNeeded } from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/constant'
 
@@ -20,7 +20,9 @@ browser.alarms.onAlarm.addListener((alarm) => {
         const dateStr = moment(date).format(DATE_FORMAT)
         fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState)
         if (bs && bs.gid !== '') {
-            fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch, store.getState)
+            fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch, store.getState).then(() => {
+                fetchGameHighlightIfNeeded(bs.gid)(store.dispatch, store.getState)
+            })
         }
     }
 })

@@ -84,9 +84,10 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
-            const { boxScoreData, gid, pbpData, url } = action.payload
+            const { boxScoreData, gid, pbpData } = action.payload
             const team = teamStatsExtrator(boxScoreData)
             return {
+                ...state,
                 bsData: sanitizeBS(convert(boxScoreData)),
                 gid,
                 isLoading: false,
@@ -98,10 +99,6 @@ export default (state = initState, action) => {
                         leadChanges: team.lc,
                         timesTied: team.tt,
                     },
-                },
-                urls: {
-                    ...state.urls,
-                    [gid]: url,
                 },
             }
         }

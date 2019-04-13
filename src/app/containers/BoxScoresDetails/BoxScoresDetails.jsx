@@ -32,14 +32,15 @@ class BoxScoresDetails extends React.Component {
             teamStats: PropTypes.object.isRequired,
             urls: PropTypes.object.isRequired,
         }),
-        date: PropTypes.object.isRequired,
 
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
         resetLiveGameBox: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
         fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
-        id: PropTypes.string,
+
+        id: PropTypes.string.isRequired,
+        date: PropTypes.object.isRequired,
     }
 
     clickHighlight = () => {
@@ -53,7 +54,7 @@ class BoxScoresDetails extends React.Component {
     }
 
     getIdFromProps = () => {
-        return this.props.id
+        return this.props.id || ''
     }
 
     componentDidMount() {
@@ -153,4 +154,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoxScoresDetails)
-
