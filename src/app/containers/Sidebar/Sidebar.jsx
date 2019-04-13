@@ -95,6 +95,7 @@ class Sidebar extends React.Component {
                 </ButtonsWrapper>
                 <CardList
                     isLoading={live.isLoading}
+                    isSidebar={true}
                     games={live.games}
                     onClick={this.selectGame}
                     selected={this.state.id}
