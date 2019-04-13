@@ -52,9 +52,9 @@ const StyledSeries = styled.div`
     height: 90%;
 `
 
-const SerieTeamRow = ({ teamId, seedNum, wins, isSeriesWinner, isTied }) => (
+const SerieTeamRow = ({ teamId, seedNum, wins, isWinning }) => (
     <StyledSerieTeamRow
-        winning={isSeriesWinner || isTied}
+        winning={isWinning}
         color={getLogoColorById(teamId)}
     >
         <div>{getTeamNameById(teamId)}{seedNum ? `(${seedNum})` : ''}</div>
@@ -67,13 +67,13 @@ SerieTeamRow.propTypes = {
     seedNum: PropTypes.string.isRequired,
     wins: PropTypes.string.isRequired,
     isSeriesWinner: PropTypes.bool.isRequired,
-    isTied: PropTypes.bool.isRequired,
+    isWinning: PropTypes.bool.isRequired,
 }
 
 const renderSerie = ({ isGameLive, seriesId, topRow, bottomRow}) => (
     <StyledSerie live={isGameLive} key={seriesId}>
-        {SerieTeamRow({...topRow, isTied: topRow.wins === bottomRow.wins})}
-        {SerieTeamRow({...bottomRow, isTied: topRow.wins === bottomRow.wins})}
+        {SerieTeamRow({...topRow, isWinning: topRow.wins >= bottomRow.wins})}
+        {SerieTeamRow({...bottomRow, isWinning: topRow.wins <= bottomRow.wins})}
     </StyledSerie>
 )
 
