@@ -1,9 +1,8 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Switch, Route, withRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import moment from 'moment-timezone'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
@@ -11,7 +10,6 @@ import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
 import { Content } from './styles'
-import { DATE_FORMAT } from '../../utils/constant'
 import {
     renderTitle,
     renderSummary,
@@ -22,7 +20,6 @@ import {
     renderPlaybyPlay,
     renderHighlightButton
 } from './helpers'
-import { getDateFromQuery } from '../../utils/common'
 import modalType from '../Modal/modal-types'
 import { toggleModal } from '../Modal/actions'
 
@@ -35,35 +32,20 @@ class BoxScoresDetails extends React.Component {
             teamStats: PropTypes.object.isRequired,
             urls: PropTypes.object.isRequired,
         }),
-        date: PropTypes.shape({
-            date: PropTypes.object.isRequired,
-        }),
-        location: PropTypes.shape({
-            pathname: PropTypes.string.isRequired,
-            search: PropTypes.string.isRequired,
-        }),
-        history: PropTypes.shape({
-            push: PropTypes.func.isRequired,
-        }),
-        match: PropTypes.object.isRequired,
+        date: PropTypes.object.isRequired,
+        // location: PropTypes.shape({
+        //     pathname: PropTypes.string.isRequired,
+        //     search: PropTypes.string.isRequired,
+        // }),
+        // history: PropTypes.shape({
+        //     push: PropTypes.func.isRequired,
+        // }),
+        // match: PropTypes.object.isRequired,
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
         resetLiveGameBox: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
         toggleModal: PropTypes.func.isRequired,
-    }
-
-    constructor(props) {
-        super(props)
-
-        const {
-            date: {date},
-        } = this.props
-        const dateStr = moment(date).format(DATE_FORMAT)
-        const queryDate = getDateFromQuery(this.props)
-
-        this.state = {
-            date: queryDate == null ? dateStr : queryDate,
-        }
+        id: PropTypes.string,
     }
 
     clickHighlight = () => {
@@ -77,20 +59,13 @@ class BoxScoresDetails extends React.Component {
     }
 
     getIdFromProps = () => {
-        return this.props.match.params.id
+        return this.props.id
     }
 
     componentDidMount() {
-        const { date } = this.state
+        const {date} = this.props
         const id = this.getIdFromProps()
-        // TODO: when sync store, read the proper date from the localStorage
-        this.props.dispatchChangeDate(moment(date, DATE_FORMAT).toDate())
         this.props.fetchLiveGameBoxIfNeeded(date, id, false)
-        if (this.props.location.search !== '') {
-            this.props.history.push({
-                search: '',
-            })
-        }
     }
 
     componentWillUnmount() {
@@ -167,9 +142,8 @@ class BoxScoresDetails extends React.Component {
 }
 
 
-const mapStateToProps = ({ bs, date }) => ({
+const mapStateToProps = ({ bs }) => ({
     bs,
-    date,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -181,4 +155,5 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch)
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BoxScoresDetails))
+export default connect(mapStateToProps, mapDispatchToProps)(BoxScoresDetails)
+

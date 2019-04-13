@@ -127,13 +127,18 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
         live: { lastUpdate, games: liveGames },
     } = getState()
 
-    const isFound = liveGames.find((game) => game.id === gid)
-    if (!isFound) {
+    const selectedGame = liveGames.find((game) => game.id === gid)
+    if (!selectedGame) {
         return
     }
 
     const oldDateStr = moment(date).format(DATE_FORMAT)
     const updateDiff = moment().diff(lastUpdate, 'seconds')
+
+    // if game hasn't start don't fetch
+    if (selectedGame.periodTime && selectedGame.periodTime.gameStatus === '1') {
+        return
+    }
 
     // if it's different day and different id, fetch new
     if (oldDateStr === dateStr && oldGid === gid) {
