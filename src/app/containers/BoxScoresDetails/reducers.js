@@ -120,7 +120,7 @@ export default (state = initState, action) => {
                 isLoading: false,
                 pbpData: {},
                 teamStats: {},
-                urls: {},
+                urls: state.urls,
             }
         default:
             return state
