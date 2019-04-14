@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import moment from 'moment-timezone'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
@@ -22,6 +23,7 @@ import {
 } from './helpers'
 import modalType from '../Modal/modal-types'
 import { toggleModal } from '../Modal/actions'
+import { DATE_FORMAT } from '../../utils/constant'
 
 class BoxScoresDetails extends React.Component {
     static propTypes = {
@@ -60,7 +62,8 @@ class BoxScoresDetails extends React.Component {
     componentDidMount() {
         const {date} = this.props
         const id = this.getIdFromProps()
-        this.props.fetchLiveGameBoxIfNeeded(date, id, false).then(() => {
+        const dateStr = moment(date).format(DATE_FORMAT)
+        this.props.fetchLiveGameBoxIfNeeded(dateStr, id, false).then(() => {
             this.props.fetchGameHighlightIfNeeded(id)
         })
     }
