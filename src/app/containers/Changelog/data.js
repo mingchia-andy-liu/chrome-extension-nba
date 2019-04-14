@@ -1,11 +1,19 @@
 module.exports = [
     {
+        version: '1.3.0 Updates: (2019-04-13)',
+        updates: [
+            'Add highlight videos from YouTube',
+            'Fix date issue related to the url',
+            'Fix playoff colors'
+        ],
+    },
+    {
         version: '1.2.10 Updates: (2019-03-31)',
         updates: [
             'Add settings to boxscores details page & popup window',
             'Add hints for doubles above player stats',
             'Add card list will have limited height when viewing in mobile',
-            'Fix loading text issue, now it will loading text instead of no games text',
+            'Fix loading text issue, now it will show loading text instead of no games text',
             'Fix popup date picker changes size while navigating between dates',
             'Fix occasional incorrect date being displayed',
             'Fix alarm update 1 minute trigger is inconsistent'
