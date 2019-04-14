@@ -1,3 +1,4 @@
+import { push } from 'react-router-redux'
 import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
@@ -44,6 +45,16 @@ const fetchGameDetail = async (dateStr, gid) => {
     }
 }
 
+const fetchGameHighlight = async (gid) => {
+    try {
+        const res = await fetch(`https://boxscores.site/v/${gid}`)
+        const {url} = await res.json()
+        return url
+    } catch (error) {
+        return null
+    }
+}
+
 const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     try {
         // has the UI been shown yet, if so, don't show the loading spinner
@@ -74,6 +85,32 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
         })
     } catch (error) {
         dispatch({ type: types.REQUEST_ERROR })
+    }
+}
+
+export const fetchGameHighlightIfNeeded = (gid) => async (dispatch, getState) => {
+    const {
+        bs: {
+            bsData,
+            urls,
+        },
+    } = getState()
+
+    if (bsData && bsData.periodTime && bsData.periodTime.gameStatus === '3') {
+        let url = null
+        if (urls[gid] == null) {
+            url = await fetchGameHighlight(gid)
+        } else {
+            url = urls[gid]
+        }
+
+        dispatch({
+            type: types.UPDATE_VID,
+            payload: {
+                gid,
+                url,
+            },
+        })
     }
 }
 
@@ -108,8 +145,9 @@ export const fetchLiveGameBoxIfNeeded = (dateStr, gid, isBackground = null) => a
         live: { lastUpdate, games: liveGames },
     } = getState()
 
-    const isFound = liveGames.find((game) => game.id === gid)
-    if (!isFound) {
+    const selectedGame = liveGames.find((game) => game.id === gid)
+    if (!selectedGame) {
+        dispatch(push('/boxscores'))
         return
     }
 

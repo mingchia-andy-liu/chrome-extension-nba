@@ -6,6 +6,7 @@ import boxScoresDetailsReducer from './containers/BoxScoresDetails/reducers'
 import dateReducer from './containers/DatePicker/reducers'
 import standingsReducer from './containers/Standings/reducers'
 import playoffReducer from './containers/Playoffs/reducers'
+import modalReducer from './containers/Modal/reducers'
 
 export const initialState = {}
 
@@ -18,4 +19,5 @@ export default combineReducers({
     date: dateReducer,
     standings: standingsReducer,
     playoff: playoffReducer,
+    modal: modalReducer,
 })

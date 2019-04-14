@@ -12,8 +12,7 @@ import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
 import { fetchGamesIfNeeded } from '../Popup/actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
-import { fetchLiveGameBoxIfNeeded } from '../BoxScoresDetails/actions'
-import { getDateFromQuery } from '../../utils/common'
+import { fetchLiveGameBoxIfNeeded, fetchGameHighlightIfNeeded } from '../BoxScoresDetails/actions'
 
 
 const Wrapper = styled.div`
@@ -22,13 +21,13 @@ const Wrapper = styled.div`
 
 class Sidebar extends React.Component {
     static propTypes = {
-        date: PropTypes.shape({
-            date: PropTypes.object.isRequired,
-        }),
+        id: PropTypes.string.isRequired,
+        date: PropTypes.object.isRequired,
         live: PropTypes.object.isRequired,
 
         fetchGamesIfNeeded: PropTypes.func.isRequired,
         fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
+        fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
         dispatchChangeDate: PropTypes.func.isRequired,
 
         history: PropTypes.object.isRequired,
@@ -36,38 +35,26 @@ class Sidebar extends React.Component {
             pathname: PropTypes.string.isRequired,
             search: PropTypes.string.isRequired,
         }),
-        match: PropTypes.object.isRequired,
     }
 
     constructor(props) {
         super(props)
 
-        const {
-            match : { params : { id } },
-            date: { date },
-        } = this.props
-        const dateStr = moment(date).format(DATE_FORMAT)
-        const queryDate = getDateFromQuery(this.props)
-
-
-        this.state = {
-            id: id ? id : '',
-            date: queryDate == null ? dateStr : queryDate,
-        }
+        const { id } = this.props
+        this.state = { id: id ? id : '' }
     }
 
     componentDidMount() {
-        const { date } = this.state
-        this.props.fetchGamesIfNeeded(date, null, true)
+        const { date } = this.props
+        const dateStr = moment(date).format(DATE_FORMAT)
+        this.props.fetchGamesIfNeeded(dateStr, null, true)
     }
 
     componentDidUpdate(prevProps) {
-        const prevDate = prevProps.date.date
+        const prevDate = prevProps.date
         const {
             fetchGamesIfNeeded,
-            date: {
-                date: currDate,
-            },
+            date: currDate,
         } = this.props
         if(!moment(currDate).isSame(prevDate)) {
             // props is already updated date, force update.
@@ -77,14 +64,16 @@ class Sidebar extends React.Component {
 
     selectGame = (e) => {
         const id = e.currentTarget.dataset.id
-        const { location: { pathname } } = this.props
+        const { location: { pathname }, date } = this.props
         if (pathname.startsWith('/boxscores')) {
             this.props.history.replace(`/boxscores/${id}`)
         } else {
             this.props.history.push(`/boxscores/${id}`)
         }
-        const { date } = this.state
-        this.props.fetchLiveGameBoxIfNeeded(date, id)
+        const dateStr = moment(date).format(DATE_FORMAT)
+        this.props.fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
+            this.props.fetchGameHighlightIfNeeded(id)
+        })
         this.setState({ id })
     }
 
@@ -94,8 +83,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        const {live} = this.props
-        const {date} = this.state
+        const {live, date} = this.props
 
         return (
             <Wrapper>
@@ -117,9 +105,8 @@ class Sidebar extends React.Component {
     }
 }
 
-const mapStateToProps = ({ live, date }) => ({
+const mapStateToProps = ({ live }) => ({
     live,
-    date,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -127,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchGamesIfNeeded,
         dispatchChangeDate,
         fetchLiveGameBoxIfNeeded,
+        fetchGameHighlightIfNeeded,
     }, dispatch)
 }
 
