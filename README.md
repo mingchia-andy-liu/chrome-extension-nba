@@ -15,11 +15,12 @@ It is available on **Chrome** and **Firefox**.
 [Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
 
 ## Screenshots
-<img style="width:20%" src="screenshots/box_score.png">
-<img style="width:20%" src="screenshots/box_score_dark_mode.png">
-<img style="width:20%" src="screenshots/standings.png">
-<img style="width:20%" src="screenshots/playoff.png">
-
+<div style="display:flex;flex-direction:column;">
+<img width="50%" src="screenshots/box_score.png">
+<img width="50%" src="screenshots/box_score_dark_mode.png">
+<img width="50%" src="screenshots/standings.png">
+<img width="50%" src="screenshots/playoff.png">
+</div>
 
 ## Motivation
 
