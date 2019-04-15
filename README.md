@@ -12,15 +12,13 @@ It is available on **Chrome** and **Firefox**.
 
 [Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
 
-[Firefox](https://addons.mozilla.org/en-US/firefox/addon/box-scores-extension/)
+[Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
 
 ## Screenshots
-<img style="height:300px" src="screenshots/popup.png">
-<br />
-<img style="width:40%" src="screenshots/box_score.png">
-<img style="width:40%" src="screenshots/box_score_dark_mode.png">
-<img style="width:40%" src="screenshots/standings.png">
-<img style="width:40%" src="screenshots/playoff.png">
+<img style="width:20%" src="screenshots/box_score.png">
+<img style="width:20%" src="screenshots/box_score_dark_mode.png">
+<img style="width:20%" src="screenshots/standings.png">
+<img style="width:20%" src="screenshots/playoff.png">
 
 
 ## Motivation
@@ -30,19 +28,19 @@ This extension is for people who just want to get the latest update but too lazy
 
 ## Features
 1. Daily box score on the popup page
-1. Full schedule list for the season
-1. Ability to add favorite team which will be shown on top of the daily list
+1. Highlight Videos from YouTube
+1. Dark mode
+1. Add favorite team
 1. Playoff bracket for each season
 1. Standings
-1. Dark mode
 
-## TODOs
-- [X] Add build scripts
-- [X] Convert into to use React, ES6, ~~SASS~~
-- [ ] Add highlights to box score page
+## Roadmap
+- [ ] Notifications
 - [ ] Add the ability to sort tables
 
-## Dev Quick Start
+
+---
+## Dev quick start notes
 `/dist`: previous release
 `/src/app`: react projects
 `/src/build`: files of pre-release
@@ -56,10 +54,10 @@ You need to have `npm` installed.
 *Firefox*
 1. Load the zip file into Firefox
 
-*Chrome* (Chrome cannot load zip as extension locally.)
+*Chrome* (Chrome cannot load zip as extension locally)
 1. Load the `/src/build` folder into Chrome
 
 #### Third party packages
-* react-sticky-table
-* react-flatpickr
-* moment-timezone: for converting times to local time
+* `react-sticky-table`
+* `react-flatpickr`
+* `moment-timezone`
