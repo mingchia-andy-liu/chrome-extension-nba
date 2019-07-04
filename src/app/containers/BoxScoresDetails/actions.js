@@ -8,7 +8,22 @@ import { waitUntilFinish } from '../../utils/common'
 
 const dataURL = 'https://data.nba.com/data/10s'
 const base = `${dataURL}/json/cms/noseason/game`
-const oldBase = (year) => `${dataURL}/v2015/json/mobile_teams/nba/${year}/scores/gamedetail`
+const oldBase = (year, leagueSlug) => `${dataURL}/v2015/json/mobile_teams/${leagueSlug}/${year}/scores/gamedetail`
+
+
+const getLeagueSlug = (gid) => {
+    if (gid.startsWith('13')) {
+        return 'sacramento';
+    } else if (gid.startsWith('14')) {
+        return 'orlando';
+    } else if (gid.startsWith('15')) {
+        return 'vegas';
+    } else if (gid.startsWith('16')) {
+        return 'utah';
+    } else {
+        return 'nba';
+    }
+}
 
 const isEmpty = (data) => (Object.keys(data).length === 0)
 
@@ -36,8 +51,11 @@ const fetchPBP = async (dateStr, gid) => {
 
 const fetchGameDetail = async (dateStr, gid) => {
     try {
-        const year = moment(dateStr).isAfter('2018-09-01') ? '2018' : '2017'
-        const advanced = await fetch(`${oldBase(year)}/${gid}_gamedetail.json`)
+        const date = moment(dateStr);
+        // if it's after july, it's a new season
+        const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year();
+        const leagueSlug = getLeagueSlug(gid);
+        const advanced = await fetch(`${oldBase(year, leagueSlug)}/${gid}_gamedetail.json`)
         const { g } = await advanced.json()
         return g
     } catch (error) {
