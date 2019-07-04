@@ -1,5 +1,11 @@
 module.exports = [
     {
+        version: '1.3.1 Updates: (2019-07-03)',
+        updates: [
+            'Fix summer league game box scores will not load'
+        ],
+    },
+    {
         version: '1.3.0 Updates: (2019-04-13)',
         updates: [
             'Add highlight videos from YouTube',

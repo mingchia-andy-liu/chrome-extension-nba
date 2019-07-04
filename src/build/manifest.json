@@ -3,7 +3,7 @@
 
     "name": "Basketball Box Scores",
     "description": "This extension shows you the daily basketball box scores. Providing a clean way to experiences box scores with a single click!",
-    "version": "1.3.0",
+    "version": "1.3.1",
 
     "icons": {
         "16": "assets/png/icon-2-color-16.png",
