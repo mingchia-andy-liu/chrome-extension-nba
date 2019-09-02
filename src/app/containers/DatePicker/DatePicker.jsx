@@ -121,8 +121,8 @@ class DatePicker extends React.Component {
                         dark={dark ? 1: undefined}
                         value={date}
                         options={{
-                            minDate: '2018-09-01',
-                            maxDate: '2019-08-30',
+                            minDate: '2019-09-01',
+                            maxDate: '2020-08-30',
                         }}
                         onChange={this.onDateChange}
                     />
