@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import TabItem from './TabItem'
 import {RowCSS} from '../../styles'
 
 const Wrapper = styled.div`
@@ -33,23 +32,25 @@ class Tab extends React.Component {
         }
     }
 
-    renderTab() {
-        const { children, onTabSelect } = this.props
-        return children.map((item, index) => (
-            <TabItem
-                key={`tab-bar-item-${index}`}
-                to={item.props.to}
-                active={this.state.selectedIndex === index}
-                label={item.props.label}
-                onClick={(index) => onTabSelect(index)}
-            />
-        ), this)
+    renderTabs() {
+        const { children, onTabSelect, isLink } = this.props
+        const childrenWithProps = React.Children.map(children, (child, index) =>
+            React.cloneElement(child, {
+                key : `tab-bar-item-${index}`,
+                to : isLink ? child.props.to : undefined,
+                active : this.state.selectedIndex === index,
+                label : child.props.label,
+                onClick : () => onTabSelect(index),
+            })
+        )
+
+        return childrenWithProps
     }
 
     render() {
         return (
             <Wrapper data-index={this.state.selectedIndex}>
-                {this.renderTab()}
+                {this.renderTabs()}
             </Wrapper>
         )
     }
@@ -68,6 +69,10 @@ Tab.propTypes = {
      * on Tab Select Callback
      */
     onTabSelect: PropTypes.func.isRequired,
+    /**
+     * Are children links
+     */
+    isLink: PropTypes.bool.isRequired,
 }
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import {Tab, TabItem} from './Tab'
+import {Tab, TabLinkItem} from './Tab'
 
 /**
  * Get the destination path for tabs. To prevent React complaining about
@@ -14,25 +14,27 @@ const getDestPath = (current, dest) => {
     else return dest
 }
 
+const noop = () => undefined
+
 class Header extends React.Component {
     render() {
         const { index, location: { pathname } } = this.props
         return (
             <React.Fragment>
-                <Tab onTabSelect={() => {}} index={index}>
-                    <TabItem
+                <Tab onTabSelect={noop} index={index} isLink={true}>
+                    <TabLinkItem
                         to={getDestPath(pathname, '/boxscores')}
                         label="Box-scores"
                     />
-                    <TabItem
+                    <TabLinkItem
                         to={getDestPath(pathname, '/standings')}
                         label="Standings"
                     />
-                    <TabItem
+                    <TabLinkItem
                         to={getDestPath(pathname, '/playoffs')}
                         label="Playoffs"
                     />
-                    <TabItem
+                    <TabLinkItem
                         to={getDestPath(pathname, '/options')}
                         label="Options"
                     />

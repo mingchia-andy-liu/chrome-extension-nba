@@ -6,11 +6,13 @@ import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
+import { Tab, TabItem } from '../../components/Tab'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox, fetchGameHighlightIfNeeded } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
-import { Content } from './styles'
+import { Content} from './styles'
+import { Row } from '../../styles'
 import {
     renderTitle,
     renderSummary,
@@ -45,6 +47,12 @@ class BoxScoresDetails extends React.Component {
         date: PropTypes.object.isRequired,
     }
 
+    constructor() {
+        super()
+        // tab index: 0: overview 1: boxscores 2: playbyplay
+        this.state = { tabIndex: 0 }
+    }
+
     clickHighlight = () => {
         const { bs: { urls } } = this.props
         const id = this.getIdFromProps()
@@ -72,6 +80,12 @@ class BoxScoresDetails extends React.Component {
         this.props.resetLiveGameBox()
     }
 
+    updateTabIndex = (index) => {
+        this.setState({
+            tabIndex: index,
+        })
+    }
+
     renderContent(spoiler, dark) {
         const { bs: { bsData, pbpData, teamStats, urls } } = this.props
         // Route expects a function for component prop
@@ -94,19 +108,42 @@ class BoxScoresDetails extends React.Component {
                 const url = urls[id]
                 return (
                     <React.Fragment>
-                        {renderTitle(bsData)}
-                        {renderHighlightButton(url, dark, this.clickHighlight)}
-                        <h3>Summary</h3>
-                        {renderSummary(bsData)}
-                        <h3>Player Stats</h3>
-                        {renderHints(dark)}
-                        {renderPlayerStats(bsData)}
-                        <h3>Team Stats</h3>
-                        {renderTeamStats(bsData)}
-                        <h4>Advanced</h4>
-                        {renderAdvancedTeamStats(teamStats, bsData)}
-                        <h3>Play By Play</h3>
-                        {renderPlaybyPlay(pbpData)}
+                        <Tab onTabSelect={this.updateTabIndex} index={this.state.tabIndex} isLink={false}>
+                            <TabItem label="Match up" />
+                            <TabItem label="Box-scores" />
+                            <TabItem label="Play-by-Play" />
+                        </Tab>
+                        <br />
+                        {
+                            this.state.tabIndex === 0 &&
+                            <React.Fragment>
+                                {renderTitle(bsData)}
+                                <Row>
+                                    {renderHighlightButton(url, dark, this.clickHighlight)}
+                                    {renderSummary(bsData)}
+                                </Row>
+                                {/* <h3>Summary</h3> */}
+                            </React.Fragment>
+                        }
+                        {
+                            this.state.tabIndex === 1 &&
+                            <React.Fragment>
+                                <h3>Player Stats</h3>
+                                {renderHints(dark)}
+                                {renderPlayerStats(bsData)}
+                                <h3>Team Stats</h3>
+                                {renderTeamStats(bsData)}
+                                <h4>Advanced</h4>
+                                {renderAdvancedTeamStats(teamStats, bsData)}
+                            </React.Fragment>
+                        }
+                        {
+                            this.state.tabIndex === 2 &&
+                            <React.Fragment>
+                                <h3>Play By Play</h3>
+                                {renderPlaybyPlay(pbpData)}
+                            </React.Fragment>
+                        }
                     </React.Fragment>
                 )
             }
