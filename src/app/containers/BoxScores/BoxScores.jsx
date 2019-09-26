@@ -77,7 +77,7 @@ class BoxScores extends React.PureComponent {
 
         return (
             <Layout>
-                <Layout.Header>{<Header index={0}/>}</Layout.Header>
+                <Layout.Header><Header index={0}/></Layout.Header>
                 <Layout.Content>
                     {
                         isLoading

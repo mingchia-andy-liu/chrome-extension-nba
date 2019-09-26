@@ -13,15 +13,15 @@ const oldBase = (year, leagueSlug) => `${dataURL}/v2015/json/mobile_teams/${leag
 
 const getLeagueSlug = (gid) => {
     if (gid.startsWith('13')) {
-        return 'sacramento';
+        return 'sacramento'
     } else if (gid.startsWith('14')) {
-        return 'orlando';
+        return 'orlando'
     } else if (gid.startsWith('15')) {
-        return 'vegas';
+        return 'vegas'
     } else if (gid.startsWith('16')) {
-        return 'utah';
+        return 'utah'
     } else {
-        return 'nba';
+        return 'nba'
     }
 }
 
@@ -51,10 +51,10 @@ const fetchPBP = async (dateStr, gid) => {
 
 const fetchGameDetail = async (dateStr, gid) => {
     try {
-        const date = moment(dateStr);
+        const date = moment(dateStr)
         // if it's after july, it's a new season
-        const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year();
-        const leagueSlug = getLeagueSlug(gid);
+        const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+        const leagueSlug = getLeagueSlug(gid)
         const advanced = await fetch(`${oldBase(year, leagueSlug)}/${gid}_gamedetail.json`)
         const { g } = await advanced.json()
         return g
