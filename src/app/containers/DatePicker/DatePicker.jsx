@@ -63,6 +63,9 @@ class DatePicker extends React.Component {
         resetLiveGameBox: PropTypes.func.isRequired,
     }
 
+    static MIN_DATE = '2019-09-01'
+    static MAX_DATE = '2020-08-30'
+
     static defaultProps = {
         hide: false,
         onChange: noop,
@@ -78,7 +81,7 @@ class DatePicker extends React.Component {
 
     onClickArrow(offset) {
         const date = moment(this.props.date.date).add(offset, 'day')
-        if (date.isAfter('2019-09-01') || date.isBefore('2018-09-01')) {
+        if (date.isAfter(DatePicker.MAX_DATE) || date.isBefore(DatePicker.MIN_DATE)) {
             return
         }
         this.props.dispatchChangeDate(date.toDate())
@@ -121,8 +124,8 @@ class DatePicker extends React.Component {
                         dark={dark ? 1: undefined}
                         value={date}
                         options={{
-                            minDate: '2019-09-01',
-                            maxDate: '2020-08-30',
+                            minDate: DatePicker.MIN_DATE,
+                            maxDate: DatePicker.MAX_DATE,
                         }}
                         onChange={this.onDateChange}
                     />
