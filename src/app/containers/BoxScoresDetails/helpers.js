@@ -96,7 +96,6 @@ export const renderAdvancedTeamStats = (teamStats, bsData) => {
     const {
         home,
         visitor,
-        extra,
     } = teamStats
 
     const {
@@ -114,7 +113,6 @@ export const renderAdvancedTeamStats = (teamStats, bsData) => {
             hta={hta}
             visitor={visitor}
             vta={vta}
-            extra={extra}
         />
     )
 }
