@@ -9,13 +9,14 @@ import {
 } from '../../components/Scores'
 import TeamInfo from '../../components/TeamInfo'
 import MatchInfo from '../../components/MatchInfo'
-import { Row, Column } from '../../styles'
+import { Row } from '../../styles'
 import { isWinning } from '../../utils/common'
 import {
     HintText,
     Subtitle,
     Title,
     HighlightButton,
+    OverviewWrapper,
     HighlightWrapper
 } from './styles'
 
@@ -38,7 +39,7 @@ export const renderTitle = (bsData) => {
 
     return (
         <Title justifyCenter={true} alignCenter={true}>
-            <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)}/>
+            <TeamInfo ta={vta} tn={vtn}  winning={isWinning(vs, hs)} large={true}/>
             <MatchInfo
                 home={{
                     ...home,
@@ -50,27 +51,30 @@ export const renderTitle = (bsData) => {
                 }}
                 periodTime={periodTime}
             />
-            <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)}/>
+            <TeamInfo ta={hta} tn={htn}  winning={isWinning(hs, vs)} large={true}/>
         </Title>
     )
 }
 
-export const renderSummary = (bsData) => {
+export const renderSummary = (bsData, teamStats) => {
     const {
         officials,
         home,
         visitor,
     } = bsData
+    const {extra} = teamStats
     return (
-        <Column>
+        <OverviewWrapper>
+            <h3>Summary</h3>
+            <Summary home={home} visitor={visitor} extra={extra}/>
+            <br/>
             <Row>
                 <Subtitle>OFFICIALS: </Subtitle>
                 {officials.map(({person_id, first_name, last_name}, i) =>
                     <Subtitle key={person_id}>{first_name} {last_name}{i !== officials.length - 1 && ','}</Subtitle>
                 )}
             </Row>
-            <Summary home={home} visitor={visitor}/>
-        </Column>
+        </OverviewWrapper>
     )
 }
 
@@ -151,14 +155,18 @@ export const renderHighlightButton = (url, dark, callback) => {
     if (url) {
         return (
             <HighlightWrapper onClick={callback}>
+                <h3>YouTube Highligh Video</h3>
                 <HighlightButton
-                    src={dark ? 'assets/png/video-light.png' : 'assets/png/video-dark.png'}
                     alt="YouTube Highlight Video"
-                    dark={dark}
+                    src={`http://img.youtube.com/vi/${url}/0.jpg`}
                 />
-                <span>YouTube Highligh Video (beta)</span>
             </HighlightWrapper>
         )
     }
-    return undefined
+    return (
+        <HighlightWrapper>
+            <h3>YouTube Highligh Video</h3>
+            <p>Highlight not available yet.</p>
+        </HighlightWrapper>
+    )
 }

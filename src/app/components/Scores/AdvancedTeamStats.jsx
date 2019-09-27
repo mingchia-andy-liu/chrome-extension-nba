@@ -49,7 +49,7 @@ const renderTeamRow = (team, name, isDark, i = 0) => (
 
 class TeamStats extends React.PureComponent {
     render() {
-        const { home, hta, visitor, vta, extra } = this.props
+        const { home, hta, visitor, vta } = this.props
         return (
             <Wrapper>
                 <ThemeConsumer>
@@ -61,18 +61,6 @@ class TeamStats extends React.PureComponent {
                         </StickyTable>
                     )}
                 </ThemeConsumer>
-                <div  style={{marginTop: '15px'}}>
-                    <StickyTable>
-                        <Row>
-                            <HeaderCell>Lead Changes</HeaderCell>
-                            <HeaderCell>Times Tied</HeaderCell>
-                        </Row>
-                        <Row>
-                            <Cell>{extra.leadChanges}</Cell>
-                            <Cell>{extra.timesTied}</Cell>
-                        </Row>
-                    </StickyTable>
-                </div>
             </Wrapper>
         )
     }
@@ -83,10 +71,6 @@ TeamStats.propTypes = {
     hta: PropTypes.string.isRequired,
     visitor: PropTypes.object.isRequired,
     vta: PropTypes.string.isRequired,
-    extra: PropTypes.shape({
-        leadChanges: PropTypes.number.isRequired,
-        timesTied: PropTypes.number.isRequired,
-    }),
 }
 
 

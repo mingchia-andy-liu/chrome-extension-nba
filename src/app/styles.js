@@ -146,6 +146,10 @@ export const JustifyCenter = css`
     justify-content: center;
 `
 
+export const JustifyStart = css`
+    justify-content: start;
+`
+
 export const AlignCenter = css`
     align-items: center;
 `

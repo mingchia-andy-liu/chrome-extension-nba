@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Shadow, Theme, Row, AlignCenter, JustifyCenter } from '../../styles'
+import { Shadow, Theme, Row, Column, AlignCenter, JustifyStart } from '../../styles'
 
 export const Content = styled.div`
     ${Shadow}
@@ -31,15 +31,20 @@ export const Hint = styled.div`
 `
 
 export const HighlightButton = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 100%;
 `
 
-export const HighlightWrapper = styled(Row)`
+export const OverviewWrapper = styled(Column)`
     ${AlignCenter}
-    ${JustifyCenter}
-    padding: 5px 0;
+    ${JustifyStart}
+    margin: 0 10px;
+`
+
+export const HighlightWrapper = styled(OverviewWrapper)`
+    width: 22vw;
+    min-width: 170px;
     cursor: pointer;
+
 `
 
 export const HintText = (dark, doubles, text) => {
@@ -49,3 +54,9 @@ export const HintText = (dark, doubles, text) => {
         <Hint backgroundColor={backgroundColor} color={Theme.light.color}>{text}</Hint>
     )
 }
+
+export const RowWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+`

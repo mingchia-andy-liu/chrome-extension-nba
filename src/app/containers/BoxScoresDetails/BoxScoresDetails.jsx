@@ -11,8 +11,7 @@ import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import { fetchLiveGameBoxIfNeeded, resetLiveGameBox, fetchGameHighlightIfNeeded } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
-import { Content} from './styles'
-import { Row } from '../../styles'
+import { Content, RowWrap } from './styles'
 import {
     renderTitle,
     renderSummary,
@@ -118,11 +117,10 @@ class BoxScoresDetails extends React.Component {
                             this.state.tabIndex === 0 &&
                             <React.Fragment>
                                 {renderTitle(bsData)}
-                                <Row>
+                                <RowWrap>
                                     {renderHighlightButton(url, dark, this.clickHighlight)}
-                                    {renderSummary(bsData)}
-                                </Row>
-                                {/* <h3>Summary</h3> */}
+                                    {renderSummary(bsData, teamStats)}
+                                </RowWrap>
                             </React.Fragment>
                         }
                         {
