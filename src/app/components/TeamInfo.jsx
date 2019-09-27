@@ -9,10 +9,11 @@ export const TeamLogo = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 45px;
-    min-height: 45px;
+    min-width: ${(props) => (props.large ? '65px' : '45px')};
+    min-height: ${(props) => (props.large ? '65px' : '45px')};
     color: white;
     border-radius: 50%;
+    font-size: ${(props) => (props.large ? 'calc(20px + 0.3vw)' : 'inherit')};
 
     background-color: ${(props) => (props.team
         ? getLogoColorByName(props.team)
@@ -42,12 +43,12 @@ const TeamInfoWrapper = styled.div`
 
 class TeamInfo extends React.PureComponent {
     render() {
-        const { ta, tn, winning } = this.props
+        const { ta, tn, winning, large } = this.props
         return (
             <SettingsConsumer>
                 {({state: {spoiler}}) => (
                     <TeamInfoWrapper>
-                        <TeamLogo winning={spoiler ? true : winning} team={ta}>{ta}</TeamLogo>
+                        <TeamLogo winning={spoiler ? true : winning} team={ta} large={large}>{ta}</TeamLogo>
                         <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
                     </TeamInfoWrapper>
                 )}
@@ -60,10 +61,12 @@ TeamInfo.propTypes = {
     ta: PropTypes.string.isRequired,
     tn: PropTypes.string.isRequired,
     winning: PropTypes.bool,
+    large: PropTypes.bool,
 }
 
 TeamInfo.defaultProps = {
     winning: true,
+    large: false,
 }
 
 export default TeamInfo

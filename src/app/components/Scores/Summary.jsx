@@ -28,23 +28,34 @@ const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
 
 class Summary extends React.PureComponent {
     render() {
-        const { home, visitor } = this.props
+        const { home, visitor, extra } = this.props
         return (
             <Wrapper>
                 <ThemeConsumer>
                     {({ state: { dark } }) => (
-                        <StickyTable stickyHeaderCount={0}>
-                            <Row>
-                                <RowHeaderCell> Team </RowHeaderCell>
-                                {home.linescores && home.linescores.period.map(period => (
+                        <React.Fragment>
+                            <StickyTable stickyHeaderCount={0}>
+                                <Row>
+                                    <RowHeaderCell> Team </RowHeaderCell>
+                                    {home.linescores && home.linescores.period.map(period => (
                                     // TODO: hides the unstart peroid
-                                    <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
-                                ))}
-                                <HeaderCell> Final </HeaderCell>
-                            </Row>
-                            {renderTeamRow(visitor, home, dark)}
-                            {renderTeamRow(home, visitor, dark, 1)}
-                        </StickyTable>
+                                        <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
+                                    ))}
+                                    <HeaderCell> Final </HeaderCell>
+                                </Row>
+                                {renderTeamRow(visitor, home, dark)}
+                                {renderTeamRow(home, visitor, dark, 1)}
+                                <Row>
+                                    <RowHeaderCell>Lead Changes</RowHeaderCell>
+                                    <Cell>{extra.leadChanges}</Cell>
+                                </Row>
+                                <Row>
+                                    <RowHeaderCell>Times Tied</RowHeaderCell>
+                                    <Cell>{extra.timesTied}</Cell>
+                                </Row>
+                            </StickyTable>
+                        </React.Fragment>
+
                     )}
                 </ThemeConsumer>
             </Wrapper>
@@ -55,6 +66,10 @@ class Summary extends React.PureComponent {
 Summary.propTypes = {
     home: PropTypes.object.isRequired,
     visitor: PropTypes.object.isRequired,
+    extra: PropTypes.shape({
+        leadChanges: PropTypes.number.isRequired,
+        timesTied: PropTypes.number.isRequired,
+    }),
 }
 
 
