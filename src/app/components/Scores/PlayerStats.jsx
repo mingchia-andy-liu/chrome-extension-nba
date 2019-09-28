@@ -185,7 +185,7 @@ class PlayerStats extends React.PureComponent {
         if ( hps.length === 0 || vps.length === 0) {
             return (
                 <Wrapper>
-                    No Player Data Avaiable
+                    No Player Data Available
                 </Wrapper>
             )
         }

@@ -20,7 +20,8 @@ import {
     renderTeamStats,
     renderAdvancedTeamStats,
     renderPlaybyPlay,
-    renderHighlightButton
+    renderHighlightButton,
+    renderTeamLeader
 } from './helpers'
 import modalType from '../Modal/modal-types'
 import { toggleModal } from '../Modal/actions'
@@ -121,6 +122,11 @@ class BoxScoresDetails extends React.Component {
                                     {renderHighlightButton(url, dark, this.clickHighlight)}
                                     {renderSummary(bsData, teamStats)}
                                 </RowWrap>
+                                {bsData.periodTime && bsData.periodTime.gameStatus === '3' && renderTeamLeader(bsData)}
+                                <h3>Team Stats</h3>
+                                {renderTeamStats(bsData)}
+                                <h4>Advanced</h4>
+                                {renderAdvancedTeamStats(teamStats, bsData)}
                             </React.Fragment>
                         }
                         {
@@ -129,10 +135,6 @@ class BoxScoresDetails extends React.Component {
                                 <h3>Player Stats</h3>
                                 {renderHints(dark)}
                                 {renderPlayerStats(bsData)}
-                                <h3>Team Stats</h3>
-                                {renderTeamStats(bsData)}
-                                <h4>Advanced</h4>
-                                {renderAdvancedTeamStats(teamStats, bsData)}
                             </React.Fragment>
                         }
                         {
