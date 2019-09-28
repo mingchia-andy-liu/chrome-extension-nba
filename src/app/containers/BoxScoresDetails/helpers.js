@@ -17,8 +17,11 @@ import {
     Title,
     HighlightButton,
     OverviewWrapper,
-    HighlightWrapper
+    HighlightWrapper,
+    TeamLeaderWrapper,
+    TeamLeaderContent
 } from './styles'
+import TeamLeaderCol from '../../components/Scores/TeamLeaderCol'
 
 export const renderTitle = (bsData) => {
     const {
@@ -166,5 +169,60 @@ export const renderHighlightButton = (url, dark, callback) => {
             <h3>YouTube Highligh Video</h3>
             <p>Highlight not available yet.</p>
         </HighlightWrapper>
+    )
+}
+
+const getMostOfField = (players, field) => {
+    const max = Math.max.apply(null,players.map((p) => p[field]))
+    if (max < 5) {
+        return []
+    }
+    return players.filter((p) => p[field] === max).map((p) => {
+        return {
+            name: p.first_name + ' ' + p.last_name,
+            value: max,
+        }
+    })
+}
+
+export const renderTeamLeader = (bsData) => {
+    const {
+        home: {
+            abbreviation: hta,
+            players: { player: homePlayers },
+        },
+        visitor: {
+            abbreviation: vta,
+            players: { player: visitorPlayers },
+        },
+    } = bsData
+
+
+    const hps = (homePlayers || []).map((p) => ({
+        ...p,
+        rebounds: p.rebounds_offensive + p.rebounds_defensive})
+    )
+    const vps = (visitorPlayers || []).map((p) => ({
+        ...p,
+        rebounds: p.rebounds_offensive + p.rebounds_defensive})
+    )
+    return (
+        <TeamLeaderWrapper>
+            <h3>Team Leader</h3>
+            <TeamLeaderContent>
+                <TeamLeaderCol
+                    name={vta}
+                    points={getMostOfField(vps, 'points')}
+                    rebounds={getMostOfField(vps, 'rebounds')}
+                    assists={getMostOfField(vps, 'assists')}
+                />
+                <TeamLeaderCol
+                    name={hta}
+                    points={getMostOfField(hps, 'points')}
+                    rebounds={getMostOfField(hps, 'rebounds')}
+                    assists={getMostOfField(hps, 'assists')}
+                />
+            </TeamLeaderContent>
+        </TeamLeaderWrapper>
     )
 }

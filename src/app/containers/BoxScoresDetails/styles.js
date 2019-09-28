@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Shadow, Theme, Row, Column, AlignCenter, JustifyStart } from '../../styles'
+
+import { Shadow, Theme, Row, Column, AlignCenter, JustifyStart, mediaQuery } from '../../styles'
 
 export const Content = styled.div`
     ${Shadow}
@@ -41,10 +42,10 @@ export const OverviewWrapper = styled(Column)`
 `
 
 export const HighlightWrapper = styled(OverviewWrapper)`
-    width: 22vw;
+    width: 18vw;
     min-width: 170px;
     cursor: pointer;
-
+    margin-left: 0;
 `
 
 export const HintText = (dark, doubles, text) => {
@@ -55,8 +56,19 @@ export const HintText = (dark, doubles, text) => {
     )
 }
 
-export const RowWrap = styled.div`
-    display: flex;
-    flex-direction: row;
+export const RowWrap = styled(Row)`
     flex-wrap: wrap;
+`
+
+export const TeamLeaderWrapper = styled(Column)`
+    ${AlignCenter}
+    width: 100%;
+    padding: 0 10%;
+    ${mediaQuery`
+        padding: 0;
+    `}
+`
+
+export const TeamLeaderContent = styled(Row)`
+    width: 100%;
 `
