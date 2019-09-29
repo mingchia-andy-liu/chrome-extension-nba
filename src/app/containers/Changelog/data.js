@@ -1,5 +1,14 @@
 module.exports = [
     {
+        version: '1.4.0 Updates: (2019-09-29)',
+        updates: [
+            'Add overview, boxscore, and play-by-play view',
+            'Add highlight preview image',
+            'Add team leader section',
+            'Update to new season stats'
+        ],
+    },
+    {
         version: '1.3.1 Updates: (2019-07-03)',
         updates: [
             'Fix summer league game box scores will not load'
