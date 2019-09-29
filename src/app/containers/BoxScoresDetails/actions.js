@@ -65,7 +65,7 @@ const fetchGameDetail = async (dateStr, gid) => {
 
 const fetchGameHighlight = async (gid) => {
     try {
-        const res = await fetch(`https://boxscores.site/v/${gid}`)
+        const res = await fetch(`https://api.boxscores.site/v/${gid}`)
         const {url} = await res.json()
         return url
     } catch (error) {
