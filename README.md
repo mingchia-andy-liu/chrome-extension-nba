@@ -4,23 +4,29 @@
 
 # Basketball Box Scores Extension
 
-This is a browser extension shows the daily box score for NBA games.
+The best NBA browser extension!
 
 ## Get Basketball Box Scores Extension
 
-It is available on **Chrome** and **Firefox**.
-
-[Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
-
-[Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
+- [Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
+- [Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
 
 ## Screenshots
+<details open>
+<summary>Click me to see.</summary>
 <div style="display:flex;flex-direction:column;">
-<img width="50%" src="screenshots/box_score.png">
-<img width="50%" src="screenshots/box_score_dark_mode.png">
+<h4>Boxscores overview with a highlight video</h4>
+<img width="50%" src="screenshots/box_score_overview.png">
+<h4>Boxscores player stats</h4>
+<img width="50%" src="screenshots/box_score_player_stats.png">
+<h4>Dark mode 🌙</h4>
+<img width="50%" src="screenshots/box_score_player_stats_dark_mode.png">
+<h4>standings</h4>
 <img width="50%" src="screenshots/standings.png">
+<h4>Playoff view</h4>
 <img width="50%" src="screenshots/playoff.png">
 </div>
+</details>
 
 ## Motivation
 
@@ -39,10 +45,9 @@ This extension is for people who just want to get the latest update but too lazy
 - [ ] Notifications
 - [ ] Add the ability to sort tables
 
-
 ---
-## Dev quick start notes
-`/dist`: previous release
+
+## Dev start notes
 `/src/app`: react projects
 `/src/build`: files of pre-release
 
@@ -50,13 +55,13 @@ This extension is for people who just want to get the latest update but too lazy
 You need to have `npm` installed.
 
 ### Running locally
-1. Run `./build.sh`. A new zip should be created under the `/dist`
+- Run `./build.sh`. A new zip should be created under the `/dist`
 
-*Firefox*
-1. Load the zip file into Firefox
+**Firefox**
+- Load the zip file into Firefox
 
-*Chrome* (Chrome cannot load zip as extension locally)
-1. Load the `/src/build` folder into Chrome
+**Chrome** (Chrome cannot load zip as extension locally)
+- Load the `/src/build` folder into Chrome
 
 #### Third party packages
 * `react-sticky-table`
