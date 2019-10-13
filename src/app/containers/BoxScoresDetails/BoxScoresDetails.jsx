@@ -50,7 +50,7 @@ class BoxScoresDetails extends React.Component {
     constructor() {
         super()
         // tab index: 0: overview 1: boxscores 2: playbyplay
-        this.state = { tabIndex: 0 }
+        this.state = { tabIndex: 1 }
     }
 
     clickHighlight = () => {
