@@ -1,5 +1,11 @@
 module.exports = [
     {
+        version: '1.4.1 Updates: (2019-10-12)',
+        updates: [
+            'Update boxscores to be the default view'
+        ],
+    },
+    {
         version: '1.4.0 Updates: (2019-09-29)',
         updates: [
             'Add overview, boxscore, and play-by-play view',
