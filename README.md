@@ -12,7 +12,7 @@ The best NBA browser extension!
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
 
 ## Screenshots
-<details open>
+<details close>
 <summary>Click me to see.</summary>
 <div style="display:flex;flex-direction:column;">
 <h4>Boxscores overview with a highlight video</h4>
