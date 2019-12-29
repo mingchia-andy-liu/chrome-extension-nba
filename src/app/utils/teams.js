@@ -36,8 +36,8 @@ const LOGO_COLORS = {
 
 const TEAM_ID = {
     ATL: '1610612737',
-    BOS: '1610612738',
     BKN: '1610612751',
+    BOS: '1610612738',
     CHA: '1610612766',
     CHI: '1610612741',
     CLE: '1610612739',
@@ -66,6 +66,42 @@ const TEAM_ID = {
     UTA: '1610612762',
     WAS: '1610612764',
 }
+
+export const eastTeams = [
+    TEAM_ID['ATL'],
+    TEAM_ID['BKN'],
+    TEAM_ID['BOS'],
+    TEAM_ID['CHA'],
+    TEAM_ID['CHI'],
+    TEAM_ID['CLE'],
+    TEAM_ID['DET'],
+    TEAM_ID['IND'],
+    TEAM_ID['MIA'],
+    TEAM_ID['MIL'],
+    TEAM_ID['NYK'],
+    TEAM_ID['ORL'],
+    TEAM_ID['PHI'],
+    TEAM_ID['TOR'],
+    TEAM_ID['WAS']
+]
+
+export const westTeams = [
+    TEAM_ID['DAL'],
+    TEAM_ID['DEN'],
+    TEAM_ID['GSW'],
+    TEAM_ID['HOU'],
+    TEAM_ID['LAC'],
+    TEAM_ID['LAL'],
+    TEAM_ID['MEM'],
+    TEAM_ID['MIN'],
+    TEAM_ID['NOP'],
+    TEAM_ID['OKC'],
+    TEAM_ID['PHX'],
+    TEAM_ID['POR'],
+    TEAM_ID['SAC'],
+    TEAM_ID['SAS'],
+    TEAM_ID['UTA']
+]
 
 export const teams = {
     ATL: 'Atlanta Hawks',

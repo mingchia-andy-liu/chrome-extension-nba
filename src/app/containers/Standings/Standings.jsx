@@ -7,7 +7,6 @@ import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import * as actions from './actions'
 import { mediaQuery } from '../../styles'
-import { winLoseCSS } from '../../utils/format'
 
 const Cell = styled.td`
     width: 10vw;
@@ -19,10 +18,6 @@ const Cell = styled.td`
 
 const NonMainCell = styled(Cell)`
     ${mediaQuery`display: none !important;`}
-`
-
-const NonMainStatsCell = styled(NonMainCell)`
-    ${winLoseCSS}
 `
 
 const HeaderCell = styled(Cell)`
@@ -50,26 +45,6 @@ const ListItem = styled.li`
     padding-bottom: 5px;
 `
 
-const decorateTeam = (conf, key) => {
-    let min = Infinity
-    let max = -Infinity
-    let minIndex = -1
-    let maxIndex = -1
-    conf.forEach((team, index) => {
-        if (team[key] > max) {
-            max = team[key]
-            maxIndex = index
-        } else if (team[key] < min) {
-            min = team[key]
-            minIndex = index
-        }
-    })
-    if (minIndex != -1 && maxIndex != -1) {
-        conf[minIndex][`${key}Min`] = true
-        conf[maxIndex][`${key}Max`] = true
-    }
-}
-
 class Standings extends React.Component {
     static propTypes = {
         east: PropTypes.array.isRequired,
@@ -92,10 +67,7 @@ class Standings extends React.Component {
             'Home Record',
             'Road Record',
             'L10 Streak',
-            'Streak',
-            'PF',
-            'PA',
-            'Differences'
+            'Streak'
         ]
 
         return (
@@ -130,22 +102,15 @@ class Standings extends React.Component {
                         ? `W ${team.streak}`
                         : `L ${Math.abs(team.streak)}`}
                 </NonMainCell>
-                <NonMainStatsCell winning={team.pfMax} losing={team.pfMin}>{team.pf}</NonMainStatsCell>
-                <NonMainStatsCell winning={team.paMin} losing={team.paMax}>{team.pa}</NonMainStatsCell>
-                <NonMainStatsCell winning={team.diffMax} losing={team.diffMin}>{team.diff}</NonMainStatsCell>
             </Row>
         )
     }
 
     renderContent() {
         const { east, west, isLoading } = this.props
+
         if (isLoading) return <Loader />
-        decorateTeam(east, 'pf')
-        decorateTeam(east, 'pa')
-        decorateTeam(east, 'diff')
-        decorateTeam(west, 'pf')
-        decorateTeam(west, 'pa')
-        decorateTeam(west, 'diff')
+
         return (
             <React.Fragment>
                 <h3>East</h3>
