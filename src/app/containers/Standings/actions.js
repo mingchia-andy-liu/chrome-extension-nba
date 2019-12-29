@@ -5,12 +5,12 @@ export const fetchStandings = () => async (dispatch) => {
     try {
         dispatch({ type: types.REQUEST_START })
 
-        const res = await fetch('https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2019-20&SeasonType=Regular+Season')
-        const { resultSets } = await res.json()
+        const res = await fetch('http://data.nba.net/prod/v1/current/standings_all.json')
+        const { league: {standard : {teams}} } = await res.json()
 
         dispatch({
             type: types.REQUEST_SUCCESS,
-            payload: resultSets[0].rowSet,
+            payload: teams,
         })
     } catch (error) {
         dispatch({ type: types.REQUEST_ERROR })

@@ -1,4 +1,5 @@
 import types from './types'
+import { eastTeams, westTeams } from '../../utils/teams'
 
 
 const initState = {
@@ -7,22 +8,22 @@ const initState = {
     west: [],
 }
 
-const conferenceExtractor = (teams, conf) => (
-    teams.filter(team => team[5] === conf).map(team => ({
-        name: team[4],
-        playoffCode: team[8],
-        win: team[12],
-        loss: team[13],
-        percentage: team[14],
-        gamesBehind: team[37],
-        homeRecord: team[17],
-        awayRecord: team[18],
-        lastTenRecord: team[19],
-        streak: team[35],
-        pf: team[56],
-        pa: team[57],
-        diff: team[58],
-    }))
+// for stats.nab.com
+const conferenceExtractor = (teams, isEast) => (
+    teams
+        .filter(team => (isEast ? eastTeams.includes(team['teamId']) : westTeams.includes(team['teamId'])))
+        .map(team => ({
+            name: team['teamSitesOnly']['teamNickname'],
+            playoffCode: team['clinchedPlayoffsCode'],
+            win: team['win'],
+            loss: team['loss'],
+            percentage: team['winPct'],
+            gamesBehind: team['gamesBehind'],
+            homeRecord: `${team['homeWin']}-${team['homeLoss']}`,
+            awayRecord: `${team['awayWin']}-${team['awayLoss']}`,
+            lastTenRecord: `${team['lastTenWin']}-${team['lastTenLoss']}`,
+            streak: `${team['isWinStreak'] ? team['streak'] : -1 * team['streak']}`,
+        }))
 )
 
 export default (state = initState, action) => {
@@ -35,8 +36,8 @@ export default (state = initState, action) => {
         case types.REQUEST_SUCCESS: {
             return {
                 isLoading: false,
-                east: conferenceExtractor(action.payload, 'East'),
-                west: conferenceExtractor(action.payload, 'West'),
+                east: conferenceExtractor(action.payload, true),
+                west: conferenceExtractor(action.payload, false),
             }
         }
         case types.REQUEST_ERROR:
