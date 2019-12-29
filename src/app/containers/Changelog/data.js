@@ -1,5 +1,11 @@
 module.exports = [
     {
+        version: '1.4.2 Updates: (2019-12-28)',
+        updates: [
+            'Fix standings page'
+        ],
+    },
+    {
         version: '1.4.1 Updates: (2019-10-12)',
         updates: [
             'Update boxscores to be the default view'
