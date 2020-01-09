@@ -37,9 +37,10 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 
 export const fetchRequest = async (dateStr) => {
     try {
-        const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
-        const { sports_content: { games: { game } } } = await res.json()
-        return game
+        return [];
+        // const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
+        // const { sports_content: { games: { game } } } = await res.json()
+        // return game
     } catch (error) {
         return []
     }
