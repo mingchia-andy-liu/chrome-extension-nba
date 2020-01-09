@@ -1,5 +1,12 @@
 module.exports = [
     {
+        version: '1.4.3 Updates: (2020-01-08)',
+        updates: [
+            'NBA has changed their API endpoints. Add warning text to card.',
+            'Disable fetching data'
+        ],
+    },
+    {
         version: '1.4.2 Updates: (2019-12-28)',
         updates: [
             'Fix standings page'
