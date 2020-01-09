@@ -37,9 +37,12 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 
 export const fetchRequest = async (dateStr) => {
     try {
-        const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
-        const { sports_content: { games: { game } } } = await res.json()
-        return game
+        // const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
+        // const res = await fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
+        const res = await fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/2019/scores/00_todays_scores.json`, {referrer: "https://cross.origin/page.html"})
+        const { gs : {g : games} } = await res.json()
+        console.log(games);
+        return games;
     } catch (error) {
         return []
     }
