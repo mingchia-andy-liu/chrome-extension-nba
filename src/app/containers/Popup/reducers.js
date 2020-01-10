@@ -91,13 +91,12 @@ const sanitizeGame = game => ({
     },
 })
 
+
 /**
  * Migrated from preprocessData()
  */
 const sanitizeGames = games => {
     const sanitized = games.map(game => sanitizeGame(game))
-    // eslint-disable-next-line no-console
-    console.log(sanitized)
     const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '1')
     const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '2')
     const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '3')
