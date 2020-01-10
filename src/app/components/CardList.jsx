@@ -61,40 +61,32 @@ class CardList extends React.PureComponent {
     }
 
     render() {
+        const { games, isLoading, selected, isSidebar, ...rest} = this.props
+        const { isPopup } = this.state
+        if (isLoading) {
+            return (
+                <Wrapper>
+                    <TextCard text={'Loading...'} />
+                </Wrapper>
+            )
+        }
+        if (games.length === 0) {
+            return (
+                <Wrapper>
+                    <TextCard text={'No games today ¯\\_(ツ)_/¯'} />
+                </Wrapper>
+            )
+        }
+
         return (
-            <Wrapper>
-                <TextCard text={`NBA has changed the data source.
-                A fix is coming soon.
-                Please be patient.`} />
-            </Wrapper>
+            <SidebarConsumer>
+                {({state: { broadcast, team }}) => (
+                    <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
+                        {generateCards(games, selected, team, broadcast, rest)}
+                    </Wrapper>
+                )}
+            </SidebarConsumer>
         )
-
-        // const { games, isLoading, selected, isSidebar, ...rest} = this.props
-        // const { isPopup } = this.state
-        // if (isLoading) {
-        //     return (
-        //         <Wrapper>
-        //             <TextCard text={'Loading...'} />
-        //         </Wrapper>
-        //     )
-        // }
-        // if (games.length === 0) {
-        //     return (
-        //         <Wrapper>
-        //             <TextCard text={'No games today ¯\\_(ツ)_/¯'} />
-        //         </Wrapper>
-        //     )
-        // }
-
-        // return (
-        //     <SidebarConsumer>
-        //         {({state: { broadcast, team }}) => (
-        //             <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
-        //                 {generateCards(games, selected, team, broadcast, rest)}
-        //             </Wrapper>
-        //         )}
-        //     </SidebarConsumer>
-        // )
     }
 }
 
