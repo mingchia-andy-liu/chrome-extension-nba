@@ -7,16 +7,6 @@ const initState = {
     lastUpdate: new Date(0),
 }
 
-
-const getBroadcasters = (casters) => {
-    const national = (casters && casters.national)
-    const canadian = (casters && casters.canadian)
-    const home = (casters && casters.home)
-    const visitor = (casters && casters.visitor)
-
-    return national.concat(canadian).concat(home).concat(visitor)
-}
-
 // for http://data.nba.net/prod/v2/${dateStr}/scoreboard.json
 // const sanitizeGame = game => ({
 //     id: game.gameId,
@@ -44,34 +34,62 @@ const getBroadcasters = (casters) => {
 //     },
 // })
 
-
 // https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/2019/scores/00_todays_scores.json
+// const sanitizeGame = game => ({
+//     id: game.gid,
+//     date: game.lm.gdate,
+//     time: game.startTimeEastern,
+//     state: game.state,
+//     arena: {
+//         name: game.arena.name,
+//         city: game.arena.city,
+//     },
+//     broadcasters: getBroadcasters(game.watch.broadcast.broadcasters),
+//     home: game.hTeam,
+//     visitor: game.vTeam,
+//     playoffs: game.playoffs || {},
+//     periodTime: {
+//         // have not start
+//         periodStatus: game.p === 1
+//             ? moment.tz(`${game.lm}${game.time}`, 'YYYY-MM-DDhhmm', 'America/New_York').local().format('hh:mm A')
+//             : game.period.current,
+//         gameClock: game.cl,
+//         gameStatus: game.stt,
+//         periodValue: game.p,
+//     },
+// })
+
+const getBroadcasters = (casters) => {
+    if (casters && casters.tv && casters.tv.broadcaster) {
+        return casters.tv.broadcaster
+    } else {
+        return []
+    }
+}
+
 const sanitizeGame = game => ({
-    id: game.gid,
-    // date: game.date,
-    date: game.lm.gdate,
-    // time: game.time,
-    time: game.startTimeEastern,
+    id: game.id,
+    date: game.date,
+    time: game.time,
     state: game.state,
     arena: {
-        name: game.arena.name,
-        city: game.arena.city,
+        name: game.arena,
+        city: game.city,
     },
-    broadcasters: getBroadcasters(game.watch.broadcast.broadcasters),
-    home: game.hTeam,
-    visitor: game.vTeam,
-    playoffs: game.playoffs || {},
+    broadcasters: getBroadcasters(game.broadcasters),
+    home: game.home,
+    visitor: game.visitor,
+    playoffs: game.playoffs,
     periodTime: {
         // have not start
-        periodStatus: game.p === 1
-            ? moment.tz(`${game.lm}${game.time}`, 'YYYY-MM-DDhhmm', 'America/New_York').local().format('hh:mm A')
-            : game.period.current,
-        gameClock: game.cl,
-        gameStatus: game.stt,
-        periodValue: game.p,
+        periodStatus: game.period_time.game_status === '1'
+            ? moment.tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York').local().format('hh:mm A')
+            : game.period_time.period_status,
+        gameClock: game.period_time.game_clock,
+        gameStatus: game.period_time.game_status,
+        periodValue: game.period_time.period_value,
     },
 })
-
 
 /**
  * Migrated from preprocessData()
