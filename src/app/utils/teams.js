@@ -103,6 +103,39 @@ export const westTeams = [
     TEAM_ID['UTA']
 ]
 
+const shortNames = {
+    ATL: 'Hawks',
+    BOS: 'Celtics',
+    BKN: 'Nets',
+    CHA: 'Hornets',
+    CHI: 'Bulls',
+    CLE: 'Cavaliers',
+    DAL: 'Mavericks',
+    DEN: 'Nuggets',
+    DET: 'Pistons',
+    GSW: 'Warriors',
+    HOU: 'Rockets',
+    IND: 'Pacers',
+    LAC: 'Clippers',
+    LAL: 'Lakers',
+    MEM: 'Grizzlies',
+    MIA: 'Heat',
+    MIL: 'Bucks',
+    MIN: 'Timberwolves',
+    NOP: 'Pelicans',
+    NYK: 'Knicks',
+    OKC: 'Thunder',
+    ORL: 'Magic',
+    PHI: '76ers',
+    PHX: 'Suns',
+    POR: 'Trail Blazers',
+    SAC: 'Kings',
+    SAS: 'Spurs',
+    TOR: 'Raptors',
+    UTA: 'Jazz',
+    WAS: 'Wizards',
+}
+
 export const teams = {
     ATL: 'Atlanta Hawks',
     BOS: 'Boston Celtics',
@@ -148,6 +181,10 @@ export const getTeamNameById = (id) => {
 
 export const getLogoColorByName = (name) => {
     return LOGO_COLORS[name] || '#000000'
+}
+
+export const getNickNamesByTriCode = (triCode) => {
+    return shortNames[triCode] || triCode
 }
 
 export const getLogoColorById = (id) => {

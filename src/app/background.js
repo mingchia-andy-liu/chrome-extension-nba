@@ -46,6 +46,18 @@ const liveListener = () => {
 
             checkLiveGame(live)
         })
+        .catch(() => {
+            return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
+        })
+        .then(res => res.json())
+        .then(({games}) => checkLiveGame(games, 2))
+        .catch(() => {
+            const date = moment(dateStr)
+            const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+            return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
+        })
+        .then(res => res.json())
+        .then(({gs: {g}})=> checkLiveGame(g, 1))
         .catch(() => browser.setBadgeText({ text: '' }))
 }
 

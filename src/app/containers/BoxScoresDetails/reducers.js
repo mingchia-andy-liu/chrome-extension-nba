@@ -1,5 +1,5 @@
 import types from './types'
-import convert from './convert'
+import {convertBS} from '../../utils/convert'
 
 /**
  * has box scores and playbyplay
@@ -88,7 +88,7 @@ export default (state = initState, action) => {
             const team = teamStatsExtrator(boxScoreData)
             return {
                 ...state,
-                bsData: sanitizeBS(convert(boxScoreData)),
+                bsData: sanitizeBS(convertBS(boxScoreData)),
                 gid,
                 isLoading: false,
                 pbpData: pbpDecorater(pbpData),
