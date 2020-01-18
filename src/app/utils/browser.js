@@ -231,10 +231,17 @@ if (typeof browser !== 'undefined') {
     browserNameSpace.tabs = { getCurrent: noop }
 }
 
-export const checkLiveGame = (games) => {
-    const hasLiveGame = games.find(game =>
-        game && game.period_time && game.period_time.game_status === '2'
-    )
+export const checkLiveGame = (games, isFallBack = 0) => {
+    let hasLiveGame
+    if (isFallBack === 1) {
+        hasLiveGame = games.find((game) => game.st === 2)
+    } else if (isFallBack === 2) {
+        hasLiveGame = games.find((game) => game.statusNum === 2)
+    } else {
+        hasLiveGame = games.find(game =>
+            game && game.period_time && game.period_time.game_status === '2'
+        )
+    }
     if (hasLiveGame) {
         browserNameSpace.setBadgeText({ text: 'LIVE' })
         browserNameSpace.setBadgeBackgroundColor({ color: '#FC0D1B' })

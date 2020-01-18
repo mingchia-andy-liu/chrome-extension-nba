@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import types from './types'
 import moment from 'moment-timezone'
+import {convertDaily, convertDaily2} from '../../utils/convert'
 
 const initState = {
     isLoading: true,
@@ -8,56 +10,32 @@ const initState = {
 }
 
 // for http://data.nba.net/prod/v2/${dateStr}/scoreboard.json
-// const sanitizeGame = game => ({
-//     id: game.gameId,
-//     // date: game.date,
-//     date: game.startDateEastern,
-//     // time: game.time,
-//     time: game.startTimeEastern,
-//     state: game.state,
-//     arena: {
-//         name: game.arena.name,
-//         city: game.arena.city,
-//     },
-//     broadcasters: getBroadcasters(game.watch.broadcast.broadcasters),
-//     home: game.hTeam,
-//     visitor: game.vTeam,
-//     playoffs: game.playoffs || {},
-//     periodTime: {
-//         // have not start
-//         periodStatus: game.period.current === 1
-//             ? moment.tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York').local().format('hh:mm A')
-//             : game.period.current,
-//         gameClock: game.clock,
-//         gameStatus: game.statusNum,
-//         periodValue: game.period.current,
-//     },
-// })
+const sanitizeGameFallBack2 = game => ({
+    // gives home, visitor
+    ...convertDaily2(game),
+    id: game.gameId,
+    date: game.startDateEastern,
+    time: game.startTimeEastern,
+    state: '',
+    arena: {
+        name: game.arena.name,
+        city: game.arena.city,
+    },
+    playoffs: game.playoffs,
+})
 
 // https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/2019/scores/00_todays_scores.json
-// const sanitizeGame = game => ({
-//     id: game.gid,
-//     date: game.lm.gdate,
-//     time: game.startTimeEastern,
-//     state: game.state,
-//     arena: {
-//         name: game.arena.name,
-//         city: game.arena.city,
-//     },
-//     broadcasters: getBroadcasters(game.watch.broadcast.broadcasters),
-//     home: game.hTeam,
-//     visitor: game.vTeam,
-//     playoffs: game.playoffs || {},
-//     periodTime: {
-//         // have not start
-//         periodStatus: game.p === 1
-//             ? moment.tz(`${game.lm}${game.time}`, 'YYYY-MM-DDhhmm', 'America/New_York').local().format('hh:mm A')
-//             : game.period.current,
-//         gameClock: game.cl,
-//         gameStatus: game.stt,
-//         periodValue: game.p,
-//     },
-// })
+const sanitizeGameFallBack = game => ({
+    // gives home, visitor, periodTime,
+    ...convertDaily(game),
+    id: game.gid,
+    date: game.gcode.split('/')[0] || '1970-01-01',
+    time: '',
+    state: game.st,
+    arena: { name: '', city: '' },
+    broadcasters: [],
+    playoffs: game.playoffs,
+})
 
 const getBroadcasters = (casters) => {
     if (casters && casters.tv && casters.tv.broadcaster) {
@@ -91,15 +69,22 @@ const sanitizeGame = game => ({
     },
 })
 
-
 /**
  * Migrated from preprocessData()
  */
-const sanitizeGames = games => {
-    const sanitized = games.map(game => sanitizeGame(game))
-    const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '1')
-    const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '2')
-    const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus === '3')
+const sanitizeGames = (games, isFallBack = 0) => {
+    const sanitized = games.map(game => {
+        if (isFallBack === 1) {
+            return sanitizeGameFallBack(game)
+        } else if (isFallBack === 2) {
+            return sanitizeGameFallBack2(game)
+        } else {
+            return sanitizeGame(game)
+        }
+    })
+    const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 1)
+    const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 2)
+    const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 3)
     return live.concat(finish.concat(prepare))
 }
 
@@ -110,13 +95,27 @@ export default (state = initState, action) => {
                 ...state,
                 isLoading: true,
             }
-        case types.REQUEST_SUCCESS:
+        case types.REQUEST_SUCCESS: {
+            let games = action.payload
+            const isFallBack = action.payload.isFallBack
+            try {
+                if (isFallBack === 1) {
+                    games  = sanitizeGames(action.payload.games, isFallBack)
+                } else if (isFallBack === 2) {
+                    games  = sanitizeGames(action.payload.games, isFallBack)
+                } else {
+                    games = sanitizeGames(action.payload)
+                }
+            } catch (error) {
+                games = []
+            }
             return {
                 ...state,
-                games: sanitizeGames(action.payload),
+                games,
                 isLoading: false,
                 lastUpdate: new Date(),
             }
+        }
         case types.REQUEST_ERROR:
             return {
                 ...state,
