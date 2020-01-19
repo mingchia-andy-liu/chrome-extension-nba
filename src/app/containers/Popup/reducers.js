@@ -83,7 +83,6 @@ const sanitizeGames = (games, isFallBack = 0) => {
             return sanitizeGame(game)
         }
     })
-    console.log(sanitized)
     const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 1)
     const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 2)
     const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 3)
@@ -120,7 +119,6 @@ export default (state = initState, action) => {
             }
         }
         case types.REQUEST_ERROR: {
-            console.log('In request error')
             return {
                 games: [],
                 hasError: true,
