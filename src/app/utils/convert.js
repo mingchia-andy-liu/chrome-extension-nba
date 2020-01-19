@@ -172,14 +172,13 @@ export const convertDaily = (game) => {
         v,
     } = game
 
-
     return {
         periodTime: {
             periodValue: `${p}`,
-            periodStatus: game.st === 1
-                ? moment.tz(`${game.stt}`, 'hh:mm A Z', 'America/New_York').local().format('hh:mm A')
+            periodStatus: st == 1
+                ? moment.tz(`${stt}`, 'hh:mm A', 'America/New_York').local().format('hh:mm A')
                 : stt,
-            gameClock: cl,
+            gameClock: cl || '',
             gameStatus: `${st}`,
         },
         home: {
