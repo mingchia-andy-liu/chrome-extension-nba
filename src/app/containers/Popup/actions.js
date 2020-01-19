@@ -31,6 +31,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
         }
         if (callback) callback(newGames)
     } catch (error) {
+        // if any of the fetch requests fail, set the state to error
         if (callback) callback([])
         dispatch({ type: types.REQUEST_ERROR })
     }
@@ -46,44 +47,31 @@ export const fetchRequest3 = async(dateStr) => {
             games,
         }
     } catch (error) {
-        try {
-            return fetchRequest2(dateStr)
-        } catch (error) {
-            []
-        }
+        return fetchRequest2(dateStr)
     }
 }
 
 export const fetchRequest2 = async (dateStr) => {
     const date = moment(dateStr)
     if (!date.isSame(new Date(), 'day')) {
-        return []
+        throw new Error()
     }
     const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
-    try {
-        const res = await fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
-        const { gs : {g}} = await res.json()
-        return {
-            isFallBack: 1,
-            games: g,
-        }
-    } catch (error) {
-        return []
+    const res = await fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
+    const { gs : {g}} = await res.json()
+    return {
+        isFallBack: 1,
+        games: g,
     }
 }
 
 export const fetchRequest = async (dateStr) => {
-    let res
     try {
-        res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
+        const res = await fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
         const { sports_content: { games: { game } } } = await res.json()
         return game
     } catch (error) {
-        try {
-            return fetchRequest3(dateStr)
-        } catch (error) {
-            return []
-        }
+        return fetchRequest3(dateStr)
     }
 }
 

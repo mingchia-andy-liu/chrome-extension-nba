@@ -4,6 +4,7 @@ import moment from 'moment-timezone'
 import {convertDaily, convertDaily2} from '../../utils/convert'
 
 const initState = {
+    hasError: false,
     isLoading: true,
     games: [],
     lastUpdate: new Date(0),
@@ -93,6 +94,7 @@ export default (state = initState, action) => {
         case types.REQUEST_START:
             return {
                 ...state,
+                hasError: false,
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
@@ -110,16 +112,16 @@ export default (state = initState, action) => {
                 games = []
             }
             return {
-                ...state,
                 games,
+                hasError: false,
                 isLoading: false,
                 lastUpdate: new Date(),
             }
         }
         case types.REQUEST_ERROR:
             return {
-                ...state,
                 games: [],
+                hasError: true,
                 isLoading: false,
                 lastUpdate: new Date(0),
             }
