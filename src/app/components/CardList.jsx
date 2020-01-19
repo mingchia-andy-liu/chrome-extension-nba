@@ -49,6 +49,24 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
 }
 
 class CardList extends React.PureComponent {
+    static propTypes = {
+        games: PropTypes.arrayOf(PropTypes.object).isRequired,
+        isLoading: PropTypes.bool,
+        selected: PropTypes.string,
+        hasError:PropTypes.bool,
+        /**
+         * is card list loading in sidebar of bs. If so, need custom css
+         */
+        isSidebar: PropTypes.bool,
+    }
+
+    static defaultProps = {
+        hasError: false,
+        isLoading: false,
+        isSidebar: false,
+        selected: '',
+    }
+
     constructor() {
         super()
         this.state = { isPopup: false }
@@ -61,12 +79,19 @@ class CardList extends React.PureComponent {
     }
 
     render() {
-        const { games, isLoading, selected, isSidebar, ...rest} = this.props
+        const { games, hasError, isLoading, selected, isSidebar, ...rest} = this.props
         const { isPopup } = this.state
         if (isLoading) {
             return (
                 <Wrapper>
                     <TextCard text={'Loading...'} />
+                </Wrapper>
+            )
+        }
+        if (hasError) {
+            return (
+                <Wrapper>
+                    <TextCard text={'Something went wrong. A fix is coming.'} />
                 </Wrapper>
             )
         }
@@ -88,22 +113,6 @@ class CardList extends React.PureComponent {
             </SidebarConsumer>
         )
     }
-}
-
-CardList.propTypes = {
-    games: PropTypes.arrayOf(PropTypes.object).isRequired,
-    isLoading: PropTypes.bool,
-    selected: PropTypes.string,
-    /**
-     * is card list loading in sidebar of bs. If so, need custom css
-     */
-    isSidebar: PropTypes.bool,
-}
-
-CardList.defaultProps = {
-    isLoading: false,
-    isSidebar: false,
-    selected: '',
 }
 
 export default CardList

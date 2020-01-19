@@ -94,6 +94,7 @@ class Sidebar extends React.Component {
                     <BroadcastCheckbox />
                 </ButtonsWrapper>
                 <CardList
+                    hasError={live.hasError}
                     isLoading={live.isLoading}
                     isSidebar={true}
                     games={live.games}

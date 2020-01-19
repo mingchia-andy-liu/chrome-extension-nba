@@ -122,9 +122,9 @@ export const convertDaily2 = (game) => {
         } else if (statusNum === 1) {
             return moment.utc(startTimeUTC).local().format('hh:mm A')
         } else if (isEndOfPeriod) {
-            return `End of ${p}${QUARTER_NAMES[p]}`
+            return `End of ${p} ${p > 4 ? 'OT' : 'Qtr'}`
         } else {
-            return clock
+            return `${p} ${p > 4 ? 'OT' : 'Qtr'}`
         }
     }
 
@@ -177,7 +177,7 @@ export const convertDaily = (game) => {
         periodTime: {
             periodValue: `${p}`,
             periodStatus: game.st === 1
-                ? moment.tz(`${game.lm}${game.time}`, 'YYYY-MM-DDhhmm', 'America/New_York').local().format('hh:mm A')
+                ? moment.tz(`${game.stt}`, 'hh:mm A Z', 'America/New_York').local().format('hh:mm A')
                 : stt,
             gameClock: cl,
             gameStatus: `${st}`,

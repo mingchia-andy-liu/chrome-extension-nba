@@ -4,6 +4,7 @@ import moment from 'moment-timezone'
 import {convertDaily, convertDaily2} from '../../utils/convert'
 
 const initState = {
+    hasError: false,
     isLoading: true,
     games: [],
     lastUpdate: new Date(0),
@@ -82,6 +83,7 @@ const sanitizeGames = (games, isFallBack = 0) => {
             return sanitizeGame(game)
         }
     })
+    console.log(sanitized)
     const prepare = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 1)
     const live = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 2)
     const finish = sanitized.filter(game => game && game.periodTime && game.periodTime.gameStatus == 3)
@@ -93,6 +95,7 @@ export default (state = initState, action) => {
         case types.REQUEST_START:
             return {
                 ...state,
+                hasError: false,
                 isLoading: true,
             }
         case types.REQUEST_SUCCESS: {
@@ -110,19 +113,21 @@ export default (state = initState, action) => {
                 games = []
             }
             return {
-                ...state,
                 games,
+                hasError: false,
                 isLoading: false,
                 lastUpdate: new Date(),
             }
         }
-        case types.REQUEST_ERROR:
+        case types.REQUEST_ERROR: {
+            console.log('In request error')
             return {
-                ...state,
                 games: [],
+                hasError: true,
                 isLoading: false,
                 lastUpdate: new Date(0),
             }
+        }
         default:
             return state
     }

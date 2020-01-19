@@ -22,7 +22,13 @@ const Wrapper = styled(Column)`
 
 class PopUp extends React.Component {
     static propTypes = {
-        live: PropTypes.object.isRequired,
+        live: PropTypes.shape({
+            hasError: PropTypes.bool.isRequired,
+            isLoading: PropTypes.bool.isRequired,
+            games: PropTypes.array.isRequired,
+            // date
+            lastUpdate: PropTypes.object.isRequired,
+        }).isRequired,
         date: PropTypes.shape({
             date: PropTypes.object.isRequired,
         }),
@@ -98,6 +104,7 @@ class PopUp extends React.Component {
                     <BroadcastCheckbox />
                 </ButtonsWrapper>
                 <CardList
+                    hasError={live.hasError}
                     selected={'0'}
                     isLoading={live.isLoading}
                     games={live.games}
