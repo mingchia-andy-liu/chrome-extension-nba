@@ -118,14 +118,13 @@ export default (state = initState, action) => {
                 lastUpdate: new Date(),
             }
         }
-        case types.REQUEST_ERROR: {
+        case types.REQUEST_ERROR:
             return {
                 games: [],
                 hasError: true,
                 isLoading: false,
                 lastUpdate: new Date(0),
             }
-        }
         default:
             return state
     }
