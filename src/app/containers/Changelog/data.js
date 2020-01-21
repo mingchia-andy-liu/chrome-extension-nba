@@ -1,5 +1,11 @@
 module.exports = [
     {
+        version: '1.4.5 Updates: (2020-01-20)',
+        updates: [
+            'Fix daily endpoints with fallbacks'
+        ],
+    },
+    {
         version: '1.4.4 Updates: (2020-01-09)',
         updates: [
             'Fix the daily box scores'
