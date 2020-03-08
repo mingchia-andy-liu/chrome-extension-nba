@@ -1,5 +1,12 @@
 module.exports = [
     {
+        version: '1.4.6 Updates: (2020-03-07)',
+        updates: [
+            'Add @ symbol to pending games',
+            'Fix playoff code and add to rank'
+        ],
+    },
+    {
         version: '1.4.5 Updates: (2020-01-20)',
         updates: [
             'Fix daily endpoints with fallbacks'
