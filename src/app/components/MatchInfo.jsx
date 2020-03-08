@@ -88,6 +88,12 @@ const renderBroadcasters = (broadcasters, gameStatus) => {
     })
 }
 
+const renderAt = (gameStatus) => {
+    if (gameStatus === '1') {
+        return <div>@</div>
+    }
+}
+
 class MatchInfo extends React.PureComponent {
     render() {
         const {
@@ -123,6 +129,7 @@ class MatchInfo extends React.PureComponent {
                         {({state: {spoiler}}) => (
                             <Wrapper>
                                 {renderScores(dark, spoiler, gameStatus, home, visitor)}
+                                {renderAt(gameStatus)}
                                 <div>
                                     {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
                                 </div>
