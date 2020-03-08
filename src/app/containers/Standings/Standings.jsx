@@ -88,8 +88,8 @@ class Standings extends React.Component {
     renderConference(team, i) {
         return (
             <Row key={`${team.id}-${i}`}>
-                <Cell style={{width: '5vw'}}>{i+1}</Cell>
-                <Cell>{team.name}{team.playoffCode}</Cell>
+                <Cell style={{width: '5vw'}}>{i+1}{team.playoffCode && `- ${team.playoffCode}`}</Cell>
+                <Cell>{team.name}</Cell>
                 <Cell>{team.win}</Cell>
                 <Cell>{team.loss}</Cell>
                 <Cell>{(Math.round(team.percentage * 100))}%</Cell>
