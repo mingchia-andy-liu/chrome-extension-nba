@@ -54,7 +54,7 @@
   "dependencies": {
     "moment-timezone": "^0.5.23",
     "node-fetch": "^2.2.1",
-    "query-string": "^6.2.0",
+    "query-string": "^6.12.1",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-flatpickr": "^3.6.4",
