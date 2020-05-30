@@ -56,7 +56,7 @@
     "node-fetch": "^2.2.1",
     "query-string": "^6.12.1",
     "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react-dom": "^16.13.0",
     "react-flatpickr": "^3.6.4",
     "react-redux": "^5.1.0",
     "react-router-dom": "^4.2.2",
