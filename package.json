@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "moment-timezone": "^0.5.31",
-    "node-fetch": "^2.2.1",
+    "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
     "react": "^16.6.0",
     "react-dom": "^16.13.0",
