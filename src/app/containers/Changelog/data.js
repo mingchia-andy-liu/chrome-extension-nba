@@ -1,5 +1,11 @@
 module.exports = [
     {
+        version: '1.4.7 Updates: (2020-03-07)',
+        updates: [
+            'Update API due to season has not end due to covid'
+        ],
+    },
+    {
         version: '1.4.6 Updates: (2020-03-07)',
         updates: [
             'Add @ symbol to pending games',
