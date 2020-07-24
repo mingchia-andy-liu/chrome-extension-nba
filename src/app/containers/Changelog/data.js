@@ -1,6 +1,6 @@
 module.exports = [
     {
-        version: '1.4.7 Updates: (2020-03-07)',
+        version: '1.4.7 Updates: (2020-07-23)',
         updates: [
             'Update API due to season has not end due to covid'
         ],
