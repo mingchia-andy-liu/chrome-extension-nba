@@ -52,8 +52,14 @@ const fetchPBP = async (dateStr, gid) => {
 const fetchGameDetail = async (dateStr, gid) => {
     try {
         const date = moment(dateStr)
-        // if it's after july, it's a new season
-        const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+        let year
+        if (date.year() === 2020) {
+            // 2020 season is delayed and season should finish in 2020-09
+            year = date.month() > 8 ? date.year() : date.add(-1, 'years').year()
+        } else {
+            // if it's after july, it's a new season
+            year = date.month() > 5  ? date.year() : date.add(-1, 'years').year()
+        }
         const leagueSlug = getLeagueSlug(gid)
         const advanced = await fetch(`${oldBase(year, leagueSlug)}/${gid}_gamedetail.json`)
         const { g } = await advanced.json()
