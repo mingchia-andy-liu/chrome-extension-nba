@@ -46,7 +46,7 @@
     "prop-types": "^15.7.2",
     "redux-devtools": "^3.5.0",
     "redux-devtools-log-monitor": "^1.4.0",
-    "style-loader": "^0.23.1",
+    "style-loader": "^1.2.1",
     "web-ext": "^4.3.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.12"
