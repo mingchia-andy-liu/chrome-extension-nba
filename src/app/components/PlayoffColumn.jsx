@@ -84,27 +84,25 @@ renderSerie.propTypes = {
     bottomRow: PropTypes.object.isRequired,
 }
 
-class PlayoffColumn extends React.PureComponent {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        series: PropTypes.any,
-    }
-
-    static defaultProps = {
-        series: [],
-    }
-
-    render() {
-        const { title, series } = this.props
-        return (
-            <StyledSerieColumn>
-                <h3>{title}</h3>
-                <StyledSeries>
-                    {series.map(serie => renderSerie(serie))}
-                </StyledSeries>
-            </StyledSerieColumn>
-        )
-    }
+const PlayoffColumn = ({ title, series }) => {
+    return (
+        <StyledSerieColumn>
+            <h3>{title}</h3>
+            <StyledSeries>
+                {series.map(serie => renderSerie(serie))}
+            </StyledSeries>
+        </StyledSerieColumn>
+    )
 }
+
+PlayoffColumn.propTypes = {
+    title: PropTypes.string.isRequired,
+    series: PropTypes.any,
+}
+
+PlayoffColumn.defaultProps = {
+    series: [],
+}
+
 
 export default PlayoffColumn

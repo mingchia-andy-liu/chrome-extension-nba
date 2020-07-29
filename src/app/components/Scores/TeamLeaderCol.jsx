@@ -27,18 +27,15 @@ const NameCell = styled(Cell)`
     background-color: ${((props) => props.bg)};
 `
 
-class TeamLeaderCol extends React.PureComponent {
-    render() {
-        const { points, rebounds, assists, name } = this.props
-        return (
-            <Wrapper>
-                <NameCell bg={getLogoColorByName(name)}>{name}</NameCell>
-                {points.map(({name, value}) => (<Cell key={name}>{name} has {value} points</Cell>))}
-                {rebounds.map(({name, value}) => (<Cell key={name}>{name} has {value} rebounds</Cell>))}
-                {assists.map(({name, value}) => (<Cell key={name}>{name} has {value} assists</Cell>))}
-            </Wrapper>
-        )
-    }
+const TeamLeaderCol = ({ points, rebounds, assists, name }) => {
+    return (
+        <Wrapper>
+            <NameCell bg={getLogoColorByName(name)}>{name}</NameCell>
+            {points.map(({name, value}) => (<Cell key={name}>{name} has {value} points</Cell>))}
+            {rebounds.map(({name, value}) => (<Cell key={name}>{name} has {value} rebounds</Cell>))}
+            {assists.map(({name, value}) => (<Cell key={name}>{name} has {value} assists</Cell>))}
+        </Wrapper>
+    )
 }
 
 TeamLeaderCol.propTypes = {

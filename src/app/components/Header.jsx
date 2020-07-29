@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import {Tab, TabLinkItem} from './Tab'
+import {noop} from '../utils/common'
 
 /**
  * Get the destination path for tabs. To prevent React complaining about
@@ -14,34 +15,29 @@ const getDestPath = (current, dest) => {
     else return dest
 }
 
-const noop = () => undefined
-
-class Header extends React.Component {
-    render() {
-        const { index, location: { pathname } } = this.props
-        return (
-            <React.Fragment>
-                <Tab onTabSelect={noop} index={index} isLink={true}>
-                    <TabLinkItem
-                        to={getDestPath(pathname, '/boxscores')}
-                        label="Box-scores"
-                    />
-                    <TabLinkItem
-                        to={getDestPath(pathname, '/standings')}
-                        label="Standings"
-                    />
-                    <TabLinkItem
-                        to={getDestPath(pathname, '/playoffs')}
-                        label="Playoffs"
-                    />
-                    <TabLinkItem
-                        to={getDestPath(pathname, '/options')}
-                        label="Options"
-                    />
-                </Tab>
-            </React.Fragment>
-        )
-    }
+const Header = ({ index, location: { pathname } }) => {
+    return (
+        <React.Fragment>
+            <Tab onTabSelect={noop} index={index} isLink={true}>
+                <TabLinkItem
+                    to={getDestPath(pathname, '/boxscores')}
+                    label="Box-scores"
+                />
+                <TabLinkItem
+                    to={getDestPath(pathname, '/standings')}
+                    label="Standings"
+                />
+                <TabLinkItem
+                    to={getDestPath(pathname, '/playoffs')}
+                    label="Playoffs"
+                />
+                <TabLinkItem
+                    to={getDestPath(pathname, '/options')}
+                    label="Options"
+                />
+            </Tab>
+        </React.Fragment>
+    )
 }
 
 Header.propTypes = {

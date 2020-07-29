@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -28,30 +28,27 @@ const Link = styled(RouterLink)`
     }
 `
 
-class TabLinkItem extends Component {
-    render() {
-        const { onClick, label, active, to } = this.props
-        return (
-            <ThemeConsumer>
-                {({state: {dark}}) => (
-                    <Link
-                        to={to}
-                        onClick={(e) => {
-                            // Prevent React error, prevent default if the same path
-                            if (to === '') e.preventDefault()
-                            else onClick()
-                        }}
-                        active={active ? 1 : undefined}
-                        dark={dark ? 1 : undefined}
-                    >
-                        <label>
-                            {label}
-                        </label>
-                    </Link>
-                )}
-            </ThemeConsumer>
-        )
-    }
+const TabLinkItem = ({ onClick, label, active, to }) => {
+    return (
+        <ThemeConsumer>
+            {({state: {dark}}) => (
+                <Link
+                    to={to}
+                    onClick={(e) => {
+                        // Prevent React error, prevent default if the same path
+                        if (to === '') e.preventDefault()
+                        else onClick()
+                    }}
+                    active={active ? 1 : undefined}
+                    dark={dark ? 1 : undefined}
+                >
+                    <label>
+                        {label}
+                    </label>
+                </Link>
+            )}
+        </ThemeConsumer>
+    )
 }
 
 TabLinkItem.propTypes = {

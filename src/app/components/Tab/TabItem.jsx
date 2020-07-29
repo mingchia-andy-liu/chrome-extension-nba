@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ThemeConsumer } from '../Context'
@@ -34,26 +34,23 @@ const Label = styled.label`
     cursor: pointer;
 `
 
-class TabItem extends Component {
-    render() {
-        const { onClick, label, active } = this.props
-        return (
-            <ThemeConsumer>
-                {({state: {dark}}) => (
-                    <Label
-                        onClick={(e) => {
-                            e.preventDefault()
-                            onClick()
-                        }}
-                        active={active ? 1 : undefined}
-                        dark={dark ? 1 : undefined}
-                    >
-                        {label}
-                    </Label>
-                )}
-            </ThemeConsumer>
-        )
-    }
+const TabItem = ({onClick, label, active}) => {
+    return (
+        <ThemeConsumer>
+            {({state: {dark}}) => (
+                <Label
+                    onClick={(e) => {
+                        e.preventDefault()
+                        onClick()
+                    }}
+                    active={active ? 1 : undefined}
+                    dark={dark ? 1 : undefined}
+                >
+                    {label}
+                </Label>
+            )}
+        </ThemeConsumer>
+    )
 }
 
 TabItem.propTypes = {

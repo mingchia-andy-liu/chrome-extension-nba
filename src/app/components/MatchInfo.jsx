@@ -94,54 +94,49 @@ const renderAt = (gameStatus) => {
     }
 }
 
-class MatchInfo extends React.PureComponent {
-    render() {
-        const {
-            broadcasters,
-            home,
-            visitor,
-            periodTime: {
-                periodStatus,
-                gameClock,
-                gameStatus,
-                periodValue,
-            },
-            playoffs,
-        } = this.props
-
-        let series = ''
-        if (playoffs) {
-            const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
-            if (+homeWins > +visitorWins) {
-                series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
-            } else if (+homeWins < +visitorWins) {
-                series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
-            } else {
-                series = `Series tied ${homeWins}-${visitorWins}`
-            }
+const MatchInfo = ({
+    broadcasters,
+    home,
+    visitor,
+    periodTime: {
+        periodStatus,
+        gameClock,
+        gameStatus,
+        periodValue,
+    },
+    playoffs,
+}) => {
+    let series = ''
+    if (playoffs) {
+        const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
+        if (+homeWins > +visitorWins) {
+            series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
+        } else if (+homeWins < +visitorWins) {
+            series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
+        } else {
+            series = `Series tied ${homeWins}-${visitorWins}`
         }
-
-
-        return (
-            <ThemeConsumer>
-                {({ state: {dark} }) => (
-                    <SettingsConsumer>
-                        {({state: {spoiler}}) => (
-                            <Wrapper>
-                                {renderScores(dark, spoiler, gameStatus, home, visitor)}
-                                {renderAt(gameStatus)}
-                                <div>
-                                    {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
-                                </div>
-                                {!spoiler && series && <div>{series}</div>}
-                                {broadcasters != null  && renderBroadcasters(broadcasters, gameStatus)}
-                            </Wrapper>
-                        )}
-                    </SettingsConsumer>
-                )}
-            </ThemeConsumer>
-        )
     }
+
+    return (
+        <ThemeConsumer>
+            {({ state: {dark} }) => (
+                <SettingsConsumer>
+                    {({state: {spoiler}}) => (
+                        <Wrapper>
+                            {renderScores(dark, spoiler, gameStatus, home, visitor)}
+                            {renderAt(gameStatus)}
+                            <div>
+                                {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
+                            </div>
+                            {!spoiler && series && <div>{series}</div>}
+                            {broadcasters != null  && renderBroadcasters(broadcasters, gameStatus)}
+                        </Wrapper>
+                    )}
+                </SettingsConsumer>
+            )}
+        </ThemeConsumer>
+    )
 }
 
 MatchInfo.propTypes = {
@@ -150,16 +145,20 @@ MatchInfo.propTypes = {
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         score: PropTypes.string,
+        nickname: PropTypes.string.isRequired,
     }).isRequired,
     visitor: PropTypes.shape({
         abbreviation: PropTypes.string.isRequired,
         city: PropTypes.string.isRequired,
         score: PropTypes.string,
+        nickname: PropTypes.string.isRequired,
     }).isRequired,
     periodTime: PropTypes.shape({
         periodStatus: PropTypes.string.isRequired,
         gameClock: PropTypes.string.isRequired,
         gameStatus: PropTypes.string.isRequired,
+        // TODO: update type
+        periodValue: PropTypes.any.isRequired,
     }).isRequired,
     playoffs: PropTypes.shape({
         home_wins: PropTypes.string,

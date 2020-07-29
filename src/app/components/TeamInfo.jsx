@@ -41,20 +41,17 @@ const TeamInfoWrapper = styled.div`
     font-size: calc(17px + 0.1vw);
 `
 
-class TeamInfo extends React.PureComponent {
-    render() {
-        const { ta, tn, winning, large } = this.props
-        return (
-            <SettingsConsumer>
-                {({state: {spoiler}}) => (
-                    <TeamInfoWrapper>
-                        <TeamLogo winning={spoiler ? true : winning} team={ta} large={large}>{ta}</TeamLogo>
-                        <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
-                    </TeamInfoWrapper>
-                )}
-            </SettingsConsumer>
-        )
-    }
+const TeamInfo = ({ ta, tn, winning, large }) => {
+    return (
+        <SettingsConsumer>
+            {({state: {spoiler}}) => (
+                <TeamInfoWrapper>
+                    <TeamLogo winning={spoiler ? true : winning} team={ta} large={large}>{ta}</TeamLogo>
+                    <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
+                </TeamInfoWrapper>
+            )}
+        </SettingsConsumer>
+    )
 }
 
 TeamInfo.propTypes = {
