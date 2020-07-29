@@ -55,7 +55,7 @@
     "moment-timezone": "^0.5.31",
     "node-fetch": "^2.6.0",
     "query-string": "^6.12.1",
-    "react": "^16.6.0",
+    "react": "^16.13.1",
     "react-dom": "^16.13.0",
     "react-flatpickr": "^3.10.4",
     "react-redux": "^5.1.0",
