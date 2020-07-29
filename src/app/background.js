@@ -48,7 +48,7 @@ const liveListener = () => {
         })
         .catch(() => {
             return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-                .then(res => res.jso1n())
+                .then(res => res.json())
                 .then(({games}) => checkLiveGame(games, 2))
                 .catch(() => {
                     const date = moment(dateStr)
