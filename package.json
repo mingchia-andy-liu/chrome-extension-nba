@@ -44,7 +44,7 @@
     "eslint": "^7.5.0",
     "eslint-plugin-react": "^7.20.0",
     "prop-types": "^15.7.2",
-    "redux-devtools": "^3.5.0",
+    "redux-devtools": "^3.6.0",
     "redux-devtools-log-monitor": "^1.4.0",
     "style-loader": "^1.2.1",
     "web-ext": "^4.3.0",
