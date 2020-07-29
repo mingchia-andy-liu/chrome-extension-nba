@@ -180,7 +180,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
 }
 
 const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
-    if ( hps.length === 0 || vps.length === 0) {
+    if (hps.length === 0 || vps.length === 0) {
         return (
             <Wrapper>
                     No Player Data Available

@@ -70,7 +70,7 @@ const MatchCard = ({
         score: hs,
     } = home
 
-    const  {
+    const {
         abbreviation: vta,
         nickname: vtn,
         score: vs,
