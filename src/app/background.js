@@ -64,7 +64,6 @@ const liveListener = () => {
                         .then(res => res.json())
                         .then(({gs: {g}})=> {
                             checkLiveGame(g, 1)
-                            throw new Error('123123')
                         })
                         .catch(error => {throw error})
                 })
