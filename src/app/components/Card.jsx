@@ -54,58 +54,54 @@ const Wrapper = styled.div`
     }
 `
 
-class MatchCard extends React.PureComponent {
-    render() {
-        const {
-            broadcasters,
-            id,
-            home,
-            visitor,
-            onClick,
-            selected,
-            showBroadcast,
-            ...rest
-        } = this.props
+const MatchCard = ({
+    broadcasters,
+    id,
+    home,
+    visitor,
+    onClick,
+    selected,
+    showBroadcast,
+    ...rest
+}) => {
+    const {
+        abbreviation: hta,
+        nickname: htn,
+        score: hs,
+    } = home
 
-        const {
-            abbreviation: hta,
-            nickname: htn,
-            score: hs,
-        } = home
+    const {
+        abbreviation: vta,
+        nickname: vtn,
+        score: vs,
+    } = visitor
 
-        const  {
-            abbreviation: vta,
-            nickname: vtn,
-            score: vs,
-        } = visitor
-
-        return (
-            <ThemeConsumer>
-                {({ state: {dark} }) => (
-                    <SidebarConsumer>
-                        {({ state: { team } }) => (
-                            <Wrapper
-                                dark={dark}
-                                onClick={onClick}
-                                data-id={id}
-                                selected={selected}
-                                fav={team === vta || team === hta}
-                            >
-                                <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
-                                <MatchInfo
-                                    home={home}
-                                    visitor={visitor}
-                                    broadcasters={showBroadcast ? broadcasters : undefined}
-                                    {...rest}
-                                />
-                                <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
-                            </Wrapper>
-                        )}
-                    </SidebarConsumer>
-                )}
-            </ThemeConsumer>
-        )
-    }
+    return (
+        <ThemeConsumer>
+            {({ state: {dark} }) => (
+                <SidebarConsumer>
+                    {({ state: { team } }) => (
+                        <Wrapper
+                            dark={dark}
+                            onClick={onClick}
+                            data-id={id}
+                            selected={selected}
+                            fav={team === vta || team === hta}
+                        >
+                            <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
+                            <MatchInfo
+                                home={home}
+                                visitor={visitor}
+                                broadcasters={showBroadcast ? broadcasters : undefined}
+                                {...rest}
+                            />
+                            <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
+                        </Wrapper>
+                    )}
+                </SidebarConsumer>
+            )}
+        </ThemeConsumer>
+    )
 }
 
 MatchCard.propTypes = {

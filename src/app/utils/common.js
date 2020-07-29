@@ -172,7 +172,7 @@ export const getOddRowColor = (i, isDark) => {
 /**
  * noop
  */
-export const noop = () => {}
+export const noop = () => undefined
 
 const queryString = require('query-string')
 export const getDateFromQuery = (props) => {

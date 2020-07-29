@@ -14,18 +14,15 @@ const IFrame = styled.iframe`
     `}
 `
 
-class Video extends React.PureComponent {
-    static propTypes = {
-        src: PropTypes.string.isRequired,
-    }
+const Video = ({src}) => {
+    return (
+        <IFrame src={src} allowFullScreen={true} frameBorder="0"></IFrame>
 
-    render() {
+    )
+}
 
-        return (
-            <IFrame src={this.props.src} allowFullScreen={true} frameBorder="0"></IFrame>
-
-        )
-    }
+Video.propTypes = {
+    src: PropTypes.string.isRequired,
 }
 
 export default Video

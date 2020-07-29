@@ -15,7 +15,6 @@ const Wrapper = styled.div`
     }
 `
 
-
 class Tab extends React.Component {
     constructor(props) {
         super(props)

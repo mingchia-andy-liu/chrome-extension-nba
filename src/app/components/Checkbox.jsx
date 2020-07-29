@@ -86,36 +86,33 @@ const StyledLabel = styled.label`
     }
 `
 
-class Checkbox extends React.PureComponent {
-    static propTypes = {
-        checked: PropTypes.bool,
-        disabled: PropTypes.bool,
-        onChange: PropTypes.func,
-        text: PropTypes.string,
-    }
+const Checkbox = ({checked, disabled, onChange, text}) => {
+    return (
+        <div>
+            <StyledLabel>
+                <input
+                    disabled={disabled}
+                    checked={checked}
+                    type="checkbox"
+                    onChange={onChange}
+                />
+                <span>{text}</span>
+            </StyledLabel>
+        </div>
+    )
+}
 
-    static defaultProps = {
-        checked: false,
-        disabled: false,
-        onChange: () => {},
-    }
+Checkbox.propTypes = {
+    checked: PropTypes.bool,
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func,
+    text: PropTypes.string,
+}
 
-    render() {
-        const {checked, disabled, onChange, text} = this.props
-        return (
-            <div>
-                <StyledLabel>
-                    <input
-                        disabled={disabled}
-                        checked={checked}
-                        type="checkbox"
-                        onChange={onChange}
-                    />
-                    <span>{text}</span>
-                </StyledLabel>
-            </div>
-        )
-    }
+Checkbox.defaultProps = {
+    checked: false,
+    disabled: false,
+    onChange: () => {},
 }
 
 export const DarkModeCheckbox = () => (

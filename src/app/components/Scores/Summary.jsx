@@ -26,41 +26,38 @@ const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
     </Row>
 )
 
-class Summary extends React.PureComponent {
-    render() {
-        const { home, visitor, extra } = this.props
-        return (
-            <Wrapper>
-                <ThemeConsumer>
-                    {({ state: { dark } }) => (
-                        <React.Fragment>
-                            <StickyTable stickyHeaderCount={0}>
-                                <Row>
-                                    <RowHeaderCell> Team </RowHeaderCell>
-                                    {home.linescores && home.linescores.period.map(period => (
+const Summary = ({home, visitor, extra}) => {
+    return (
+        <Wrapper>
+            <ThemeConsumer>
+                {({ state: { dark } }) => (
+                    <React.Fragment>
+                        <StickyTable stickyHeaderCount={0}>
+                            <Row>
+                                <RowHeaderCell> Team </RowHeaderCell>
+                                {home.linescores && home.linescores.period.map(period => (
                                     // TODO: hides the unstart peroid
-                                        <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
-                                    ))}
-                                    <HeaderCell> Final </HeaderCell>
-                                </Row>
-                                {renderTeamRow(visitor, home, dark)}
-                                {renderTeamRow(home, visitor, dark, 1)}
-                                <Row>
-                                    <RowHeaderCell>Lead Changes</RowHeaderCell>
-                                    <Cell>{extra.leadChanges}</Cell>
-                                </Row>
-                                <Row>
-                                    <RowHeaderCell>Times Tied</RowHeaderCell>
-                                    <Cell>{extra.timesTied}</Cell>
-                                </Row>
-                            </StickyTable>
-                        </React.Fragment>
+                                    <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
+                                ))}
+                                <HeaderCell> Final </HeaderCell>
+                            </Row>
+                            {renderTeamRow(visitor, home, dark)}
+                            {renderTeamRow(home, visitor, dark, 1)}
+                            <Row>
+                                <RowHeaderCell>Lead Changes</RowHeaderCell>
+                                <Cell>{extra.leadChanges}</Cell>
+                            </Row>
+                            <Row>
+                                <RowHeaderCell>Times Tied</RowHeaderCell>
+                                <Cell>{extra.timesTied}</Cell>
+                            </Row>
+                        </StickyTable>
+                    </React.Fragment>
 
-                    )}
-                </ThemeConsumer>
-            </Wrapper>
-        )
-    }
+                )}
+            </ThemeConsumer>
+        </Wrapper>
+    )
 }
 
 Summary.propTypes = {

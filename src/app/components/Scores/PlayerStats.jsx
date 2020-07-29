@@ -179,36 +179,33 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
     )
 }
 
-class PlayerStats extends React.PureComponent {
-    render() {
-        const { hps, vps, hta, vta, isLive } = this.props
-        if ( hps.length === 0 || vps.length === 0) {
-            return (
-                <Wrapper>
-                    No Player Data Available
-                </Wrapper>
-            )
-        }
-
+const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
+    if (hps.length === 0 || vps.length === 0) {
         return (
             <Wrapper>
-                <ThemeConsumer>
-                    {({ state: {dark} }) => (
-                        <BoxScoreConsumer>
-                            {({ state: { hideZeroRow } }) => (
-                                <StickyTable stickyHeaderCount={0}>
-                                    {renderHeaderRow(vta)}
-                                    {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                                    {renderHeaderRow(hta)}
-                                    {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                                </StickyTable>
-                            )}
-                        </BoxScoreConsumer>
-                    )}
-                </ThemeConsumer>
+                    No Player Data Available
             </Wrapper>
         )
     }
+
+    return (
+        <Wrapper>
+            <ThemeConsumer>
+                {({ state: {dark} }) => (
+                    <BoxScoreConsumer>
+                        {({ state: { hideZeroRow } }) => (
+                            <StickyTable stickyHeaderCount={0}>
+                                {renderHeaderRow(vta)}
+                                {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                                {renderHeaderRow(hta)}
+                                {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                            </StickyTable>
+                        )}
+                    </BoxScoreConsumer>
+                )}
+            </ThemeConsumer>
+        </Wrapper>
+    )
 }
 
 PlayerStats.propTypes = {

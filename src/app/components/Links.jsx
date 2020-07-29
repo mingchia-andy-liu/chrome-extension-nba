@@ -24,32 +24,30 @@ const Link = styled.a`
     cursor: pointer;
 `
 
-class Links extends React.PureComponent {
-    render() {
-        const links = ['Box-scores', 'Standings', 'Playoffs', 'Options']
-        const hrefs = ['boxscores', 'standings', 'playoffs', 'options']
-        const atags = links.map((element, index) => (
-            <ThemeConsumer key={`link-${index}`}>
-                {({ state: { dark } }) => (
-                    <Link
-                        dark={dark}
-                        onClick={() => {
-                            browser.tabs.create({ url: `/index.html#/${hrefs[index]}` })
-                            window.close()
-                        }}
-                    >
-                        {element}
-                    </Link>
-                )}
-            </ThemeConsumer>
-        ))
+const Links = () => {
+    const links = ['Box-scores', 'Standings', 'Playoffs', 'Options']
+    const hrefs = ['boxscores', 'standings', 'playoffs', 'options']
+    const atags = links.map((element, index) => (
+        <ThemeConsumer key={`link-${index}`}>
+            {({ state: { dark } }) => (
+                <Link
+                    dark={dark}
+                    onClick={() => {
+                        browser.tabs.create({ url: `/index.html#/${hrefs[index]}` })
+                        window.close()
+                    }}
+                >
+                    {element}
+                </Link>
+            )}
+        </ThemeConsumer>
+    ))
 
-        return (
-            <Wrapper>
-                {atags}
-            </Wrapper>
-        )
-    }
+    return (
+        <Wrapper>
+            {atags}
+        </Wrapper>
+    )
 }
 
 

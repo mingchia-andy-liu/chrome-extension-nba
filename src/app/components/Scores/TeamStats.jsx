@@ -81,23 +81,20 @@ const renderTeamRow = (team, name, isDark, i = 0) => {
     )
 }
 
-class TeamStats extends React.PureComponent {
-    render() {
-        const { hts, vts, hta, vta } = this.props
-        return (
-            <Wrapper>
-                <ThemeConsumer>
-                    {({state: { dark }})=> (
-                        <StickyTable stickyHeaderCount={0}>
-                            {renderHeaderRow(0)}
-                            {renderTeamRow(vts, vta, dark)}
-                            {renderTeamRow(hts, hta, dark, 1)}
-                        </StickyTable>
-                    )}
-                </ThemeConsumer>
-            </Wrapper>
-        )
-    }
+const TeamStats = ({ hts, vts, hta, vta }) => {
+    return (
+        <Wrapper>
+            <ThemeConsumer>
+                {({state: { dark }})=> (
+                    <StickyTable stickyHeaderCount={0}>
+                        {renderHeaderRow(0)}
+                        {renderTeamRow(vts, vta, dark)}
+                        {renderTeamRow(hts, hta, dark, 1)}
+                    </StickyTable>
+                )}
+            </ThemeConsumer>
+        </Wrapper>
+    )
 }
 
 TeamStats.propTypes = {
