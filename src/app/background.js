@@ -65,9 +65,7 @@ const liveListener = () => {
                         .then(({gs: {g}})=> {
                             checkLiveGame(g, 1)
                         })
-                        .catch(error => {throw error})
                 })
-                .catch(error => {throw error})
         })
         .catch(() => browser.setBadgeText({ text: '' }))
 }
