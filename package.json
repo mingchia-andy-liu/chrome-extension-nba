@@ -58,7 +58,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-flatpickr": "^3.10.4",
-    "react-redux": "^5.1.0",
+    "react-redux": "^6.0.1",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "react-sticky-table": "^2.0.4",
