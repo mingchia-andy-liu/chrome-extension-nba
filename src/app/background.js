@@ -1,12 +1,12 @@
 import moment from 'moment-timezone'
 import browser, { checkLiveGame } from './utils/browser'
 import getAPIDate from './utils/getApiDate'
-import { nextNearestMinutes/*, nearestMinutes */} from './utils/common'
+import { nextNearestMinutes /*, nearestMinutes */ } from './utils/common'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-    when: nextNearestMinutes(30, moment()).valueOf(),
-    periodInMinutes: 30,
+  when: nextNearestMinutes(30, moment()).valueOf(),
+  periodInMinutes: 30,
 })
 
 // const fireFavTeamNotificationIfNeeded = (games) => {
@@ -34,86 +34,97 @@ browser.alarms.create('live', {
 // }
 
 const liveListener = () => {
-    const dateStr = moment(getAPIDate()).format('YYYYMMDD')
-    fetch(`https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`)
-        .then(res => res.json())
-        .then(data => {
-            const { sports_content: { games: { game: live } } } = data
+  const dateStr = moment(getAPIDate()).format('YYYYMMDD')
+  fetch(
+    `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      const {
+        sports_content: {
+          games: { game: live },
+        },
+      } = data
 
-            // if (!initCheck) {
-            //     fireFavTeamNotificationIfNeeded(live)
-            // }
+      // if (!initCheck) {
+      //     fireFavTeamNotificationIfNeeded(live)
+      // }
 
-            checkLiveGame(live)
-        })
+      checkLiveGame(live)
+    })
+    .catch(() => {
+      return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
+        .then((res) => res.json())
+        .then(({ games }) => checkLiveGame(games, 2))
         .catch(() => {
-            return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-                .then(res => res.json())
-                .then(({games}) => checkLiveGame(games, 2))
-                .catch(() => {
-                    const date = moment(dateStr)
-                    let year
-                    if (date.year() === 2020) {
-                        // 2020 season is delayed and season should finish in 2020-09
-                        year = date.month() > 8 ? date.year() : date.add(-1, 'years').year()
-                    } else {
-                        // if it's after july, it's a new season
-                        year = date.month() > 5  ? date.year() : date.add(-1, 'years').year()
-                    }
-                    return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
-                        .then(res => res.json())
-                        .then(({gs: {g}})=> {
-                            checkLiveGame(g, 1)
-                        })
-                })
+          const date = moment(dateStr)
+          let year
+          if (date.year() === 2020) {
+            // 2020 season is delayed and season should finish in 2020-09
+            year = date.month() > 8 ? date.year() : date.add(-1, 'years').year()
+          } else {
+            // if it's after july, it's a new season
+            year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+          }
+          return fetch(
+            `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
+          )
+            .then((res) => res.json())
+            .then(({ gs: { g } }) => {
+              checkLiveGame(g, 1)
+            })
         })
-        .catch(() => browser.setBadgeText({ text: '' }))
+    })
+    .catch(() => browser.setBadgeText({ text: '' }))
 }
 
 // immediately search for live game
 liveListener()
 
 browser.alarms.onAlarm.addListener((alarm) => {
-    // when the chrome is reopened, alarms get ran even though the time has passed
-    if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
-        return
-    }
+  // when the chrome is reopened, alarms get ran even though the time has passed
+  if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
+    return
+  }
 
-    if (alarm.name === 'live') {
-        liveListener()
-    }
+  if (alarm.name === 'live') {
+    liveListener()
+  }
 })
 
 // this will reload the background explicitly to trigger an update as soon as possible if available
 browser.runtime.onUpdateAvailable.addListener(() => {
-    browser.runtime.reload()
+  browser.runtime.reload()
 })
 
 // Add a listener for loading up the changelog on Major/Minor update, not patches.
 browser.runtime.onInstalled.addListener((details) => {
-    const currentVersion = browser.runtime.getManifest().version
-    const previousVersion = details.previousVersion
-    if (details.reason === 'update') {
-        // only open the options page iff it's major and minor updates
-        const currentSplit = currentVersion.split('.')
-        const previousSplit = previousVersion.split('.')
-        if (currentSplit[0] !== previousSplit[0] || currentSplit[1] !== previousSplit[1]) {
-            browser.tabs.create({ url: '/index.html#/changelog' })
-        }
-
-        // Get rid of the old data
-        // TODO: remove this after few versions
-        browser.getAll((data) => {
-            const newOptions = {
-                broadcast: data.broadcast,
-                favTeam: data.favTeam,
-                hideZeroRow: data.hideZeroRow,
-                nightMode: data.nightMode,
-                spoiler: data.spoiler,
-            }
-            browser.clear(() => {
-                browser.setItem(newOptions)
-            })
-        })
+  const currentVersion = browser.runtime.getManifest().version
+  const previousVersion = details.previousVersion
+  if (details.reason === 'update') {
+    // only open the options page iff it's major and minor updates
+    const currentSplit = currentVersion.split('.')
+    const previousSplit = previousVersion.split('.')
+    if (
+      currentSplit[0] !== previousSplit[0] ||
+      currentSplit[1] !== previousSplit[1]
+    ) {
+      browser.tabs.create({ url: '/index.html#/changelog' })
     }
+
+    // Get rid of the old data
+    // TODO: remove this after few versions
+    browser.getAll((data) => {
+      const newOptions = {
+        broadcast: data.broadcast,
+        favTeam: data.favTeam,
+        hideZeroRow: data.hideZeroRow,
+        nightMode: data.nightMode,
+        spoiler: data.spoiler,
+      }
+      browser.clear(() => {
+        browser.setItem(newOptions)
+      })
+    })
+  }
 })

@@ -1,10 +1,9 @@
 import React from 'react'
-import {Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ThemeConsumer } from '../Context'
 import { ColumnCSS, AlignCenter, JustifyCenter } from '../../styles'
-
 
 const Link = styled(RouterLink)`
     ${ColumnCSS}
@@ -14,7 +13,14 @@ const Link = styled(RouterLink)`
     height: 100%;
     padding: 10px;
     background-color: ${(props) => (props.dark ? '#2963FF' : '#046fdb')};
-    border-bottom: 4px solid ${(props) => (props.active ? ((props.dark ? '#92CBF7' : '#81D3FA')) : (props.dark ? '#2963FF' : '#046fdb'))};
+    border-bottom: 4px solid ${(props) =>
+      props.active
+        ? props.dark
+          ? '#92CBF7'
+          : '#81D3FA'
+        : props.dark
+        ? '#2963FF'
+        : '#046fdb'};
 
     &:hover {
         font-weight: 400;
@@ -29,38 +35,36 @@ const Link = styled(RouterLink)`
 `
 
 const TabLinkItem = ({ onClick, label, active, to }) => {
-    return (
-        <ThemeConsumer>
-            {({state: {dark}}) => (
-                <Link
-                    to={to}
-                    onClick={(e) => {
-                        // Prevent React error, prevent default if the same path
-                        if (to === '') e.preventDefault()
-                        else onClick()
-                    }}
-                    active={active ? 1 : undefined}
-                    dark={dark ? 1 : undefined}
-                >
-                    <label>
-                        {label}
-                    </label>
-                </Link>
-            )}
-        </ThemeConsumer>
-    )
+  return (
+    <ThemeConsumer>
+      {({ state: { dark } }) => (
+        <Link
+          to={to}
+          onClick={(e) => {
+            // Prevent React error, prevent default if the same path
+            if (to === '') e.preventDefault()
+            else onClick()
+          }}
+          active={active ? 1 : undefined}
+          dark={dark ? 1 : undefined}
+        >
+          <label>{label}</label>
+        </Link>
+      )}
+    </ThemeConsumer>
+  )
 }
 
 TabLinkItem.propTypes = {
-    label: PropTypes.string.isRequired,
-    active: PropTypes.bool.isRequired,
-    onClick: PropTypes.func,
-    to: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  active: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
+  to: PropTypes.string.isRequired,
 }
 
 TabLinkItem.defaultProps = {
-    label: '',
-    active: false,
+  label: '',
+  active: false,
 }
 
 export default TabLinkItem

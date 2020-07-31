@@ -10,14 +10,13 @@ import modalReducer from './containers/Modal/reducers'
 
 export const initialState = {}
 
-
 // combined reducer
 export default combineReducers({
-    routing,
-    live: liveReducer,
-    bs: boxScoresDetailsReducer,
-    date: dateReducer,
-    standings: standingsReducer,
-    playoff: playoffReducer,
-    modal: modalReducer,
+  routing,
+  live: liveReducer,
+  bs: boxScoresDetailsReducer,
+  date: dateReducer,
+  standings: standingsReducer,
+  playoff: playoffReducer,
+  modal: modalReducer,
 })
