@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, HeaderCell, RowHeaderCell, Table, Row } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { ThemeConsumer } from '../Context'
 
@@ -32,26 +31,28 @@ const Summary = ({home, visitor, extra}) => {
             <ThemeConsumer>
                 {({ state: { dark } }) => (
                     <React.Fragment>
-                        <StickyTable stickyHeaderCount={0}>
-                            <Row>
-                                <RowHeaderCell> Team </RowHeaderCell>
-                                {home.linescores && home.linescores.period.map(period => (
+                        <Table>
+                            <tbody>
+                                <Row>
+                                    <RowHeaderCell> Team </RowHeaderCell>
+                                    {home.linescores && home.linescores.period.map(period => (
                                     // TODO: hides the unstart peroid
-                                    <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
-                                ))}
-                                <HeaderCell> Final </HeaderCell>
-                            </Row>
-                            {renderTeamRow(visitor, home, dark)}
-                            {renderTeamRow(home, visitor, dark, 1)}
-                            <Row>
-                                <RowHeaderCell>Lead Changes</RowHeaderCell>
-                                <Cell>{extra.leadChanges}</Cell>
-                            </Row>
-                            <Row>
-                                <RowHeaderCell>Times Tied</RowHeaderCell>
-                                <Cell>{extra.timesTied}</Cell>
-                            </Row>
-                        </StickyTable>
+                                        <HeaderCell key={`period-${period.period_value}`}> {period.period_name} </HeaderCell>
+                                    ))}
+                                    <HeaderCell> Final </HeaderCell>
+                                </Row>
+                                {renderTeamRow(visitor, home, dark)}
+                                {renderTeamRow(home, visitor, dark, 1)}
+                                <Row>
+                                    <RowHeaderCell>Lead Changes</RowHeaderCell>
+                                    <Cell>{extra.leadChanges}</Cell>
+                                </Row>
+                                <Row>
+                                    <RowHeaderCell>Times Tied</RowHeaderCell>
+                                    <Cell>{extra.timesTied}</Cell>
+                                </Row>
+                            </tbody>
+                        </Table>
                     </React.Fragment>
 
                 )}

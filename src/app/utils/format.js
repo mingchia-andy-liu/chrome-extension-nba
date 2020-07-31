@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components'
-import { Cell as StickyCell, Row } from 'react-sticky-table'
 import { Theme } from '../styles'
 
-export const Cell = styled(StickyCell)`
+export const Cell = styled.td`
     min-width: 40px;
     width: 5vw;
     height: 1.8em !important;
@@ -12,6 +11,7 @@ export const Cell = styled(StickyCell)`
         if (props.dark && props.winning) return Theme.dark.winning
         if (props.winning) return Theme.light.winning
     }};
+    border: none;
 `
 
 export const winLoseCSS = css`
@@ -48,11 +48,16 @@ export const Sup = styled.div`
     padding: 1px;
 `
 
-export const RowWrapper = styled(Row)`
-    border-bottom: 1px solid hsl(0, 0%, 95%);
+export const Row = styled.tr``
+
+export const Table = styled.table`
+    border-collapse: collapse;
+`
+
+export const RowWrapper = styled.tr`
     color: ${(props) => (props.doubles && 'white')};
     &:hover {
-        background-color: grey !important;
+        background-color: ${(props) => (props.dark ? 'hsl(0, 0%, 10%)' : 'hsl(0, 0%, 80%)')} !important;
     }
 `
 

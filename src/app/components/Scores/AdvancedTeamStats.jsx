@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StickyTable, Row } from 'react-sticky-table'
-import { Cell, HeaderCell as FormatHeaderCell, RowHeaderCell } from '../../utils/format'
+import { Cell, HeaderCell as FormatHeaderCell, RowHeaderCell, Table, Row } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { ThemeConsumer } from '../Context'
 
@@ -52,11 +51,13 @@ const TeamStats = ({home, hta, visitor, vta}) => {
         <Wrapper>
             <ThemeConsumer>
                 {({state: { dark }}) => (
-                    <StickyTable stickyHeaderCount={0}>
-                        {renderHeaderRow(0)}
-                        {renderTeamRow(visitor, vta, dark)}
-                        {renderTeamRow(home, hta, dark, 1)}
-                    </StickyTable>
+                    <Table>
+                        <tbody>
+                            {renderHeaderRow(0)}
+                            {renderTeamRow(visitor, vta, dark)}
+                            {renderTeamRow(home, hta, dark, 1)}
+                        </tbody>
+                    </Table>
                 )}
             </ThemeConsumer>
         </Wrapper>

@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StickyTable, Row } from 'react-sticky-table'
 import { ThemeConsumer } from '../Context'
-import { Cell, HeaderCell } from '../../utils/format'
+import { Cell, HeaderCell, Table, Row } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { QUARTER_NAMES } from '../../utils/constant'
 import { RowCSS } from '../../styles'
@@ -135,10 +134,12 @@ class PlayByPlay extends React.PureComponent {
                 </Title>
                 <ThemeConsumer>
                     {({state: {dark}}) => (
-                        <StickyTable stickyHeaderCount={0} stickyColumnCount={0}>
-                            {renderHeaderRow()}
-                            {renderPBPRow(play, currentQuarter, dark)}
-                        </StickyTable>
+                        <Table>
+                            <tbody>
+                                {renderHeaderRow()}
+                                {renderPBPRow(play, currentQuarter, dark)}
+                            </tbody>
+                        </Table>
                     )}
                 </ThemeConsumer>
             </Wrapper>
