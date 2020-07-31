@@ -64,6 +64,5 @@ You need to have `npm` installed.
 - Load the `/src/build` folder into Chrome
 
 #### Third party packages
-* `react-sticky-table`
 * `react-flatpickr`
 * `moment-timezone`

@@ -15,7 +15,6 @@ import {
     BoxScoreProvider
 } from '../../components/Context'
 
-import 'react-sticky-table/dist/react-sticky-table.css'
 import 'flatpickr/dist/flatpickr.min.css'
 
 const AppBase = styled.div``

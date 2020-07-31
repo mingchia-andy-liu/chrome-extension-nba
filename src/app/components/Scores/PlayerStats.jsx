@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { StickyTable } from 'react-sticky-table'
 import {
     Cell,
     HeaderCell,
@@ -9,7 +8,8 @@ import {
     RowHeaderCell,
     RowWrapper,
     StatsCell,
-    Sup
+    Sup,
+    Table
 } from '../../utils/format'
 import {
     formatMinutes,
@@ -116,6 +116,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
             key={name}
             style={{ backgroundColor: doubles ? rowBGColor(doubles, isDark) : getOddRowColor(i, isDark) }}
             title={doubles && getDoublesText(doubles)}
+            dark={isDark}
         >
             <PlayerName>
                 {name}
@@ -194,12 +195,14 @@ const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
                 {({ state: {dark} }) => (
                     <BoxScoreConsumer>
                         {({ state: { hideZeroRow } }) => (
-                            <StickyTable stickyHeaderCount={0}>
-                                {renderHeaderRow(vta)}
-                                {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                                {renderHeaderRow(hta)}
-                                {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
-                            </StickyTable>
+                            <Table>
+                                <tbody>
+                                    {renderHeaderRow(vta)}
+                                    {vps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                                    {renderHeaderRow(hta)}
+                                    {hps.map((player, i) => (renderPlayerRow(player, isLive, i, dark, hideZeroRow)))}
+                                </tbody>
+                            </Table>
                         )}
                     </BoxScoreConsumer>
                 )}
