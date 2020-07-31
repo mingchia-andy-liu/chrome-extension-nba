@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import types from './types'
 
 export const fetchPlayoff = () => async (dispatch) => {

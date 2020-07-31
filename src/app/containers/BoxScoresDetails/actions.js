@@ -1,5 +1,4 @@
 import { push } from 'react-router-redux'
-import fetch from 'node-fetch'
 import moment from 'moment'
 import types from './types'
 import getAPIDate from '../../utils/getApiDate'
