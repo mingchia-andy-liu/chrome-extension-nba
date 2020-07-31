@@ -8,16 +8,16 @@ import App from './containers/App'
 import './utils/alarms'
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Router history={history}>
-            <App />
-        </Router>
-    </Provider>
-    , document.getElementById('app')
+  <Provider store={store}>
+    <Router history={history}>
+      <App />
+    </Router>
+  </Provider>,
+  document.getElementById('app')
 )
 
 if (process.env.NODE_ENV === 'development') {
-    // const showDevTools = require('./showDevTools')
-    // showDevTools.default(store)
-    window.Store = store
+  // const showDevTools = require('./showDevTools')
+  // showDevTools.default(store)
+  window.Store = store
 }

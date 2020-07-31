@@ -20,7 +20,8 @@ const Wrapper = styled.div`
     padding: 2px 5px;
     margin-bottom: 15px;
     font-size: calc(17px + 0.1vw);
-    background-color: ${(props) => (props.dark ? Theme.dark.blockBackground: '#f9f9f9')};
+    background-color: ${(props) =>
+      props.dark ? Theme.dark.blockBackground : '#f9f9f9'};
     border-radius: 5px;
     transition: 0.3s;
 
@@ -31,16 +32,17 @@ const Wrapper = styled.div`
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.3);
     }
 
-    border: ${(props) => (props.selected
-        ? '2px solid rgb(30, 90, 250)'
-        : '2px solid transparent')};
+    border: ${(props) =>
+      props.selected ? '2px solid rgb(30, 90, 250)' : '2px solid transparent'};
 
     &:last-child {
         margin-bottom: 0px;
     }
 
     &::before {
-        ${(props) => (props.fav && `
+        ${(props) =>
+          props.fav &&
+          `
             content: '';
             position: absolute;
             top: -2px;
@@ -50,79 +52,70 @@ const Wrapper = styled.div`
             border-left: 5px solid gold;
             border-right: 20px solid transparent;
             border-bottom: 5px solid transparent;
-        `)}
+        `}
     }
 `
 
 const MatchCard = ({
-    broadcasters,
-    id,
-    home,
-    visitor,
-    onClick,
-    selected,
-    showBroadcast,
-    ...rest
+  broadcasters,
+  id,
+  home,
+  visitor,
+  onClick,
+  selected,
+  showBroadcast,
+  ...rest
 }) => {
-    const {
-        abbreviation: hta,
-        nickname: htn,
-        score: hs,
-    } = home
+  const { abbreviation: hta, nickname: htn, score: hs } = home
 
-    const {
-        abbreviation: vta,
-        nickname: vtn,
-        score: vs,
-    } = visitor
+  const { abbreviation: vta, nickname: vtn, score: vs } = visitor
 
-    return (
-        <ThemeConsumer>
-            {({ state: {dark} }) => (
-                <SidebarConsumer>
-                    {({ state: { team } }) => (
-                        <Wrapper
-                            dark={dark}
-                            onClick={onClick}
-                            data-id={id}
-                            selected={selected}
-                            fav={team === vta || team === hta}
-                        >
-                            <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)}/>
-                            <MatchInfo
-                                home={home}
-                                visitor={visitor}
-                                broadcasters={showBroadcast ? broadcasters : undefined}
-                                {...rest}
-                            />
-                            <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)}/>
-                        </Wrapper>
-                    )}
-                </SidebarConsumer>
-            )}
-        </ThemeConsumer>
-    )
+  return (
+    <ThemeConsumer>
+      {({ state: { dark } }) => (
+        <SidebarConsumer>
+          {({ state: { team } }) => (
+            <Wrapper
+              dark={dark}
+              onClick={onClick}
+              data-id={id}
+              selected={selected}
+              fav={team === vta || team === hta}
+            >
+              <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} />
+              <MatchInfo
+                home={home}
+                visitor={visitor}
+                broadcasters={showBroadcast ? broadcasters : undefined}
+                {...rest}
+              />
+              <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} />
+            </Wrapper>
+          )}
+        </SidebarConsumer>
+      )}
+    </ThemeConsumer>
+  )
 }
 
 MatchCard.propTypes = {
-    broadcasters: PropTypes.array,
-    id: PropTypes.string.isRequired,
-    home: PropTypes.object.isRequired,
-    visitor: PropTypes.object.isRequired,
-    onClick: PropTypes.func.isRequired,
-    selected: PropTypes.bool,
-    showBroadcast: PropTypes.bool,
+  broadcasters: PropTypes.array,
+  id: PropTypes.string.isRequired,
+  home: PropTypes.object.isRequired,
+  visitor: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  showBroadcast: PropTypes.bool,
 }
 
 const TextCard = ({ text }) => (
-    <ThemeConsumer>
-        {({ state: { dark } }) => <Wrapper dark={dark}> {text} </Wrapper>}
-    </ThemeConsumer>
+  <ThemeConsumer>
+    {({ state: { dark } }) => <Wrapper dark={dark}> {text} </Wrapper>}
+  </ThemeConsumer>
 )
 
 TextCard.propTypes = {
-    text: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
 }
-
 
 export { MatchCard, TextCard }

@@ -6,168 +6,175 @@ import { SettingsConsumer, ThemeConsumer } from '../components/Context'
 import { Theme } from '../styles'
 import { formatClock } from '../utils/common'
 
-
 const Wrapper = styled.div`
-    flex-basis: 40%;
-    text-align: center;
+  flex-basis: 40%;
+  text-align: center;
 
-    & > * {
-        margin-top: 5px;
-    }
+  & > * {
+    margin-top: 5px;
+  }
 `
 
 const TeamScore = styled.div`
-    flex-grow: 2;
-    color: ${(props) => {
-        if (props.dark && props.winning) return Theme.dark.winning
-        if (props.winning) return Theme.light.winning
-    }};
-    opacity: ${(props) => (props.losing ? '0.4' : '')};
+  flex-grow: 2;
+  color: ${(props) => {
+    if (props.dark && props.winning) return Theme.dark.winning
+    if (props.winning) return Theme.light.winning
+  }};
+  opacity: ${(props) => (props.losing ? '0.4' : '')};
 `
 
 const SubText = styled.div`
-    font-size: calc(12px + 0.1vw);
-    color: hsl(0, 0%, 50%);
+  font-size: calc(12px + 0.1vw);
+  color: hsl(0, 0%, 50%);
 `
 
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
-    if (gameStatus !== '1') {
-        if (spoiler) {
-            return (
-                <Row>
-                    <TeamScore> --- </TeamScore>
-                    -
-                    <TeamScore> --- </TeamScore>
-                </Row>
-            )
-        }
-        return (
-            <Row>
-                <TeamScore
-                    dark={dark}
-                    winning={+visitor.score > +home.score}
-                    losing={+visitor.score < +home.score}
-                >
-                    {visitor.score}
-                </TeamScore>
-                -
-                <TeamScore
-                    dark={dark}
-                    winning={+visitor.score < +home.score}
-                    losing={+visitor.score > +home.score}
-                >
-                    {home.score}
-                </TeamScore>
-            </Row>
-        )
+  if (gameStatus !== '1') {
+    if (spoiler) {
+      return (
+        <Row>
+          <TeamScore> --- </TeamScore>-<TeamScore> --- </TeamScore>
+        </Row>
+      )
     }
+    return (
+      <Row>
+        <TeamScore
+          dark={dark}
+          winning={+visitor.score > +home.score}
+          losing={+visitor.score < +home.score}
+        >
+          {visitor.score}
+        </TeamScore>
+        -
+        <TeamScore
+          dark={dark}
+          winning={+visitor.score < +home.score}
+          losing={+visitor.score > +home.score}
+        >
+          {home.score}
+        </TeamScore>
+      </Row>
+    )
+  }
 }
 
-const renderStatusAndClock = (spoiler, status, clock, totalPeriod, gameStatus) => {
-    // if no spoiler is on, show the final status for games.
-    if (spoiler && gameStatus === '2') {
-        return ''
-    }
-    return formatClock(clock, status, totalPeriod) || status
+const renderStatusAndClock = (
+  spoiler,
+  status,
+  clock,
+  totalPeriod,
+  gameStatus
+) => {
+  // if no spoiler is on, show the final status for games.
+  if (spoiler && gameStatus === '2') {
+    return ''
+  }
+  return formatClock(clock, status, totalPeriod) || status
 }
 
 const renderBroadcasters = (broadcasters, gameStatus) => {
-    return broadcasters.map(broadcaster => {
-        if (broadcaster.scope === 'natl') {
-            return (
-                <div key={broadcaster.display_name}>{broadcaster.display_name}</div>
-            )
-        }
-        // don't show local broadcaster if the game has started/over
-        if (gameStatus !== '1' ) {
-            return null
-        }
-        return (
-            <SubText key={broadcaster.display_name}>{broadcaster.display_name}</SubText>
-        )
-    })
+  return broadcasters.map((broadcaster) => {
+    if (broadcaster.scope === 'natl') {
+      return (
+        <div key={broadcaster.display_name}>{broadcaster.display_name}</div>
+      )
+    }
+    // don't show local broadcaster if the game has started/over
+    if (gameStatus !== '1') {
+      return null
+    }
+    return (
+      <SubText key={broadcaster.display_name}>
+        {broadcaster.display_name}
+      </SubText>
+    )
+  })
 }
 
 const renderAt = (gameStatus) => {
-    if (gameStatus === '1') {
-        return <div>@</div>
-    }
+  if (gameStatus === '1') {
+    return <div>@</div>
+  }
 }
 
 const MatchInfo = ({
-    broadcasters,
-    home,
-    visitor,
-    periodTime: {
-        periodStatus,
-        gameClock,
-        gameStatus,
-        periodValue,
-    },
-    playoffs,
+  broadcasters,
+  home,
+  visitor,
+  periodTime: { periodStatus, gameClock, gameStatus, periodValue },
+  playoffs,
 }) => {
-    let series = ''
-    if (playoffs) {
-        const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
-        if (+homeWins > +visitorWins) {
-            series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
-        } else if (+homeWins < +visitorWins) {
-            series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
-        } else {
-            series = `Series tied ${homeWins}-${visitorWins}`
-        }
+  let series = ''
+  if (playoffs) {
+    const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
+    if (+homeWins > +visitorWins) {
+      series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
+    } else if (+homeWins < +visitorWins) {
+      series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
+    } else {
+      series = `Series tied ${homeWins}-${visitorWins}`
     }
+  }
 
-    return (
-        <ThemeConsumer>
-            {({ state: {dark} }) => (
-                <SettingsConsumer>
-                    {({state: {spoiler}}) => (
-                        <Wrapper>
-                            {renderScores(dark, spoiler, gameStatus, home, visitor)}
-                            {renderAt(gameStatus)}
-                            <div>
-                                {renderStatusAndClock(spoiler, periodStatus, gameClock, periodValue, gameStatus)}
-                            </div>
-                            {!spoiler && series && <div>{series}</div>}
-                            {broadcasters != null  && renderBroadcasters(broadcasters, gameStatus)}
-                        </Wrapper>
-                    )}
-                </SettingsConsumer>
-            )}
-        </ThemeConsumer>
-    )
+  return (
+    <ThemeConsumer>
+      {({ state: { dark } }) => (
+        <SettingsConsumer>
+          {({ state: { spoiler } }) => (
+            <Wrapper>
+              {renderScores(dark, spoiler, gameStatus, home, visitor)}
+              {renderAt(gameStatus)}
+              <div>
+                {renderStatusAndClock(
+                  spoiler,
+                  periodStatus,
+                  gameClock,
+                  periodValue,
+                  gameStatus
+                )}
+              </div>
+              {!spoiler && series && <div>{series}</div>}
+              {broadcasters != null &&
+                renderBroadcasters(broadcasters, gameStatus)}
+            </Wrapper>
+          )}
+        </SettingsConsumer>
+      )}
+    </ThemeConsumer>
+  )
 }
 
 MatchInfo.propTypes = {
-    broadcasters: PropTypes.array,
-    home: PropTypes.shape({
-        abbreviation: PropTypes.string.isRequired,
-        city: PropTypes.string.isRequired,
-        score: PropTypes.string,
-        nickname: PropTypes.string.isRequired,
-    }).isRequired,
-    visitor: PropTypes.shape({
-        abbreviation: PropTypes.string.isRequired,
-        city: PropTypes.string.isRequired,
-        score: PropTypes.string,
-        nickname: PropTypes.string.isRequired,
-    }).isRequired,
-    periodTime: PropTypes.shape({
-        periodStatus: PropTypes.string.isRequired,
-        gameClock: PropTypes.string.isRequired,
-        gameStatus: PropTypes.string.isRequired,
-        // TODO: update type
-        periodValue: PropTypes.any.isRequired,
-    }).isRequired,
-    playoffs: PropTypes.shape({
-        home_wins: PropTypes.string,
-        visitor_wins: PropTypes.string,
-    }),
+  broadcasters: PropTypes.array,
+  home: PropTypes.shape({
+    abbreviation: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    score: PropTypes.string,
+    nickname: PropTypes.string.isRequired,
+  }).isRequired,
+  visitor: PropTypes.shape({
+    abbreviation: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    score: PropTypes.string,
+    nickname: PropTypes.string.isRequired,
+  }).isRequired,
+  periodTime: PropTypes.shape({
+    periodStatus: PropTypes.string.isRequired,
+    gameClock: PropTypes.string.isRequired,
+    gameStatus: PropTypes.string.isRequired,
+    // TODO: update type
+    periodValue: PropTypes.any.isRequired,
+  }).isRequired,
+  playoffs: PropTypes.shape({
+    home_wins: PropTypes.string,
+    visitor_wins: PropTypes.string,
+  }),
 }
 
 MatchInfo.defaultProps = {
-    broadcasters: [],
+  broadcasters: [],
 }
 
 export default MatchInfo
