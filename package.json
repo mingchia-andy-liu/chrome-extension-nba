@@ -61,7 +61,7 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",
-    "react-sticky-table": "^2.0.4",
+    "react-sticky-table": "^5.1.4",
     "redux": "^4.0.1",
     "redux-thunk": "^2.2.0",
     "styled-components": "^3.4.10"
