@@ -16,12 +16,13 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    'react'
+    'react',
+    'react-hooks'
   ],
   rules: {
     'comma-dangle': 0,
     camelcase: 0,
     eqeqeq: 0,
-    'standard/no-callback-literal': 0,
+    'standard/no-callback-literal': 0
   }
 }
