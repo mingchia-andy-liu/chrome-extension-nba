@@ -174,8 +174,8 @@ export const getOddRowColor = (i, isDark) => {
 export const noop = () => undefined
 
 const queryString = require('query-string')
-export const getDateFromQuery = (props) => {
-  const { date: queryDate } = queryString.parse(props.location.search)
+export const getDateFromQuery = (location) => {
+  const { date: queryDate } = queryString.parse(location.search)
   if (queryDate) {
     return queryDate
   }

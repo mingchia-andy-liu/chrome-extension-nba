@@ -6,7 +6,7 @@ set -e
 npm install
 
 # test
-npm run lint:js
+# npm run lint:js
 
 # bundle the main.js and background.js
 npm run webpack

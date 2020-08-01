@@ -42,7 +42,7 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
       {g.map((game, index) => (
         <MatchCard
           selected={game.id === selected}
-          key={`card-${index}`}
+          key={'card' + index}
           showBroadcast={broadcast}
           {...game}
           {...rest}
@@ -52,78 +52,71 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
   )
 }
 
-class CardList extends React.PureComponent {
-  static propTypes = {
-    games: PropTypes.arrayOf(PropTypes.object).isRequired,
-    isLoading: PropTypes.bool,
-    selected: PropTypes.string,
-    hasError: PropTypes.bool,
-    /**
-     * is card list loading in sidebar of bs. If so, need custom css
-     */
-    isSidebar: PropTypes.bool,
-  }
+const CardList = ({
+  games,
+  hasError,
+  isLoading,
+  selected,
+  isSidebar,
+  ...rest
+}) => {
+  const [isPopup, togglePopup] = React.useState(false)
 
-  static defaultProps = {
-    hasError: false,
-    isLoading: false,
-    isSidebar: false,
-    selected: '',
-  }
-
-  constructor() {
-    super()
-    this.state = { isPopup: false }
-  }
-
-  componentDidMount() {
+  React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
-      this.setState({ isPopup: !tab })
+      togglePopup(!tab)
     })
-  }
+  }, [])
 
-  render() {
-    const {
-      games,
-      hasError,
-      isLoading,
-      selected,
-      isSidebar,
-      ...rest
-    } = this.props
-    const { isPopup } = this.state
-    if (isLoading) {
-      return (
-        <Wrapper>
-          <TextCard text={'Loading...'} />
-        </Wrapper>
-      )
-    }
-    if (hasError) {
-      return (
-        <Wrapper>
-          <TextCard text={'Something went wrong. A fix is coming.'} />
-        </Wrapper>
-      )
-    }
-    if (games.length === 0) {
-      return (
-        <Wrapper>
-          <TextCard text={'No games today ¯\\_(ツ)_/¯'} />
-        </Wrapper>
-      )
-    }
-
+  if (isLoading) {
     return (
-      <SidebarConsumer>
-        {({ state: { broadcast, team } }) => (
-          <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
-            {generateCards(games, selected, team, broadcast, rest)}
-          </Wrapper>
-        )}
-      </SidebarConsumer>
+      <Wrapper>
+        <TextCard text={'Loading...'} />
+      </Wrapper>
     )
   }
+  if (hasError) {
+    return (
+      <Wrapper>
+        <TextCard text={'Something went wrong. A fix is coming.'} />
+      </Wrapper>
+    )
+  }
+  if (games.length === 0) {
+    return (
+      <Wrapper>
+        <TextCard text={'No games today ¯\\_(ツ)_/¯'} />
+      </Wrapper>
+    )
+  }
+
+  return (
+    <SidebarConsumer>
+      {({ state: { broadcast, team } }) => (
+        <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
+          {generateCards(games, selected, team, broadcast, rest)}
+        </Wrapper>
+      )}
+    </SidebarConsumer>
+  )
+}
+
+CardList.propTypes = {
+  games: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isLoading: PropTypes.bool,
+  selected: PropTypes.string,
+  hasError: PropTypes.bool,
+  /**
+   * is card list loading in sidebar of bs. If so, need custom css
+   */
+  isSidebar: PropTypes.bool,
+}
+
+CardList.defaultProps = {
+  hasError: false,
+  isLoading: false,
+  isSidebar: false,
+  selected: '',
 }
 
 export default CardList

@@ -45,130 +45,122 @@ const ListItem = styled.li`
   padding-bottom: 5px;
 `
 
-class Standings extends React.Component {
-  static propTypes = {
-    east: PropTypes.array.isRequired,
-    fetchStandings: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    west: PropTypes.array.isRequired,
-  }
+const renderConference = (team, i) => {
+  return (
+    <Row key={`${team.id}-${i}`}>
+      <Cell style={{ width: '5vw' }}>
+        {i + 1}
+        {team.playoffCode && `- ${team.playoffCode}`}
+      </Cell>
+      <Cell>{team.name}</Cell>
+      <Cell>{team.win}</Cell>
+      <Cell>{team.loss}</Cell>
+      <Cell>{Math.round(team.percentage * 100)}%</Cell>
+      <Cell>{team.gamesBehind}</Cell>
+      <NonMainCell>{team.homeRecord}</NonMainCell>
+      <NonMainCell>{team.awayRecord}</NonMainCell>
+      <NonMainCell>{team.lastTenRecord}</NonMainCell>
+      <NonMainCell>
+        {team.streak >= 0 ? `W ${team.streak}` : `L ${Math.abs(team.streak)}`}
+      </NonMainCell>
+    </Row>
+  )
+}
 
-  constructor(props) {
-    super(props)
-  }
+const renderHeader = (conf) => {
+  const headers = ['Home Record', 'Road Record', 'L10 Streak', 'Streak']
 
-  componentDidMount() {
-    this.props.fetchStandings()
+  return (
+    <Row>
+      <HeaderCell>Rank</HeaderCell>
+      <HeaderCell>Team</HeaderCell>
+      <HeaderCell>Win</HeaderCell>
+      <HeaderCell>Loss</HeaderCell>
+      <HeaderCell>Win %</HeaderCell>
+      <HeaderCell>GB</HeaderCell>
+      {headers.map((element) => (
+        <NonMainHeaderCell key={`stats-${element}-${conf}`}>
+          {element}
+        </NonMainHeaderCell>
+      ))}
+    </Row>
+  )
+}
+
+const renderContent = (east, west, isLoading) => {
+  if (isLoading) return <Loader />
+
+  return (
+    <React.Fragment>
+      <h3>East</h3>
+      <table style={{ borderCollapse: 'collapse' }}>
+        <tbody>
+          {renderHeader('east')}
+          {east.map((team, i) => renderConference(team, i))}
+        </tbody>
+      </table>
+      <h3>West</h3>
+      <table style={{ borderCollapse: 'collapse' }}>
+        <tbody>
+          {renderHeader('west')}
+          {west.map((team, i) => renderConference(team, i))}
+        </tbody>
+      </table>
+      <List>
+        <ListItem>
+          <strong>x</strong> - Clinched Playoff Berth
+        </ListItem>
+        <ListItem>
+          <strong>o</strong> - Eliminated from Playoff contention
+        </ListItem>
+        <ListItem>
+          <strong>nw</strong> - Clinched Northwest Division
+        </ListItem>
+        <ListItem>
+          <strong>c</strong> - Clinched Central Division
+        </ListItem>
+        <ListItem>
+          <strong>p</strong> - Clinched Pacific Division
+        </ListItem>
+        <ListItem>
+          <strong>se</strong> - Clinched Southeast Division
+        </ListItem>
+        <ListItem>
+          <strong>e</strong> - Clinched Eastern Conference
+        </ListItem>
+        <ListItem>
+          <strong>sw</strong> - Clinched Southwest Division
+        </ListItem>
+        <ListItem>
+          <strong>w</strong> - Clinched Western Conference
+        </ListItem>
+        <ListItem>
+          <strong>a</strong> - Clinched Atlantic Division
+        </ListItem>
+      </List>
+    </React.Fragment>
+  )
+}
+
+const Standings = ({ fetchStandings, east, west, isLoading }) => {
+  React.useEffect(() => {
+    fetchStandings()
     document.title = 'Box Scores | Standings'
-  }
+  }, [])
 
-  renderHeader(conf) {
-    const headers = ['Home Record', 'Road Record', 'L10 Streak', 'Streak']
+  return (
+    <Layout>
+      <Layout.Header>{<Header index={1} />}</Layout.Header>
+      <Layout.Content>{renderContent(east, west, isLoading)}</Layout.Content>
+    </Layout>
+  )
+}
 
-    return (
-      <Row>
-        <HeaderCell>Rank</HeaderCell>
-        <HeaderCell>Team</HeaderCell>
-        <HeaderCell>Win</HeaderCell>
-        <HeaderCell>Loss</HeaderCell>
-        <HeaderCell>Win %</HeaderCell>
-        <HeaderCell>GB</HeaderCell>
-        {headers.map((element) => (
-          <NonMainHeaderCell key={`stats-${element}-${conf}`}>
-            {element}
-          </NonMainHeaderCell>
-        ))}
-      </Row>
-    )
-  }
-
-  renderConference(team, i) {
-    return (
-      <Row key={`${team.id}-${i}`}>
-        <Cell style={{ width: '5vw' }}>
-          {i + 1}
-          {team.playoffCode && `- ${team.playoffCode}`}
-        </Cell>
-        <Cell>{team.name}</Cell>
-        <Cell>{team.win}</Cell>
-        <Cell>{team.loss}</Cell>
-        <Cell>{Math.round(team.percentage * 100)}%</Cell>
-        <Cell>{team.gamesBehind}</Cell>
-        <NonMainCell>{team.homeRecord}</NonMainCell>
-        <NonMainCell>{team.awayRecord}</NonMainCell>
-        <NonMainCell>{team.lastTenRecord}</NonMainCell>
-        <NonMainCell>
-          {team.streak >= 0 ? `W ${team.streak}` : `L ${Math.abs(team.streak)}`}
-        </NonMainCell>
-      </Row>
-    )
-  }
-
-  renderContent() {
-    const { east, west, isLoading } = this.props
-
-    if (isLoading) return <Loader />
-
-    return (
-      <React.Fragment>
-        <h3>East</h3>
-        <table style={{ borderCollapse: 'collapse' }}>
-          <tbody>
-            {this.renderHeader('east')}
-            {east.map((team, i) => this.renderConference(team, i))}
-          </tbody>
-        </table>
-        <h3>West</h3>
-        <table style={{ borderCollapse: 'collapse' }}>
-          <tbody>
-            {this.renderHeader('west')}
-            {west.map((team, i) => this.renderConference(team, i))}
-          </tbody>
-        </table>
-        <List>
-          <ListItem>
-            <strong>x</strong> - Clinched Playoff Berth
-          </ListItem>
-          <ListItem>
-            <strong>o</strong> - Eliminated from Playoff contention
-          </ListItem>
-          <ListItem>
-            <strong>nw</strong> - Clinched Northwest Division
-          </ListItem>
-          <ListItem>
-            <strong>c</strong> - Clinched Central Division
-          </ListItem>
-          <ListItem>
-            <strong>p</strong> - Clinched Pacific Division
-          </ListItem>
-          <ListItem>
-            <strong>se</strong> - Clinched Southeast Division
-          </ListItem>
-          <ListItem>
-            <strong>e</strong> - Clinched Eastern Conference
-          </ListItem>
-          <ListItem>
-            <strong>sw</strong> - Clinched Southwest Division
-          </ListItem>
-          <ListItem>
-            <strong>w</strong> - Clinched Western Conference
-          </ListItem>
-          <ListItem>
-            <strong>a</strong> - Clinched Atlantic Division
-          </ListItem>
-        </List>
-      </React.Fragment>
-    )
-  }
-
-  render() {
-    return (
-      <Layout>
-        <Layout.Header>{<Header index={1} />}</Layout.Header>
-        <Layout.Content>{this.renderContent()}</Layout.Content>
-      </Layout>
-    )
-  }
+Standings.propTypes = {
+  east: PropTypes.array.isRequired,
+  fetchStandings: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  west: PropTypes.array.isRequired,
 }
 
 const mapStateToProps = ({ standings: { east, west, isLoading } }) => ({
