@@ -40,7 +40,9 @@ const Playoffs = ({ fetchPlayoff, isLoading, west, east, final }) => {
   return (
     <Layout>
       <Layout.Header>{<Header index={2} />}</Layout.Header>
-      <Layout.Content>{renderContent({ isLoading, west, east, final })}</Layout.Content>
+      <Layout.Content>
+        {renderContent({ isLoading, west, east, final })}
+      </Layout.Content>
     </Layout>
   )
 }

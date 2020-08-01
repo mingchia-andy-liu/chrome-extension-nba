@@ -50,25 +50,24 @@ const Arrow = styled.img`
 const MIN_DATE = '2019-09-01'
 const MAX_DATE = '2020-08-30'
 
-const DatePicker = ({
-  hide,
-  onChange,
-  dispatchChangeDate,
-  resetLiveGameBox,
-  date: { date },
-} = { hide: false, onChange: noop }) => {
-  const onClickArrow = React.useCallback((offset) => {
-    const currDate = moment(date).add(offset, 'day')
-    if (
-      currDate.isAfter(MAX_DATE) ||
-      currDate.isBefore(MIN_DATE)
-    ) {
-      return
-    }
-    dispatchChangeDate(currDate.toDate())
-    onChange(currDate.format(DATE_FORMAT))
-    resetLiveGameBox()
-  }, [date, dispatchChangeDate, onChange, resetLiveGameBox])
+const DatePicker = (
+  { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
+    hide: false,
+    onChange: noop,
+  }
+) => {
+  const onClickArrow = React.useCallback(
+    (offset) => {
+      const currDate = moment(date).add(offset, 'day')
+      if (currDate.isAfter(MAX_DATE) || currDate.isBefore(MIN_DATE)) {
+        return
+      }
+      dispatchChangeDate(currDate.toDate())
+      onChange(currDate.format(DATE_FORMAT))
+      resetLiveGameBox()
+    },
+    [date, dispatchChangeDate, onChange, resetLiveGameBox]
+  )
 
   const onClickNextDay = React.useCallback(() => {
     onClickArrow(1)
@@ -78,13 +77,16 @@ const DatePicker = ({
     onClickArrow(-1)
   }, [onClickArrow])
 
-  const onDateChange = React.useCallback((date) => {
-    const d = moment(date[0])
-    const dateObj = d.toDate()
-    dispatchChangeDate(dateObj)
-    onChange(dateObj)
-    resetLiveGameBox()
-  }, [dispatchChangeDate, onChange, resetLiveGameBox])
+  const onDateChange = React.useCallback(
+    (date) => {
+      const d = moment(date[0])
+      const dateObj = d.toDate()
+      dispatchChangeDate(dateObj)
+      onChange(dateObj)
+      resetLiveGameBox()
+    },
+    [dispatchChangeDate, onChange, resetLiveGameBox]
+  )
 
   const renderInput = () => {
     if (hide) {
@@ -122,15 +124,9 @@ const DatePicker = ({
 
   return (
     <Wrapper>
-      <Arrow
-        onClick={onClickPrevDay}
-        src="../../assets/png/arrow-left.png"
-      />
+      <Arrow onClick={onClickPrevDay} src="../../assets/png/arrow-left.png" />
       {renderInput()}
-      <Arrow
-        onClick={onClickNextDay}
-        src="../../assets/png/arrow-right.png"
-      />
+      <Arrow onClick={onClickNextDay} src="../../assets/png/arrow-right.png" />
     </Wrapper>
   )
 }

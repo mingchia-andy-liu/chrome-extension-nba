@@ -14,7 +14,13 @@ import { getDateFromQuery } from '../../utils/common'
 import { DATE_FORMAT } from '../../utils/constant'
 import { dispatchChangeDate } from '../DatePicker/actions'
 
-const BoxScores = ({ date: { date }, location, history, match, dispatchChangeDate }) => {
+const BoxScores = ({
+  date: { date },
+  location,
+  history,
+  match,
+  dispatchChangeDate,
+}) => {
   const dateStr = moment(date).format(DATE_FORMAT)
   const queryDate = getDateFromQuery(location)
   const [isLoading, toggleLoading] = React.useState(true)
@@ -24,15 +30,14 @@ const BoxScores = ({ date: { date }, location, history, match, dispatchChangeDat
 
   React.useEffect(() => {
     const gameDate = queryDate == null ? dateStr : queryDate
-    dispatchChangeDate(moment(gameDate, DATE_FORMAT).toDate())
-      .then(() => {
-        if (location.search !== '') {
-          history.push({
-            search: '',
-          })
-        }
-        toggleLoading(false)
-      })
+    dispatchChangeDate(moment(gameDate, DATE_FORMAT).toDate()).then(() => {
+      if (location.search !== '') {
+        history.push({
+          search: '',
+        })
+      }
+      toggleLoading(false)
+    })
   }, [])
 
   const getIdFromProps = React.useCallback(() => {
