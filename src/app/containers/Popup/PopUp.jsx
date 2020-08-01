@@ -29,18 +29,14 @@ const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
   const [gameDate, toggleGameDate] = React.useState(
     moment(date).format(DATE_FORMAT)
   )
+
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
       togglePopup(!tab)
     })
-  }, [])
-
-  React.useEffect(() => {
     const dateStr = moment(date).format(DATE_FORMAT)
     fetchGamesIfNeeded(dateStr, null, true)
-    if (!isPopup) {
-      document.title = 'Box Scores | Popup'
-    }
+    document.title = 'Box Scores | Popup'
   }, [])
 
   // useRef for previous date.
@@ -50,11 +46,9 @@ const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
     if (!moment(date).isSame(prevDate)) {
       // props is already updated date, force update.
       fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      prevDateRef.current = date
     }
-  })
-  React.useEffect(() => {
-    prevDateRef.current = date
-  })
+  }, [date, fetchGamesIfNeeded])
 
   const selectGame = React.useCallback(
     (e) => {

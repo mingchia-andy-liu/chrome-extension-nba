@@ -37,12 +37,6 @@ const Sidebar = ({
 }) => {
   const [gameId, toggleGameId] = React.useState(id || '')
 
-  // fetch game on mount
-  React.useEffect(() => {
-    const dateStr = moment(date).format(DATE_FORMAT)
-    fetchGameHighlightIfNeeded(dateStr, null, true)
-  }, [])
-
   // useRef for prevProps.
   // set it after the fetch effect
   const prevCountRef = React.useRef()
@@ -51,11 +45,9 @@ const Sidebar = ({
     if (!moment(date).isSame(prevDate)) {
       // props is already updated date, force update.
       fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      prevCountRef.current = date
     }
-  })
-  React.useEffect(() => {
-    prevCountRef.current = date
-  })
+  }, [date, fetchGamesIfNeeded])
 
   const selectGame = React.useCallback(
     (e) => {

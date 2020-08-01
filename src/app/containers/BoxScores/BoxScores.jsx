@@ -24,11 +24,9 @@ const BoxScores = ({
   const dateStr = moment(date).format(DATE_FORMAT)
   const queryDate = getDateFromQuery(location)
   const [isLoading, toggleLoading] = React.useState(true)
-  React.useEffect(() => {
-    document.title = 'Box Scores | Box-scores'
-  }, [])
 
   React.useEffect(() => {
+    document.title = 'Box Scores | Box-scores'
     const gameDate = queryDate == null ? dateStr : queryDate
     dispatchChangeDate(moment(gameDate, DATE_FORMAT).toDate()).then(() => {
       if (location.search !== '') {
@@ -40,11 +38,9 @@ const BoxScores = ({
     })
   }, [])
 
-  const getIdFromProps = React.useCallback(() => {
+  const id = React.useMemo(() => {
     return match.params.id || ''
-  }, [match])
-
-  const id = getIdFromProps()
+  }, [match.params.id])
 
   return (
     <Layout>
