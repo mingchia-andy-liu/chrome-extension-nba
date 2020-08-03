@@ -106,32 +106,19 @@ const renderPBPRow = (plays, period, isDark) => {
   })
 }
 
-class PlayByPlay extends React.PureComponent {
-  constructor(props) {
-    super(props)
+const PlayByPlay = ({ pbp: { play } }) => {
+  const numberOfQuarters = play && play.length !== 0 ? +play[play.length - 1].period : -1
+  const [currentQuarter, togglerCurrentQuarter] = React.useState(numberOfQuarters)
 
-    const {
-      pbp: { play },
-    } = this.props
-    const quarter =
-      play && play.length !== 0 ? +play[play.length - 1].period : -1
-    this.state = {
-      quarter,
-      currentQuarter: quarter,
-    }
-  }
-
-  renderQuarters(quarter, currentQuarter) {
+  const renderQuarters = React.useCallback(() => {
     const Btns = []
-    for (let i = 0; i < quarter; i++) {
+    for (let i = 0; i < numberOfQuarters; i++) {
       Btns.push(
         <QtrBtn
           key={`qtr-${i}`}
           selected={i + 1 === currentQuarter}
           onClick={() => {
-            this.setState({
-              currentQuarter: i + 1,
-            })
+            togglerCurrentQuarter(i + 1)
           }}
         >
           {QUARTER_NAMES[i]}
@@ -140,34 +127,27 @@ class PlayByPlay extends React.PureComponent {
     }
 
     return <Title> {Btns} </Title>
-  }
+  }, [togglerCurrentQuarter, numberOfQuarters, currentQuarter])
 
-  render() {
-    const {
-      pbp: { play },
-    } = this.props
-    const { quarter, currentQuarter } = this.state
-
-    return (
-      <Wrapper>
-        {this.renderQuarters(quarter, currentQuarter)}
-        <Title>
-          <Hint backgroundColor={'#1b5e20'}>Lead Changes</Hint>
-          <Hint backgroundColor={'#7c4dff'}>Tied</Hint>
-        </Title>
-        <ThemeConsumer>
-          {({ state: { dark } }) => (
-            <Table>
-              <tbody>
-                {renderHeaderRow()}
-                {renderPBPRow(play, currentQuarter, dark)}
-              </tbody>
-            </Table>
-          )}
-        </ThemeConsumer>
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper>
+      {renderQuarters()}
+      <Title>
+        <Hint backgroundColor={'#1b5e20'}>Lead Changes</Hint>
+        <Hint backgroundColor={'#7c4dff'}>Tied</Hint>
+      </Title>
+      <ThemeConsumer>
+        {({ state: { dark } }) => (
+          <Table>
+            <tbody>
+              {renderHeaderRow()}
+              {renderPBPRow(play, currentQuarter, dark)}
+            </tbody>
+          </Table>
+        )}
+      </ThemeConsumer>
+    </Wrapper>
+  )
 }
 
 PlayByPlay.propTypes = {

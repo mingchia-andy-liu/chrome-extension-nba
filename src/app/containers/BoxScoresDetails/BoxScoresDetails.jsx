@@ -27,75 +27,35 @@ import {
   renderHighlightButton,
   renderTeamLeader,
 } from './helpers'
-import modalType from '../Modal/modal-types'
-import { toggleModal } from '../Modal/actions'
 import { DATE_FORMAT } from '../../utils/constant'
+import browser from '../../utils/browser'
 
-class BoxScoresDetails extends React.Component {
-  static propTypes = {
-    bs: PropTypes.shape({
-      isLoading: PropTypes.bool.isRequired,
-      bsData: PropTypes.object.isRequired,
-      pbpData: PropTypes.object.isRequired,
-      teamStats: PropTypes.object.isRequired,
-      urls: PropTypes.object.isRequired,
-    }),
+const BoxScoresDetails = ({
+  bs: { bsData, pbpData, teamStats, urls, isLoading },
+  id,
+  date,
+  fetchLiveGameBoxIfNeeded,
+  fetchGameHighlightIfNeeded,
+}) => {
+  // tab index: 0: overview 1: boxscores 2: playbyplay
+  const [tabIndex, toggleIndex] = React.useState(1)
 
-    fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
-    resetLiveGameBox: PropTypes.func.isRequired,
-    dispatchChangeDate: PropTypes.func.isRequired,
-    toggleModal: PropTypes.func.isRequired,
-    fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
+  const clickHighlight = React.useCallback(() => {
+    const gameId = id || ''
+    const url = urls[gameId]
+    browser.tabs.create({ url: `https://youtube.com/watch?v=${url}` })
+  })
 
-    id: PropTypes.string.isRequired,
-    date: PropTypes.object.isRequired,
-  }
-
-  constructor() {
-    super()
-    // tab index: 0: overview 1: boxscores 2: playbyplay
-    this.state = { tabIndex: 1 }
-  }
-
-  clickHighlight = () => {
-    const {
-      bs: { urls },
-    } = this.props
-    const id = this.getIdFromProps()
-    const url = urls[id]
-    this.props.toggleModal({
-      modalType: modalType.HIGHLIGH_VIDEO,
-      src: `https://youtube.com/embed/${url}`,
-    })
-  }
-
-  getIdFromProps = () => {
-    return this.props.id || ''
-  }
-
-  componentDidMount() {
-    const { date } = this.props
-    const id = this.getIdFromProps()
+  React.useEffect(() => {
+    const gameId = id || ''
     const dateStr = moment(date).format(DATE_FORMAT)
-    this.props.fetchLiveGameBoxIfNeeded(dateStr, id, false).then(() => {
-      this.props.fetchGameHighlightIfNeeded(id)
+    fetchLiveGameBoxIfNeeded(dateStr, gameId, false).then(() => {
+      fetchGameHighlightIfNeeded(gameId)
     })
-  }
+    return () => resetLiveGameBox()
+  }, [])
 
-  componentWillUnmount() {
-    this.props.resetLiveGameBox()
-  }
-
-  updateTabIndex = (index) => {
-    this.setState({
-      tabIndex: index,
-    })
-  }
-
-  renderContent(spoiler, dark) {
-    const {
-      bs: { bsData, pbpData, teamStats, urls },
-    } = this.props
+  const renderContent = React.useCallback((spoiler, dark) => {
     // Route expects a function for component prop
     const contentComponent = () => {
       if (
@@ -112,13 +72,12 @@ class BoxScoresDetails extends React.Component {
             </Overlay>
           )
         }
-        const id = this.getIdFromProps()
-        const url = urls[id]
+        const url = urls[id || '']
         return (
           <React.Fragment>
             <Tab
-              onTabSelect={this.updateTabIndex}
-              index={this.state.tabIndex}
+              onTabSelect={toggleIndex}
+              index={tabIndex}
               isLink={false}
             >
               <TabItem label="Match up" />
@@ -126,11 +85,11 @@ class BoxScoresDetails extends React.Component {
               <TabItem label="Play-by-Play" />
             </Tab>
             <br />
-            {this.state.tabIndex === 0 && (
+            {tabIndex === 0 && (
               <React.Fragment>
                 {renderTitle(bsData)}
                 <RowWrap>
-                  {renderHighlightButton(url, dark, this.clickHighlight)}
+                  {renderHighlightButton(url, dark, clickHighlight)}
                   {renderSummary(bsData, teamStats)}
                 </RowWrap>
                 {bsData.periodTime &&
@@ -142,14 +101,14 @@ class BoxScoresDetails extends React.Component {
                 {renderAdvancedTeamStats(teamStats, bsData)}
               </React.Fragment>
             )}
-            {this.state.tabIndex === 1 && (
+            {tabIndex === 1 && (
               <React.Fragment>
                 <h3>Player Stats</h3>
                 {renderHints(dark)}
                 {renderPlayerStats(bsData)}
               </React.Fragment>
             )}
-            {this.state.tabIndex === 2 && (
+            {tabIndex === 2 && (
               <React.Fragment>
                 <h3>Play By Play</h3>
                 {renderPlaybyPlay(pbpData)}
@@ -159,33 +118,45 @@ class BoxScoresDetails extends React.Component {
         )
       }
     }
-
     return (
       <Switch>
         <Route path="/boxscores/:id" component={contentComponent} />
         <Route path="/boxscores" component={Overlay} />
       </Switch>
     )
-  }
+  }, [bsData, pbpData, teamStats, urls, toggleIndex, tabIndex])
 
-  render() {
-    const {
-      bs: { isLoading },
-    } = this.props
-    return (
-      <ThemeConsumer>
-        {({ state: { dark } }) => (
-          <SettingsConsumer>
-            {({ state: { spoiler } }) => (
-              <Content dark={dark}>
-                {isLoading ? <Loader /> : this.renderContent(spoiler, dark)}
-              </Content>
-            )}
-          </SettingsConsumer>
-        )}
-      </ThemeConsumer>
-    )
-  }
+  return (
+    <ThemeConsumer>
+      {({ state: { dark } }) => (
+        <SettingsConsumer>
+          {({ state: { spoiler } }) => (
+            <Content dark={dark}>
+              {isLoading ? <Loader /> : renderContent(spoiler, dark)}
+            </Content>
+          )}
+        </SettingsConsumer>
+      )}
+    </ThemeConsumer>
+  )
+}
+
+BoxScoresDetails.propTypes = {
+  bs: PropTypes.shape({
+    isLoading: PropTypes.bool.isRequired,
+    bsData: PropTypes.object.isRequired,
+    pbpData: PropTypes.object.isRequired,
+    teamStats: PropTypes.object.isRequired,
+    urls: PropTypes.object.isRequired,
+  }),
+
+  fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
+  resetLiveGameBox: PropTypes.func.isRequired,
+  dispatchChangeDate: PropTypes.func.isRequired,
+  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
+
+  id: PropTypes.string.isRequired,
+  date: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = ({ bs }) => ({
@@ -198,7 +169,6 @@ const mapDispatchToProps = (dispatch) => {
       fetchLiveGameBoxIfNeeded,
       resetLiveGameBox,
       dispatchChangeDate,
-      toggleModal,
       fetchGameHighlightIfNeeded,
     },
     dispatch

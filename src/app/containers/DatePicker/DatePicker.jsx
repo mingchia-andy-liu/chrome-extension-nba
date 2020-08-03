@@ -47,60 +47,48 @@ const Arrow = styled.img`
   cursor: pointer;
 `
 
-class DatePicker extends React.Component {
-  static propTypes = {
-    date: PropTypes.shape({
-      date: PropTypes.object.isRequired,
-    }),
-    onChange: PropTypes.func,
-    hide: PropTypes.bool,
-    dispatchChangeDate: PropTypes.func.isRequired,
-    resetLiveGameBox: PropTypes.func.isRequired,
-  }
+const MIN_DATE = '2019-09-01'
+const MAX_DATE = '2020-08-30'
 
-  static MIN_DATE = '2019-09-01'
-  static MAX_DATE = '2020-08-30'
-
-  static defaultProps = {
+const DatePicker = (
+  { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
     hide: false,
     onChange: noop,
   }
+) => {
+  const onClickArrow = React.useCallback(
+    (offset) => {
+      const currDate = moment(date).add(offset, 'day')
+      if (currDate.isAfter(MAX_DATE) || currDate.isBefore(MIN_DATE)) {
+        return
+      }
+      dispatchChangeDate(currDate.toDate())
+      onChange(currDate.format(DATE_FORMAT))
+      resetLiveGameBox()
+    },
+    [date, dispatchChangeDate, onChange, resetLiveGameBox]
+  )
 
-  onClickNextDay = () => {
-    this.onClickArrow(1)
-  }
+  const onClickNextDay = React.useCallback(() => {
+    onClickArrow(1)
+  }, [onClickArrow])
 
-  onClickPrevDay = () => {
-    this.onClickArrow(-1)
-  }
+  const onClickPrevDay = React.useCallback(() => {
+    onClickArrow(-1)
+  }, [onClickArrow])
 
-  onClickArrow(offset) {
-    const date = moment(this.props.date.date).add(offset, 'day')
-    if (
-      date.isAfter(DatePicker.MAX_DATE) ||
-      date.isBefore(DatePicker.MIN_DATE)
-    ) {
-      return
-    }
-    this.props.dispatchChangeDate(date.toDate())
-    this.props.onChange(date.format(DATE_FORMAT))
-    this.props.resetLiveGameBox()
-  }
+  const onDateChange = React.useCallback(
+    (date) => {
+      const d = moment(date[0])
+      const dateObj = d.toDate()
+      dispatchChangeDate(dateObj)
+      onChange(dateObj)
+      resetLiveGameBox()
+    },
+    [dispatchChangeDate, onChange, resetLiveGameBox]
+  )
 
-  onDateChange = (date) => {
-    const d = moment(date[0])
-    const dateObj = d.toDate()
-    this.props.dispatchChangeDate(dateObj)
-    this.props.onChange(dateObj)
-    this.props.resetLiveGameBox()
-  }
-
-  renderInput() {
-    const {
-      hide,
-      date: { date },
-    } = this.props
-
+  const renderInput = () => {
     if (hide) {
       return (
         <ThemeConsumer>
@@ -124,31 +112,33 @@ class DatePicker extends React.Component {
             dark={dark ? 1 : undefined}
             value={date}
             options={{
-              minDate: DatePicker.MIN_DATE,
-              maxDate: DatePicker.MAX_DATE,
+              minDate: MIN_DATE,
+              maxDate: MAX_DATE,
             }}
-            onChange={this.onDateChange}
+            onChange={onDateChange}
           />
         )}
       </ThemeConsumer>
     )
   }
 
-  render() {
-    return (
-      <Wrapper>
-        <Arrow
-          onClick={this.onClickPrevDay}
-          src="../../assets/png/arrow-left.png"
-        />
-        {this.renderInput()}
-        <Arrow
-          onClick={this.onClickNextDay}
-          src="../../assets/png/arrow-right.png"
-        />
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper>
+      <Arrow onClick={onClickPrevDay} src="../../assets/png/arrow-left.png" />
+      {renderInput()}
+      <Arrow onClick={onClickNextDay} src="../../assets/png/arrow-right.png" />
+    </Wrapper>
+  )
+}
+
+DatePicker.propTypes = {
+  date: PropTypes.shape({
+    date: PropTypes.object.isRequired,
+  }),
+  onChange: PropTypes.func,
+  hide: PropTypes.bool,
+  dispatchChangeDate: PropTypes.func.isRequired,
+  resetLiveGameBox: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ date }) => ({

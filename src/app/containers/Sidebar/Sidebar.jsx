@@ -25,96 +25,89 @@ const Wrapper = styled.div`
   grid-area: sidebar;
 `
 
-class Sidebar extends React.Component {
-  static propTypes = {
-    id: PropTypes.string.isRequired,
-    date: PropTypes.object.isRequired,
-    live: PropTypes.object.isRequired,
+const Sidebar = ({
+  date,
+  id,
+  fetchGamesIfNeeded,
+  fetchLiveGameBoxIfNeeded,
+  fetchGameHighlightIfNeeded,
+  history,
+  location,
+  live,
+}) => {
+  const [gameId, toggleGameId] = React.useState(id || '')
 
-    fetchGamesIfNeeded: PropTypes.func.isRequired,
-    fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
-    fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
-    dispatchChangeDate: PropTypes.func.isRequired,
-
-    history: PropTypes.object.isRequired,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-      search: PropTypes.string.isRequired,
-    }),
-  }
-
-  constructor(props) {
-    super(props)
-
-    const { id } = this.props
-    this.state = { id: id ? id : '' }
-  }
-
-  componentDidMount() {
-    const { date } = this.props
-    const dateStr = moment(date).format(DATE_FORMAT)
-    this.props.fetchGamesIfNeeded(dateStr, null, true)
-  }
-
-  componentDidUpdate(prevProps) {
-    const prevDate = prevProps.date
-    const { fetchGamesIfNeeded, date: currDate } = this.props
-    if (!moment(currDate).isSame(prevDate)) {
+  // useRef for prevProps.
+  // set it after the fetch effect
+  const prevCountRef = React.useRef()
+  React.useEffect(() => {
+    const prevDate = prevCountRef.current
+    if (!moment(date).isSame(prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(
-        moment(currDate).format(DATE_FORMAT),
-        null,
-        true,
-        false
-      )
+      fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      prevCountRef.current = date
     }
-  }
+  }, [date, fetchGamesIfNeeded])
 
-  selectGame = (e) => {
-    const id = e.currentTarget.dataset.id
-    const {
-      location: { pathname },
-      date,
-    } = this.props
-    if (pathname.startsWith('/boxscores')) {
-      this.props.history.replace(`/boxscores/${id}`)
-    } else {
-      this.props.history.push(`/boxscores/${id}`)
-    }
-    const dateStr = moment(date).format(DATE_FORMAT)
-    this.props.fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
-      this.props.fetchGameHighlightIfNeeded(id)
-    })
-    this.setState({ id })
-  }
+  const selectGame = React.useCallback(
+    (e) => {
+      const id = e.currentTarget.dataset.id
+      const pathname = location.pathname
 
-  dateOnChange = () => {
-    this.props.history.replace('/boxscores')
-    this.setState({ id: '' })
-  }
+      if (pathname.startsWith('/boxscores')) {
+        history.replace(`/boxscores/${id}`)
+      } else {
+        history.push(`/boxscores/${id}`)
+      }
+      const dateStr = moment(date).format(DATE_FORMAT)
+      fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
+        fetchGameHighlightIfNeeded(id)
+      })
+      toggleGameId(id)
+    },
+    [date, history, location]
+  )
 
-  render() {
-    const { live, date } = this.props
+  const dateOnChange = React.useCallback(() => {
+    history.replace('/boxscores')
+    toggleGameId('')
+  }, [history])
 
-    return (
-      <Wrapper>
-        <DatePicker startDate={date} onChange={this.dateOnChange} />
-        <ButtonsWrapper>
-          <DarkModeCheckbox />
-          <NoSpoilerCheckbox />
-          <BroadcastCheckbox />
-        </ButtonsWrapper>
-        <CardList
-          hasError={live.hasError}
-          isLoading={live.isLoading}
-          isSidebar={true}
-          games={live.games}
-          onClick={this.selectGame}
-          selected={this.state.id}
-        />
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper>
+      <DatePicker startDate={date} onChange={dateOnChange} />
+      <ButtonsWrapper>
+        <DarkModeCheckbox />
+        <NoSpoilerCheckbox />
+        <BroadcastCheckbox />
+      </ButtonsWrapper>
+      <CardList
+        hasError={live.hasError}
+        isLoading={live.isLoading}
+        isSidebar={true}
+        games={live.games}
+        onClick={selectGame}
+        selected={gameId}
+      />
+    </Wrapper>
+  )
+}
+
+Sidebar.propTypes = {
+  id: PropTypes.string.isRequired,
+  date: PropTypes.object.isRequired,
+  live: PropTypes.object.isRequired,
+
+  fetchGamesIfNeeded: PropTypes.func.isRequired,
+  fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
+  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
+  dispatchChangeDate: PropTypes.func.isRequired,
+
+  history: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+  }),
 }
 
 const mapStateToProps = ({ live }) => ({

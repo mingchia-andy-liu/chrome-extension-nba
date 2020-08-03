@@ -24,102 +24,89 @@ const Wrapper = styled(Column)`
   min-width: 370px;
 `
 
-class PopUp extends React.Component {
-  static propTypes = {
-    live: PropTypes.shape({
-      hasError: PropTypes.bool.isRequired,
-      isLoading: PropTypes.bool.isRequired,
-      games: PropTypes.array.isRequired,
-      // date
-      lastUpdate: PropTypes.object.isRequired,
-    }).isRequired,
-    date: PropTypes.shape({
-      date: PropTypes.object.isRequired,
-    }),
-    fetchGamesIfNeeded: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }),
-  }
+const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
+  const [isPopup, togglePopup] = React.useState(false)
+  const [gameDate, toggleGameDate] = React.useState(
+    moment(date).format(DATE_FORMAT)
+  )
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isPopup: false,
-      date: moment(this.props.date.date).format(DATE_FORMAT),
-    }
-    // check if popup is opened in the "popup" or in a tab
-    // if it is in a popup window, there is no tab
+  React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
-      if (!tab) {
-        this.setState({ isPopup: true })
-      }
+      togglePopup(!tab)
     })
-  }
-
-  componentDidMount() {
-    const {
-      date: { date },
-    } = this.props
     const dateStr = moment(date).format(DATE_FORMAT)
-    this.props.fetchGamesIfNeeded(dateStr, null, true)
+    fetchGamesIfNeeded(dateStr, null, true)
     document.title = 'Box Scores | Popup'
-  }
+  }, [])
 
-  componentDidUpdate(prevProps) {
-    const prevDate = prevProps.date.date
-    const {
-      fetchGamesIfNeeded,
-      date: { date: currDate },
-    } = this.props
-    if (!moment(currDate).isSame(prevDate)) {
+  // useRef for previous date.
+  const prevDateRef = React.useRef()
+  React.useEffect(() => {
+    const prevDate = prevDateRef.current
+    if (!moment(date).isSame(prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(
-        moment(currDate).format(DATE_FORMAT),
-        null,
-        true,
-        false
-      )
+      fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      prevDateRef.current = date
     }
-  }
+  }, [date, fetchGamesIfNeeded])
 
-  selectGame(e) {
-    const { isPopup, date } = this.state
-    const id = e.currentTarget.dataset.id
-    if (isPopup) {
-      browser.tabs.create({ url: `/index.html#/boxscores/${id}?date=${date}` })
-      window.close()
-    } else {
-      this.props.history.push(`/boxscores/${id}`)
-    }
-  }
+  const selectGame = React.useCallback(
+    (e) => {
+      const id = e.currentTarget.dataset.id
+      if (isPopup) {
+        browser.tabs.create({
+          url: `/index.html#/boxscores/${id}?date=${gameDate}`,
+        })
+        window.close()
+      } else {
+        history.push(`/boxscores/${id}`)
+      }
+    },
+    [gameDate, isPopup]
+  )
 
-  selectDate = (date) => {
-    this.setState({ date })
-  }
+  const selectDate = React.useCallback(
+    (date) => {
+      toggleGameDate(date)
+    },
+    [toggleGameDate]
+  )
 
-  render() {
-    const { live } = this.props
-    return (
-      <Wrapper>
-        <DatePicker hide={this.state.isPopup} onChange={this.selectDate} />
-        <Links />
-        <ButtonsWrapper>
-          <DarkModeCheckbox />
-          <NoSpoilerCheckbox />
-          <BroadcastCheckbox />
-        </ButtonsWrapper>
-        <CardList
-          hasError={live.hasError}
-          selected={'0'}
-          isLoading={live.isLoading}
-          games={live.games}
-          onClick={this.selectGame.bind(this)}
-        />
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper>
+      <DatePicker hide={isPopup} onChange={selectDate} />
+      <Links />
+      <ButtonsWrapper>
+        <DarkModeCheckbox />
+        <NoSpoilerCheckbox />
+        <BroadcastCheckbox />
+      </ButtonsWrapper>
+      <CardList
+        hasError={live.hasError}
+        selected={'0'}
+        isLoading={live.isLoading}
+        games={live.games}
+        onClick={selectGame}
+      />
+    </Wrapper>
+  )
+}
+
+PopUp.propTypes = {
+  live: PropTypes.shape({
+    hasError: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    games: PropTypes.array.isRequired,
+    // date
+    lastUpdate: PropTypes.object.isRequired,
+  }).isRequired,
+  date: PropTypes.shape({
+    date: PropTypes.object.isRequired,
+  }),
+  fetchGamesIfNeeded: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
 }
 
 const mapStateToProps = ({ live, date }) => ({

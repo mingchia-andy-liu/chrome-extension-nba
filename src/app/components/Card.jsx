@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { RowCSS, JustifyCenter, AlignCenter, Shadow } from '../styles'
+import { RowCSS, JustifyCenter, AlignCenter, Shadow, Theme } from '../styles'
 import TeamInfo from './TeamInfo'
 import MatchInfo from './MatchInfo'
 import { isWinning } from '../utils/common'
 import { SidebarConsumer, ThemeConsumer } from '../components/Context'
-import { Theme } from '../styles'
 
 // position relative for before pseudo element
 const Wrapper = styled.div`

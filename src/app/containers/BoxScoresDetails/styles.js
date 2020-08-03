@@ -51,7 +51,7 @@ export const OverviewWrapper = styled(Column)`
 `
 
 export const HighlightWrapper = styled(OverviewWrapper)`
-  width: 18vw;
+  width: 20vw;
   min-width: 170px;
   cursor: pointer;
   margin-left: 0;
