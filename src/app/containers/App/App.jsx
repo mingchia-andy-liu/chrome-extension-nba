@@ -13,6 +13,7 @@ import {
   ThemeProvider,
   BoxScoreProvider,
 } from '../../components/Context'
+import { GlobalStyle } from '../../styles'
 
 import 'flatpickr/dist/flatpickr.min.css'
 
@@ -24,6 +25,7 @@ const App = () => {
       <SidebarProvider>
         <BoxScoreProvider>
           <SettingsProvider>
+            <GlobalStyle />
             <AppBase>
               <Switch>
                 <Route exact path="/popup" component={PopUp} />
