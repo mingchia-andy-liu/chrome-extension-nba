@@ -18,12 +18,8 @@ browser.alarms.onAlarm.addListener((alarm) => {
     const {
       bs,
       date: { date },
-      modal: { isOpen },
     } = store.getState()
-    if (isOpen) {
-      // modal is opened, cancel alarm
-      return
-    }
+
     const dateStr = moment(date).format(DATE_FORMAT)
     fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState)
     if (bs && bs.gid !== '') {

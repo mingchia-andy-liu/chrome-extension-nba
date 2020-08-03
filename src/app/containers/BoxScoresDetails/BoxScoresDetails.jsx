@@ -27,9 +27,8 @@ import {
   renderHighlightButton,
   renderTeamLeader,
 } from './helpers'
-import modalType from '../Modal/modal-types'
-import { toggleModal } from '../Modal/actions'
 import { DATE_FORMAT } from '../../utils/constant'
+import browser from '../../utils/browser'
 
 class BoxScoresDetails extends React.Component {
   static propTypes = {
@@ -44,7 +43,6 @@ class BoxScoresDetails extends React.Component {
     fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
     resetLiveGameBox: PropTypes.func.isRequired,
     dispatchChangeDate: PropTypes.func.isRequired,
-    toggleModal: PropTypes.func.isRequired,
     fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
 
     id: PropTypes.string.isRequired,
@@ -63,10 +61,7 @@ class BoxScoresDetails extends React.Component {
     } = this.props
     const id = this.getIdFromProps()
     const url = urls[id]
-    this.props.toggleModal({
-      modalType: modalType.HIGHLIGH_VIDEO,
-      src: `https://youtube.com/embed/${url}`,
-    })
+    browser.tabs.create({ url: `https://youtube.com/watch?v=${url}` })
   }
 
   getIdFromProps = () => {
@@ -198,7 +193,6 @@ const mapDispatchToProps = (dispatch) => {
       fetchLiveGameBoxIfNeeded,
       resetLiveGameBox,
       dispatchChangeDate,
-      toggleModal,
       fetchGameHighlightIfNeeded,
     },
     dispatch

@@ -15,44 +15,33 @@ const Wrapper = styled.div`
   }
 `
 
-class Tab extends React.Component {
-  constructor(props) {
-    super(props)
+const Tab = ({ index, children, onTabSelect, isLink } = { children: [] }) => {
+  const childrenArray = Array.isArray(children)
+    ? children
+    : [children]
+  const selectedIndex = index > childrenArray.length
+    ? 0
+    : index
 
-    // this.props.children is an opaque data structure. It can be either an array or a single element.
-    const { index } = this.props
-    let { children } = this.props
-    if (!children) {
-      throw Error('Must contain at least one tab')
-    }
-    children = Array.isArray(children) ? children : [children]
-    this.state = {
-      selectedIndex: index > children.length ? 0 : index,
-    }
-  }
-
-  renderTabs() {
-    const { children, onTabSelect, isLink } = this.props
-    const childrenWithProps = React.Children.map(children, (child, index) =>
+  const renderTabs = () => {
+    const childrenWithProps = React.Children.map(children, (child, i) =>
       React.cloneElement(child, {
-        key: `tab-bar-item-${index}`,
+        key: `tab-bar-item-${i}`,
         to: isLink ? child.props.to : undefined,
-        active: this.state.selectedIndex === index,
+        active: selectedIndex === i,
         label: child.props.label,
-        onClick: () => onTabSelect(index),
+        onClick: () => onTabSelect(i),
       })
     )
 
     return childrenWithProps
   }
 
-  render() {
-    return (
-      <Wrapper data-index={this.state.selectedIndex}>
-        {this.renderTabs()}
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper data-index={selectedIndex}>
+      {renderTabs()}
+    </Wrapper>
+  )
 }
 
 Tab.propTypes = {

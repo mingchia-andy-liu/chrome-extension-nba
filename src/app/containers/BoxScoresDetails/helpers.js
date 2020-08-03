@@ -129,7 +129,8 @@ export const renderHighlightButton = (url, dark, callback) => {
   if (url) {
     return (
       <HighlightWrapper onClick={callback}>
-        <h3>YouTube Highligh Video</h3>
+        <h3>NBA Official YouTube Highligh Video</h3>
+        <span>Watch on Youtube.</span>
         <HighlightButton
           alt="YouTube Highlight Video"
           src={`http://img.youtube.com/vi/${url}/0.jpg`}
@@ -139,7 +140,7 @@ export const renderHighlightButton = (url, dark, callback) => {
   }
   return (
     <HighlightWrapper>
-      <h3>YouTube Highligh Video</h3>
+      <h3>NBA Official YouTube Highligh Video</h3>
       <p>Highlight not available yet.</p>
     </HighlightWrapper>
   )
