@@ -1,13 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Cell, HeaderCell, RowHeaderCell, Table, Row } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { ThemeConsumer } from '../Context'
-
-const Wrapper = styled.div`
-  width: 100%;
-`
 
 const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
   <Row style={{ backgroundColor: getOddRowColor(i, isDark) }}>
@@ -37,15 +32,14 @@ const renderTeamRow = (team, otherTeam, isDark, i = 0) => (
 
 const Summary = ({ home, visitor, extra }) => {
   return (
-    <Wrapper>
-      <ThemeConsumer>
-        {({ state: { dark } }) => (
-          <React.Fragment>
-            <Table>
-              <tbody>
-                <Row>
-                  <RowHeaderCell> Team </RowHeaderCell>
-                  {home.linescores &&
+    <ThemeConsumer>
+      {({ state: { dark } }) => (
+        <React.Fragment>
+          <Table>
+            <tbody>
+              <Row>
+                <RowHeaderCell> Team </RowHeaderCell>
+                {home.linescores &&
                     home.linescores.period.map((period) => (
                       // TODO: hides the unstart peroid
                       <HeaderCell key={`period-${period.period_value}`}>
@@ -53,24 +47,23 @@ const Summary = ({ home, visitor, extra }) => {
                         {period.period_name}{' '}
                       </HeaderCell>
                     ))}
-                  <HeaderCell> Final </HeaderCell>
-                </Row>
-                {renderTeamRow(visitor, home, dark)}
-                {renderTeamRow(home, visitor, dark, 1)}
-                <Row>
-                  <RowHeaderCell>Lead Changes</RowHeaderCell>
-                  <Cell>{extra.leadChanges}</Cell>
-                </Row>
-                <Row>
-                  <RowHeaderCell>Times Tied</RowHeaderCell>
-                  <Cell>{extra.timesTied}</Cell>
-                </Row>
-              </tbody>
-            </Table>
-          </React.Fragment>
-        )}
-      </ThemeConsumer>
-    </Wrapper>
+                <HeaderCell> Final </HeaderCell>
+              </Row>
+              {renderTeamRow(visitor, home, dark)}
+              {renderTeamRow(home, visitor, dark, 1)}
+              <Row>
+                <RowHeaderCell>Lead Changes</RowHeaderCell>
+                <Cell>{extra.leadChanges}</Cell>
+              </Row>
+              <Row>
+                <RowHeaderCell>Times Tied</RowHeaderCell>
+                <Cell>{extra.timesTied}</Cell>
+              </Row>
+            </tbody>
+          </Table>
+        </React.Fragment>
+      )}
+    </ThemeConsumer>
   )
 }
 

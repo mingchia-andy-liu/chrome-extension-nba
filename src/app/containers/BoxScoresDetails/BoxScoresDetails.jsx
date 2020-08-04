@@ -15,7 +15,7 @@ import {
   fetchGameHighlightIfNeeded,
 } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
-import { Content, RowWrap } from './styles'
+import { Content } from './styles'
 import {
   renderTitle,
   renderSummary,
@@ -24,11 +24,10 @@ import {
   renderTeamStats,
   renderAdvancedTeamStats,
   renderPlaybyPlay,
-  renderHighlightButton,
+  renderHighlight,
   renderTeamLeader,
 } from './helpers'
 import { DATE_FORMAT } from '../../utils/constant'
-import browser from '../../utils/browser'
 
 const BoxScoresDetails = ({
   bs: { bsData, pbpData, teamStats, urls, isLoading },
@@ -39,12 +38,6 @@ const BoxScoresDetails = ({
 }) => {
   // tab index: 0: overview 1: boxscores 2: playbyplay
   const [tabIndex, toggleIndex] = React.useState(1)
-
-  const clickHighlight = React.useCallback(() => {
-    const gameId = id || ''
-    const url = urls[gameId]
-    browser.tabs.create({ url: `https://youtube.com/watch?v=${url}` })
-  })
 
   React.useEffect(() => {
     const gameId = id || ''
@@ -88,10 +81,8 @@ const BoxScoresDetails = ({
             {tabIndex === 0 && (
               <React.Fragment>
                 {renderTitle(bsData)}
-                <RowWrap>
-                  {renderHighlightButton(url, dark, clickHighlight)}
-                  {renderSummary(bsData, teamStats)}
-                </RowWrap>
+                {renderHighlight(url)}
+                {renderSummary(bsData, teamStats)}
                 {bsData.periodTime &&
                   bsData.periodTime.gameStatus === '3' &&
                   renderTeamLeader(bsData)}
