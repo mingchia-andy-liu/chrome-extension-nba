@@ -7,7 +7,7 @@ import {
   Row,
   Column,
   AlignCenter,
-  JustifyStart,
+  JustifyCenter,
   mediaQuery,
 } from '../../styles'
 
@@ -40,21 +40,10 @@ export const Hint = styled.div`
   margin: 0 5px;
 `
 
-export const HighlightButton = styled.img`
-  width: 100%;
-`
-
 export const OverviewWrapper = styled(Column)`
   ${AlignCenter}
-  ${JustifyStart}
-    margin: 0 10px;
-`
-
-export const HighlightWrapper = styled(OverviewWrapper)`
-  width: 20vw;
-  min-width: 170px;
-  cursor: pointer;
-  margin-left: 0;
+  ${JustifyCenter}
+  margin: 0 10px;
 `
 
 export const HintText = (dark, doubles, text) => {

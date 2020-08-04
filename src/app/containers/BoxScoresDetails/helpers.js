@@ -15,9 +15,7 @@ import {
   HintText,
   Subtitle,
   Title,
-  HighlightButton,
   OverviewWrapper,
-  HighlightWrapper,
   TeamLeaderWrapper,
   TeamLeaderContent,
 } from './styles'
@@ -125,25 +123,14 @@ export const renderHints = (dark) => {
   )
 }
 
-export const renderHighlightButton = (url, dark, callback) => {
+export const renderHighlight = (url) => {
   if (url) {
     return (
-      <HighlightWrapper onClick={callback}>
-        <h3>NBA Official YouTube Highligh Video</h3>
-        <span>Watch on Youtube.</span>
-        <HighlightButton
-          alt="YouTube Highlight Video"
-          src={`http://img.youtube.com/vi/${url}/0.jpg`}
-        />
-      </HighlightWrapper>
+      <OverviewWrapper>
+        <a href={`https://youtube.com/watch?v=${url}`}> Watch NBA Official YouTube Highligh Video </a>
+      </OverviewWrapper>
     )
   }
-  return (
-    <HighlightWrapper>
-      <h3>NBA Official YouTube Highligh Video</h3>
-      <p>Highlight not available yet.</p>
-    </HighlightWrapper>
-  )
 }
 
 const getMostOfField = (players, field) => {
