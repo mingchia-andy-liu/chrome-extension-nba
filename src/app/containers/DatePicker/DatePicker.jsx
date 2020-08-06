@@ -47,8 +47,9 @@ const Arrow = styled.img`
   cursor: pointer;
 `
 
+// https://www.nba.com/key-dates
 const MIN_DATE = '2019-09-01'
-const MAX_DATE = '2020-08-30'
+const MAX_DATE = '2020-10-13'
 
 const DatePicker = (
   { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
