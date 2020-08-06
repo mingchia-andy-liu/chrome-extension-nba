@@ -10,17 +10,18 @@ export const history = createHashHistory({
 })
 
 const middleware = routerMiddleware(history)
-let middlewares
-if (process.env.NODE_ENV === 'development') {
-  const DevTools = require('./devTools')
-  middlewares = compose(
-    applyMiddleware(thunk, middleware),
-    // Required! Enable Redux DevTools with the monitors you chose
-    DevTools.default.instrument()
-  )
-} else {
-  middlewares = compose(applyMiddleware(thunk, middleware))
-}
+const middlewares = compose(applyMiddleware(thunk, middleware))
+// TODO: babel v7 does not transpile devTools
+// if (process.env.NODE_ENV === 'development') {
+//   const DevTools = require('./devTools')
+//   middlewares = compose(
+//     applyMiddleware(thunk, middleware),
+//     // Required! Enable Redux DevTools with the monitors you chose
+//     DevTools.default.instrument()
+//   )
+// } else {
+//   middlewares = compose(applyMiddleware(thunk, middleware))
+// }
 
 // Create store
 export const store = createStore(reducer, initialState, middlewares)
