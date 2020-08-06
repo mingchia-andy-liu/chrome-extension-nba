@@ -64,9 +64,9 @@ const sanitizeGame = (game) => ({
     periodStatus:
       game.period_time.game_status === '1'
         ? moment
-            .tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York')
-            .local()
-            .format('hh:mm A')
+          .tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York')
+          .local()
+          .format('hh:mm A')
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,
@@ -108,24 +108,22 @@ export default (state = initState, action) => {
         isLoading: true,
       }
     case types.REQUEST_SUCCESS: {
-      let games = action.payload
-      const isFallBack = action.payload.isFallBack
       try {
-        if (isFallBack === 1) {
-          games = sanitizeGames(action.payload.games, isFallBack)
-        } else if (isFallBack === 2) {
-          games = sanitizeGames(action.payload.games, isFallBack)
-        } else {
-          games = sanitizeGames(action.payload)
+        const isFallBack = action.payload.isFallBack
+        const games = sanitizeGames(action.payload.games, isFallBack)
+        return {
+          games,
+          hasError: false,
+          isLoading: false,
+          lastUpdate: new Date(),
         }
       } catch (error) {
-        games = []
-      }
-      return {
-        games,
-        hasError: false,
-        isLoading: false,
-        lastUpdate: new Date(),
+        return {
+          games: [],
+          hasError: true,
+          isLoading: false,
+          lastUpdate: new Date(0),
+        }
       }
     }
     case types.REQUEST_ERROR:

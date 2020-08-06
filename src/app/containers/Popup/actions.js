@@ -37,7 +37,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
   }
 }
 
-export const fetchRequest3 = async (dateStr) => {
+export const fetchRequestFailOver = async (dateStr) => {
   try {
     const res = await fetch(
       `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
@@ -49,11 +49,11 @@ export const fetchRequest3 = async (dateStr) => {
       games,
     }
   } catch (error) {
-    return fetchRequest2(dateStr)
+    return fetchRequestFailFailOver(dateStr)
   }
 }
 
-export const fetchRequest2 = async (dateStr) => {
+export const fetchRequestFailFailOver = async (dateStr) => {
   const date = moment(dateStr)
   if (!date.isSame(new Date(), 'day')) {
     throw new Error()
@@ -72,19 +72,24 @@ export const fetchRequest2 = async (dateStr) => {
 }
 
 export const fetchRequest = async (dateStr) => {
-  try {
-    const res = await fetch(
-      `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
-    )
-    const {
-      sports_content: {
-        games: { game },
-      },
-    } = await res.json()
-    return game
-  } catch (error) {
-    return fetchRequest3(dateStr)
-  }
+  // try {
+  //   const res = await fetch(
+  //     `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
+  //   )
+  //   const {
+  //     sports_content: {
+  //       games: { game },
+  //     },
+  //   } = await res.json()
+  //   return {
+  //     games: game
+  //   }
+  // } catch (error) {
+  //   return fetchRequestFailOver(dateStr)
+  // }
+  // TODO: the above endpoint seems to be broken for extended season
+  // Review again once regular season starts
+  return fetchRequestFailOver(dateStr)
 }
 
 export const fetchGamesIfNeeded = (
