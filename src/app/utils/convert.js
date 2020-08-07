@@ -1,7 +1,11 @@
+import { utcToZonedTime } from 'date-fns-tz'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
+import { getUserTimeZoneId } from './time'
 import { toPercentage } from './common'
 import { QUARTER_NAMES } from './constant'
 import { getNickNamesByTriCode } from '../utils/teams'
-import moment from 'moment-timezone'
+import getApiDate from './getApiDate'
 
 const getStats = (old, points) => {
   if (!old) {
@@ -115,7 +119,7 @@ export const convertDaily2 = (game) => {
     } else if (isHalftime) {
       return 'Halftime'
     } else if (statusNum === 1) {
-      return moment.utc(startTimeUTC).local().format('hh:mm A')
+      return format(utcToZonedTime(startTimeUTC, getUserTimeZoneId()), 'hh:mm a')
     } else if (isEndOfPeriod) {
       if (p > 4) {
         const otP = p - 4
@@ -174,10 +178,7 @@ export const convertDaily = (game) => {
       periodValue: `${p}`,
       periodStatus:
         st == 1
-          ? moment
-            .tz(`${stt}`, 'hh:mm A', 'America/New_York')
-            .local()
-            .format('hh:mm A')
+          ? format(utcToZonedTime(parse(stt, 'hh:mm a', getApiDate()).toISOString(), getUserTimeZoneId()), 'hh:mm a')
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

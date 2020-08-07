@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import moment from 'moment-timezone'
+import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
 import DatePicker from '../DatePicker'
 import CardList from '../../components/CardList'
 import {
@@ -42,9 +43,9 @@ const Sidebar = ({
   const prevCountRef = React.useRef()
   React.useEffect(() => {
     const prevDate = prevCountRef.current
-    if (!moment(date).isSame(prevDate)) {
+    if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
       prevCountRef.current = date
     }
   }, [date, fetchGamesIfNeeded])
@@ -59,7 +60,7 @@ const Sidebar = ({
       } else {
         history.push(`/boxscores/${id}`)
       }
-      const dateStr = moment(date).format(DATE_FORMAT)
+      const dateStr = format(date, DATE_FORMAT)
       fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
         fetchGameHighlightIfNeeded(id)
       })

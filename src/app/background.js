@@ -1,11 +1,16 @@
-import moment from 'moment-timezone'
+import format from 'date-fns/format'
+import getYear from 'date-fns/getYear'
+import addYears from 'date-fns/addYears'
+import getMonth from 'date-fns/getMonth'
+import differenceInSeconds from 'date-fns/differenceInSeconds'
 import browser, { checkLiveGame } from './utils/browser'
-import getAPIDate from './utils/getApiDate'
-import { nextNearestMinutes /*, nearestMinutes */ } from './utils/common'
+import getApiDate from './utils/getApiDate'
+import { nextNearestMinutes } from './utils/time'
+import { DATE_FORMAT } from './utils/constant'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
-  when: nextNearestMinutes(30, moment()).valueOf(),
+  when: nextNearestMinutes(30, new Date()).valueOf(),
   periodInMinutes: 30,
 })
 
@@ -16,7 +21,7 @@ browser.alarms.create('live', {
 //             if (favTeamGame) {
 //                 const format = 'HHmm'
 //                 const roundedDate = nearestMinutes(30, moment()).format(format)
-//                 const favTeamMoment = moment.tz(favTeamGame.time, format, 'America/New_York').local()
+//                 const favTeamMoment = moment.tz(favTeamGame.time, format, EST_IANA_ZONE_ID).local()
 
 //                 if (roundedDate === favTeamMoment.format(format)) {
 //                     const options = {
@@ -34,7 +39,8 @@ browser.alarms.create('live', {
 // }
 
 const liveListener = () => {
-  const dateStr = moment(getAPIDate()).format('YYYYMMDD')
+  // const dateStr = moment(getAPIDate()).format('yyyyMMdd')
+  const dateStr = format(getApiDate(), DATE_FORMAT)
   // fetch(
   //   `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
   // )
@@ -58,14 +64,14 @@ const liveListener = () => {
     .then((res) => res.json())
     .then(({ games }) => checkLiveGame(games, 2))
     .catch(() => {
-      const date = moment(dateStr)
+      const date = getApiDate()
       let year
-      if (date.year() === 2020) {
+      if (getYear(date) === 2020) {
         // 2020 season is delayed and season should finish in 2020-09
-        year = date.month() > 8 ? date.year() : date.add(-1, 'years').year()
+        year = getMonth(date) > 8 ? getYear(date) : getYear(addYears(date, -1))
       } else {
         // if it's after july, it's a new season
-        year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+        year = getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
       }
       return fetch(
             `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
@@ -84,7 +90,8 @@ liveListener()
 
 browser.alarms.onAlarm.addListener((alarm) => {
   // when the chrome is reopened, alarms get ran even though the time has passed
-  if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
+  // if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
+  if (differenceInSeconds(alarm.scheduledTime, Date.now()) < -10) {
     return
   }
 

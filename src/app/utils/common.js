@@ -1,24 +1,4 @@
 /**
- * Returns the cloestest interval minute date
- * @param {number} interval
- * @param {moment obj} momentDate
- */
-export const nearestMinutes = (interval, momentDate) => {
-  const roundedMinutes = Math.round(momentDate.minute() / interval) * interval
-  return momentDate.clone().minute(roundedMinutes).second(0)
-}
-
-/**
- * Returns the future of the nearest interval date
- * @param {number} interval
- * @param {moment obj} momentDate
- */
-export const nextNearestMinutes = (interval, momentDate) => {
-  const roundedMinutes = Math.ceil(momentDate.minute() / interval) * interval
-  return momentDate.clone().minute(roundedMinutes).second(0)
-}
-
-/**
  * Returns represented doubles of the player
  * @param {obj} player
  */

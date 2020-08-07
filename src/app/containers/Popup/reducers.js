@@ -1,7 +1,10 @@
-/* eslint-disable no-console */
 import types from './types'
-import moment from 'moment-timezone'
+import { utcToZonedTime } from 'date-fns-tz'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
+import { getUserTimeZoneId } from '../../utils/time'
 import { convertDaily, convertDaily2 } from '../../utils/convert'
+import getApiDate from '../../utils/getApiDate'
 
 const initState = {
   hasError: false,
@@ -63,10 +66,7 @@ const sanitizeGame = (game) => ({
     // have not start
     periodStatus:
       game.period_time.game_status === '1'
-        ? moment
-          .tz(`${game.date}${game.time}`, 'YYYYMMDDhhmm', 'America/New_York')
-          .local()
-          .format('hh:mm A')
+        ? format(utcToZonedTime(parse(`${game.date}${game.time}`, 'yyyyMMddhhmm', getApiDate()).toISOString(), getUserTimeZoneId()), 'hh:mm a')
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,

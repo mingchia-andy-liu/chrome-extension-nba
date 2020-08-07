@@ -4,7 +4,10 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import Flatpickr from 'react-flatpickr'
-import moment from 'moment-timezone'
+import addDays from 'date-fns/addDays'
+import format from 'date-fns/format'
+import isAfter from 'date-fns/isAfter'
+import isBefore from 'date-fns/isBefore'
 import { dispatchChangeDate } from './actions'
 import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
@@ -48,8 +51,8 @@ const Arrow = styled.img`
 `
 
 // https://www.nba.com/key-dates
-const MIN_DATE = '2019-09-01'
-const MAX_DATE = '2020-10-13'
+const MIN_DATE = new Date('2019-09-02')
+const MAX_DATE = new Date('2020-10-14')
 
 const DatePicker = (
   { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
@@ -59,12 +62,12 @@ const DatePicker = (
 ) => {
   const onClickArrow = React.useCallback(
     (offset) => {
-      const currDate = moment(date).add(offset, 'day')
-      if (currDate.isAfter(MAX_DATE) || currDate.isBefore(MIN_DATE)) {
+      const currDate = addDays(date, offset)
+      if (isAfter(currDate, MAX_DATE) || isBefore(currDate, MIN_DATE)) {
         return
       }
-      dispatchChangeDate(currDate.toDate())
-      onChange(currDate.format(DATE_FORMAT))
+      dispatchChangeDate(currDate)
+      onChange(format(currDate, DATE_FORMAT))
       resetLiveGameBox()
     },
     [date, dispatchChangeDate, onChange, resetLiveGameBox]
@@ -80,10 +83,8 @@ const DatePicker = (
 
   const onDateChange = React.useCallback(
     (date) => {
-      const d = moment(date[0])
-      const dateObj = d.toDate()
-      dispatchChangeDate(dateObj)
-      onChange(dateObj)
+      dispatchChangeDate(date[0])
+      onChange(date[0])
       resetLiveGameBox()
     },
     [dispatchChangeDate, onChange, resetLiveGameBox]
@@ -97,7 +98,7 @@ const DatePicker = (
             <StyledInput
               dark={dark ? 1 : undefined}
               readOnly={true}
-              value={moment(date).format('YYYY-MM-DD')}
+              value={format(date, 'yyyy-MM-dd')}
             />
           )}
         </ThemeConsumer>

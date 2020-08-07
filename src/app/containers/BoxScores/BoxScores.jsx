@@ -3,7 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import moment from 'moment-timezone'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
+import startOfDay from 'date-fns/startOfDay'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
@@ -21,14 +23,14 @@ const BoxScores = ({
   match,
   dispatchChangeDate,
 }) => {
-  const dateStr = moment(date).format(DATE_FORMAT)
+  const dateStr = format(date, DATE_FORMAT)
   const queryDate = getDateFromQuery(location)
   const [isLoading, toggleLoading] = React.useState(true)
 
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
     const gameDate = queryDate == null ? dateStr : queryDate
-    dispatchChangeDate(moment(gameDate, DATE_FORMAT).toDate()).then(() => {
+    dispatchChangeDate(parse(gameDate, DATE_FORMAT, startOfDay(new Date()))).then(() => {
       if (location.search !== '') {
         history.push({
           search: '',
