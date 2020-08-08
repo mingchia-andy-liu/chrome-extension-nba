@@ -22,4 +22,15 @@ export const nextNearestMinutes = (interval, date) => {
   return setSeconds(setMinutes(date, roundedMinutes), 0)
 }
 
-export const getUserTimeZoneId = () => Intl.DateTimeFormat().resolvedOptions().timeZone
+let timezone = ''
+export const getUserTimeZoneId = () => {
+  if (timezone !== '') {
+    return timezone
+  }
+  if (Intl && Intl.DateTimeFormat && Intl.DateTimeFormat().resolvedOptions) {
+    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  } else {
+    timezone = 'America/New_York'
+  }
+  return timezone
+}
