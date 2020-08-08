@@ -155,8 +155,6 @@ export const fetchLiveGameBoxIfNeeded = (
 
   const apiDate = getAPIDate()
   // if the date is in the future, then exit early
-  // if (moment(dateStr).isAfter(apiDate)) {
-  console.log(dateStr, apiDate, isAfter(parse(dateStr, DATE_FORMAT, new Date()), apiDate))
   if (isAfter(parse(dateStr, DATE_FORMAT, new Date()), apiDate)) {
     return
   }

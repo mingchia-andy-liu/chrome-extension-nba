@@ -39,7 +39,6 @@ browser.alarms.create('live', {
 // }
 
 const liveListener = () => {
-  // const dateStr = moment(getAPIDate()).format('yyyyMMdd')
   const dateStr = format(getApiDate(), DATE_FORMAT)
   // fetch(
   //   `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`

@@ -29,7 +29,6 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
       payload: games,
     })
     const newGames = games.isFallBack ? games.games : games
-    // if (moment(getApiDate()).format(DATE_FORMAT) === dateStr) {
     if (format(getApiDate(), DATE_FORMAT) === dateStr) {
       checkLiveGame(newGames, games.isFallBack)
     }
