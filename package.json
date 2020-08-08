@@ -19,7 +19,8 @@
     "start": "webpack-dev-server --open",
     "webpack:bg": "webpack --config bg.webpack.config.js",
     "webpack:dev": "NODE_ENV=development webpack --progress --colors",
-    "webpack": "NODE_ENV=production webpack --progress --colors"
+    "webpack": "NODE_ENV=production webpack --progress --colors",
+    "test": "jest"
   },
   "license": "MIT",
   "main": "index.js",
@@ -51,6 +52,8 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.2.2",
+    "jest-date-mock": "^1.0.8",
     "prettier": "^2.0.5",
     "prop-types": "^15.7.2",
     "redux-devtools": "^3.6.0",
@@ -61,7 +64,8 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "moment-timezone": "^0.5.31",
+    "date-fns": "^2.15.0",
+    "date-fns-tz": "^1.0.10",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

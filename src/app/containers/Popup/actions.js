@@ -1,4 +1,7 @@
-import moment from 'moment'
+import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
+import differenceInSeconds from 'date-fns/differenceInSeconds'
+import parse from 'date-fns/parse'
 import types from './types'
 import getApiDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
@@ -26,7 +29,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
       payload: games,
     })
     const newGames = games.isFallBack ? games.games : games
-    if (moment(getApiDate()).format(DATE_FORMAT) === dateStr) {
+    if (format(getApiDate(), DATE_FORMAT) === dateStr) {
       checkLiveGame(newGames, games.isFallBack)
     }
     if (callback) callback(newGames)
@@ -54,8 +57,8 @@ export const fetchRequestFailOver = async (dateStr) => {
 }
 
 export const fetchRequestFailFailOver = async (dateStr) => {
-  const date = moment(dateStr)
-  if (!date.isSame(new Date(), 'day')) {
+  const date = parse(dateStr, DATE_FORMAT, new Date())
+  if (!isSameDay(date, new Date())) {
     throw new Error()
   }
   const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
@@ -102,8 +105,8 @@ export const fetchGamesIfNeeded = (
     live: { games, lastUpdate },
     date: { date },
   } = getState()
-  const oldDateStr = moment(date).format(DATE_FORMAT)
-  const updateDiff = moment().diff(lastUpdate, 'seconds')
+  const oldDateStr = format(date, DATE_FORMAT)
+  const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
 
   // if it's different day, or force update, fetch new
   if (oldDateStr === dateStr && !forceUpdate) {

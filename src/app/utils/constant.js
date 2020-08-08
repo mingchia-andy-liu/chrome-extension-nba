@@ -15,4 +15,5 @@ export const QUARTER_NAMES = [
   'OT10',
 ]
 
-export const DATE_FORMAT = 'YYYYMMDD'
+export const EST_IANA_ZONE_ID = 'America/New_York'
+export const DATE_FORMAT = 'yyyyMMdd'

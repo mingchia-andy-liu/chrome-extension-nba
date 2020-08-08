@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import moment from 'moment-timezone'
+import format from 'date-fns/format'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
 import { Tab, TabItem } from '../../components/Tab'
@@ -41,7 +41,7 @@ const BoxScoresDetails = ({
 
   React.useEffect(() => {
     const gameId = id || ''
-    const dateStr = moment(date).format(DATE_FORMAT)
+    const dateStr = format(date, DATE_FORMAT)
     fetchLiveGameBoxIfNeeded(dateStr, gameId, false).then(() => {
       fetchGameHighlightIfNeeded(gameId)
     })

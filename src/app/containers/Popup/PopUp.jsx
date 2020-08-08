@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import moment from 'moment-timezone'
+import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
 import CardList from '../../components/CardList'
 import {
   DarkModeCheckbox,
@@ -15,7 +16,6 @@ import Links from '../../components/Links'
 import { Column, ButtonsWrapper } from '../../styles'
 import * as actions from './actions'
 import { DATE_FORMAT } from '../../utils/constant'
-
 import browser from '../../utils/browser'
 
 const Wrapper = styled(Column)`
@@ -27,14 +27,14 @@ const Wrapper = styled(Column)`
 const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(
-    moment(date).format(DATE_FORMAT)
+    format(date, DATE_FORMAT)
   )
 
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
       togglePopup(!tab)
     })
-    const dateStr = moment(date).format(DATE_FORMAT)
+    const dateStr = format(date, DATE_FORMAT)
     fetchGamesIfNeeded(dateStr, null, true)
     document.title = 'Box Scores | Popup'
   }, [])
@@ -43,9 +43,9 @@ const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
   const prevDateRef = React.useRef()
   React.useEffect(() => {
     const prevDate = prevDateRef.current
-    if (!moment(date).isSame(prevDate)) {
+    if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(moment(date).format(DATE_FORMAT), null, true, false)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
       prevDateRef.current = date
     }
   }, [date, fetchGamesIfNeeded])
