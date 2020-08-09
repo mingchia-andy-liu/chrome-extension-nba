@@ -2,11 +2,14 @@ import format from 'date-fns/format'
 import getYear from 'date-fns/getYear'
 import addYears from 'date-fns/addYears'
 import getMonth from 'date-fns/getMonth'
+import isSameMinute from 'date-fns/isSameMinute'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
+import { utcToZonedTime } from 'date-fns-tz'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate from './utils/getApiDate'
-import { nextNearestMinutes } from './utils/time'
-import { DATE_FORMAT } from './utils/constant'
+import { nextNearestMinutes, nearestMinutes } from './utils/time'
+import { DATE_FORMAT, EST_IANA_ZONE_ID } from './utils/constant'
+import { sanitizeGames } from './utils/gameSanitize'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
@@ -14,31 +17,37 @@ browser.alarms.create('live', {
   periodInMinutes: 30,
 })
 
-// const fireFavTeamNotificationIfNeeded = (games) => {
-//     browser.getItem(['favTeam'], (data) => {
-//         if (data && data.favTeam) {
-//             const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
-//             if (favTeamGame) {
-//                 const format = 'HHmm'
-//                 const roundedDate = nearestMinutes(30, moment()).format(format)
-//                 const favTeamMoment = moment.tz(favTeamGame.time, format, EST_IANA_ZONE_ID).local()
+const fireFavTeamNotificationIfNeeded = (games) => {
+  browser.getItem(['favTeam'], (data) => {
+    if (data && data.favTeam) {
+      console.log(data.favTeam, games)
+      const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
+      console.log('fav', favTeamGame)
+      if (favTeamGame) {
+        const roundedDate = nearestMinutes(30, new Date())
+        let gameTime = new Date(0)
 
-//                 if (roundedDate === favTeamMoment.format(format)) {
-//                     const options = {
-//                         type: 'basic',
-//                         title: 'You favourite team is about to play',
-//                         message: `${favTeamGame.home.abbreviation} vs ${favTeamGame.visitor.abbreviation} @ ${favTeamMoment.format('hh:mm A')}`,
-//                         iconUrl: 'assets/png/icon-2-color-512.png',
-//                     }
+        if (favTeamGame.startTimeUtc) {
+          const etStartTime = utcToZonedTime(favTeamGame.startTimeUtc, EST_IANA_ZONE_ID)
+          gameTime = etStartTime
+        }
 
-//                     browser.notifications.create(options)
-//                 }
-//             }
-//         }
-//     })
-// }
+        if (isSameMinute(roundedDate, gameTime)) {
+          const options = {
+            type: 'basic',
+            title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
+            message: 'You favorite team is about to play.',
+            iconUrl: 'assets/png/icon-2-color-512.png',
+          }
 
-const liveListener = () => {
+          browser.notifications.create(options)
+        }
+      }
+    }
+  })
+}
+
+const liveListener = (initCheck = false) => {
   const dateStr = format(getApiDate(), DATE_FORMAT)
   // fetch(
   //   `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
@@ -61,7 +70,12 @@ const liveListener = () => {
   //     return
   fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
     .then((res) => res.json())
-    .then(({ games }) => checkLiveGame(games, 2))
+    .then(({ games }) => {
+      checkLiveGame(games, 2)
+      if (!initCheck) {
+        fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+      }
+    })
     .catch(() => {
       const date = getApiDate()
       let year
@@ -78,6 +92,9 @@ const liveListener = () => {
         .then((res) => res.json())
         .then(({ gs: { g } }) => {
           checkLiveGame(g, 1)
+          if (!initCheck) {
+            fireFavTeamNotificationIfNeeded(sanitizeGames(g, 1))
+          }
         })
     })
     // })
@@ -85,7 +102,7 @@ const liveListener = () => {
 }
 
 // immediately search for live game
-liveListener()
+liveListener(true)
 
 browser.alarms.onAlarm.addListener((alarm) => {
   // when the chrome is reopened, alarms get ran even though the time has passed
