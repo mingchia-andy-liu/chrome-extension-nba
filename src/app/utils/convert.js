@@ -1,11 +1,9 @@
 import { utcToZonedTime } from 'date-fns-tz'
-import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import { getUserTimeZoneId } from './time'
 import { toPercentage } from './common'
 import { QUARTER_NAMES } from './constant'
 import { getNickNamesByTriCode } from '../utils/teams'
-import getApiDate from './getApiDate'
 
 const getStats = (old, points) => {
   if (!old) {
@@ -173,13 +171,25 @@ export const convertDaily2 = (game) => {
 export const convertDaily = (game) => {
   const { cl, h, p, st, stt, v } = game
 
+  let startDateUtc
+  if (st == 1) {
+    // construct the date string with timezone
+    const startTimeEastern = stt.replace(/ET$/, '')
+    const startDateEastern = game.gcode.split('/')[0]
+    const formattedStartDateEastern = `${startDateEastern.substring(0, 4)}-${startDateEastern.substring(4, 6)}-${startDateEastern.substring(6, 8)}`
+    const startDateTimeEastern = `${formattedStartDateEastern} ${startTimeEastern} GMT-0400`
+    startDateUtc = new Date(startDateTimeEastern)
+  }
   return {
     periodTime: {
       periodValue: `${p}`,
       periodStatus:
-        st == 1
-          ? format(utcToZonedTime(parse(stt, 'hh:mm a', getApiDate()).toISOString(), getUserTimeZoneId()), 'hh:mm a')
-          : stt,
+      st == 1
+        ? format(
+          startDateUtc,
+          'hh:mm a'
+        )
+        : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,
     },
@@ -197,6 +207,7 @@ export const convertDaily = (game) => {
       nickname: v.tn,
       score: `${v.s}`,
     },
+    startTimeUtc: (startDateUtc || new Date(0)).toISOString()
   }
 }
 

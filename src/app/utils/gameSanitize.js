@@ -67,7 +67,7 @@ const sanitizeGame = (game) => ({
   },
 })
 
-export const sanitizeGames2 = (games, isFallBack = 0) => {
+export const sanitizeGames = (games, isFallBack = 0) => {
   return games.map((game) => {
     if (isFallBack === 1) {
       return sanitizeGameFallBack(game)
@@ -82,8 +82,8 @@ export const sanitizeGames2 = (games, isFallBack = 0) => {
 /**
  * Migrated from preprocessData()
  */
-export const sanitizeGames = (games, isFallBack = 0) => {
-  const sanitized = sanitizeGames2(games, isFallBack)
+export const sanitizeGamesAndReorder = (games, isFallBack = 0) => {
+  const sanitized = sanitizeGames(games, isFallBack)
   const prepare = sanitized.filter(
     (game) => game && game.periodTime && game.periodTime.gameStatus == 1
   )

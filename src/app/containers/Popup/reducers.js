@@ -1,5 +1,5 @@
 import types from './types'
-import { sanitizeGames } from '../../utils/gameSanitize'
+import { sanitizeGamesAndReorder } from '../../utils/gameSanitize'
 
 const initState = {
   hasError: false,
@@ -19,7 +19,7 @@ export default (state = initState, action) => {
     case types.REQUEST_SUCCESS: {
       try {
         const isFallBack = action.payload.isFallBack
-        const games = sanitizeGames(action.payload.games, isFallBack)
+        const games = sanitizeGamesAndReorder(action.payload.games, isFallBack)
         return {
           games,
           hasError: false,

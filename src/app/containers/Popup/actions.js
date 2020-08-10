@@ -2,6 +2,9 @@ import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
+import getYear from 'date-fns/getYear'
+import getMonth from 'date-fns/getMonth'
+import addYears from 'date-fns/addYears'
 import types from './types'
 import getApiDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
@@ -58,10 +61,19 @@ export const fetchRequestFailOver = async (dateStr) => {
 
 export const fetchRequestFailFailOver = async (dateStr) => {
   const date = parse(dateStr, DATE_FORMAT, new Date())
+  // this endpoint only works for current date
   if (!isSameDay(date, new Date())) {
     throw new Error()
   }
-  const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+
+  let year
+  if (getYear(date) === 2020) {
+    // 2020 season is delayed and season should finish in 2020-09
+    year = getMonth(date) > 8 ? getYear(date) : getYear(addYears(date, -1))
+  } else {
+    // if it's after july, it's a new season
+    year = getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
+  }
   const res = await fetch(
     `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
   )

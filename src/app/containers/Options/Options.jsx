@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import {
+import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
   HideZeroRowCheckbox,
@@ -104,33 +104,28 @@ const Options = () => {
         permissions: ['notifications'],
       },
       (hasNotificationPermission) => {
-        console.log('has', hasNotificationPermission)
         togglePermission(hasNotificationPermission)
       }
     )
   }, [])
 
   const requestNotification = React.useCallback(() => {
-    console.log('requesting')
     browser.permissions.request(
       {
         permissions: ['notifications'],
       },
       (granted) => {
-        console.log('graned', granted)
         togglePermission(granted)
       }
     )
   }, [])
 
   const removeNotification = React.useCallback(() => {
-    console.log('removing')
     browser.permissions.remove(
       {
         permissions: ['notifications'],
       },
       (removed) => {
-        console.log('removed', removed)
         togglePermission(!removed)
       }
     )
@@ -144,15 +139,9 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {hasNotificationPermission
-          ? <NotificationWrapper>
-            <button onClick={removeNotification}>Remove permission</button>
-          </NotificationWrapper>
-          : <NotificationWrapper>
-            <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
-            <button onClick={requestNotification}>Grant Permission</button>
-          </NotificationWrapper>
-        }
+        <NotificationWrapper>
+          <Checkbox checked={hasNotificationPermission} onChange={hasNotificationPermission ? removeNotification : requestNotification} text="Notification (need to grant permission)" />
+        </NotificationWrapper>
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />

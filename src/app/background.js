@@ -4,12 +4,11 @@ import addYears from 'date-fns/addYears'
 import getMonth from 'date-fns/getMonth'
 import isSameMinute from 'date-fns/isSameMinute'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import { utcToZonedTime } from 'date-fns-tz'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate from './utils/getApiDate'
 import { nextNearestMinutes, nearestMinutes } from './utils/time'
-import { DATE_FORMAT, EST_IANA_ZONE_ID } from './utils/constant'
-import { sanitizeGames } from './utils/gameSanitize'
+import { DATE_FORMAT } from './utils/constant'
+import { sanitizeGamesAndReorder } from './utils/gameSanitize'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
@@ -18,33 +17,42 @@ browser.alarms.create('live', {
 })
 
 const fireFavTeamNotificationIfNeeded = (games) => {
-  browser.getItem(['favTeam'], (data) => {
-    if (data && data.favTeam) {
-      console.log(data.favTeam, games)
-      const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
-      console.log('fav', favTeamGame)
-      if (favTeamGame) {
-        const roundedDate = nearestMinutes(30, new Date())
-        let gameTime = new Date(0)
-
-        if (favTeamGame.startTimeUtc) {
-          const etStartTime = utcToZonedTime(favTeamGame.startTimeUtc, EST_IANA_ZONE_ID)
-          gameTime = etStartTime
-        }
-
-        if (isSameMinute(roundedDate, gameTime)) {
-          const options = {
-            type: 'basic',
-            title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
-            message: 'You favorite team is about to play.',
-            iconUrl: 'assets/png/icon-2-color-512.png',
-          }
-
-          browser.notifications.create(options)
-        }
+  browser.permissions.contains(
+    {
+      permissions: ['notifications'],
+    },
+    (hasNotificationPermission) => {
+      if (!hasNotificationPermission) {
+        return
       }
+
+      browser.getItem(['favTeam'], (data) => {
+        if (data && data.favTeam) {
+          const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
+          if (favTeamGame) {
+            const roundedDate = nearestMinutes(30, new Date())
+            let gameTime = new Date(0)
+
+            if (favTeamGame.startTimeUtc) {
+              const localStartTime = new Date(favTeamGame.startTimeUtc)
+              gameTime = localStartTime
+            }
+
+            if (isSameMinute(roundedDate, gameTime)) {
+              const options = {
+                type: 'basic',
+                title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
+                message: 'You favorite team is about to play.',
+                iconUrl: 'assets/png/icon-2-color-512.png',
+              }
+
+              browser.notifications.create(options)
+            }
+          }
+        }
+      })
     }
-  })
+  )
 }
 
 const liveListener = (initCheck = false) => {
@@ -69,11 +77,11 @@ const liveListener = (initCheck = false) => {
   //   .catch(() => {
   //     return
   fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-    .then((res) => res.json())
+    .then((res) => res.json1())
     .then(({ games }) => {
       checkLiveGame(games, 2)
       if (!initCheck) {
-        fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+        fireFavTeamNotificationIfNeeded(sanitizeGamesAndReorder(games, 2))
       }
     })
     .catch(() => {
@@ -93,7 +101,7 @@ const liveListener = (initCheck = false) => {
         .then(({ gs: { g } }) => {
           checkLiveGame(g, 1)
           if (!initCheck) {
-            fireFavTeamNotificationIfNeeded(sanitizeGames(g, 1))
+            fireFavTeamNotificationIfNeeded(sanitizeGamesAndReorder(g, 1))
           }
         })
     })
