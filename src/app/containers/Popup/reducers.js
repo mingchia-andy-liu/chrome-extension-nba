@@ -66,7 +66,17 @@ const sanitizeGame = (game) => ({
     // have not start
     periodStatus:
       game.period_time.game_status === '1'
-        ? format(utcToZonedTime(parse(`${game.date}${game.time}`, 'yyyyMMddhhmm', getApiDate()).toISOString(), getUserTimeZoneId()), 'hh:mm a')
+        ? format(
+            utcToZonedTime(
+              parse(
+                `${game.date}${game.time}`,
+                'yyyyMMddhhmm',
+                getApiDate()
+              ).toISOString(),
+              getUserTimeZoneId()
+            ),
+            'hh:mm a'
+          )
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,

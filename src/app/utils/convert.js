@@ -119,7 +119,10 @@ export const convertDaily2 = (game) => {
     } else if (isHalftime) {
       return 'Halftime'
     } else if (statusNum === 1) {
-      return format(utcToZonedTime(startTimeUTC, getUserTimeZoneId()), 'hh:mm a')
+      return format(
+        utcToZonedTime(startTimeUTC, getUserTimeZoneId()),
+        'hh:mm a'
+      )
     } else if (isEndOfPeriod) {
       if (p > 4) {
         const otP = p - 4
@@ -178,7 +181,13 @@ export const convertDaily = (game) => {
       periodValue: `${p}`,
       periodStatus:
         st == 1
-          ? format(utcToZonedTime(parse(stt, 'hh:mm a', getApiDate()).toISOString(), getUserTimeZoneId()), 'hh:mm a')
+          ? format(
+              utcToZonedTime(
+                parse(stt, 'hh:mm a', getApiDate()).toISOString(),
+                getUserTimeZoneId()
+              ),
+              'hh:mm a'
+            )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

@@ -48,74 +48,73 @@ const BoxScoresDetails = ({
     return () => resetLiveGameBox()
   }, [])
 
-  const renderContent = React.useCallback((spoiler, dark) => {
-    // Route expects a function for component prop
-    const contentComponent = () => {
-      if (
-        !bsData ||
-        Object.keys(bsData).length === 0 ||
-        (bsData.periodTime && bsData.periodTime.gameStatus === '1')
-      ) {
-        return <Overlay text={'Game has not started'} />
-      } else {
-        if (spoiler) {
+  const renderContent = React.useCallback(
+    (spoiler, dark) => {
+      // Route expects a function for component prop
+      const contentComponent = () => {
+        if (
+          !bsData ||
+          Object.keys(bsData).length === 0 ||
+          (bsData.periodTime && bsData.periodTime.gameStatus === '1')
+        ) {
+          return <Overlay text={'Game has not started'} />
+        } else {
+          if (spoiler) {
+            return (
+              <Overlay text="Turn off no spoiler">
+                <NoSpoilerCheckbox />
+              </Overlay>
+            )
+          }
+          const url = urls[id || '']
           return (
-            <Overlay text="Turn off no spoiler">
-              <NoSpoilerCheckbox />
-            </Overlay>
+            <React.Fragment>
+              <Tab onTabSelect={toggleIndex} index={tabIndex} isLink={false}>
+                <TabItem label="Match up" />
+                <TabItem label="Box-scores" />
+                <TabItem label="Play-by-Play" />
+              </Tab>
+              <br />
+              {tabIndex === 0 && (
+                <React.Fragment>
+                  {renderTitle(bsData)}
+                  {renderHighlight(url)}
+                  {renderSummary(bsData, teamStats)}
+                  {bsData.periodTime &&
+                    bsData.periodTime.gameStatus === '3' &&
+                    renderTeamLeader(bsData)}
+                  <h3>Team Stats</h3>
+                  {renderTeamStats(bsData)}
+                  <h4>Advanced</h4>
+                  {renderAdvancedTeamStats(teamStats, bsData)}
+                </React.Fragment>
+              )}
+              {tabIndex === 1 && (
+                <React.Fragment>
+                  <h3>Player Stats</h3>
+                  {renderHints(dark)}
+                  {renderPlayerStats(bsData)}
+                </React.Fragment>
+              )}
+              {tabIndex === 2 && (
+                <React.Fragment>
+                  <h3>Play By Play</h3>
+                  {renderPlaybyPlay(pbpData)}
+                </React.Fragment>
+              )}
+            </React.Fragment>
           )
         }
-        const url = urls[id || '']
-        return (
-          <React.Fragment>
-            <Tab
-              onTabSelect={toggleIndex}
-              index={tabIndex}
-              isLink={false}
-            >
-              <TabItem label="Match up" />
-              <TabItem label="Box-scores" />
-              <TabItem label="Play-by-Play" />
-            </Tab>
-            <br />
-            {tabIndex === 0 && (
-              <React.Fragment>
-                {renderTitle(bsData)}
-                {renderHighlight(url)}
-                {renderSummary(bsData, teamStats)}
-                {bsData.periodTime &&
-                  bsData.periodTime.gameStatus === '3' &&
-                  renderTeamLeader(bsData)}
-                <h3>Team Stats</h3>
-                {renderTeamStats(bsData)}
-                <h4>Advanced</h4>
-                {renderAdvancedTeamStats(teamStats, bsData)}
-              </React.Fragment>
-            )}
-            {tabIndex === 1 && (
-              <React.Fragment>
-                <h3>Player Stats</h3>
-                {renderHints(dark)}
-                {renderPlayerStats(bsData)}
-              </React.Fragment>
-            )}
-            {tabIndex === 2 && (
-              <React.Fragment>
-                <h3>Play By Play</h3>
-                {renderPlaybyPlay(pbpData)}
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        )
       }
-    }
-    return (
-      <Switch>
-        <Route path="/boxscores/:id" component={contentComponent} />
-        <Route path="/boxscores" component={Overlay} />
-      </Switch>
-    )
-  }, [bsData, pbpData, teamStats, urls, toggleIndex, tabIndex])
+      return (
+        <Switch>
+          <Route path="/boxscores/:id" component={contentComponent} />
+          <Route path="/boxscores" component={Overlay} />
+        </Switch>
+      )
+    },
+    [bsData, pbpData, teamStats, urls, toggleIndex, tabIndex]
+  )
 
   return (
     <ThemeConsumer>

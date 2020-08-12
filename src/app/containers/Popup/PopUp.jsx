@@ -26,9 +26,7 @@ const Wrapper = styled(Column)`
 
 const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
   const [isPopup, togglePopup] = React.useState(false)
-  const [gameDate, toggleGameDate] = React.useState(
-    format(date, DATE_FORMAT)
-  )
+  const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
 
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
