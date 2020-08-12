@@ -8,7 +8,6 @@ import format from 'date-fns/format'
 import startOfDay from 'date-fns/startOfDay'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import Loader from '../../components/Loader'
 import Sidebar from '../Sidebar'
 import BoxScoresDetails from '../BoxScoresDetails'
 import { Wrapper } from './styles'
@@ -25,7 +24,6 @@ const BoxScores = ({
 }) => {
   const dateStr = format(date, DATE_FORMAT)
   const queryDate = getDateFromQuery(location)
-  const [isLoading, toggleLoading] = React.useState(true)
 
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
@@ -36,7 +34,6 @@ const BoxScores = ({
           search: '',
         })
       }
-      toggleLoading(false)
     })
   }, [])
 
@@ -50,14 +47,10 @@ const BoxScores = ({
         <Header index={0} />
       </Layout.Header>
       <Layout.Content>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <Wrapper>
-            <Sidebar id={id} date={date} />
-            <BoxScoresDetails id={id} date={date} />
-          </Wrapper>
-        )}
+        <Wrapper>
+          <Sidebar id={id} date={date} />
+          <BoxScoresDetails id={id} date={date} />
+        </Wrapper>
       </Layout.Content>
     </Layout>
   )
