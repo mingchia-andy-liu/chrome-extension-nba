@@ -40,13 +40,13 @@ const Summary = ({ home, visitor, extra }) => {
               <Row>
                 <RowHeaderCell> Team </RowHeaderCell>
                 {home.linescores &&
-                    home.linescores.period.map((period) => (
-                      // TODO: hides the unstart peroid
-                      <HeaderCell key={`period-${period.period_value}`}>
-                        {' '}
-                        {period.period_name}{' '}
-                      </HeaderCell>
-                    ))}
+                  home.linescores.period.map((period) => (
+                    // TODO: hides the unstart peroid
+                    <HeaderCell key={`period-${period.period_value}`}>
+                      {' '}
+                      {period.period_name}{' '}
+                    </HeaderCell>
+                  ))}
                 <HeaderCell> Final </HeaderCell>
               </Row>
               {renderTeamRow(visitor, home, dark)}

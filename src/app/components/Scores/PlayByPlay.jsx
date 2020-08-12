@@ -107,8 +107,11 @@ const renderPBPRow = (plays, period, isDark) => {
 }
 
 const PlayByPlay = ({ pbp: { play } }) => {
-  const numberOfQuarters = play && play.length !== 0 ? +play[play.length - 1].period : -1
-  const [currentQuarter, togglerCurrentQuarter] = React.useState(numberOfQuarters)
+  const numberOfQuarters =
+    play && play.length !== 0 ? +play[play.length - 1].period : -1
+  const [currentQuarter, togglerCurrentQuarter] = React.useState(
+    numberOfQuarters
+  )
 
   const renderQuarters = React.useCallback(() => {
     const Btns = []

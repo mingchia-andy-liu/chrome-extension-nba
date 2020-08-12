@@ -127,7 +127,10 @@ export const renderHighlight = (url) => {
   if (url) {
     return (
       <OverviewWrapper>
-        <a href={`https://youtube.com/watch?v=${url}`}> Watch NBA Official YouTube Highligh Video </a>
+        <a href={`https://youtube.com/watch?v=${url}`}>
+          {' '}
+          Watch NBA Official YouTube Highligh Video{' '}
+        </a>
       </OverviewWrapper>
     )
   }

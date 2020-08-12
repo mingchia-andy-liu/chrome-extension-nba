@@ -16,12 +16,8 @@ const Wrapper = styled.div`
 `
 
 const Tab = ({ index, children, onTabSelect, isLink } = { children: [] }) => {
-  const childrenArray = Array.isArray(children)
-    ? children
-    : [children]
-  const selectedIndex = index > childrenArray.length
-    ? 0
-    : index
+  const childrenArray = Array.isArray(children) ? children : [children]
+  const selectedIndex = index > childrenArray.length ? 0 : index
 
   const renderTabs = () => {
     const childrenWithProps = React.Children.map(children, (child, i) =>
@@ -37,11 +33,7 @@ const Tab = ({ index, children, onTabSelect, isLink } = { children: [] }) => {
     return childrenWithProps
   }
 
-  return (
-    <Wrapper data-index={selectedIndex}>
-      {renderTabs()}
-    </Wrapper>
-  )
+  return <Wrapper data-index={selectedIndex}>{renderTabs()}</Wrapper>
 }
 
 Tab.propTypes = {

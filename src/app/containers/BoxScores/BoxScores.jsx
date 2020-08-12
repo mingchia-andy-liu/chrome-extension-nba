@@ -28,7 +28,9 @@ const BoxScores = ({
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
     const gameDate = queryDate == null ? dateStr : queryDate
-    dispatchChangeDate(parse(gameDate, DATE_FORMAT, startOfDay(new Date()))).then(() => {
+    dispatchChangeDate(
+      parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
+    ).then(() => {
       if (location.search !== '') {
         history.push({
           search: '',
