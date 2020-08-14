@@ -149,7 +149,7 @@ export const convertDaily2 = (game) => {
   }
 
   const getPlayoffs = () => {
-    if (playoffs == null || Object.keys(playoffs) == 0 || playoffs.hTeam == null || playoffs.vTeam == null) {
+    if (playoffs == null || playoffs.hTeam == null || playoffs.vTeam == null) {
       return undefined
     }
 

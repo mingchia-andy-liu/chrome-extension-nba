@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Theme } from '../styles'
 import { SettingsConsumer, ThemeConsumer } from '../components/Context'
-
 import { formatClock } from '../utils/common'
 
 const Wrapper = styled.div`
