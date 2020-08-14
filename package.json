@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-nba",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "This is a browser extension shows the daily box score for NBA games.",
   "author": "Liu, Ming Chia",
   "directories": {
