@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Row } from '../styles'
+import { Row, Theme } from '../styles'
 import { SettingsConsumer, ThemeConsumer } from '../components/Context'
-import { Theme } from '../styles'
 import { formatClock } from '../utils/common'
 
 const Wrapper = styled.div`
@@ -109,12 +108,14 @@ const MatchInfo = ({
   let series = ''
   if (playoffs) {
     const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
-    if (+homeWins > +visitorWins) {
-      series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
-    } else if (+homeWins < +visitorWins) {
-      series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
-    } else {
-      series = `Series tied ${homeWins}-${visitorWins}`
+    if (homeWins != null && visitorWins != null) {
+      if (+homeWins > +visitorWins) {
+        series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
+      } else if (+homeWins < +visitorWins) {
+        series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
+      } else if (+homeWins === +visitorWins) {
+        series = `Series tied ${homeWins}-${visitorWins}`
+      }
     }
   }
 

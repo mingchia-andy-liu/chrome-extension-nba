@@ -25,7 +25,6 @@ const sanitizeGameFallBack2 = (game) => ({
     name: game.arena.name,
     city: game.arena.city,
   },
-  playoffs: game.playoffs,
 })
 
 // https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/2019/scores/00_todays_scores.json
@@ -67,16 +66,16 @@ const sanitizeGame = (game) => ({
     periodStatus:
       game.period_time.game_status === '1'
         ? format(
-            utcToZonedTime(
-              parse(
+          utcToZonedTime(
+            parse(
                 `${game.date}${game.time}`,
                 'yyyyMMddhhmm',
                 getApiDate()
-              ).toISOString(),
-              getUserTimeZoneId()
-            ),
-            'hh:mm a'
-          )
+            ).toISOString(),
+            getUserTimeZoneId()
+          ),
+          'hh:mm a'
+        )
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,
