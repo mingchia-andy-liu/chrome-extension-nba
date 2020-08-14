@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.4.9 Updates: (2020-08-13)',
+    updates: ['Hot fix playoff series summary text'],
+  },
+  {
     version: '1.4.8 Updates: (2020-08-11)',
     updates: [
       'Fix live indicator',
