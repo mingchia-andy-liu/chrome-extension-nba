@@ -67,10 +67,8 @@ const renderStatusAndClock = (
   gameStatus
 ) => {
   // if no spoiler is on, show the final status for games.
-  if (spoiler && gameStatus === '2') {
-    return ''
-  }
-  return formatClock(clock, status, totalPeriod) || status
+  console.log(clock, status)
+  return formatClock(clock, status, totalPeriod, spoiler) || status
 }
 
 const renderBroadcasters = (broadcasters, gameStatus) => {
