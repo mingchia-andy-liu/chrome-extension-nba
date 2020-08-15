@@ -69,7 +69,7 @@ const Sidebar = ({
     [date, history, location]
   )
 
-  const dateOnChange = React.useCallback(() => {
+  const dateOnChange = React.useCallback((newDate) => {
     history.replace('/boxscores')
     toggleGameId('')
   }, [history])
