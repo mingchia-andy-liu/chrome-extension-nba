@@ -17,7 +17,5 @@ ReactDOM.render(
 )
 
 if (process.env.NODE_ENV === 'development') {
-  // const showDevTools = require('./showDevTools')
-  // showDevTools.default(store)
   window.Store = store
 }
