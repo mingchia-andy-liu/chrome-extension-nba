@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
 import startOfDay from 'date-fns/startOfDay'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
@@ -28,15 +29,16 @@ const BoxScores = ({
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
     const gameDate = queryDate == null ? dateStr : queryDate
-    dispatchChangeDate(
-      parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
-    ).then(() => {
-      if (location.search !== '') {
-        history.push({
-          search: '',
-        })
-      }
-    })
+    const gameDateObj = parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
+    if (!isSameDay(date, gameDateObj)) {
+      dispatchChangeDate(gameDateObj).then(() => {
+        if (location.search !== '') {
+          history.push({
+            search: '',
+          })
+        }
+      })
+    }
   }, [])
 
   const id = React.useMemo(() => {
