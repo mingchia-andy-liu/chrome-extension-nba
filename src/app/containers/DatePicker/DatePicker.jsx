@@ -8,7 +8,6 @@ import addDays from 'date-fns/addDays'
 import format from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isBefore from 'date-fns/isBefore'
-import isSameDay from 'date-fns/isSameDay'
 import { dispatchChangeDate } from './actions'
 import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
@@ -84,12 +83,9 @@ const DatePicker = (
 
   const onDateChange = React.useCallback(
     (dates) => {
-      if (!isSameDay(date, dates[0])) {
-        console.log(date, dates[0])
-        dispatchChangeDate(dates[0])
-        onChange(dates[0])
-        resetLiveGameBox()
-      }
+      dispatchChangeDate(dates[0])
+      onChange(dates[0])
+      resetLiveGameBox()
     },
     [dispatchChangeDate, onChange, resetLiveGameBox]
   )
@@ -116,7 +112,7 @@ const DatePicker = (
             tabIndex="-1"
             autoFocus={false}
             dark={dark ? 1 : undefined}
-            value={date}
+            value={format(date, 'yyyy-MM-dd')}
             options={{
               minDate: MIN_DATE,
               maxDate: MAX_DATE,
