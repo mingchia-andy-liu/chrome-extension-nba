@@ -64,7 +64,6 @@ const renderStatusAndClock = (
   clock,
   totalPeriod
 ) => {
-  // if no spoiler is on, show the final status for games.
   return formatClock(clock, status, totalPeriod) || status
 }
 
