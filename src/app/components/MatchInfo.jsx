@@ -60,14 +60,12 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
 }
 
 const renderStatusAndClock = (
-  spoiler,
   status,
   clock,
-  totalPeriod,
-  gameStatus
+  totalPeriod
 ) => {
   // if no spoiler is on, show the final status for games.
-  return formatClock(clock, status, totalPeriod, spoiler) || status
+  return formatClock(clock, status, totalPeriod) || status
 }
 
 const renderBroadcasters = (broadcasters, gameStatus) => {
@@ -126,11 +124,9 @@ const MatchInfo = ({
               {renderAt(gameStatus)}
               <div>
                 {renderStatusAndClock(
-                  spoiler,
                   periodStatus,
                   gameClock,
                   periodValue,
-                  gameStatus
                 )}
               </div>
               {!spoiler && series && <div>{series}</div>}
