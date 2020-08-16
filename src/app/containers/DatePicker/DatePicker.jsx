@@ -84,8 +84,7 @@ const DatePicker = (
 
   const onDateChange = React.useCallback(
     (dates) => {
-      if (!isSameDay(date, dates[0])) {
-        console.log(date, dates[0])
+      if (!isSameDay(date, dates)) {
         dispatchChangeDate(dates[0])
         onChange(dates[0])
         resetLiveGameBox()
@@ -116,7 +115,7 @@ const DatePicker = (
             tabIndex="-1"
             autoFocus={false}
             dark={dark ? 1 : undefined}
-            value={date}
+            value={format(date, 'yyyy-MM-dd')}
             options={{
               minDate: MIN_DATE,
               maxDate: MAX_DATE,
