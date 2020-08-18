@@ -92,7 +92,7 @@ const renderAt = (gameStatus) => {
   }
 }
 
-const renderHighlight = (id, urls) => {
+const renderHighlight = (id, urls, dark) => {
   if (id == null || urls == null || urls[id] == null) {
     return undefined
   }
@@ -100,12 +100,19 @@ const renderHighlight = (id, urls) => {
   const url = urls[id]
   if (url) {
     return (
-      <a href={`https://youtube.com/watch?v=${url}`} style={{ fontSize: 'smaller' }}>
+      <a
+        href={`https://youtube.com/watch?v=${url}`}
+        style={{
+          fontSize: 'smaller',
+          color: dark ? 'lightblue' : undefined,
+        }}
+      >
         Highlight
       </a>
     )
   }
 }
+
 const MatchInfo = ({
   id,
   broadcasters,
@@ -147,7 +154,7 @@ const MatchInfo = ({
               {!spoiler && series && <div>{series}</div>}
               {broadcasters != null &&
                 renderBroadcasters(broadcasters, gameStatus)}
-              {renderHighlight(id, urls)}
+              {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
         </SettingsConsumer>

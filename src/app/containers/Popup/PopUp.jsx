@@ -33,9 +33,8 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, history, date: 
       togglePopup(!tab)
     })
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr, null, true).then(() => {
-      fetchGameHighlightIfNeeded()
-    })
+    fetchGamesIfNeeded(dateStr, null, true)
+      .then(fetchGameHighlightIfNeeded)
     document.title = 'Box Scores | Popup'
   }, [])
 
@@ -46,6 +45,7 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, history, date: 
     if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
       fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
+        .then(fetchGameHighlightIfNeeded)
       prevDateRef.current = date
     }
   }, [date, fetchGamesIfNeeded])

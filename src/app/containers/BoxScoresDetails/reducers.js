@@ -10,7 +10,6 @@ const initState = {
   isLoading: false,
   pbpData: {},
   teamStats: {},
-  urls: {},
 }
 
 const sanitizeBS = ({ home, visitor, officials, periodTime }) => ({
@@ -100,16 +99,6 @@ export default (state = initState, action) => {
         },
       }
     }
-    case types.UPDATE_VID: {
-      const { gid, url } = action.payload
-      return {
-        ...state,
-        urls: {
-          ...state.urls,
-          [gid]: url,
-        },
-      }
-    }
     case types.REQUEST_ERROR:
     case types.RESET:
       return {
@@ -118,7 +107,6 @@ export default (state = initState, action) => {
         isLoading: false,
         pbpData: {},
         teamStats: {},
-        urls: state.urls,
       }
     default:
       return state

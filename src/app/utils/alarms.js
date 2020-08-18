@@ -20,9 +20,10 @@ browser.alarms.onAlarm.addListener((alarm) => {
     } = store.getState()
 
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState).then(() => {
-      fetchGameHighlightIfNeeded()(store.dispatch, store.getState)
-    })
+
+    fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState)
+      .then(fetchGameHighlightIfNeeded()(store.dispatch, store.getState))
+
     if (bs && bs.gid !== '') {
       fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(
         store.dispatch,

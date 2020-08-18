@@ -28,7 +28,7 @@ import {
 import { DATE_FORMAT } from '../../utils/constant'
 
 const BoxScoresDetails = ({
-  bs: { bsData, pbpData, teamStats, urls, isLoading },
+  bs: { bsData, pbpData, teamStats, isLoading },
   id,
   date,
   fetchLiveGameBoxIfNeeded,
@@ -106,7 +106,7 @@ const BoxScoresDetails = ({
         </Switch>
       )
     },
-    [bsData, pbpData, teamStats, urls, toggleIndex, tabIndex]
+    [bsData, pbpData, teamStats, toggleIndex, tabIndex]
   )
 
   return (
@@ -130,7 +130,6 @@ BoxScoresDetails.propTypes = {
     bsData: PropTypes.object.isRequired,
     pbpData: PropTypes.object.isRequired,
     teamStats: PropTypes.object.isRequired,
-    urls: PropTypes.object.isRequired,
   }),
 
   fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
