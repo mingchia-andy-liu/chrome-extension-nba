@@ -17,7 +17,6 @@ const sanitizeGameFallBack2 = (game) => ({
     name: game.arena.name,
     city: game.arena.city,
   },
-  playoffs: game.playoffs,
   startTimeUtc: game.startTimeUTC,
 })
 
