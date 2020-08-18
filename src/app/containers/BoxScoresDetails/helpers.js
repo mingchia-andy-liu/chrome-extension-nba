@@ -123,19 +123,6 @@ export const renderHints = (dark) => {
   )
 }
 
-export const renderHighlight = (url) => {
-  if (url) {
-    return (
-      <OverviewWrapper>
-        <a href={`https://youtube.com/watch?v=${url}`}>
-          {' '}
-          Watch NBA Official YouTube Highligh Video{' '}
-        </a>
-      </OverviewWrapper>
-    )
-  }
-}
-
 const getMostOfField = (players, field) => {
   const max = Math.max.apply(
     null,

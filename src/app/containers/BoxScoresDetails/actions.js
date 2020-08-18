@@ -78,16 +78,6 @@ const fetchGameDetail = async (dateStr, gid) => {
   }
 }
 
-const fetchGameHighlight = async (gid) => {
-  try {
-    const res = await fetch(`https://api.boxscores.site/v/${gid}`)
-    const { url } = await res.json()
-    return url
-  } catch (error) {
-    return null
-  }
-}
-
 const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
   try {
     // has the UI been shown yet, if so, don't show the loading spinner
@@ -115,32 +105,6 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     })
   } catch (error) {
     dispatch({ type: types.REQUEST_ERROR })
-  }
-}
-
-export const fetchGameHighlightIfNeeded = (gid) => async (
-  dispatch,
-  getState
-) => {
-  const {
-    bs: { bsData, urls },
-  } = getState()
-
-  if (bsData && bsData.periodTime && bsData.periodTime.gameStatus === '3') {
-    let url = null
-    if (urls[gid] == null) {
-      url = await fetchGameHighlight(gid)
-    } else {
-      url = urls[gid]
-    }
-
-    dispatch({
-      type: types.UPDATE_VID,
-      payload: {
-        gid,
-        url,
-      },
-    })
   }
 }
 

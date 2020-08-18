@@ -11,6 +11,7 @@ const initState = {
   isLoading: true,
   games: [],
   lastUpdate: new Date(0),
+  urls: {},
 }
 
 // for http://data.nba.net/prod/v2/${dateStr}/scoreboard.json
@@ -66,16 +67,16 @@ const sanitizeGame = (game) => ({
     periodStatus:
       game.period_time.game_status === '1'
         ? format(
-          utcToZonedTime(
-            parse(
+            utcToZonedTime(
+              parse(
                 `${game.date}${game.time}`,
                 'yyyyMMddhhmm',
                 getApiDate()
-            ).toISOString(),
-            getUserTimeZoneId()
-          ),
-          'hh:mm a'
-        )
+              ).toISOString(),
+              getUserTimeZoneId()
+            ),
+            'hh:mm a'
+          )
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,
@@ -125,6 +126,7 @@ export default (state = initState, action) => {
           hasError: false,
           isLoading: false,
           lastUpdate: new Date(),
+          urls: state.urls,
         }
       } catch (error) {
         return {
@@ -132,6 +134,7 @@ export default (state = initState, action) => {
           hasError: true,
           isLoading: false,
           lastUpdate: new Date(0),
+          urls: state.urls,
         }
       }
     }
@@ -141,7 +144,18 @@ export default (state = initState, action) => {
         hasError: true,
         isLoading: false,
         lastUpdate: new Date(0),
+        urls: state.urls,
       }
+    case types.UPDATE_VID: {
+      const urls = action.payload
+      return {
+        ...state,
+        urls: {
+          ...state.urls,
+          ...urls,
+        },
+      }
+    }
     default:
       return state
   }

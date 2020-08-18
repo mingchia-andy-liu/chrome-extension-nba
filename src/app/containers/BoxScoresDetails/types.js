@@ -9,7 +9,4 @@ export default {
   PBP_REQUEST_ERROR: '@box-scores/PBP_REQUEST_ERROR',
 
   RESET: '@box-scores/RESET',
-
-  // highlight video id
-  UPDATE_VID: '@box-scores/UPDATE_VID',
 }

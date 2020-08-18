@@ -2,4 +2,6 @@ export default {
   REQUEST_START: '@live/REQUEST_START',
   REQUEST_SUCCESS: '@live/REQUEST_SUCCESS',
   REQUEST_ERROR: '@live/REQUEST_ERROR',
+
+  UPDATE_VID: '@live/UPDATE_VID',
 }

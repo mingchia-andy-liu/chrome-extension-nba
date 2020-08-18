@@ -3,11 +3,11 @@ import setSeconds from 'date-fns/setSeconds'
 import format from 'date-fns/format'
 import browser from './browser'
 import { store } from '../store'
+import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScoresDetails/actions'
 import {
-  fetchLiveGameBoxIfNeeded,
+  fetchGamesIfNeeded,
   fetchGameHighlightIfNeeded,
-} from '../containers/BoxScoresDetails/actions'
-import { fetchGamesIfNeeded } from '../containers/Popup/actions'
+} from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/constant'
 
 browser.alarms.create('minute', {
@@ -23,14 +23,13 @@ browser.alarms.onAlarm.addListener((alarm) => {
     } = store.getState()
 
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState)
+
+    fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState).then(
+      fetchGameHighlightIfNeeded()(store.dispatch, store.getState)
+    )
+
     if (bs && bs.gid !== '') {
-      fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(
-        store.dispatch,
-        store.getState
-      ).then(() => {
-        fetchGameHighlightIfNeeded(bs.gid)(store.dispatch, store.getState)
-      })
+      fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch, store.getState)
     }
   }
 })

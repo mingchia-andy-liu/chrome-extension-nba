@@ -59,11 +59,7 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   }
 }
 
-const renderStatusAndClock = (
-  status,
-  clock,
-  totalPeriod
-) => {
+const renderStatusAndClock = (status, clock, totalPeriod) => {
   return formatClock(clock, status, totalPeriod) || status
 }
 
@@ -92,12 +88,32 @@ const renderAt = (gameStatus) => {
   }
 }
 
+const renderHighlight = (id, urls, dark) => {
+  if (id == null || urls == null || urls[id] == null) {
+    return undefined
+  }
+
+  return (
+    <a
+      href={`https://youtube.com/watch?v=${urls[id]}`}
+      style={{
+        fontSize: 'smaller',
+        color: dark ? 'lightblue' : undefined,
+      }}
+    >
+      Highlight
+    </a>
+  )
+}
+
 const MatchInfo = ({
+  id,
   broadcasters,
   home,
   visitor,
   periodTime: { periodStatus, gameClock, gameStatus, periodValue },
   playoffs,
+  urls,
 }) => {
   let series = ''
   if (playoffs) {
@@ -122,15 +138,12 @@ const MatchInfo = ({
               {renderScores(dark, spoiler, gameStatus, home, visitor)}
               {renderAt(gameStatus)}
               <div>
-                {renderStatusAndClock(
-                  periodStatus,
-                  gameClock,
-                  periodValue,
-                )}
+                {renderStatusAndClock(periodStatus, gameClock, periodValue)}
               </div>
               {!spoiler && series && <div>{series}</div>}
               {broadcasters != null &&
                 renderBroadcasters(broadcasters, gameStatus)}
+              {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
         </SettingsConsumer>
@@ -140,6 +153,7 @@ const MatchInfo = ({
 }
 
 MatchInfo.propTypes = {
+  id: PropTypes.string,
   broadcasters: PropTypes.array,
   home: PropTypes.shape({
     abbreviation: PropTypes.string.isRequired,
@@ -164,6 +178,7 @@ MatchInfo.propTypes = {
     home_wins: PropTypes.string,
     visitor_wins: PropTypes.string,
   }),
+  urls: PropTypes.object,
 }
 
 MatchInfo.defaultProps = {
