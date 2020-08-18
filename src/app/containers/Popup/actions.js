@@ -6,6 +6,7 @@ import types from './types'
 import getApiDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
+import { allSettled } from '../../utils/common'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -121,4 +122,46 @@ export const fetchGamesIfNeeded = (
 
   isBackground = isBackground === false ? false : oldDateStr === dateStr
   return await fetchGames(dispatch, dateStr, callback, isBackground)
+}
+
+// ------ highlights -------
+
+const fetchGameHighlight = async (gid) => {
+  const res = await fetch(`https://api.boxscores.site/v/${gid}`)
+  const { url } = await res.json()
+  return { [gid]: url }
+}
+
+export const fetchGameHighlightIfNeeded = () => async (
+  dispatch,
+  getState
+) => {
+  const {
+    live: { urls, games },
+  } = getState()
+
+  const fetchPromises = games.map(({ id: gid }) => {
+    return new Promise((resolve, reject) => {
+      if (urls[gid] == null) {
+        fetchGameHighlight(gid).then(resolve).catch(reject)
+      } else {
+        resolve(null)
+      }
+    })
+  })
+
+  const urlsResults = await allSettled(fetchPromises)
+  const merged = urlsResults.reduce((accu, curr) => {
+    if (curr == null || curr.status === 'rejected') {
+      return accu
+    }
+    return {
+      ...accu,
+      ...curr.value,
+    }
+  }, {})
+  dispatch({
+    type: types.UPDATE_VID,
+    payload: merged,
+  })
 }

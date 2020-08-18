@@ -92,12 +92,28 @@ const renderAt = (gameStatus) => {
   }
 }
 
+const renderHighlight = (id, urls) => {
+  if (id == null || urls == null || urls[id] == null) {
+    return undefined
+  }
+
+  const url = urls[id]
+  if (url) {
+    return (
+      <a href={`https://youtube.com/watch?v=${url}`} style={{ fontSize: 'smaller' }}>
+        Highlight
+      </a>
+    )
+  }
+}
 const MatchInfo = ({
+  id,
   broadcasters,
   home,
   visitor,
   periodTime: { periodStatus, gameClock, gameStatus, periodValue },
   playoffs,
+  urls,
 }) => {
   let series = ''
   if (playoffs) {
@@ -131,6 +147,7 @@ const MatchInfo = ({
               {!spoiler && series && <div>{series}</div>}
               {broadcasters != null &&
                 renderBroadcasters(broadcasters, gameStatus)}
+              {renderHighlight(id, urls)}
             </Wrapper>
           )}
         </SettingsConsumer>
@@ -140,6 +157,7 @@ const MatchInfo = ({
 }
 
 MatchInfo.propTypes = {
+  id: PropTypes.string,
   broadcasters: PropTypes.array,
   home: PropTypes.shape({
     abbreviation: PropTypes.string.isRequired,
@@ -164,6 +182,7 @@ MatchInfo.propTypes = {
     home_wins: PropTypes.string,
     visitor_wins: PropTypes.string,
   }),
+  urls: PropTypes.object
 }
 
 MatchInfo.defaultProps = {

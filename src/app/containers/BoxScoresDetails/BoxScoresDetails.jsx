@@ -12,7 +12,6 @@ import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import {
   fetchLiveGameBoxIfNeeded,
   resetLiveGameBox,
-  fetchGameHighlightIfNeeded,
 } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
 import { Content } from './styles'
@@ -24,7 +23,6 @@ import {
   renderTeamStats,
   renderAdvancedTeamStats,
   renderPlaybyPlay,
-  renderHighlight,
   renderTeamLeader,
 } from './helpers'
 import { DATE_FORMAT } from '../../utils/constant'
@@ -34,7 +32,6 @@ const BoxScoresDetails = ({
   id,
   date,
   fetchLiveGameBoxIfNeeded,
-  fetchGameHighlightIfNeeded,
 }) => {
   // tab index: 0: overview 1: boxscores 2: playbyplay
   const [tabIndex, toggleIndex] = React.useState(1)
@@ -42,9 +39,7 @@ const BoxScoresDetails = ({
   React.useEffect(() => {
     const gameId = id || ''
     const dateStr = format(date, DATE_FORMAT)
-    fetchLiveGameBoxIfNeeded(dateStr, gameId, false).then(() => {
-      fetchGameHighlightIfNeeded(gameId)
-    })
+    fetchLiveGameBoxIfNeeded(dateStr, gameId, false)
     return () => resetLiveGameBox()
   }, [])
 
@@ -66,7 +61,6 @@ const BoxScoresDetails = ({
               </Overlay>
             )
           }
-          const url = urls[id || '']
           return (
             <React.Fragment>
               <Tab onTabSelect={toggleIndex} index={tabIndex} isLink={false}>
@@ -78,7 +72,6 @@ const BoxScoresDetails = ({
               {tabIndex === 0 && (
                 <React.Fragment>
                   {renderTitle(bsData)}
-                  {renderHighlight(url)}
                   {renderSummary(bsData, teamStats)}
                   {bsData.periodTime &&
                     bsData.periodTime.gameStatus === '3' &&
@@ -143,7 +136,6 @@ BoxScoresDetails.propTypes = {
   fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
   resetLiveGameBox: PropTypes.func.isRequired,
   dispatchChangeDate: PropTypes.func.isRequired,
-  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
 
   id: PropTypes.string.isRequired,
   date: PropTypes.object.isRequired,
@@ -159,7 +151,6 @@ const mapDispatchToProps = (dispatch) => {
       fetchLiveGameBoxIfNeeded,
       resetLiveGameBox,
       dispatchChangeDate,
-      fetchGameHighlightIfNeeded,
     },
     dispatch
   )

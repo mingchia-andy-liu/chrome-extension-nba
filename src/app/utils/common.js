@@ -177,3 +177,10 @@ export const waitUntilFinish = async (
     }
   }
 }
+
+export const allSettled = (promises) =>
+  Promise.all(promises.map((promise) =>
+    promise
+      .then((data) => ({ status: 'fullfilled', value: data }))
+      .catch(error => ({ status: 'rejected', reason: error }))
+  ))
