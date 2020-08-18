@@ -9,10 +9,7 @@ import Loader from '../../components/Loader'
 import { Tab, TabItem } from '../../components/Tab'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
-import {
-  fetchLiveGameBoxIfNeeded,
-  resetLiveGameBox,
-} from './actions'
+import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
 import { Content } from './styles'
 import {

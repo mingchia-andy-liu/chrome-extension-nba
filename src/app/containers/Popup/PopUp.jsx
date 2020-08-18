@@ -24,7 +24,13 @@ const Wrapper = styled(Column)`
   min-width: 370px;
 `
 
-const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, history, date: { date }, live }) => {
+const PopUp = ({
+  fetchGamesIfNeeded,
+  fetchGameHighlightIfNeeded,
+  history,
+  date: { date },
+  live,
+}) => {
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
 
@@ -33,8 +39,7 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, history, date: 
       togglePopup(!tab)
     })
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr, null, true)
-      .then(fetchGameHighlightIfNeeded)
+    fetchGamesIfNeeded(dateStr, null, true).then(fetchGameHighlightIfNeeded)
     document.title = 'Box Scores | Popup'
   }, [])
 
@@ -44,8 +49,9 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, history, date: 
     const prevDate = prevDateRef.current
     if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
-        .then(fetchGameHighlightIfNeeded)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
+        fetchGameHighlightIfNeeded
+      )
       prevDateRef.current = date
     }
   }, [date, fetchGamesIfNeeded])
@@ -101,7 +107,7 @@ PopUp.propTypes = {
     // date
     lastUpdate: PropTypes.object.isRequired,
     // { [gid]: string }
-    urls: PropTypes.object.isRequired
+    urls: PropTypes.object.isRequired,
   }).isRequired,
   date: PropTypes.shape({
     date: PropTypes.object.isRequired,

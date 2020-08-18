@@ -132,10 +132,7 @@ const fetchGameHighlight = async (gid) => {
   return { [gid]: url }
 }
 
-export const fetchGameHighlightIfNeeded = () => async (
-  dispatch,
-  getState
-) => {
+export const fetchGameHighlightIfNeeded = () => async (dispatch, getState) => {
   const {
     live: { urls, games },
   } = getState()

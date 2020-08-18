@@ -15,7 +15,10 @@ import {
 } from '../../components/Checkbox'
 import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
-import { fetchGamesIfNeeded, fetchGameHighlightIfNeeded } from '../Popup/actions'
+import {
+  fetchGamesIfNeeded,
+  fetchGameHighlightIfNeeded,
+} from '../Popup/actions'
 import { dispatchChangeDate } from '../DatePicker/actions'
 import { fetchLiveGameBoxIfNeeded } from '../BoxScoresDetails/actions'
 
@@ -42,8 +45,9 @@ const Sidebar = ({
     const prevDate = prevCountRef.current
     if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
-        .then(fetchGameHighlightIfNeeded)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
+        fetchGameHighlightIfNeeded
+      )
       prevCountRef.current = date
     }
   }, [date, fetchGamesIfNeeded, fetchGameHighlightIfNeeded])
@@ -65,10 +69,13 @@ const Sidebar = ({
     [date, history, location]
   )
 
-  const dateOnChange = React.useCallback((newDate) => {
-    history.replace('/boxscores')
-    toggleGameId('')
-  }, [history])
+  const dateOnChange = React.useCallback(
+    (newDate) => {
+      history.replace('/boxscores')
+      toggleGameId('')
+    },
+    [history]
+  )
 
   return (
     <Wrapper>

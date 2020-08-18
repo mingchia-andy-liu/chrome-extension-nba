@@ -103,7 +103,7 @@ export const convertDaily2 = (game) => {
         broadcasters: { national, vTeam, hTeam },
       },
     },
-    playoffs
+    playoffs,
   } = game
 
   const addQuarterNames = (linescores) =>
@@ -195,12 +195,12 @@ export const convertDaily = (game) => {
       periodStatus:
         st == 1
           ? format(
-            utcToZonedTime(
-              parse(stt, 'hh:mm a', getApiDate()).toISOString(),
-              getUserTimeZoneId()
-            ),
-            'hh:mm a'
-          )
+              utcToZonedTime(
+                parse(stt, 'hh:mm a', getApiDate()).toISOString(),
+                getUserTimeZoneId()
+              ),
+              'hh:mm a'
+            )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

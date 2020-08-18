@@ -59,11 +59,7 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   }
 }
 
-const renderStatusAndClock = (
-  status,
-  clock,
-  totalPeriod
-) => {
+const renderStatusAndClock = (status, clock, totalPeriod) => {
   return formatClock(clock, status, totalPeriod) || status
 }
 
@@ -97,20 +93,17 @@ const renderHighlight = (id, urls, dark) => {
     return undefined
   }
 
-  const url = urls[id]
-  if (url) {
-    return (
-      <a
-        href={`https://youtube.com/watch?v=${url}`}
-        style={{
-          fontSize: 'smaller',
-          color: dark ? 'lightblue' : undefined,
-        }}
-      >
-        Highlight
-      </a>
-    )
-  }
+  return (
+    <a
+      href={`https://youtube.com/watch?v=${urls[id]}`}
+      style={{
+        fontSize: 'smaller',
+        color: dark ? 'lightblue' : undefined,
+      }}
+    >
+      Highlight
+    </a>
+  )
 }
 
 const MatchInfo = ({
@@ -145,11 +138,7 @@ const MatchInfo = ({
               {renderScores(dark, spoiler, gameStatus, home, visitor)}
               {renderAt(gameStatus)}
               <div>
-                {renderStatusAndClock(
-                  periodStatus,
-                  gameClock,
-                  periodValue,
-                )}
+                {renderStatusAndClock(periodStatus, gameClock, periodValue)}
               </div>
               {!spoiler && series && <div>{series}</div>}
               {broadcasters != null &&
@@ -189,7 +178,7 @@ MatchInfo.propTypes = {
     home_wins: PropTypes.string,
     visitor_wins: PropTypes.string,
   }),
-  urls: PropTypes.object
+  urls: PropTypes.object,
 }
 
 MatchInfo.defaultProps = {
