@@ -15,12 +15,12 @@ import {
 } from '../../components/Checkbox'
 import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
-import { fetchGamesIfNeeded } from '../Popup/actions'
-import { dispatchChangeDate } from '../DatePicker/actions'
 import {
-  fetchLiveGameBoxIfNeeded,
+  fetchGamesIfNeeded,
   fetchGameHighlightIfNeeded,
-} from '../BoxScoresDetails/actions'
+} from '../Popup/actions'
+import { dispatchChangeDate } from '../DatePicker/actions'
+import { fetchLiveGameBoxIfNeeded } from '../BoxScoresDetails/actions'
 
 const Wrapper = styled.div`
   grid-area: sidebar;
@@ -45,10 +45,12 @@ const Sidebar = ({
     const prevDate = prevCountRef.current
     if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
+        fetchGameHighlightIfNeeded
+      )
       prevCountRef.current = date
     }
-  }, [date, fetchGamesIfNeeded])
+  }, [date, fetchGamesIfNeeded, fetchGameHighlightIfNeeded])
 
   const selectGame = React.useCallback(
     (e) => {
@@ -61,18 +63,19 @@ const Sidebar = ({
         history.push(`/boxscores/${id}`)
       }
       const dateStr = format(date, DATE_FORMAT)
-      fetchLiveGameBoxIfNeeded(dateStr, id).then(() => {
-        fetchGameHighlightIfNeeded(id)
-      })
+      fetchLiveGameBoxIfNeeded(dateStr, id)
       toggleGameId(id)
     },
     [date, history, location]
   )
 
-  const dateOnChange = React.useCallback(() => {
-    history.replace('/boxscores')
-    toggleGameId('')
-  }, [history])
+  const dateOnChange = React.useCallback(
+    (newDate) => {
+      history.replace('/boxscores')
+      toggleGameId('')
+    },
+    [history]
+  )
 
   return (
     <Wrapper>
@@ -89,6 +92,7 @@ const Sidebar = ({
         games={live.games}
         onClick={selectGame}
         selected={gameId}
+        urls={live.urls}
       />
     </Wrapper>
   )

@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Row } from '../styles'
+import { Row, Theme } from '../styles'
 import { SettingsConsumer, ThemeConsumer } from '../components/Context'
-import { Theme } from '../styles'
 import { formatClock } from '../utils/common'
 
 const Wrapper = styled.div`
@@ -60,17 +59,7 @@ const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   }
 }
 
-const renderStatusAndClock = (
-  spoiler,
-  status,
-  clock,
-  totalPeriod,
-  gameStatus
-) => {
-  // if no spoiler is on, show the final status for games.
-  if (spoiler && gameStatus === '2') {
-    return ''
-  }
+const renderStatusAndClock = (status, clock, totalPeriod) => {
   return formatClock(clock, status, totalPeriod) || status
 }
 
@@ -99,22 +88,44 @@ const renderAt = (gameStatus) => {
   }
 }
 
+const renderHighlight = (id, urls, dark) => {
+  if (id == null || urls == null || urls[id] == null) {
+    return undefined
+  }
+
+  return (
+    <a
+      href={`https://youtube.com/watch?v=${urls[id]}`}
+      style={{
+        fontSize: 'smaller',
+        color: dark ? 'lightblue' : undefined,
+      }}
+    >
+      Highlight
+    </a>
+  )
+}
+
 const MatchInfo = ({
+  id,
   broadcasters,
   home,
   visitor,
   periodTime: { periodStatus, gameClock, gameStatus, periodValue },
   playoffs,
+  urls,
 }) => {
   let series = ''
   if (playoffs) {
     const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
-    if (+homeWins > +visitorWins) {
-      series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
-    } else if (+homeWins < +visitorWins) {
-      series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
-    } else {
-      series = `Series tied ${homeWins}-${visitorWins}`
+    if (homeWins != null && visitorWins != null) {
+      if (+homeWins > +visitorWins) {
+        series = `${home.nickname} leads series ${homeWins}-${visitorWins}`
+      } else if (+homeWins < +visitorWins) {
+        series = `${visitor.nickname} leads series ${visitorWins}-${homeWins}`
+      } else if (+homeWins === +visitorWins) {
+        series = `Series tied ${homeWins}-${visitorWins}`
+      }
     }
   }
 
@@ -127,17 +138,12 @@ const MatchInfo = ({
               {renderScores(dark, spoiler, gameStatus, home, visitor)}
               {renderAt(gameStatus)}
               <div>
-                {renderStatusAndClock(
-                  spoiler,
-                  periodStatus,
-                  gameClock,
-                  periodValue,
-                  gameStatus
-                )}
+                {renderStatusAndClock(periodStatus, gameClock, periodValue)}
               </div>
               {!spoiler && series && <div>{series}</div>}
               {broadcasters != null &&
                 renderBroadcasters(broadcasters, gameStatus)}
+              {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
         </SettingsConsumer>
@@ -147,6 +153,7 @@ const MatchInfo = ({
 }
 
 MatchInfo.propTypes = {
+  id: PropTypes.string,
   broadcasters: PropTypes.array,
   home: PropTypes.shape({
     abbreviation: PropTypes.string.isRequired,
@@ -171,6 +178,7 @@ MatchInfo.propTypes = {
     home_wins: PropTypes.string,
     visitor_wins: PropTypes.string,
   }),
+  urls: PropTypes.object,
 }
 
 MatchInfo.defaultProps = {

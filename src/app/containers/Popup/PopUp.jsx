@@ -24,18 +24,22 @@ const Wrapper = styled(Column)`
   min-width: 370px;
 `
 
-const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
+const PopUp = ({
+  fetchGamesIfNeeded,
+  fetchGameHighlightIfNeeded,
+  history,
+  date: { date },
+  live,
+}) => {
   const [isPopup, togglePopup] = React.useState(false)
-  const [gameDate, toggleGameDate] = React.useState(
-    format(date, DATE_FORMAT)
-  )
+  const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
 
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
       togglePopup(!tab)
     })
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr, null, true)
+    fetchGamesIfNeeded(dateStr, null, true).then(fetchGameHighlightIfNeeded)
     document.title = 'Box Scores | Popup'
   }, [])
 
@@ -45,7 +49,9 @@ const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
     const prevDate = prevDateRef.current
     if (!isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
+      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
+        fetchGameHighlightIfNeeded
+      )
       prevDateRef.current = date
     }
   }, [date, fetchGamesIfNeeded])
@@ -87,6 +93,7 @@ const PopUp = ({ fetchGamesIfNeeded, history, date: { date }, live }) => {
         isLoading={live.isLoading}
         games={live.games}
         onClick={selectGame}
+        urls={live.urls}
       />
     </Wrapper>
   )
@@ -99,11 +106,14 @@ PopUp.propTypes = {
     games: PropTypes.array.isRequired,
     // date
     lastUpdate: PropTypes.object.isRequired,
+    // { [gid]: string }
+    urls: PropTypes.object.isRequired,
   }).isRequired,
   date: PropTypes.shape({
     date: PropTypes.object.isRequired,
   }),
   fetchGamesIfNeeded: PropTypes.func.isRequired,
+  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),

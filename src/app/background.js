@@ -95,7 +95,7 @@ const liveListener = (initCheck = false) => {
         year = getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
       }
       return fetch(
-            `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
+        `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
       )
         .then((res) => res.json())
         .then(({ gs: { g } }) => {
@@ -105,8 +105,8 @@ const liveListener = (initCheck = false) => {
           }
         })
     })
-    // })
-    // .catch(() => browser.setBadgeText({ text: '' }))
+  // })
+  // .catch(() => browser.setBadgeText({ text: '' }))
 }
 
 // immediately search for live game

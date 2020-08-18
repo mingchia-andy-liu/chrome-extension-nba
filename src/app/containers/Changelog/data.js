@@ -1,5 +1,17 @@
 module.exports = [
   {
+    version: '1.4.9 Updates: (2020-08-13)',
+    updates: ['Hot fix playoff series summary text'],
+  },
+  {
+    version: '1.4.8 Updates: (2020-08-11)',
+    updates: [
+      'Fix live indicator',
+      'Remove freeze table column and row function',
+      'Improve performance and reduce bundle size by 1/3',
+    ],
+  },
+  {
     version: '1.4.7 Updates: (2020-07-23)',
     updates: ['Update API due to season has not end due to covid'],
   },

@@ -101,6 +101,7 @@ export const convertDaily2 = (game) => {
         broadcasters: { national, vTeam, hTeam },
       },
     },
+    playoffs,
   } = game
 
   const addQuarterNames = (linescores) =>
@@ -117,7 +118,10 @@ export const convertDaily2 = (game) => {
     } else if (isHalftime) {
       return 'Halftime'
     } else if (statusNum === 1) {
-      return format(utcToZonedTime(startTimeUTC, getUserTimeZoneId()), 'hh:mm a')
+      return format(
+        utcToZonedTime(startTimeUTC, getUserTimeZoneId()),
+        'hh:mm a'
+      )
     } else if (isEndOfPeriod) {
       if (p > 4) {
         const otP = p - 4
@@ -140,6 +144,17 @@ export const convertDaily2 = (game) => {
       ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
       ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
     ]
+  }
+
+  const getPlayoffs = () => {
+    if (playoffs == null || playoffs.hTeam == null || playoffs.vTeam == null) {
+      return undefined
+    }
+
+    return {
+      home_wins: playoffs.hTeam.seriesWin,
+      visitor_wins: playoffs.vTeam.seriesWin,
+    }
   }
 
   return {
@@ -165,6 +180,7 @@ export const convertDaily2 = (game) => {
       gameStatus: `${statusNum}`,
       periodValue: `${p}`,
     },
+    playoffs: getPlayoffs(),
   }
 }
 

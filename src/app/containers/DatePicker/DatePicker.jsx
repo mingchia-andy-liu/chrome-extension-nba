@@ -82,9 +82,9 @@ const DatePicker = (
   }, [onClickArrow])
 
   const onDateChange = React.useCallback(
-    (date) => {
-      dispatchChangeDate(date[0])
-      onChange(date[0])
+    (dates) => {
+      dispatchChangeDate(dates[0])
+      onChange(dates[0])
       resetLiveGameBox()
     },
     [dispatchChangeDate, onChange, resetLiveGameBox]
@@ -112,7 +112,7 @@ const DatePicker = (
             tabIndex="-1"
             autoFocus={false}
             dark={dark ? 1 : undefined}
-            value={date}
+            value={format(date, 'yyyy-MM-dd')}
             options={{
               minDate: MIN_DATE,
               maxDate: MAX_DATE,

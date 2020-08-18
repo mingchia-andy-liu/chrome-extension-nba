@@ -66,7 +66,6 @@ const MatchCard = ({
   ...rest
 }) => {
   const { abbreviation: hta, nickname: htn, score: hs } = home
-
   const { abbreviation: vta, nickname: vtn, score: vs } = visitor
 
   return (
@@ -83,6 +82,7 @@ const MatchCard = ({
             >
               <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} />
               <MatchInfo
+                id={id}
                 home={home}
                 visitor={visitor}
                 broadcasters={showBroadcast ? broadcasters : undefined}

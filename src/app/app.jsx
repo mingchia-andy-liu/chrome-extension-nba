@@ -1,3 +1,5 @@
+import './utils/wdyr'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -17,7 +19,5 @@ ReactDOM.render(
 )
 
 if (process.env.NODE_ENV === 'development') {
-  // const showDevTools = require('./showDevTools')
-  // showDevTools.default(store)
   window.Store = store
 }
