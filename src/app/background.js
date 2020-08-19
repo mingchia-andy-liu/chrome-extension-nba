@@ -16,6 +16,11 @@ browser.alarms.create('live', {
   periodInMinutes: 30,
 })
 
+const onClickListener = (notifId) => {
+  browser.notifications.clear(notifId)
+  browser.tabs.create({ url: '/index.html#/boxscores' })
+}
+
 const fireFavTeamNotificationIfNeeded = (games) => {
   browser.permissions.contains(
     {
@@ -24,6 +29,10 @@ const fireFavTeamNotificationIfNeeded = (games) => {
     (hasNotificationPermission) => {
       if (!hasNotificationPermission) {
         return
+      }
+      const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
+      if (!hasListener) {
+        browser.notifications.onClicked.addListener(onClickListener)
       }
 
       browser.getItem(['favTeam'], (data) => {
@@ -77,7 +86,7 @@ const liveListener = (initCheck = false) => {
   //   .catch(() => {
   //     return
   fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-    .then((res) => res.json1())
+    .then((res) => res.json())
     .then(({ games }) => {
       checkLiveGame(games, 2)
       if (!initCheck) {
