@@ -3,14 +3,14 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import {
+import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
   HideZeroRowCheckbox,
   DarkModeCheckbox,
 } from '../../components/Checkbox'
 import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
-// import browser from '../../utils/browser'
+import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
 
@@ -38,14 +38,9 @@ const ButtonsWrapper = styled.div`
   }
 `
 
-// const NotificationWrapper = styled.div`
-//     padding: 5px 0;
-// `
-
-// const NotificationParagraph = styled.p`
-//     padding: 5px 0;
-//     margin: 0;
-// `
+const NotificationWrapper = styled.div`
+    padding: 5px 0;
+`
 
 const renderHeader = () => {
   return (
@@ -96,45 +91,40 @@ const renderTeams = (favTeam, updateTeam) => {
 
 const Options = () => {
   // to enable, add "optional_permissions": [ "notifications" ], to manifest
-  // const [hasNotificationPermission, togglePermission] = React.useState(false)
+  const [hasNotificationPermission, togglePermission] = React.useState(false)
   React.useEffect(() => {
     document.title = 'Box Scores | Options'
-    // browser.permissions.contains(
-    //   {
-    //     permissions: ['notifications'],
-    //   },
-    //   (hasNotificationPermission) => {
-    //     console.log('has', hasNotificationPermission)
-    //     togglePermission(hasNotificationPermission)
-    //   }
-    // )
+    browser.permissions.contains(
+      {
+        permissions: ['notifications'],
+      },
+      (hasNotificationPermission) => {
+        togglePermission(hasNotificationPermission)
+      }
+    )
   }, [])
 
-  // const requestNotification = React.useCallback(() => {
-  //   console.log('requesting')
-  //   browser.permissions.request(
-  //     {
-  //       permissions: ['notifications'],
-  //     },
-  //     (granted) => {
-  //       console.log('graned', granted)
-  //       togglePermission(granted)
-  //     }
-  //   )
-  // }, [])
+  const requestNotification = React.useCallback(() => {
+    browser.permissions.request(
+      {
+        permissions: ['notifications'],
+      },
+      (granted) => {
+        togglePermission(granted)
+      }
+    )
+  }, [])
 
-  // const removeNotification = React.useCallback(() => {
-  //   console.log('removing')
-  //   browser.permissions.remove(
-  //     {
-  //       permissions: ['notifications'],
-  //     },
-  //     (removed) => {
-  //       console.log('removed', removed)
-  //       togglePermission(!removed)
-  //     }
-  //   )
-  // }, [])
+  const removeNotification = React.useCallback(() => {
+    browser.permissions.remove(
+      {
+        permissions: ['notifications'],
+      },
+      (removed) => {
+        togglePermission(!removed)
+      }
+    )
+  }, [])
 
   const renderContent = React.useCallback((sidebarContext) => {
     const { team } = sidebarContext.state
@@ -144,15 +134,9 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {/* {hasNotificationPermission
-          ? <NotificationWrapper>
-            <button onClick={removeNotification}>Remove permission</button>
-          </NotificationWrapper>
-          : <NotificationWrapper>
-            <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
-            <button onClick={requestNotification}>Grant Permission</button>
-          </NotificationWrapper>
-        } */}
+        <NotificationWrapper>
+          <Checkbox checked={hasNotificationPermission} onChange={hasNotificationPermission ? removeNotification : requestNotification} text="Notification (need to grant permission)" />
+        </NotificationWrapper>
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />

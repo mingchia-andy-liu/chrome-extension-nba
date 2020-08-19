@@ -106,6 +106,23 @@ if (typeof browser !== 'undefined') {
         browser.notifications.create(options)
       }
     },
+    clear: (id) => {
+      if (browser.notifications && browser.notifications.clear) {
+        browser.notifications.clear(id)
+      }
+    },
+    onClicked: {
+      addListener: (fn) => {
+        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.addListener) {
+          browser.notifications.onClicked.addListener(fn)
+        }
+      },
+      hasListener: (fn) => {
+        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.hasListener) {
+          return browser.notifications.onClicked.hasListener(fn)
+        }
+      }
+    },
   }
 } else if (typeof chrome !== 'undefined' && chrome.runtime !== undefined) {
   // Chrome
@@ -208,6 +225,23 @@ if (typeof browser !== 'undefined') {
         chrome.notifications.create(options)
       }
     },
+    clear: (id) => {
+      if (chrome.notifications && chrome.notifications.clear) {
+        chrome.notifications.clear(id)
+      }
+    },
+    onClicked: {
+      addListener: (fn) => {
+        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.addListener) {
+          chrome.notifications.onClicked.addListener(fn)
+        }
+      },
+      hasListener: (fn) => {
+        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.hasListener) {
+          return chrome.notifications.onClicked.hasListener(fn)
+        }
+      }
+    },
   }
 } else {
   browserNameSpace.alarms = {
@@ -222,6 +256,11 @@ if (typeof browser !== 'undefined') {
   browserNameSpace.setBadgeText = noop
   browserNameSpace.setItem = noop
   browserNameSpace.tabs = { getCurrent: noop }
+  browserNameSpace.notifications = {
+    create: noop,
+    clear: noop,
+    onClicked: { addListener: noop, hasListener: noop }
+  }
 }
 
 export const checkLiveGame = (games, isFallBack = 0) => {

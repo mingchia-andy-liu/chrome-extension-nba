@@ -7,9 +7,9 @@ import getMinutes from 'date-fns/getMinutes'
  * @param {number} interval
  * @param {moment obj} momentDate
  */
-export const nearestMinutes = (interval, momentDate) => {
-  const roundedMinutes = Math.round(momentDate.minute() / interval) * interval
-  return momentDate.clone().minute(roundedMinutes).second(0)
+export const nearestMinutes = (interval, date) => {
+  const roundedMinutes = Math.round(getMinutes(date) / interval) * interval
+  return setSeconds(setMinutes(date, roundedMinutes), 0)
 }
 
 /**
