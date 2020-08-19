@@ -42,11 +42,6 @@ const NotificationWrapper = styled.div`
     padding: 5px 0;
 `
 
-const NotificationParagraph = styled.p`
-    padding: 5px 0;
-    margin: 0;
-`
-
 const renderHeader = () => {
   return (
     <ThemeConsumer>
