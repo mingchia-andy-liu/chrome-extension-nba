@@ -1,5 +1,13 @@
 module.exports = [
   {
+    version: '1.4.10 Updates: (2020-08-23)',
+    updates: [
+      'Simplify the popup page',
+      'Move highlights to card view',
+      'Clock status will now show in spoiler view'
+    ],
+  },
+  {
     version: '1.4.9 Updates: (2020-08-13)',
     updates: ['Hot fix playoff series summary text'],
   },
