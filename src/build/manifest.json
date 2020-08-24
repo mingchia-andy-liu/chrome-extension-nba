@@ -3,7 +3,7 @@
 
     "name": "Basketball Box Scores",
     "description": "The best NBA browser extension with box scores, standings, highlights and more!",
-    "version": "1.4.9",
+    "version": "1.4.10",
 
     "icons": {
         "16": "assets/png/icon-2-color-16.png",
