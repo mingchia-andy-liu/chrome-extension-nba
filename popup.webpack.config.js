@@ -2,10 +2,10 @@ const path = require('path')
 
 const webpackConfig = {
   entry: [
-    path.resolve(__dirname, 'src', 'app', 'app.jsx')
+    path.resolve(__dirname, 'src', 'app', 'popup', 'popup.jsx')
   ],
   output: {
-    filename: 'main.js',
+    filename: 'popup.js',
     path: path.resolve(__dirname, 'src', 'build'),
   },
   resolve: {

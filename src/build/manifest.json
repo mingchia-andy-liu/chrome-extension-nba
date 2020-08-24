@@ -12,7 +12,7 @@
     },
 
     "browser_action": {
-        "default_popup": "index.html",
+        "default_popup": "popup.html",
         "default_icon": {
             "48": "assets/png/icon-2-color-48.png"
         }

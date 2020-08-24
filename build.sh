@@ -11,6 +11,7 @@ npm install
 # bundle the main.js and background.js
 npm run webpack
 npm run webpack:bg
+npm run webpack:popup
 
 # build the release zip
 npm run build
