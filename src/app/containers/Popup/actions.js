@@ -3,7 +3,7 @@ import isSameDay from 'date-fns/isSameDay'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
 import types from './types'
-import getApiDate from '../../utils/getApiDate'
+import getApiDate, { getLeagueYear } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
@@ -62,7 +62,7 @@ export const fetchRequestFailFailOver = async (dateStr) => {
   if (!isSameDay(date, new Date())) {
     throw new Error()
   }
-  const year = date.month() > 5 ? date.year() : date.add(-1, 'years').year()
+  const year = getLeagueYear(date)
   const res = await fetch(
     `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
   )

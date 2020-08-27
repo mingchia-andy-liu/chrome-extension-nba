@@ -1,13 +1,10 @@
 import { push } from 'react-router-redux'
 import isAfter from 'date-fns/isAfter'
-import getYear from 'date-fns/getYear'
-import getMonth from 'date-fns/getMonth'
-import addYears from 'date-fns/addYears'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import types from './types'
-import getAPIDate from '../../utils/getApiDate'
+import getAPIDate, { getLeagueYear } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
 
@@ -59,14 +56,7 @@ const fetchPBP = async (dateStr, gid) => {
 const fetchGameDetail = async (dateStr, gid) => {
   try {
     const date = parse(dateStr, DATE_FORMAT, new Date())
-    let year
-    if (getYear(date) === 2020) {
-      // 2020 season is delayed and season should finish in 2020-09
-      year = getMonth(date) > 8 ? getYear(date) : getYear(addYears(date, -1))
-    } else {
-      // if it's after july, it's a new season
-      year = getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
-    }
+    const year = getLeagueYear(date)
     const leagueSlug = getLeagueSlug(gid)
     const advanced = await fetch(
       `${oldBase(year, leagueSlug)}/${gid}_gamedetail.json`

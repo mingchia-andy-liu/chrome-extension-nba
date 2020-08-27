@@ -1,6 +1,7 @@
 import { utcToZonedTime } from 'date-fns-tz'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 import { getUserTimeZoneId } from './time'
 import { toPercentage } from './common'
 import { QUARTER_NAMES } from './constant'
@@ -104,6 +105,7 @@ export const convertDaily2 = (game) => {
       },
     },
     playoffs,
+    nugget,
   } = game
 
   const addQuarterNames = (linescores) =>
@@ -115,6 +117,14 @@ export const convertDaily2 = (game) => {
 
   // there is no field for game status
   const formatGameStatus = () => {
+    // special case for postponed games
+    if (
+      nugget != null &&
+      nugget.text != null &&
+      typeof nugget.text === 'string' &&
+      nugget.text.toLowerCase().includes('postponed')) {
+      return 'PPD'
+    }
     if (endTimeUTC != null) {
       return 'Final'
     } else if (isHalftime) {
@@ -189,18 +199,17 @@ export const convertDaily2 = (game) => {
 export const convertDaily = (game) => {
   const { cl, h, p, st, stt, v } = game
 
+  const gameTime = parse(stt, 'hh:mm a', getApiDate())
+  const isStatusValidDate = isValid(gameTime)
   return {
     periodTime: {
       periodValue: `${p}`,
       periodStatus:
-        st == 1
+        st == 1 && isStatusValidDate
           ? format(
-              utcToZonedTime(
-                parse(stt, 'hh:mm a', getApiDate()).toISOString(),
-                getUserTimeZoneId()
-              ),
-              'hh:mm a'
-            )
+            utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
+            'hh:mm a'
+          )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,
