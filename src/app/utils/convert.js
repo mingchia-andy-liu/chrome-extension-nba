@@ -122,7 +122,7 @@ export const convertDaily2 = (game) => {
       nugget != null &&
       nugget.text != null &&
       typeof nugget.text === 'string' &&
-      nugget.text.toLowerCase().includes('postponed')) {
+      nugget.text.toLowerCase().trim() === 'postponed') {
       return 'PPD'
     }
     if (endTimeUTC != null) {
