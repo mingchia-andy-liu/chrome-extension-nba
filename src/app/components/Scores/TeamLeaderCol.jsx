@@ -10,21 +10,21 @@ import {
 import { getLogoColorByName } from '../../utils/teams'
 
 const Wrapper = styled.div`
-    ${ColumnCSS}
-    ${JustifyStart}
+  ${ColumnCSS}
+  ${JustifyStart}
     ${AlignCenter}
     width: 100%;
 `
 
 const Cell = styled.div`
-    ${ColumnCSS}
-    ${JustifyCenter}
+  ${ColumnCSS}
+  ${JustifyCenter}
     ${AlignCenter}
     min-width: 200px;
-    width: 100%;
-    height: 1.8em !important;
-    text-align: center;
-    vertical-align: middle;
+  width: 100%;
+  height: 1.8em !important;
+  text-align: center;
+  vertical-align: middle;
 `
 
 const NameCell = styled(Cell)`

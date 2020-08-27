@@ -122,7 +122,8 @@ export const convertDaily2 = (game) => {
       nugget != null &&
       nugget.text != null &&
       typeof nugget.text === 'string' &&
-      nugget.text.toLowerCase().trim() === 'postponed') {
+      nugget.text.toLowerCase().trim() === 'postponed'
+    ) {
       return 'PPD'
     }
     if (endTimeUTC != null) {
@@ -207,9 +208,9 @@ export const convertDaily = (game) => {
       periodStatus:
         st == 1 && isStatusValidDate
           ? format(
-            utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
-            'hh:mm a'
-          )
+              utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
+              'hh:mm a'
+            )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

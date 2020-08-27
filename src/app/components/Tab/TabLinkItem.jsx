@@ -6,14 +6,15 @@ import { ThemeConsumer } from '../Context'
 import { ColumnCSS, AlignCenter, JustifyCenter } from '../../styles'
 
 const Link = styled(RouterLink)`
-    ${ColumnCSS}
-    ${AlignCenter}
+  ${ColumnCSS}
+  ${AlignCenter}
     ${JustifyCenter}
     width: 100%;
-    height: 100%;
-    padding: 10px;
-    background-color: ${(props) => (props.dark ? '#2963FF' : '#046fdb')};
-    border-bottom: 4px solid ${(props) =>
+  height: 100%;
+  padding: 10px;
+  background-color: ${(props) => (props.dark ? '#2963FF' : '#046fdb')};
+  border-bottom: 4px solid
+    ${(props) =>
       props.active
         ? props.dark
           ? '#92CBF7'
@@ -22,16 +23,16 @@ const Link = styled(RouterLink)`
         ? '#2963FF'
         : '#046fdb'};
 
-    &:hover {
-        font-weight: 400;
-    }
+  &:hover {
+    font-weight: 400;
+  }
 
-    & > label {
-        color: ${(props) => (props.active ? '#fff' : 'hsl(0, 0%, 80%)')};
-        font-weight: ${(props) => (props.active ? '500' : '300')};
-        font-size: calc(17px + 0.1vw);
-        cursor: pointer;
-    }
+  & > label {
+    color: ${(props) => (props.active ? '#fff' : 'hsl(0, 0%, 80%)')};
+    font-weight: ${(props) => (props.active ? '500' : '300')};
+    font-size: calc(17px + 0.1vw);
+    cursor: pointer;
+  }
 `
 
 const TabLinkItem = ({ onClick, label, active, to }) => {

@@ -5,11 +5,11 @@ import browser from '../utils/browser'
 import { ThemeConsumer } from './Context'
 
 const Wrapper = styled.div`
-    ${RowCSS}
-    ${AlignCenter}
+  ${RowCSS}
+  ${AlignCenter}
     ${JustifyCenter}
     width: 100%;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 `
 
 const Link = styled.a`

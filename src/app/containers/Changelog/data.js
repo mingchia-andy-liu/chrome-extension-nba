@@ -4,7 +4,7 @@ module.exports = [
     updates: [
       'Simplify the popup page',
       'Move highlights to card view',
-      'Clock status will now show in spoiler view'
+      'Clock status will now show in spoiler view',
     ],
   },
   {
