@@ -1,10 +1,7 @@
 import format from 'date-fns/format'
-import getYear from 'date-fns/getYear'
-import addYears from 'date-fns/addYears'
-import getMonth from 'date-fns/getMonth'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import browser, { checkLiveGame } from './utils/browser'
-import getApiDate from './utils/getApiDate'
+import getApiDate, { getLeagueYear } from './utils/getApiDate'
 import { nextNearestMinutes } from './utils/time'
 import { DATE_FORMAT } from './utils/constant'
 
@@ -39,7 +36,8 @@ browser.alarms.create('live', {
 // }
 
 const liveListener = () => {
-  const dateStr = format(getApiDate(), DATE_FORMAT)
+  const apiDate = getApiDate()
+  const dateStr = format(apiDate, DATE_FORMAT)
   // fetch(
   //   `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
   // )
@@ -63,15 +61,7 @@ const liveListener = () => {
     .then((res) => res.json())
     .then(({ games }) => checkLiveGame(games, 2))
     .catch(() => {
-      const date = getApiDate()
-      let year
-      if (getYear(date) === 2020) {
-        // 2020 season is delayed and season should finish in 2020-09
-        year = getMonth(date) > 8 ? getYear(date) : getYear(addYears(date, -1))
-      } else {
-        // if it's after july, it's a new season
-        year = getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
-      }
+      const year = getLeagueYear(apiDate)
       return fetch(
         `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
       )
