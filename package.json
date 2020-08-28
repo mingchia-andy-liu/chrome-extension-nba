@@ -64,7 +64,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "date-fns": "^2.15.0",
+    "date-fns": "^2.16.0",
     "date-fns-tz": "^1.0.10",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
