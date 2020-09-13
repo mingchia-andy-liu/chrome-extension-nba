@@ -137,10 +137,10 @@ export const fetchGameHighlightIfNeeded = () => async (dispatch, getState) => {
     live: { urls, games },
   } = getState()
 
-  const fetchPromises = games.map(({ id: gid }) => {
+  const fetchPromises = games.map((game) => {
     return new Promise((resolve, reject) => {
-      if (urls[gid] == null) {
-        fetchGameHighlight(gid).then(resolve).catch(reject)
+      if (urls[game.id] == null && game.periodTime.gameStatus === '3') {
+        fetchGameHighlight(game.id).then(resolve).catch(reject)
       } else {
         resolve(null)
       }
