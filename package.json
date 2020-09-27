@@ -42,7 +42,7 @@
     "@babel/preset-react": "^7.10.4",
     "@babel/runtime": "^7.11.2",
     "@welldone-software/why-did-you-render": "^4.3.2",
-    "addons-linter": "^2.1.0",
+    "addons-linter": "^2.6.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.3.0",
