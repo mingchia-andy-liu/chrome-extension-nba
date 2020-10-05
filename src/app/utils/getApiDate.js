@@ -22,8 +22,8 @@ export default () => {
 
 export const getLeagueYear = (date) => {
   if (getYear(date) === 2020) {
-    // 2020 season is delayed and season should finish in 2020-09
-    return getMonth(date) > 8 ? getYear(date) : getYear(addYears(date, -1))
+    // 2020 season is delayed and season should finish in 2020-10
+    return getMonth(date) > 9 ? getYear(date) : getYear(addYears(date, -1))
   } else {
     // if it's after july, it's a new season
     return getMonth(date) > 5 ? getYear(date) : getYear(addYears(date, -1))
