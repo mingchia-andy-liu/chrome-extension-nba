@@ -19,7 +19,7 @@
     "start": "webpack-dev-server --open",
     "webpack:bg": "webpack --config bg.webpack.config.js",
     "webpack:dev": "NODE_ENV=development webpack --progress --colors",
-    "webpack:popup": "NODE_ENV=development webpack --progress --colors --config popup.webpack.config.js",
+    "webpack:popup": "NODE_ENV=production webpack --progress --colors --config popup.webpack.config.js",
     "webpack": "NODE_ENV=production webpack --progress --colors",
     "test": "jest"
   },
