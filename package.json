@@ -61,7 +61,7 @@
     "style-loader": "^1.2.1",
     "web-ext": "^5.1.0",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^4.1.0"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
