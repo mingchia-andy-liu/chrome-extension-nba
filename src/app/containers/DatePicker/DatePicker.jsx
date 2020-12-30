@@ -52,7 +52,7 @@ const Arrow = styled.img`
 
 // https://www.nba.com/key-dates
 const MIN_DATE = new Date('2019-09-02')
-const MAX_DATE = new Date('2021-01-01')
+const MAX_DATE = new Date('2022-01-01')
 
 const DatePicker = (
   { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
