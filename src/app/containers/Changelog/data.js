@@ -1,6 +1,6 @@
 module.exports = [
   {
-    version: '1.4.13 Updates: (2020-12-29)',
+    version: '1.4.13/14 Updates: (2020-12-29)',
     updates: ['Patches'],
   },
   {
