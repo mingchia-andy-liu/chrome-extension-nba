@@ -95,6 +95,7 @@ export const convertDaily2 = (game) => {
     startTimeUTC,
     endTimeUTC,
     statusNum,
+    extendedStatusNum,
     clock,
     hTeam: h,
     vTeam: v,
@@ -124,6 +125,9 @@ export const convertDaily2 = (game) => {
       typeof nugget.text === 'string' &&
       nugget.text.toLowerCase().trim() === 'postponed'
     ) {
+      return 'PPD'
+    }
+    if (extendedStatusNum != null && extendedStatusNum === 2) {
       return 'PPD'
     }
     if (endTimeUTC != null) {
