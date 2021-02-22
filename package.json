@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "date-fns": "^2.16.1",
-    "date-fns-tz": "^1.0.12",
+    "date-fns-tz": "^1.1.2",
     "query-string": "^6.13.8",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
