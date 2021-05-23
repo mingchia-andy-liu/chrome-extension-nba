@@ -171,6 +171,7 @@ export const teams = {
 
 export const getTeamNameById = (id) => {
   let name = ''
+  id = typeof id === 'number' ? id.toString() : id
   Object.keys(TEAM_ID).forEach((key) => {
     if (TEAM_ID[key] === id) {
       name = key
@@ -189,6 +190,7 @@ export const getNickNamesByTriCode = (triCode) => {
 
 export const getLogoColorById = (id) => {
   let name = ''
+  id = typeof id === 'number' ? id.toString() : id
   Object.keys(TEAM_ID).forEach((key) => {
     if (TEAM_ID[key] === id) {
       name = key
