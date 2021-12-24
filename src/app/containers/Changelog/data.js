@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.4.17 Updates: (2021-12-23)',
+    updates: ['Update packages', 'Update max date']
+  },
+  {
     version: '1.4.16 Updates: (2021-05-23)',
     updates: ['Playoff update', 'Package maintenance']
   },
