@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
   webpackConfig.mode = 'production'
 } else {
   webpackConfig.mode = 'development'
-  webpackConfig.devtool = 'cheap-module-eval-source-map'
+  webpackConfig.devtool = 'eval-cheap-module-source-map'
 }
 
 module.exports = webpackConfig
