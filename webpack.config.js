@@ -9,15 +9,14 @@ const webpackConfig = {
     path: path.resolve(__dirname, 'build'),
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', ".ts", ".tsx"],
   },
   module: {
     rules: [
-      {
-        test: /\.(jsx?)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
+      // All files with a '.t|js' or '.t|jsx' extension will be handled by 'ts-loader'.
+      { test: /\.(t|j)sx?$/, loader: "ts-loader" },
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      // { test: /\.js$/, loader: "source-map-loader" },
       {
         test: /\.(s?css)$/,
         use: [
@@ -26,7 +25,7 @@ const webpackConfig = {
           // translates CSS into CommonJS
           'css-loader'
         ],
-      }
+      },
     ],
   }
 }

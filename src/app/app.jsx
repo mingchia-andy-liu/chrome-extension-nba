@@ -1,4 +1,4 @@
-import './utils/wdyr'
+// import './utils/wdyr'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
