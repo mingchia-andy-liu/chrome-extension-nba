@@ -91,7 +91,8 @@ const StyledLabel = styled.label`
   }
 `
 
-const Checkbox = ({ checked, disabled, onChange, text }) => {
+const Checkbox = (prop) => {
+  const { checked, disabled, onChange, text } = prop;
   return (
     <div>
       <StyledLabel>

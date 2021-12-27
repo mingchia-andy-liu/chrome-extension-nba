@@ -66,6 +66,8 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.173",
+    "@types/firefox-webext-browser": "^94.0.0",
     "date-fns": "^2.22.1",
     "date-fns-tz": "^1.1.4",
     "query-string": "^6.13.8",

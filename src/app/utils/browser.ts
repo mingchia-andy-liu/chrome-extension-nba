@@ -1,5 +1,5 @@
 const noop = () => {}
-const browserNameSpace = {}
+const browserNameSpace: any = {}
 
 if (typeof browser !== 'undefined') {
   // Firefox
@@ -36,7 +36,7 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.clear = (callback) => {
-    browser.storage.local.clear(callback)
+    return browser.storage.local.clear().then(callback);
   }
 
   browserNameSpace.setItem = (obj) => {
@@ -142,7 +142,7 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.clear = (callback) => {
-    chrome.storage.local.clear(callback)
+    return chrome.storage.local.clear().then(callback);
   }
 
   browserNameSpace.setItem = (obj) => {
