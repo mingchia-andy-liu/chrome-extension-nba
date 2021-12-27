@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/build/assets/png/icon-2-color-128.png">
+  <img src="build/assets/png/icon-2-color-128.png">
 </p>
 
 # Basketball Box Scores Extension
