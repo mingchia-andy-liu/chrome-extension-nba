@@ -1,6 +1,6 @@
-import React from 'react'
+import * as React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ThemeConsumer } from '../Context'
 import { ColumnCSS, AlignCenter, JustifyCenter } from '../../styles'

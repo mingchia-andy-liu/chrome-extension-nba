@@ -1,6 +1,6 @@
-import React from 'react'
+import * as React from 'react'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'

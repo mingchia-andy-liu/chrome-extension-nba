@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
+import * as PropTypes from 'prop-types'
 import { Cell, HeaderCell, RowHeaderCell, Table, Row } from '../../utils/format'
 import { getOddRowColor } from '../../utils/common'
 import { ThemeConsumer } from '../Context'

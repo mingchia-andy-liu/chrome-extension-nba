@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/runtime": "^7.16.5",
+    "@types/react": "^17.0.38",
     "@welldone-software/why-did-you-render": "^6.0.5",
     "addons-linter": "^3.5.0",
     "babel-eslint": "^10.1.0",

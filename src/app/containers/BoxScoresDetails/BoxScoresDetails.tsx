@@ -1,8 +1,8 @@
-import React from 'react'
+import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import format from 'date-fns/format'
 import Overlay from '../../components/Overlay'
 import Loader from '../../components/Loader'
@@ -37,7 +37,7 @@ const BoxScoresDetails = ({
     const gameId = id || ''
     const dateStr = format(date, DATE_FORMAT)
     fetchLiveGameBoxIfNeeded(dateStr, gameId, false)
-    return () => resetLiveGameBox()
+    return () => {resetLiveGameBox()}
   }, [])
 
   const renderContent = React.useCallback(

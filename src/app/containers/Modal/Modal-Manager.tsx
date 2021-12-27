@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
-import ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import styled, { keyframes } from 'styled-components'
 import * as actions from './actions'
 import modal from './modal'
@@ -71,6 +71,8 @@ class ModalManager extends PureComponent {
     isOpen: PropTypes.bool.isRequired,
     type: PropTypes.object.isRequired,
   }
+
+  el: HTMLDivElement
 
   constructor(props) {
     super(props)

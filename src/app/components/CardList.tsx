@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import { mediaQuery } from '../styles'
 import { TextCard, MatchCard } from './Card'
 import { SidebarConsumer } from './Context'
@@ -52,14 +52,15 @@ const generateCards = (games, selected, favTeam, broadcast, rest) => {
   )
 }
 
-const CardList = ({
-  games,
-  hasError,
-  isLoading,
-  selected,
-  isSidebar,
-  ...rest
-}) => {
+const CardList = (props) => {
+  const {
+    games,
+    hasError,
+    isLoading,
+    selected,
+    isSidebar,
+    ...rest
+  } = props;
   const [isPopup, togglePopup] = React.useState(false)
 
   React.useEffect(() => {
@@ -110,6 +111,7 @@ CardList.propTypes = {
    * is card list loading in sidebar of bs. If so, need custom css
    */
   isSidebar: PropTypes.bool,
+  onClick: PropTypes.func,
 }
 
 CardList.defaultProps = {

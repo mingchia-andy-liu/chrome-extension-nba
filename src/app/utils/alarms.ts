@@ -9,6 +9,7 @@ import {
   fetchGameHighlightIfNeeded,
 } from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/constant'
+import { noop } from './common'
 
 browser.alarms.create('minute', {
   when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
@@ -24,9 +25,8 @@ browser.alarms.onAlarm.addListener((alarm) => {
 
     const dateStr = format(date, DATE_FORMAT)
 
-    fetchGamesIfNeeded(dateStr)(store.dispatch, store.getState).then(
-      fetchGameHighlightIfNeeded()(store.dispatch, store.getState)
-    )
+    fetchGamesIfNeeded(dateStr, noop)(store.dispatch, store.getState)
+      .then(() => fetchGameHighlightIfNeeded()(store.dispatch, store.getState))
 
     if (bs && bs.gid !== '') {
       fetchLiveGameBoxIfNeeded(dateStr, bs.gid)(store.dispatch, store.getState)
