@@ -11,7 +11,7 @@ import {
   mediaQuery,
 } from '../../styles'
 
-export const Content = styled.div`
+export const Content = styled.div<{dark: boolean}>`
   ${Shadow}
   grid-area: content;
   overflow-y: scroll !important;
@@ -33,7 +33,12 @@ export const Subtitle = styled.span`
   }
 `
 
-export const Hint = styled.div`
+interface HintProps {
+  backgroundColor: string,
+  color: string,
+}
+
+export const Hint = styled.div<HintProps>`
   background-color: ${(props) => props.backgroundColor};
   color: ${(props) => props.color};
   padding: 0 5px;
