@@ -49,7 +49,7 @@ This extension is for people who just want to get the latest update but too lazy
 
 ## Dev start notes
 `/src/app`: react projects
-`/src/build`: files of pre-release
+`build`: files of pre-release
 
 ### Prerequisite
 You need to have `npm` installed.
@@ -61,7 +61,7 @@ You need to have `npm` installed.
 - Load the zip file into Firefox
 
 **Chrome** (Chrome cannot load zip as extension locally)
-- Load the `/src/build` folder into Chrome
+- Load the `build` folder into Chrome
 
 #### Third party packages
 * `react-flatpickr`

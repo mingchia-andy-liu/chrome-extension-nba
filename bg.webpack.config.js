@@ -6,7 +6,7 @@ const webpackConfig = {
   ],
   output: {
     filename: 'background.min.js',
-    path: path.resolve(__dirname, 'src', 'build'),
+    path: path.resolve(__dirname, 'build'),
   },
   resolve: {
     extensions: ['.js'],
