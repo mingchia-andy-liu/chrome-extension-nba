@@ -24,6 +24,7 @@ module.exports = {
     'comma-dangle': 0,
     camelcase: 0,
     eqeqeq: 0,
-    'standard/no-callback-literal': 0
+    'standard/no-callback-literal': 0,
+    "node/no-callback-literal": 1
   }
 }
