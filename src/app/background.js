@@ -1,9 +1,11 @@
 import format from 'date-fns/format'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
+import isSameMinute from 'date-fns/isSameMinute'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate, { getLeagueYear } from './utils/getApiDate'
-import { nextNearestMinutes } from './utils/time'
+import { nearestMinutes, nextNearestMinutes } from './utils/time'
 import { DATE_FORMAT } from './utils/constant'
+import { sanitizeGames } from './utils/games'
 
 // tracks any live game in the background
 browser.alarms.create('live', {
@@ -11,73 +13,88 @@ browser.alarms.create('live', {
   periodInMinutes: 30,
 })
 
-// const fireFavTeamNotificationIfNeeded = (games) => {
-//     browser.getItem(['favTeam'], (data) => {
-//         if (data && data.favTeam) {
-//             const favTeamGame = games.find(({home, visitor}) => home.team_key === data.favTeam || visitor.team_key === data.favTeam)
-//             if (favTeamGame) {
-//                 const format = 'HHmm'
-//                 const roundedDate = nearestMinutes(30, moment()).format(format)
-//                 const favTeamMoment = moment.tz(favTeamGame.time, format, EST_IANA_ZONE_ID).local()
 
-//                 if (roundedDate === favTeamMoment.format(format)) {
-//                     const options = {
-//                         type: 'basic',
-//                         title: 'You favourite team is about to play',
-//                         message: `${favTeamGame.home.abbreviation} vs ${favTeamGame.visitor.abbreviation} @ ${favTeamMoment.format('hh:mm A')}`,
-//                         iconUrl: 'assets/png/icon-2-color-512.png',
-//                     }
+const onClickListener = (notifId) => {
+  browser.notifications.clear(notifId)
+  browser.tabs.create({ url: '/index.html#/boxscores' })
+}
 
-//                     browser.notifications.create(options)
-//                 }
-//             }
-//         }
-//     })
-// }
+const fireFavTeamNotificationIfNeeded = (games) => {
+  console.log('fireFavTeamNotificationIfNeeded', games)
+  browser.permissions.contains(
+    {
+      permissions: ['notifications'],
+    },
+    (hasNotificationPermission) => {
+      if (!hasNotificationPermission) {
+        return
+      }
+      const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
+      if (!hasListener) {
+        browser.notifications.onClicked.addListener(onClickListener)
+      }
 
-const liveListener = () => {
+      browser.getItem(['favTeam'], (data) => {
+        if (data && data.favTeam) {
+          const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
+          console.log('fireFavTeamNotificationIfNeeded/favTeamGame', favTeamGame);
+          if (favTeamGame) {
+            // check start time is somewhat close to the now() time.
+            const roundedDate = nearestMinutes(30, new Date())
+            console.log('roundedDate', roundedDate)
+            if (favTeamGame.startTimeUtc && isSameMinute(roundedDate, favTeamGame.startTimeUtc)) {
+              const options = {
+                type: 'basic',
+                title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
+                message: 'You favorite team is about to play.',
+                iconUrl: 'assets/png/icon-2-color-512.png',
+              }
+              console.log('fireFavTeamNotificationIfNeeded/creating notification', options);
+
+              browser.notifications.create(options)
+            }
+          }
+        }
+      })
+    }
+  )
+}
+
+
+/**
+ * 
+ * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
+ */
+const liveListener = (initCheck) => {
   const apiDate = getApiDate()
   const dateStr = format(apiDate, DATE_FORMAT)
-  // fetch(
-  //   `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
-  // )
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     const {
-  //       sports_content: {
-  //         games: { game: live },
-  //       },
-  //     } = data
-
-  //     // if (!initCheck) {
-  //     //     fireFavTeamNotificationIfNeeded(live)
-  //     // }
-
-  //     checkLiveGame(live)
-  //   })
-  //   .catch(() => {
-  //     return
   fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
     .then((res) => res.json())
-    .then(({ games }) => checkLiveGame(games, 2))
+    .then(({ games }) => {
+      checkLiveGame(games, 2)
+      if (!initCheck) {
+        fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+      }
+    })
     .catch(() => {
       const year = getLeagueYear(apiDate)
-      return fetch(
-        `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
-      )
+      return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
         .then((res) => res.json())
         .then(({ gs: { g } }) => {
           checkLiveGame(g, 1)
+          // can't check with this endpoints because it does not have start time.
         })
     })
-  // })
-  // .catch(() => browser.setBadgeText({ text: '' }))
+    .catch((error) => {
+      console.error('something went wrong...', error)
+    })
 }
 
 // immediately search for live game
-liveListener()
+liveListener(true)
 
 browser.alarms.onAlarm.addListener((alarm) => {
+  console.log('alarm', new Date())
   // when the chrome is reopened, alarms get ran even though the time has passed
   // if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
   if (differenceInSeconds(alarm.scheduledTime, Date.now()) < -10) {
@@ -85,7 +102,7 @@ browser.alarms.onAlarm.addListener((alarm) => {
   }
 
   if (alarm.name === 'live') {
-    liveListener()
+    liveListener(false)
   }
 })
 
