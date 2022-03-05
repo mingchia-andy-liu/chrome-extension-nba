@@ -101,9 +101,9 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.notifications = {
-    create: (options) => {
+    create: (id, options) => {
       if (browser.notifications && browser.notifications.create) {
-        browser.notifications.create(options)
+        browser.notifications.create(id, options)
       }
     },
     clear: (id) => {
@@ -220,9 +220,9 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.notifications = {
-    create: (options) => {
+    create: (id, options) => {
       if (chrome.notifications && chrome.notifications.create) {
-        chrome.notifications.create(options)
+        chrome.notifications.create(id, options)
       }
     },
     clear: (id) => {
@@ -264,6 +264,7 @@ if (typeof browser !== 'undefined') {
 }
 
 export const checkLiveGame = (games, isFallBack = 0) => {
+  console.log('checkLiveGame', isFallBack)
   let hasLiveGame
   if (isFallBack === 1) {
     hasLiveGame = games.find((game) => game.st === 2)

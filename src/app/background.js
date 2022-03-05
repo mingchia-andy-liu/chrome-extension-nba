@@ -13,10 +13,9 @@ browser.alarms.create('live', {
   periodInMinutes: 30,
 })
 
-
 const onClickListener = (notifId) => {
   browser.notifications.clear(notifId)
-  browser.tabs.create({ url: '/index.html#/boxscores' })
+  browser.tabs.create({ url: '/index.html#/boxscores/' + notifId })
 }
 
 const fireFavTeamNotificationIfNeeded = (games) => {
@@ -41,8 +40,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
           if (favTeamGame) {
             // check start time is somewhat close to the now() time.
             const roundedDate = nearestMinutes(30, new Date())
-            console.log('roundedDate', roundedDate)
-            if (favTeamGame.startTimeUtc && isSameMinute(roundedDate, favTeamGame.startTimeUtc)) {
+            if (favTeamGame.startTimeUTC && isSameMinute(roundedDate, new Date(favTeamGame.startTimeUTC))) {
               const options = {
                 type: 'basic',
                 title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
@@ -51,7 +49,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
               }
               console.log('fireFavTeamNotificationIfNeeded/creating notification', options);
 
-              browser.notifications.create(options)
+              browser.notifications.create(favTeamGame.id, options)
             }
           }
         }
@@ -66,6 +64,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
  * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
  */
 const liveListener = (initCheck) => {
+  console.log('liveListener', new Date().toISOString())
+  console.log('liveListener', new Date().toISOString())
   const apiDate = getApiDate()
   const dateStr = format(apiDate, DATE_FORMAT)
   fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
@@ -91,7 +91,7 @@ const liveListener = (initCheck) => {
 }
 
 // immediately search for live game
-liveListener(true)
+liveListener(false)
 
 browser.alarms.onAlarm.addListener((alarm) => {
   console.log('alarm', new Date())
