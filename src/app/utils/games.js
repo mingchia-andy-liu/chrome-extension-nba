@@ -2,9 +2,111 @@ import { utcToZonedTime } from 'date-fns-tz'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import { getUserTimeZoneId } from './time'
-import { convertDaily, convertDaily2 } from './convert'
+import { convertDaily, convertDaily2, convertDaily3 } from './convert'
 import getApiDate from './getApiDate'
 
+/**
+ * Target interface
+ * @returns 
+ * export interface Game {
+      broadcasters: Broadcaster[]
+      home: Home
+      visitor: Visitor
+      periodTime: PeriodTime
+      id: string
+      date: string
+      time: string
+      state: string
+      arena: Arena
+      startTimeUTC: string
+    }
+   export interface PeriodTime {
+      periodStatus: string
+      gameClock: string
+      gameStatus: string
+      periodValue: string
+    }
+
+   export interface Team {
+      abbreviation: string
+      city: string
+      linescores: Linescores
+      nickname: string
+      score: string
+    }
+
+  export interface Linescores {
+      period: Period[]
+    }
+
+  export interface Period {
+      period_name: string
+      period_value: string
+      score: string
+    }
+ */
+
+// for https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json
+/**
+ *  
+ * export interface Root {
+      meta: Meta
+      scoreboard: Scoreboard
+    }
+ * 
+ * export interface Game {
+      gameId: string
+      gameCode: string
+      gameStatus: number
+      gameStatusText: string
+      period: number
+      gameClock: string
+      gameTimeUTC: string
+      gameEt: string
+      regulationPeriods: number
+      ifNecessary: boolean
+      seriesGameNumber: string
+      seriesText: string
+      homeTeam: Team
+      awayTeam: Team
+      gameLeaders: GameLeaders
+      pbOdds: PbOdds
+    }
+ *
+ * export interface HomeTeam {
+      teamId: number
+      teamName: string
+      teamCity: string
+      teamTricode: string
+      wins: number
+      losses: number
+      score: number
+      seed: any
+      inBonus: any
+      timeoutsRemaining: number
+      periods: Period[]
+    }
+
+  export interface Period {
+      period: number
+      periodType: string
+      score: number
+    }
+ * 
+ */
+const sanitizeGameFallBack3 = (game) => ({
+  // gives home, visitor
+  ...convertDaily3(game),
+  id: game.gameId,
+  date: game.gameEt, // v
+  time: game.gameEt, // v
+  state: game.gameStatus,
+  arena: { // v
+    name: '',
+    city: '',
+  },
+  startTimeUTC: game.gameTimeUTC,
+})
 
 // for http://data.nba.net/prod/v2/${dateStr}/scoreboard.json
 /**
@@ -149,6 +251,8 @@ export const sanitizeGames = (games, isFallBack = 0) => {
       return sanitizeGameFallBack(game)
     } else if (isFallBack === 2) {
       return sanitizeGameFallBack2(game)
+    } else if (isFallBack === 3) {
+      return sanitizeGameFallBack3(game)
     } else {
       return sanitizeGame(game)
     }

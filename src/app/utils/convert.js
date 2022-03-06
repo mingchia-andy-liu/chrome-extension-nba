@@ -89,6 +89,70 @@ const getLinescores = (stats, p) => {
     }))
 }
 
+const addQuarterNames = (linescores) =>
+  linescores.map((ls, i) => ({
+    period_name: QUARTER_NAMES[i],
+    period_value: i.toString(),
+    score: ls.score,
+  }))
+
+// for cdn
+export const convertDaily3 = (game) => {
+  const {
+    startTimeUTC,
+    gameClock,
+    gameStatus,
+    gameStatusText,
+    period,
+    homeTeam: h,
+    awayTeam: v,
+    period: { current: p, isHalftime, isEndOfPeriod },
+  } = game
+
+  const formatGameStatus = () => {
+    // special case for postponed games
+    if (gameStatus === 1) {
+      return format(
+        utcToZonedTime(startTimeUTC, getUserTimeZoneId()),
+        'hh:mm a'
+      )
+    }
+
+    return gameStatusText;
+  }
+
+  const addQuarterNames = (linescores) =>
+    linescores.map((ls, i) => ({
+      period_name: QUARTER_NAMES[i],
+      period_value: i.toString(),
+      score: ls.score,
+    }))
+
+  return {
+    broadcasters: [],
+    home: {
+      abbreviation: h.teamTricode,
+      city: h.teamCity,
+      linescores: { period: addQuarterNames(h.periods) },
+      nickname: getNickNamesByTriCode(h.teamTricode),
+      score: `${h.score}`,
+    },
+    visitor: {
+      abbreviation: v.teamTricode,
+      city: v.teamCity,
+      linescores: { period: addQuarterNames(v.periods) },
+      nickname: getNickNamesByTriCode(v.teamTricode),
+      score: `${v.score}`,
+    },
+    periodTime: {
+      periodStatus: formatGameStatus(),
+      gameClock: gameClock,
+      gameStatus: `${gameStatus}`,
+      periodValue: `${period}`,
+    },
+  }
+}
+
 // this is for http://data.nba.net/prod/v2/dateStr/scoreboard.json endpoint
 export const convertDaily2 = (game) => {
   const {
@@ -109,14 +173,6 @@ export const convertDaily2 = (game) => {
     nugget,
   } = game
 
-  const addQuarterNames = (linescores) =>
-    linescores.map((ls, i) => ({
-      period_name: QUARTER_NAMES[i],
-      period_value: i.toString(),
-      score: ls.score,
-    }))
-
-  // there is no field for game status
   const formatGameStatus = () => {
     // special case for postponed games
     if (
@@ -154,7 +210,6 @@ export const convertDaily2 = (game) => {
       return `${p} Qtr`
     }
   }
-
   const getBroadcasters = () => {
     return [
       ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),

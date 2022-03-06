@@ -41,7 +41,27 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
   }
 }
 
-export const fetchRequestFailOver = async (dateStr) => {
+const fetchRequest3 = async (dateStr) => {
+  const today = format(new Date(), DATE_FORMAT);
+  // only use cdn for today as it's the only endpoint 
+  if (today === dateStr) {
+    try {
+      const res = await fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+      const { scoreboard: { games }} = await res.json()
+
+      return {
+        isFallBack: 3,
+        games,
+      }
+    } catch (error) {
+      return fetchRequest2(dateStr)
+    }
+  } else {
+    return fetchRequest2(dateStr)
+  }
+}
+
+const fetchRequest2 = async (dateStr) => {
   try {
     const res = await fetch(
       `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
@@ -53,11 +73,11 @@ export const fetchRequestFailOver = async (dateStr) => {
       games,
     }
   } catch (error) {
-    return fetchRequestFailFailOver(dateStr)
+    return fetchRequest1(dateStr)
   }
 }
 
-export const fetchRequestFailFailOver = async (dateStr) => {
+const fetchRequest1 = async (dateStr) => {
   const date = parse(dateStr, DATE_FORMAT, new Date())
   if (!isSameDay(date, new Date())) {
     throw new Error()
@@ -75,7 +95,7 @@ export const fetchRequestFailFailOver = async (dateStr) => {
   }
 }
 
-export const fetchRequest = async (dateStr) => {
+const fetchRequest = async (dateStr) => {
   // try {
   //   const res = await fetch(
   //     `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
@@ -93,7 +113,7 @@ export const fetchRequest = async (dateStr) => {
   // }
   // TODO: the above endpoint seems to be broken for extended season
   // Review again once regular season starts
-  return fetchRequestFailOver(dateStr)
+  return fetchRequest3(dateStr)
 }
 
 export const fetchGamesIfNeeded = (

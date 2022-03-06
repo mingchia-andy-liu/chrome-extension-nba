@@ -64,34 +64,47 @@ const fireFavTeamNotificationIfNeeded = (games) => {
  * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
  */
 const liveListener = (initCheck) => {
-  console.log('liveListener', new Date().toISOString())
-  console.log('liveListener', new Date().toISOString())
   const apiDate = getApiDate()
   const dateStr = format(apiDate, DATE_FORMAT)
-  fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-    .then((res) => res.json())
-    .then(({ games }) => {
-      checkLiveGame(games, 2)
+  const year = getLeagueYear(apiDate)
+
+  // cdn
+  fetch(`https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json`)
+    .then(res => res.json())
+    .then(({ scoreboard: { games }}) => {
+      checkLiveGame(games, 3)
       if (!initCheck) {
-        fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+        fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
       }
     })
+    // data
     .catch(() => {
-      const year = getLeagueYear(apiDate)
-      return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
+      return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
         .then((res) => res.json())
-        .then(({ gs: { g } }) => {
-          checkLiveGame(g, 1)
-          // can't check with this endpoints because it does not have start time.
+        .then(({ games }) => {
+          checkLiveGame(games, 2)
+          if (!initCheck) {
+            fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+          }
+        })
+        // old
+        .catch(() => {
+          return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
+            .then((res) => res.json())
+            .then(({ gs: { g } }) => {
+              checkLiveGame(g, 1)
+              // can't check with this endpoints because it does not have start time.
+            })
         })
     })
+    // final catch
     .catch((error) => {
       console.error('something went wrong...', error)
     })
 }
 
 // immediately search for live game
-liveListener(false)
+liveListener(true)
 
 browser.alarms.onAlarm.addListener((alarm) => {
   console.log('alarm', new Date())
