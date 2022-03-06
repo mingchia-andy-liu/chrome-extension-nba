@@ -33,6 +33,8 @@ const PopUp = ({
 }) => {
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
+  // useRef for previous selected date.
+  const prevDateRef = React.useRef()
 
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
@@ -41,13 +43,13 @@ const PopUp = ({
     const dateStr = format(date, DATE_FORMAT)
     fetchGamesIfNeeded(dateStr, null, true).then(fetchGameHighlightIfNeeded)
     document.title = 'Box Scores | Popup'
+    prevDateRef.current = date;
   }, [])
 
-  // useRef for previous date.
-  const prevDateRef = React.useRef()
+  // this is used to trace the toggle for different "selected" dates.
   React.useEffect(() => {
     const prevDate = prevDateRef.current
-    if (!isSameDay(date, prevDate)) {
+    if (prevDate != null && !isSameDay(date, prevDate)) {
       // props is already updated date, force update.
       fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
         fetchGameHighlightIfNeeded
