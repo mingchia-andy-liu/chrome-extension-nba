@@ -10,10 +10,10 @@ import {
 } from '../containers/Popup/actions'
 import { DATE_FORMAT } from '../utils/constant'
 
-browser.alarms.create('minute', {
-  when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
-  periodInMinutes: 1,
-})
+// browser.alarms.create('minute', {
+//   when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
+//   periodInMinutes: 1,
+// })
 
 browser.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'minute') {

@@ -264,7 +264,6 @@ if (typeof browser !== 'undefined') {
 }
 
 export const checkLiveGame = (games, isFallBack = 0) => {
-  console.log('checkLiveGame', isFallBack)
   let hasLiveGame
   if (isFallBack === 1) {
     hasLiveGame = games.find((game) => game.st === 2)

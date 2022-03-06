@@ -1,6 +1,8 @@
 import format from 'date-fns/format'
+import addMinutes from 'date-fns/addMinutes'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import isSameMinute from 'date-fns/isSameMinute'
+import setSeconds from 'date-fns/setSeconds'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate, { getLeagueYear } from './utils/getApiDate'
 import { nearestMinutes, nextNearestMinutes } from './utils/time'
@@ -8,9 +10,10 @@ import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 
 // tracks any live game in the background
-browser.alarms.create('live', {
-  when: nextNearestMinutes(30, new Date()).valueOf(),
-  periodInMinutes: 30,
+browser.alarms.create('minute', {
+  // when: nextNearestMinutes(30, new Date()).valueOf(),
+  when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
+  periodInMinutes: 1,
 })
 
 const onClickListener = (notifId) => {
@@ -39,15 +42,13 @@ const fireFavTeamNotificationIfNeeded = (games) => {
           console.log('fireFavTeamNotificationIfNeeded/favTeamGame', favTeamGame);
           if (favTeamGame) {
             // check start time is somewhat close to the now() time.
-            const roundedDate = nearestMinutes(30, new Date())
-            if (favTeamGame.startTimeUTC && isSameMinute(roundedDate, new Date(favTeamGame.startTimeUTC))) {
+            if (favTeamGame.startTimeUTC && isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))) {
               const options = {
                 type: 'basic',
                 title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
                 message: 'You favorite team is about to play.',
                 iconUrl: 'assets/png/icon-2-color-512.png',
               }
-              console.log('fireFavTeamNotificationIfNeeded/creating notification', options);
 
               browser.notifications.create(favTeamGame.id, options)
             }
@@ -109,12 +110,11 @@ liveListener(true)
 browser.alarms.onAlarm.addListener((alarm) => {
   console.log('alarm', new Date())
   // when the chrome is reopened, alarms get ran even though the time has passed
-  // if (moment(alarm.scheduledTime).diff(new Date(), 'seconds') < -10) {
   if (differenceInSeconds(alarm.scheduledTime, Date.now()) < -10) {
     return
   }
 
-  if (alarm.name === 'live') {
+  if (alarm.name === 'minute') {
     liveListener(false)
   }
 })
