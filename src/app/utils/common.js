@@ -73,15 +73,17 @@ export const formatGames = (games) => {
  * @param {string} status
  */
 export const formatClock = (clock, status, totalPeriod) => {
-  if (status.includes('Halftime') || status.includes('Tipoff')) {
+  if (status.includes('Half')) {
+    return 'Halftime'
+  } else if (status.includes('Halftime') || status.includes('Tipoff')) {
     // game started, clock stopped
     return status
   } else if (status === 'PPD') {
     // PPD mean postponed
     return 'Postponed'
-  } else if (status.includes('Start') || status.includes('End')) {
+  } else if ((status.includes('Start') || status.includes('End')) && status.includes('of')) {
+    // Start/End of 1st Qtr/OT
     const statusArray = status.split(' ')
-    console.log(status);
     if (status.includes('Qtr')) {
       return statusArray[0] + ' of Q' + statusArray[2].charAt(0)
     } else if (status.includes('OT')) {
@@ -89,10 +91,10 @@ export const formatClock = (clock, status, totalPeriod) => {
     } else {
       return status; 
     }
-  } else if (status && status.includes('Qtr')) {
+  } else if (status && status.includes('Qtr') && status.includes('of')) {
     // game started being played over regular time
     return 'Q' + status.charAt(0) + ' ' + clock
-  } else if (status && status.includes('OT')) {
+  } else if (status && status.includes('OT') && status.includes('of')) {
     // game start being played over over time
     return 'OT' + status.charAt(0) + ' ' + clock
   } else if (status.includes('Final')) {
