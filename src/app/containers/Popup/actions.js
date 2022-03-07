@@ -42,12 +42,12 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 }
 
 const fetchRequest3 = async (dateStr) => {
-  const today = format(new Date(), DATE_FORMAT);
-  // only use cdn for today as it's the only endpoint 
+  const today = format(new Date(), DATE_FORMAT)
+  // only use cdn for today as it's the only endpoint
   if (today === dateStr) {
     try {
       const res = await fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
-      const { scoreboard: { games }} = await res.json()
+      const { scoreboard: { games } } = await res.json()
 
       return {
         isFallBack: 3,

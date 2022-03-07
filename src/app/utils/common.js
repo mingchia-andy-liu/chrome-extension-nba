@@ -73,7 +73,7 @@ export const formatGames = (games) => {
  * @param {string} status
  */
 export const formatClock = (clock, status, totalPeriod) => {
-  if (status.includes('Half')) {
+  if (status === 'Half') {
     return 'Halftime'
   } else if (status.includes('Halftime') || status.includes('Tipoff')) {
     // game started, clock stopped
@@ -89,7 +89,7 @@ export const formatClock = (clock, status, totalPeriod) => {
     } else if (status.includes('OT')) {
       return statusArray[0] + ' of OT' + statusArray[2].charAt(0)
     } else {
-      return status; 
+      return status
     }
   } else if (status && status.includes('Qtr') && status.includes('of')) {
     // game started being played over regular time

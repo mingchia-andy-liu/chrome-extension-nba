@@ -1,5 +1,5 @@
 import types from './types'
-import {sanitizeGames} from '../../utils/games'
+import { sanitizeGames } from '../../utils/games'
 
 const initState = {
   hasError: false,

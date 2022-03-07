@@ -100,16 +100,14 @@ const addQuarterNames = (linescores) =>
 export const convertDaily3 = (game) => {
   const {
     gameTimeUTC,
-    gameClock,
     gameStatus,
     gameStatusText,
     period,
     homeTeam: h,
     awayTeam: v,
-  } = game;
+  } = game
 
   const formatGameStatus = () => {
-    // special case for postponed games
     if (gameStatus === 1) {
       return format(
         utcToZonedTime(gameTimeUTC, getUserTimeZoneId()),
@@ -117,7 +115,11 @@ export const convertDaily3 = (game) => {
       )
     }
 
-    return gameStatusText;
+    if (gameStatusText === 'Half') {
+      return 'Halftime'
+    } 
+
+    return gameStatusText
   }
 
   const addQuarterNames = (linescores) =>

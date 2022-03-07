@@ -20,9 +20,9 @@ const onClickListener = (notifId) => {
   browser.notifications.clear(notifId)
   browser.tabs.create({ url: '/index.html#/boxscores/' + notifId })
 }
+const ding = new Audio('./assets/ding.wav')
 
 const fireFavTeamNotificationIfNeeded = (games) => {
-  console.log('fireFavTeamNotificationIfNeeded', games)
   browser.permissions.contains(
     {
       permissions: ['notifications'],
@@ -40,10 +40,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
         if (data && data.favTeam) {
           const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
           if (favTeamGame) {
-            console.log('fireFavTeamNotificationIfNeeded/favTeamGame', favTeamGame, isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC)));
             // check start time is somewhat close to the now() time.
             if (favTeamGame.startTimeUTC && isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))) {
-              console.log('creating notification')
               const options = {
                 type: 'basic',
                 title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
@@ -52,12 +50,10 @@ const fireFavTeamNotificationIfNeeded = (games) => {
               }
 
               browser.notifications.getAll((notifications) => {
-                console.log(notifications, notifications[favTeamGame.id])
                 // only fire if we have not send a notification
                 if (!notifications[favTeamGame.id]) {
                   browser.notifications.create(favTeamGame.id, options)
-                  const ding = new Audio('./assets/ding.wav');  
-                  ding.play();
+                  ding.play()
                 }
               })
             }
@@ -69,7 +65,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
 }
 
 /**
- * 
+ *
  * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
  */
 const liveListener = (initCheck) => {
@@ -78,9 +74,9 @@ const liveListener = (initCheck) => {
   const year = getLeagueYear(apiDate)
 
   // cdn
-  fetch(`https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json`)
+  fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
     .then(res => res.json())
-    .then(({ scoreboard: { games }}) => {
+    .then(({ scoreboard: { games } }) => {
       checkLiveGame(games, 3)
       if (!initCheck) {
         fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))

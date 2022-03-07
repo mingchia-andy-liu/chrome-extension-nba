@@ -7,7 +7,7 @@ import getApiDate from './getApiDate'
 
 /**
  * Target interface
- * @returns 
+ * @returns
  * export interface Game {
       broadcasters: Broadcaster[]
       home: Home
@@ -48,12 +48,12 @@ import getApiDate from './getApiDate'
 
 // for https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json
 /**
- *  
+ *
  * export interface Root {
       meta: Meta
       scoreboard: Scoreboard
     }
- * 
+ *
  * export interface Game {
       gameId: string
       gameCode: string
@@ -92,16 +92,16 @@ import getApiDate from './getApiDate'
       periodType: string
       score: number
     }
- * 
+ *
  */
 const sanitizeGameFallBack3 = (game) => ({
   // gives home, visitor
   ...convertDaily3(game),
   id: game.gameId,
-  date: game.gameEt, // v
-  time: game.gameEt, // v
+  date: game.gameEt,
+  time: game.gameEt,
   state: game.gameStatus,
-  arena: { // v
+  arena: {
     name: '',
     city: '',
   },
@@ -110,10 +110,10 @@ const sanitizeGameFallBack3 = (game) => ({
 
 // for http://data.nba.net/prod/v2/${dateStr}/scoreboard.json
 /**
- * 
- * @param {} game 
- * @returns 
- * 
+ *
+ * @param {} game
+ * @returns
+ *
  * export interface Game {
     seasonStageId:         number;
     seasonYear:            string;
@@ -164,9 +164,9 @@ const sanitizeGameFallBack2 = (game) => ({
 
 // https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/2019/scores/00_todays_scores.json
 /**
- * 
- * @param {*} game 
- * @returns 
+ *
+ * @param {*} game
+ * @returns
  * export interface G {
         gid:   string;
         gcode: string;
@@ -236,12 +236,12 @@ const sanitizeGame = (game) => ({
 
 /**
  * Migrated from preprocessData()
- * 
+ *
  * Mapping:
- *  
+ *
  *  0: `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
  *      broken
- * 
+ *
  *  1: `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
  *  2: `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
  */
