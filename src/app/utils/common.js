@@ -99,7 +99,11 @@ export const formatClock = (clock, status, totalPeriod) => {
     return 'OT' + status.charAt(0) + ' ' + clock
   } else if (status.includes('Final')) {
     if (+totalPeriod > 4) {
-      return `${status}/OT ${+totalPeriod - 4}`
+      if (status.includes('OT')) {
+        return `${status} ${+totalPeriod - 4}`
+      } else {
+        return `${status}/OT ${+totalPeriod - 4}`
+      }
     }
     return status
   } else if (+totalPeriod === 0) {
