@@ -111,6 +111,11 @@ if (typeof browser !== 'undefined') {
         browser.notifications.clear(id)
       }
     },
+    getAll: (cb) => {
+      if (browser.notifications && browser.notifications.getAll) {
+        return browser.notifications.getAll().then(cb)
+      }
+    },
     onClicked: {
       addListener: (fn) => {
         if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.addListener) {
@@ -230,6 +235,11 @@ if (typeof browser !== 'undefined') {
         chrome.notifications.clear(id)
       }
     },
+    getAll: (cb) => {
+      if (chrome.notifications && chrome.notifications.getAll) {
+        return chrome.notifications.getAll(cb)
+      }
+    },
     onClicked: {
       addListener: (fn) => {
         if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.addListener) {
@@ -259,6 +269,7 @@ if (typeof browser !== 'undefined') {
   browserNameSpace.notifications = {
     create: noop,
     clear: noop,
+    getAll: noop,
     onClicked: { addListener: noop, hasListener: noop }
   }
 }

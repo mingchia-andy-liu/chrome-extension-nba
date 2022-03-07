@@ -145,7 +145,7 @@ export const convertDaily3 = (game) => {
     },
     periodTime: {
       periodStatus: formatGameStatus(),
-      gameClock: gameClock,
+      gameClock: gameStatusText,
       gameStatus: `${gameStatus}`,
       periodValue: `${period}`,
     },

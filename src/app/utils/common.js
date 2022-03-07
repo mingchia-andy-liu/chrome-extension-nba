@@ -81,10 +81,13 @@ export const formatClock = (clock, status, totalPeriod) => {
     return 'Postponed'
   } else if (status.includes('Start') || status.includes('End')) {
     const statusArray = status.split(' ')
+    console.log(status);
     if (status.includes('Qtr')) {
       return statusArray[0] + ' of Q' + statusArray[2].charAt(0)
-    } else {
+    } else if (status.includes('OT')) {
       return statusArray[0] + ' of OT' + statusArray[2].charAt(0)
+    } else {
+      return status; 
     }
   } else if (status && status.includes('Qtr')) {
     // game started being played over regular time

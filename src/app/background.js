@@ -5,9 +5,9 @@ import isSameMinute from 'date-fns/isSameMinute'
 import setSeconds from 'date-fns/setSeconds'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate, { getLeagueYear } from './utils/getApiDate'
-import { nearestMinutes, nextNearestMinutes } from './utils/time'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
+import { getNickNamesByTriCode } from './utils/teams'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
@@ -39,18 +39,27 @@ const fireFavTeamNotificationIfNeeded = (games) => {
       browser.getItem(['favTeam'], (data) => {
         if (data && data.favTeam) {
           const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
-          console.log('fireFavTeamNotificationIfNeeded/favTeamGame', favTeamGame);
           if (favTeamGame) {
+            console.log('fireFavTeamNotificationIfNeeded/favTeamGame', favTeamGame, isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC)));
             // check start time is somewhat close to the now() time.
             if (favTeamGame.startTimeUTC && isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))) {
+              console.log('creating notification')
               const options = {
                 type: 'basic',
                 title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
-                message: 'You favorite team is about to play.',
+                message: `${getNickNamesByTriCode(data.favTeam)} is about to play.`,
                 iconUrl: 'assets/png/icon-2-color-512.png',
               }
 
-              browser.notifications.create(favTeamGame.id, options)
+              browser.notifications.getAll((notifications) => {
+                console.log(notifications, notifications[favTeamGame.id])
+                // only fire if we have not send a notification
+                if (!notifications[favTeamGame.id]) {
+                  browser.notifications.create(favTeamGame.id, options)
+                  const ding = new Audio('./assets/ding.wav');  
+                  ding.play();
+                }
+              })
             }
           }
         }
@@ -58,7 +67,6 @@ const fireFavTeamNotificationIfNeeded = (games) => {
     }
   )
 }
-
 
 /**
  * 
@@ -105,7 +113,7 @@ const liveListener = (initCheck) => {
 }
 
 // immediately search for live game
-liveListener(true)
+liveListener(false)
 
 browser.alarms.onAlarm.addListener((alarm) => {
   console.log('alarm', new Date())
