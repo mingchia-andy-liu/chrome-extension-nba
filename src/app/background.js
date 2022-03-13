@@ -31,6 +31,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
       if (!hasNotificationPermission) {
         return
       }
+      const apiDate = getApiDate()
+      const dateStr = format(apiDate, DATE_FORMAT)
       const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
       if (!hasListener) {
         browser.notifications.onClicked.addListener(onClickListener)
@@ -52,7 +54,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
               browser.notifications.getAll((notifications) => {
                 // only fire if we have not send a notification
                 if (!notifications[favTeamGame.id]) {
-                  browser.notifications.create(favTeamGame.id, options)
+                  const id = `${favTeamGame.id}?date=${dateStr}`
+                  browser.notifications.create(id, options)
                   ding.play()
                 }
               })
