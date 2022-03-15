@@ -50,9 +50,16 @@ const fetchRequest3 = async (dateStr) => {
     if (gameDate.replaceAll('-', '') !== dateStr) {
       throw Error("wrong date use other endpoints");
     }
+
+    const res2 = await fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`);
+    const { games: games2 } = await res2.json();
+
     return {
       isFallBack: 3,
-      games,
+      games: games.map(g => ({
+        ...g,
+        watch: (games2.find(g2 => g2.gameId === g.gameId) || {}).watch
+      }))
     }
   } catch (error) {
     return fetchRequest2(dateStr)
