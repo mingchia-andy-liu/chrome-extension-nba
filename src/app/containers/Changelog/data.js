@@ -4,8 +4,8 @@ module.exports = [
     updates: [
       'Add beta notification options',
       'Update live alarm checker',
-      'Fix duplicate request', 
-      'Fix potential duplicate key in boxscores', 
+      'Fix duplicate request',
+      'Fix potential duplicate key in boxscores',
     ],
   },
   {
