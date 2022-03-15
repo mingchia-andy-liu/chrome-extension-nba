@@ -11,7 +11,6 @@ import { getNickNamesByTriCode } from './utils/teams'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
-  // when: nextNearestMinutes(30, new Date()).valueOf(),
   when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
   periodInMinutes: 1,
 })
@@ -56,7 +55,9 @@ const fireFavTeamNotificationIfNeeded = (games) => {
                 if (!notifications[favTeamGame.id]) {
                   const id = `${favTeamGame.id}?date=${dateStr}`
                   browser.notifications.create(id, options)
-                  ding.play()
+                  if (browser.isChrome) {
+                    ding.play();
+                  }
                 }
               })
             }
@@ -115,7 +116,7 @@ const liveListener = (initCheck) => {
 liveListener(false)
 
 browser.alarms.onAlarm.addListener((alarm) => {
-  console.log('alarm', new Date())
+  // console.log('alarm', new Date())
   // when the chrome is reopened, alarms get ran even though the time has passed
   if (differenceInSeconds(alarm.scheduledTime, Date.now()) < -10) {
     return

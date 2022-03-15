@@ -93,6 +93,46 @@ const renderTeams = (favTeam, updateTeam) => {
     </React.Fragment>
   )
 }
+const ding = new Audio('./assets/ding.wav')
+const renderNotification = (permissionEnum, request, remove) => {
+  /* only show the notification once it's loaded */
+  if (permissionEnum === -1) {
+    return null;
+  }
+
+  const button = (permissionEnum === 1
+    ? <NotificationWrapper>
+      <label>(BETA) notification permission: </label>
+      <button onClick={remove}>Remove permission</button>
+    </NotificationWrapper>
+    : <NotificationWrapper>
+      <NotificationParagraph>(BETA) You can get notified when your favorite team starts a game!</NotificationParagraph>
+      <label>(BETA) notification permission: </label>
+      <button onClick={request}>Grant Permission</button>
+    </NotificationWrapper>
+  )
+
+  const exampleButton = permissionEnum === 1
+    ? <button onClick={() => {
+      browser.notifications.create({
+        type: 'basic',
+        title: `Suns vs Heat`,
+        message: `Suns is about to play.`,
+        iconUrl: 'assets/png/icon-2-color-512.png',
+      })
+      if (browser.isChrome) {
+        ding.play();
+      }
+    }}>Send an example</button>
+    : null;
+
+  return (
+    <NotificationWrapper>
+      {button}
+      {exampleButton}      
+    </NotificationWrapper>
+  )
+}
 
 const Options = () => {
   // to enable, add "optional_permissions": [ "notifications" ], to manifest
@@ -140,18 +180,7 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {/* only show the notification once it's loaded */}
-        {notificationPermissionEnum != -1 && 
-          (notificationPermissionEnum === 1
-            ? <NotificationWrapper>
-              <button onClick={removeNotification}>Remove permission</button>
-            </NotificationWrapper>
-            : <NotificationWrapper>
-              <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
-              <button onClick={requestNotification}>Grant Permission</button>
-            </NotificationWrapper>
-          )
-        }
+        {renderNotification(notificationPermissionEnum, requestNotification, removeNotification)}
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />

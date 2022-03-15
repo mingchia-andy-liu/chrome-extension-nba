@@ -3,6 +3,7 @@ const browserNameSpace = {}
 
 if (typeof browser !== 'undefined') {
   // Firefox
+  browserNameSpace.isFirefox = true;
   browserNameSpace.runtime = {
     connect: () => {
       browser.runtime.connect()
@@ -131,6 +132,7 @@ if (typeof browser !== 'undefined') {
   }
 } else if (typeof chrome !== 'undefined' && chrome.runtime !== undefined) {
   // Chrome
+  browserNameSpace.isChrome = true;
   browserNameSpace.runtime = {
     connect: () => {
       chrome.runtime.connect()
@@ -254,6 +256,8 @@ if (typeof browser !== 'undefined') {
     },
   }
 } else {
+  browserNameSpace.isFirefox = false;
+  browserNameSpace.isChrome = false;
   browserNameSpace.alarms = {
     create: noop,
     onAlarm: { addListener: noop },
