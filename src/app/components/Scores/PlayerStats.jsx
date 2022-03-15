@@ -114,7 +114,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
 
   return (
     <RowWrapper
-      key={name}
+      key={name + i}
       style={{
         backgroundColor: doubles
           ? rowBGColor(doubles, isDark)

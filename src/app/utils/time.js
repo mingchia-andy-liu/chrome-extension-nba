@@ -5,11 +5,11 @@ import getMinutes from 'date-fns/getMinutes'
 /**
  * Returns the cloestest interval minute date
  * @param {number} interval
- * @param {moment obj} momentDate
+ * @param {Date} date
  */
-export const nearestMinutes = (interval, momentDate) => {
-  const roundedMinutes = Math.round(momentDate.minute() / interval) * interval
-  return momentDate.clone().minute(roundedMinutes).second(0)
+export const nearestMinutes = (interval, date) => {
+  const roundedMinutes = Math.round(getMinutes(date) / interval) * interval
+  return setSeconds(setMinutes(date, roundedMinutes), 0)
 }
 
 /**

@@ -10,7 +10,7 @@ import {
   DarkModeCheckbox,
 } from '../../components/Checkbox'
 import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
-// import browser from '../../utils/browser'
+import browser from '../../utils/browser'
 
 import { teams } from '../../utils/teams'
 
@@ -38,14 +38,14 @@ const ButtonsWrapper = styled.div`
   }
 `
 
-// const NotificationWrapper = styled.div`
-//     padding: 5px 0;
-// `
+const NotificationWrapper = styled.div`
+    padding: 5px 0;
+`
 
-// const NotificationParagraph = styled.p`
-//     padding: 5px 0;
-//     margin: 0;
-// `
+const NotificationParagraph = styled.p`
+    padding: 5px 0;
+    margin: 0;
+`
 
 const renderHeader = () => {
   return (
@@ -93,48 +93,84 @@ const renderTeams = (favTeam, updateTeam) => {
     </React.Fragment>
   )
 }
+const ding = new Audio('./assets/ding.wav')
+const renderNotification = (permissionEnum, request, remove) => {
+  /* only show the notification once it's loaded */
+  if (permissionEnum === -1) {
+    return null;
+  }
+
+  const button = (permissionEnum === 1
+    ? <NotificationWrapper>
+      <label>(BETA) notification permission: </label>
+      <button onClick={remove}>Remove permission</button>
+    </NotificationWrapper>
+    : <NotificationWrapper>
+      <NotificationParagraph>(BETA) You can get notified when your favorite team starts a game!</NotificationParagraph>
+      <label>(BETA) notification permission: </label>
+      <button onClick={request}>Grant Permission</button>
+    </NotificationWrapper>
+  )
+
+  const exampleButton = permissionEnum === 1
+    ? <button onClick={() => {
+      browser.notifications.create({
+        type: 'basic',
+        title: `Suns vs Heat`,
+        message: `Suns is about to play.`,
+        iconUrl: 'assets/png/icon-2-color-512.png',
+      })
+      if (browser.isChrome) {
+        ding.play();
+      }
+    }}>Send an example</button>
+    : null;
+
+  return (
+    <NotificationWrapper>
+      {button}
+      {exampleButton}      
+    </NotificationWrapper>
+  )
+}
 
 const Options = () => {
   // to enable, add "optional_permissions": [ "notifications" ], to manifest
-  // const [hasNotificationPermission, togglePermission] = React.useState(false)
+  // -1: loading, 0: no permission, 1: has permission
+  const [notificationPermissionEnum, togglePermission] = React.useState(-1)
   React.useEffect(() => {
     document.title = 'Box Scores | Options'
-    // browser.permissions.contains(
-    //   {
-    //     permissions: ['notifications'],
-    //   },
-    //   (hasNotificationPermission) => {
-    //     console.log('has', hasNotificationPermission)
-    //     togglePermission(hasNotificationPermission)
-    //   }
-    // )
+    browser.permissions.contains(
+      {
+        permissions: ['notifications'],
+      },
+      (hasNotificationPermission) => {
+        togglePermission(hasNotificationPermission ? 1 : 0)
+      }
+    )
   }, [])
 
-  // const requestNotification = React.useCallback(() => {
-  //   console.log('requesting')
-  //   browser.permissions.request(
-  //     {
-  //       permissions: ['notifications'],
-  //     },
-  //     (granted) => {
-  //       console.log('graned', granted)
-  //       togglePermission(granted)
-  //     }
-  //   )
-  // }, [])
+  const requestNotification = React.useCallback(() => {
+    browser.permissions.request(
+      {
+        permissions: ['notifications'],
+      },
+      (granted) => {
+        togglePermission(1)
+      }
+    )
+  }, [])
 
-  // const removeNotification = React.useCallback(() => {
-  //   console.log('removing')
-  //   browser.permissions.remove(
-  //     {
-  //       permissions: ['notifications'],
-  //     },
-  //     (removed) => {
-  //       console.log('removed', removed)
-  //       togglePermission(!removed)
-  //     }
-  //   )
-  // }, [])
+  const removeNotification = React.useCallback(() => {
+    browser.permissions.remove(
+      {
+        permissions: ['notifications'],
+      },
+      (removed) => {
+        togglePermission(removed ? 0 : 1);
+      }
+    )
+  }, [])
 
   const renderContent = React.useCallback((sidebarContext) => {
     const { team } = sidebarContext.state
@@ -144,15 +180,7 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {/* {hasNotificationPermission
-          ? <NotificationWrapper>
-            <button onClick={removeNotification}>Remove permission</button>
-          </NotificationWrapper>
-          : <NotificationWrapper>
-            <NotificationParagraph>You can get notified when your favorite starts a game!</NotificationParagraph>
-            <button onClick={requestNotification}>Grant Permission</button>
-          </NotificationWrapper>
-        } */}
+        {renderNotification(notificationPermissionEnum, requestNotification, removeNotification)}
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />

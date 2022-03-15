@@ -89,6 +89,86 @@ const getLinescores = (stats, p) => {
     }))
 }
 
+const addQuarterNames = (linescores) =>
+  linescores.map((ls, i) => ({
+    period_name: QUARTER_NAMES[i],
+    period_value: i.toString(),
+    score: ls.score,
+  }))
+
+const getBroadcasters = (national, vTeam, hTeam) => {
+  return [
+    ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),
+    ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
+    ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
+  ]
+}
+
+
+// for cdn
+export const convertDaily3 = (game) => {
+  const {
+    gameTimeUTC,
+    gameStatus,
+    gameStatusText,
+    period,
+    homeTeam: h,
+    awayTeam: v,
+    // from 2
+    watch: {
+      broadcast: {
+        broadcasters: { national, vTeam, hTeam },
+      },
+    },
+  } = game
+
+  const formatGameStatus = () => {
+    if (gameStatus === 1) {
+      return format(
+        utcToZonedTime(gameTimeUTC, getUserTimeZoneId()),
+        'hh:mm a'
+      )
+    }
+
+    if (gameStatusText === 'Half') {
+      return 'Halftime'
+    } 
+
+    return gameStatusText
+  }
+
+  const addQuarterNames = (linescores) =>
+    linescores.map((ls, i) => ({
+      period_name: QUARTER_NAMES[i],
+      period_value: i.toString(),
+      score: ls.score,
+    }))
+
+  return {
+    broadcasters: getBroadcasters(national, vTeam, hTeam),
+    home: {
+      abbreviation: h.teamTricode,
+      city: h.teamCity,
+      linescores: { period: addQuarterNames(h.periods) },
+      nickname: getNickNamesByTriCode(h.teamTricode),
+      score: `${h.score}`,
+    },
+    visitor: {
+      abbreviation: v.teamTricode,
+      city: v.teamCity,
+      linescores: { period: addQuarterNames(v.periods) },
+      nickname: getNickNamesByTriCode(v.teamTricode),
+      score: `${v.score}`,
+    },
+    periodTime: {
+      periodStatus: formatGameStatus(),
+      gameClock: gameStatusText,
+      gameStatus: `${gameStatus}`,
+      periodValue: `${period}`,
+    },
+  }
+}
+
 // this is for http://data.nba.net/prod/v2/dateStr/scoreboard.json endpoint
 export const convertDaily2 = (game) => {
   const {
@@ -109,14 +189,6 @@ export const convertDaily2 = (game) => {
     nugget,
   } = game
 
-  const addQuarterNames = (linescores) =>
-    linescores.map((ls, i) => ({
-      period_name: QUARTER_NAMES[i],
-      period_value: i.toString(),
-      score: ls.score,
-    }))
-
-  // there is no field for game status
   const formatGameStatus = () => {
     // special case for postponed games
     if (
@@ -155,14 +227,6 @@ export const convertDaily2 = (game) => {
     }
   }
 
-  const getBroadcasters = () => {
-    return [
-      ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),
-      ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
-      ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
-    ]
-  }
-
   const getPlayoffs = () => {
     if (playoffs == null || playoffs.hTeam == null || playoffs.vTeam == null) {
       return undefined
@@ -175,7 +239,7 @@ export const convertDaily2 = (game) => {
   }
 
   return {
-    broadcasters: getBroadcasters(),
+    broadcasters: getBroadcasters(national, vTeam, hTeam),
     home: {
       abbreviation: h.triCode,
       city: '',

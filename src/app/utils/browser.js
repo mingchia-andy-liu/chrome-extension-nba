@@ -3,6 +3,7 @@ const browserNameSpace = {}
 
 if (typeof browser !== 'undefined') {
   // Firefox
+  browserNameSpace.isFirefox = true;
   browserNameSpace.runtime = {
     connect: () => {
       browser.runtime.connect()
@@ -101,14 +102,37 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.notifications = {
-    create: (options) => {
+    create: (id, options) => {
       if (browser.notifications && browser.notifications.create) {
-        browser.notifications.create(options)
+        browser.notifications.create(id, options)
+      }
+    },
+    clear: (id) => {
+      if (browser.notifications && browser.notifications.clear) {
+        browser.notifications.clear(id)
+      }
+    },
+    getAll: (cb) => {
+      if (browser.notifications && browser.notifications.getAll) {
+        return browser.notifications.getAll().then(cb)
+      }
+    },
+    onClicked: {
+      addListener: (fn) => {
+        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.addListener) {
+          browser.notifications.onClicked.addListener(fn)
+        }
+      },
+      hasListener: (fn) => {
+        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.hasListener) {
+          return browser.notifications.onClicked.hasListener(fn)
+        }
       }
     },
   }
 } else if (typeof chrome !== 'undefined' && chrome.runtime !== undefined) {
   // Chrome
+  browserNameSpace.isChrome = true;
   browserNameSpace.runtime = {
     connect: () => {
       chrome.runtime.connect()
@@ -203,13 +227,37 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.notifications = {
-    create: (options) => {
+    create: (id, options) => {
       if (chrome.notifications && chrome.notifications.create) {
-        chrome.notifications.create(options)
+        chrome.notifications.create(id, options)
+      }
+    },
+    clear: (id) => {
+      if (chrome.notifications && chrome.notifications.clear) {
+        chrome.notifications.clear(id)
+      }
+    },
+    getAll: (cb) => {
+      if (chrome.notifications && chrome.notifications.getAll) {
+        return chrome.notifications.getAll(cb)
+      }
+    },
+    onClicked: {
+      addListener: (fn) => {
+        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.addListener) {
+          chrome.notifications.onClicked.addListener(fn)
+        }
+      },
+      hasListener: (fn) => {
+        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.hasListener) {
+          return chrome.notifications.onClicked.hasListener(fn)
+        }
       }
     },
   }
 } else {
+  browserNameSpace.isFirefox = false;
+  browserNameSpace.isChrome = false;
   browserNameSpace.alarms = {
     create: noop,
     onAlarm: { addListener: noop },
@@ -222,6 +270,12 @@ if (typeof browser !== 'undefined') {
   browserNameSpace.setBadgeText = noop
   browserNameSpace.setItem = noop
   browserNameSpace.tabs = { getCurrent: noop }
+  browserNameSpace.notifications = {
+    create: noop,
+    clear: noop,
+    getAll: noop,
+    onClicked: { addListener: noop, hasListener: noop }
+  }
 }
 
 export const checkLiveGame = (games, isFallBack = 0) => {
@@ -230,6 +284,8 @@ export const checkLiveGame = (games, isFallBack = 0) => {
     hasLiveGame = games.find((game) => game.st === 2)
   } else if (isFallBack === 2) {
     hasLiveGame = games.find((game) => game.statusNum === 2)
+  } else if (isFallBack === 3) {
+    hasLiveGame = games.find((game) => game.gameStatus === 2)
   } else {
     hasLiveGame = games.find(
       (game) => game && game.period_time && game.period_time.game_status === '2'
