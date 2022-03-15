@@ -99,7 +99,8 @@ const liveListener = (initCheck) => {
       }
     })
     // data
-    .catch(() => {
+    .catch((e) => {
+      console.log(e);
       return (
         fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
           .then((res) => res.json())

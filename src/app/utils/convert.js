@@ -96,12 +96,21 @@ const addQuarterNames = (linescores) =>
     score: ls.score,
   }))
 
-const getBroadcasters = (national, vTeam, hTeam) => {
-  return [
-    ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),
-    ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
-    ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
-  ]
+const getBroadcasters = (watch) => {
+  try {
+    const {
+      broadcast: {
+        broadcasters: { national, vTeam, hTeam },
+      },
+    } = watch 
+    return [
+      ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),
+      ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
+      ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
+    ]
+  } catch (e) {
+    return [];
+  }
 }
 
 // for cdn
@@ -114,11 +123,7 @@ export const convertDaily3 = (game) => {
     homeTeam: h,
     awayTeam: v,
     // from 2
-    watch: {
-      broadcast: {
-        broadcasters: { national, vTeam, hTeam },
-      },
-    },
+    watch,
   } = game
 
   const formatGameStatus = () => {
@@ -141,7 +146,7 @@ export const convertDaily3 = (game) => {
     }))
 
   return {
-    broadcasters: getBroadcasters(national, vTeam, hTeam),
+    broadcasters: getBroadcasters(watch),
     home: {
       abbreviation: h.teamTricode,
       city: h.teamCity,
@@ -176,11 +181,7 @@ export const convertDaily2 = (game) => {
     hTeam: h,
     vTeam: v,
     period: { current: p, isHalftime, isEndOfPeriod },
-    watch: {
-      broadcast: {
-        broadcasters: { national, vTeam, hTeam },
-      },
-    },
+    watch,
     playoffs,
     nugget,
   } = game
@@ -235,7 +236,7 @@ export const convertDaily2 = (game) => {
   }
 
   return {
-    broadcasters: getBroadcasters(national, vTeam, hTeam),
+    broadcasters: getBroadcasters(watch),
     home: {
       abbreviation: h.triCode,
       city: '',
