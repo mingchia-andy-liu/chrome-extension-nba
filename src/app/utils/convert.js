@@ -104,7 +104,6 @@ const getBroadcasters = (national, vTeam, hTeam) => {
   ]
 }
 
-
 // for cdn
 export const convertDaily3 = (game) => {
   const {
@@ -124,15 +123,12 @@ export const convertDaily3 = (game) => {
 
   const formatGameStatus = () => {
     if (gameStatus === 1) {
-      return format(
-        utcToZonedTime(gameTimeUTC, getUserTimeZoneId()),
-        'hh:mm a'
-      )
+      return format(utcToZonedTime(gameTimeUTC, getUserTimeZoneId()), 'hh:mm a')
     }
 
     if (gameStatusText === 'Half') {
       return 'Halftime'
-    } 
+    }
 
     return gameStatusText
   }
@@ -276,9 +272,9 @@ export const convertDaily = (game) => {
       periodStatus:
         st == 1 && isStatusValidDate
           ? format(
-            utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
-            'hh:mm a'
-          )
+              utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
+              'hh:mm a'
+            )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

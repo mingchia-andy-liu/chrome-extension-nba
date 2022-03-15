@@ -18,14 +18,14 @@ const normalizer = (serie) => ({
     teamId: serie.highSeedId,
     seedNum: serie.highSeedRank,
     wins: serie.highSeedSeriesWins,
-    isSeriesWinner: serie.highSeedSeriesWins === 4
+    isSeriesWinner: serie.highSeedSeriesWins === 4,
   },
   bottomRow: {
     teamId: serie.lowSeedId,
     seedNum: serie.lowSeedRank,
     wins: serie.lowSeedSeriesWins,
-    isSeriesWinner: serie.lowSeedSeriesWins === 4
-  }
+    isSeriesWinner: serie.lowSeedSeriesWins === 4,
+  },
 })
 
 export default (state = initState, action) => {

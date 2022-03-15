@@ -1,5 +1,7 @@
 export const westSelector = (series) => {
-  const west = series.filter((serie) => serie.confName?.toLowerCase() === 'west')
+  const west = series.filter(
+    (serie) => serie.confName?.toLowerCase() === 'west'
+  )
   const first = west.filter((serie) => serie.roundNum == '1')
   const second = west.filter((serie) => serie.roundNum == '2')
   const final = west.filter((serie) => serie.roundNum == '3')
@@ -11,7 +13,9 @@ export const westSelector = (series) => {
 }
 
 export const eastSelector = (series) => {
-  const east = series.filter((serie) => serie.confName?.toLowerCase() === 'east')
+  const east = series.filter(
+    (serie) => serie.confName?.toLowerCase() === 'east'
+  )
   const first = east.filter((serie) => serie.roundNum == '1')
   const second = east.filter((serie) => serie.roundNum == '2')
   const final = east.filter((serie) => serie.roundNum == '3')

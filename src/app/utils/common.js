@@ -81,7 +81,10 @@ export const formatClock = (clock, status, totalPeriod) => {
   } else if (status === 'PPD') {
     // PPD mean postponed
     return 'Postponed'
-  } else if ((status.includes('Start') || status.includes('End')) && status.includes('of')) {
+  } else if (
+    (status.includes('Start') || status.includes('End')) &&
+    status.includes('of')
+  ) {
     // Start/End of 1st Qtr/OT
     const statusArray = status.split(' ')
     if (status.includes('Qtr')) {

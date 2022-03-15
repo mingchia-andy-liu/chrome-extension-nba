@@ -1,15 +1,15 @@
 module.exports = [
   {
     version: '1.4.17 Updates: (2021-12-23)',
-    updates: ['Update packages', 'Update max date']
+    updates: ['Update packages', 'Update max date'],
   },
   {
     version: '1.4.16 Updates: (2021-05-23)',
-    updates: ['Playoff update', 'Package maintenance']
+    updates: ['Playoff update', 'Package maintenance'],
   },
   {
     version: '1.4.15 Updates: (2021-01-17)',
-    updates: ['Add postponed status']
+    updates: ['Add postponed status'],
   },
   {
     version: '1.4.13/14 Updates: (2020-12-29)',

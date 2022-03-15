@@ -7,14 +7,16 @@ export const fetchPlayoff2 = async (dispatch) => {
     const res = await fetch(
       'https://stats.nba.com/stats/playoffbracket?LeagueID=00&SeasonYear=2020&State=2'
     )
-    const { bracket: { playoffBracketSeries } } = await res.json()
+    const {
+      bracket: { playoffBracketSeries },
+    } = await res.json()
 
     dispatch({
       type: types.REQUEST_SUCCESS,
       payload: {
         version: 1,
         series: playoffBracketSeries || [],
-      }
+      },
     })
   } catch (error) {
     dispatch({ type: types.REQUEST_ERROR })

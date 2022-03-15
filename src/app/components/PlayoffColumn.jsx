@@ -90,7 +90,7 @@ const roundIndices = {
     5: 1,
     6: 2,
     7: 3,
-    8: 0
+    8: 0,
   },
   2: {
     1: 0,
@@ -121,7 +121,7 @@ const roundIndices = {
     6: 0,
     7: 0,
     8: 0,
-  }
+  },
 }
 
 const PlayoffColumn = ({ title, series }) => {

@@ -3,7 +3,7 @@ const browserNameSpace = {}
 
 if (typeof browser !== 'undefined') {
   // Firefox
-  browserNameSpace.isFirefox = true;
+  browserNameSpace.isFirefox = true
   browserNameSpace.runtime = {
     connect: () => {
       browser.runtime.connect()
@@ -119,20 +119,28 @@ if (typeof browser !== 'undefined') {
     },
     onClicked: {
       addListener: (fn) => {
-        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.addListener) {
+        if (
+          browser.notifications &&
+          browser.notifications.onClicked &&
+          browser.notifications.onClicked.addListener
+        ) {
           browser.notifications.onClicked.addListener(fn)
         }
       },
       hasListener: (fn) => {
-        if (browser.notifications && browser.notifications.onClicked && browser.notifications.onClicked.hasListener) {
+        if (
+          browser.notifications &&
+          browser.notifications.onClicked &&
+          browser.notifications.onClicked.hasListener
+        ) {
           return browser.notifications.onClicked.hasListener(fn)
         }
-      }
+      },
     },
   }
 } else if (typeof chrome !== 'undefined' && chrome.runtime !== undefined) {
   // Chrome
-  browserNameSpace.isChrome = true;
+  browserNameSpace.isChrome = true
   browserNameSpace.runtime = {
     connect: () => {
       chrome.runtime.connect()
@@ -244,20 +252,28 @@ if (typeof browser !== 'undefined') {
     },
     onClicked: {
       addListener: (fn) => {
-        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.addListener) {
+        if (
+          chrome.notifications &&
+          chrome.notifications.onClicked &&
+          chrome.notifications.onClicked.addListener
+        ) {
           chrome.notifications.onClicked.addListener(fn)
         }
       },
       hasListener: (fn) => {
-        if (chrome.notifications && chrome.notifications.onClicked && chrome.notifications.onClicked.hasListener) {
+        if (
+          chrome.notifications &&
+          chrome.notifications.onClicked &&
+          chrome.notifications.onClicked.hasListener
+        ) {
           return chrome.notifications.onClicked.hasListener(fn)
         }
-      }
+      },
     },
   }
 } else {
-  browserNameSpace.isFirefox = false;
-  browserNameSpace.isChrome = false;
+  browserNameSpace.isFirefox = false
+  browserNameSpace.isChrome = false
   browserNameSpace.alarms = {
     create: noop,
     onAlarm: { addListener: noop },
@@ -274,7 +290,7 @@ if (typeof browser !== 'undefined') {
     create: noop,
     clear: noop,
     getAll: noop,
-    onClicked: { addListener: noop, hasListener: noop }
+    onClicked: { addListener: noop, hasListener: noop },
   }
 }
 

@@ -44,22 +44,28 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 const fetchRequest3 = async (dateStr) => {
   // only use cdn for apiDate as it's the only endpoint
   try {
-    const res = await fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
-    const { scoreboard: { games, gameDate } } = await res.json()
+    const res = await fetch(
+      'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+    )
+    const {
+      scoreboard: { games, gameDate },
+    } = await res.json()
 
     if (gameDate.replaceAll('-', '') !== dateStr) {
-      throw Error("wrong date use other endpoints");
+      throw Error('wrong date use other endpoints')
     }
 
-    const res2 = await fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`);
-    const { games: games2 } = await res2.json();
+    const res2 = await fetch(
+      `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
+    )
+    const { games: games2 } = await res2.json()
 
     return {
       isFallBack: 3,
-      games: games.map(g => ({
+      games: games.map((g) => ({
         ...g,
-        watch: (games2.find(g2 => g2.gameId === g.gameId) || {}).watch
-      }))
+        watch: (games2.find((g2) => g2.gameId === g.gameId) || {}).watch,
+      })),
     }
   } catch (error) {
     return fetchRequest2(dateStr)
@@ -121,33 +127,30 @@ const fetchRequest = async (dateStr) => {
   return fetchRequest3(dateStr)
 }
 
-export const fetchGamesIfNeeded = (
-  dateStr,
-  callback,
-  forceUpdate = false,
-  isBackground = null
-) => async (dispatch, getState) => {
-  const {
-    live: { games, lastUpdate },
-    date: { date },
-  } = getState()
-  const oldDateStr = format(date, DATE_FORMAT)
-  const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+export const fetchGamesIfNeeded =
+  (dateStr, callback, forceUpdate = false, isBackground = null) =>
+  async (dispatch, getState) => {
+    const {
+      live: { games, lastUpdate },
+      date: { date },
+    } = getState()
+    const oldDateStr = format(date, DATE_FORMAT)
+    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
 
-  // if it's different day, or force update, fetch new
-  if (oldDateStr === dateStr && !forceUpdate) {
-    const hasPendingOrLiveGame = games.find(
-      (game) => game.periodTime && game.periodTime.gameStatus !== '3'
-    )
+    // if it's different day, or force update, fetch new
+    if (oldDateStr === dateStr && !forceUpdate) {
+      const hasPendingOrLiveGame = games.find(
+        (game) => game.periodTime && game.periodTime.gameStatus !== '3'
+      )
 
-    if (!hasPendingOrLiveGame || updateDiff < 55) {
-      return
+      if (!hasPendingOrLiveGame || updateDiff < 55) {
+        return
+      }
     }
-  }
 
-  isBackground = isBackground === false ? false : oldDateStr === dateStr
-  return await fetchGames(dispatch, dateStr, callback, isBackground)
-}
+    isBackground = isBackground === false ? false : oldDateStr === dateStr
+    return await fetchGames(dispatch, dateStr, callback, isBackground)
+  }
 
 // ------ highlights -------
 

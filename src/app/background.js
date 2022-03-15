@@ -32,21 +32,31 @@ const fireFavTeamNotificationIfNeeded = (games) => {
       }
       const apiDate = getApiDate()
       const dateStr = format(apiDate, DATE_FORMAT)
-      const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
+      const hasListener =
+        browser.notifications.onClicked.hasListener(onClickListener)
       if (!hasListener) {
         browser.notifications.onClicked.addListener(onClickListener)
       }
 
       browser.getItem(['favTeam'], (data) => {
         if (data && data.favTeam) {
-          const favTeamGame = games.find(({ home, visitor }) => home.abbreviation === data.favTeam || visitor.abbreviation === data.favTeam)
+          const favTeamGame = games.find(
+            ({ home, visitor }) =>
+              home.abbreviation === data.favTeam ||
+              visitor.abbreviation === data.favTeam
+          )
           if (favTeamGame) {
             // check start time is somewhat close to the now() time.
-            if (favTeamGame.startTimeUTC && isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))) {
+            if (
+              favTeamGame.startTimeUTC &&
+              isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))
+            ) {
               const options = {
                 type: 'basic',
                 title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
-                message: `${getNickNamesByTriCode(data.favTeam)} is about to play.`,
+                message: `${getNickNamesByTriCode(
+                  data.favTeam
+                )} is about to play.`,
                 iconUrl: 'assets/png/icon-2-color-512.png',
               }
 
@@ -56,7 +66,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
                   const id = `${favTeamGame.id}?date=${dateStr}`
                   browser.notifications.create(id, options)
                   if (browser.isChrome) {
-                    ding.play();
+                    ding.play()
                   }
                 }
               })
@@ -78,8 +88,10 @@ const liveListener = (initCheck) => {
   const year = getLeagueYear(apiDate)
 
   // cdn
-  fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
-    .then(res => res.json())
+  fetch(
+    'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+  )
+    .then((res) => res.json())
     .then(({ scoreboard: { games } }) => {
       checkLiveGame(games, 3)
       if (!initCheck) {
@@ -88,23 +100,27 @@ const liveListener = (initCheck) => {
     })
     // data
     .catch(() => {
-      return fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-        .then((res) => res.json())
-        .then(({ games }) => {
-          checkLiveGame(games, 2)
-          if (!initCheck) {
-            fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
-          }
-        })
-        // old
-        .catch(() => {
-          return fetch(`https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`)
-            .then((res) => res.json())
-            .then(({ gs: { g } }) => {
-              checkLiveGame(g, 1)
-              // can't check with this endpoints because it does not have start time.
-            })
-        })
+      return (
+        fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
+          .then((res) => res.json())
+          .then(({ games }) => {
+            checkLiveGame(games, 2)
+            if (!initCheck) {
+              fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
+            }
+          })
+          // old
+          .catch(() => {
+            return fetch(
+              `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
+            )
+              .then((res) => res.json())
+              .then(({ gs: { g } }) => {
+                checkLiveGame(g, 1)
+                // can't check with this endpoints because it does not have start time.
+              })
+          })
+      )
     })
     // final catch
     .catch((error) => {

@@ -43,7 +43,7 @@ const PopUp = ({
     const dateStr = format(date, DATE_FORMAT)
     fetchGamesIfNeeded(dateStr, null, true).then(fetchGameHighlightIfNeeded)
     document.title = 'Box Scores | Popup'
-    prevDateRef.current = date;
+    prevDateRef.current = date
   }, [])
 
   // this is used to trace the toggle for different "selected" dates.

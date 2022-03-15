@@ -98,62 +98,60 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
   }
 }
 
-export const fetchLiveGameBoxIfNeeded = (
-  dateStr,
-  gid,
-  isBackground = null
-) => async (dispatch, getState) => {
-  if (gid == null || gid === '') {
-    return
-  }
-
-  const apiDate = getAPIDate()
-  // if the date is in the future, then exit early
-  if (isAfter(parse(dateStr, DATE_FORMAT, new Date()), apiDate)) {
-    return
-  }
-
-  const {
-    live: { isLoading: isLiveLoading },
-  } = getState()
-
-  // if live is loading, wait to see if game exists
-  if (isLiveLoading) {
-    await waitUntilFinish(() => {
-      return getState().live.isLoading
-    }, false)
-  }
-
-  const {
-    bs: { bsData, gid: oldGid },
-    date: { date },
-    live: { lastUpdate, games: liveGames },
-  } = getState()
-
-  const selectedGame = liveGames.find((game) => game.id === gid)
-  if (!selectedGame) {
-    dispatch(push('/boxscores'))
-    return
-  }
-
-  const oldDateStr = format(date, DATE_FORMAT)
-  const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
-
-  // if it's different day and different id, fetch new
-  if (oldDateStr === dateStr && oldGid === gid) {
-    // if it's same game but the game is finished, use old
-    // if it's less than 60 seconds from the last update, use old
-    if (
-      (bsData.periodTime && bsData.periodTime.gameStatus === '3') ||
-      updateDiff < 55
-    ) {
+export const fetchLiveGameBoxIfNeeded =
+  (dateStr, gid, isBackground = null) =>
+  async (dispatch, getState) => {
+    if (gid == null || gid === '') {
       return
     }
+
+    const apiDate = getAPIDate()
+    // if the date is in the future, then exit early
+    if (isAfter(parse(dateStr, DATE_FORMAT, new Date()), apiDate)) {
+      return
+    }
+
+    const {
+      live: { isLoading: isLiveLoading },
+    } = getState()
+
+    // if live is loading, wait to see if game exists
+    if (isLiveLoading) {
+      await waitUntilFinish(() => {
+        return getState().live.isLoading
+      }, false)
+    }
+
+    const {
+      bs: { bsData, gid: oldGid },
+      date: { date },
+      live: { lastUpdate, games: liveGames },
+    } = getState()
+
+    const selectedGame = liveGames.find((game) => game.id === gid)
+    if (!selectedGame) {
+      dispatch(push('/boxscores'))
+      return
+    }
+
+    const oldDateStr = format(date, DATE_FORMAT)
+    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+
+    // if it's different day and different id, fetch new
+    if (oldDateStr === dateStr && oldGid === gid) {
+      // if it's same game but the game is finished, use old
+      // if it's less than 60 seconds from the last update, use old
+      if (
+        (bsData.periodTime && bsData.periodTime.gameStatus === '3') ||
+        updateDiff < 55
+      ) {
+        return
+      }
+    }
+    // make sure to show the loading screen when in didUpdate()
+    isBackground = isBackground === false ? false : oldGid === gid
+    return await fetchLiveGameBox(dispatch, dateStr, gid, isBackground)
   }
-  // make sure to show the loading screen when in didUpdate()
-  isBackground = isBackground === false ? false : oldGid === gid
-  return await fetchLiveGameBox(dispatch, dateStr, gid, isBackground)
-}
 
 export const resetLiveGameBox = () => (dispatch) => {
   dispatch({ type: types.RESET })

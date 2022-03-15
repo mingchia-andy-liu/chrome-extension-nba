@@ -39,12 +39,12 @@ const ButtonsWrapper = styled.div`
 `
 
 const NotificationWrapper = styled.div`
-    padding: 5px 0;
+  padding: 5px 0;
 `
 
 const NotificationParagraph = styled.p`
-    padding: 5px 0;
-    margin: 0;
+  padding: 5px 0;
+  margin: 0;
 `
 
 const renderHeader = () => {
@@ -97,39 +97,48 @@ const ding = new Audio('./assets/ding.wav')
 const renderNotification = (permissionEnum, request, remove) => {
   /* only show the notification once it's loaded */
   if (permissionEnum === -1) {
-    return null;
+    return null
   }
 
-  const button = (permissionEnum === 1
-    ? <NotificationWrapper>
-      <label>(BETA) notification permission: </label>
-      <button onClick={remove}>Remove permission</button>
-    </NotificationWrapper>
-    : <NotificationWrapper>
-      <NotificationParagraph>(BETA) You can get notified when your favorite team starts a game!</NotificationParagraph>
-      <label>(BETA) notification permission: </label>
-      <button onClick={request}>Grant Permission</button>
-    </NotificationWrapper>
-  )
+  const button =
+    permissionEnum === 1 ? (
+      <NotificationWrapper>
+        <label>(BETA) notification permission: </label>
+        <button onClick={remove}>Remove permission</button>
+      </NotificationWrapper>
+    ) : (
+      <NotificationWrapper>
+        <NotificationParagraph>
+          (BETA) You can get notified when your favorite team starts a game!
+        </NotificationParagraph>
+        <label>(BETA) notification permission: </label>
+        <button onClick={request}>Grant Permission</button>
+      </NotificationWrapper>
+    )
 
-  const exampleButton = permissionEnum === 1
-    ? <button onClick={() => {
-      browser.notifications.create({
-        type: 'basic',
-        title: `Suns vs Heat`,
-        message: `Suns is about to play.`,
-        iconUrl: 'assets/png/icon-2-color-512.png',
-      })
-      if (browser.isChrome) {
-        ding.play();
-      }
-    }}>Send an example</button>
-    : null;
+  const exampleButton =
+    permissionEnum === 1 ? (
+      <button
+        onClick={() => {
+          browser.notifications.create({
+            type: 'basic',
+            title: `Suns vs Heat`,
+            message: `Suns is about to play.`,
+            iconUrl: 'assets/png/icon-2-color-512.png',
+          })
+          if (browser.isChrome) {
+            ding.play()
+          }
+        }}
+      >
+        Send an example
+      </button>
+    ) : null
 
   return (
     <NotificationWrapper>
       {button}
-      {exampleButton}      
+      {exampleButton}
     </NotificationWrapper>
   )
 }
@@ -167,7 +176,7 @@ const Options = () => {
         permissions: ['notifications'],
       },
       (removed) => {
-        togglePermission(removed ? 0 : 1);
+        togglePermission(removed ? 0 : 1)
       }
     )
   }, [])
@@ -180,7 +189,11 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {renderNotification(notificationPermissionEnum, requestNotification, removeNotification)}
+        {renderNotification(
+          notificationPermissionEnum,
+          requestNotification,
+          removeNotification
+        )}
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />
