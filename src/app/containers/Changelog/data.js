@@ -1,5 +1,14 @@
 module.exports = [
   {
+    version: '1.4.18 Updates: (2022-03-15)',
+    updates: [
+      'Add beta notification options',
+      'Update live alarm checker',
+      'Fix duplicate request',
+      'Fix potential duplicate key in boxscores',
+    ],
+  },
+  {
     version: '1.4.17 Updates: (2021-12-23)',
     updates: ['Update packages', 'Update max date'],
   },
