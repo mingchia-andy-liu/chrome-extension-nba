@@ -102,14 +102,14 @@ const getBroadcasters = (watch) => {
       broadcast: {
         broadcasters: { national, vTeam, hTeam },
       },
-    } = watch 
+    } = watch
     return [
       ...national.map((c) => ({ scope: 'natl', display_name: c.shortName })),
       ...vTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
       ...hTeam.map((c) => ({ scope: 'local', display_name: c.shortName })),
     ]
   } catch (e) {
-    return [];
+    return []
   }
 }
 
