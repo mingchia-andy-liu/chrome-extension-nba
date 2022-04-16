@@ -30,7 +30,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
       }
       const apiDate = getApiDate()
       const dateStr = format(apiDate, DATE_FORMAT)
-      const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
+      const hasListener =
+        browser.notifications.onClicked.hasListener(onClickListener)
       if (!hasListener) {
         browser.notifications.onClicked.addListener(onClickListener)
       }
@@ -44,7 +45,12 @@ const fireFavTeamNotificationIfNeeded = (games) => {
           )
           if (favTeamGame) {
             // check start time is somewhat close to the now() time.
-            fireNotificationIfNeeded(favTeamGame, data.notification, data.favTeam, dateStr)
+            fireNotificationIfNeeded(
+              favTeamGame,
+              data.notification,
+              data.favTeam,
+              dateStr
+            )
           }
         }
       })

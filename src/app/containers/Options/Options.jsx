@@ -89,7 +89,7 @@ const renderTeams = (favTeam, updateTeam) => {
                     ...data.notification,
                     gameId: undefined,
                     status: undefined,
-                  }
+                  },
                 })
               }
             })
@@ -107,12 +107,16 @@ const renderTeams = (favTeam, updateTeam) => {
   )
 }
 const ding = new Audio('./assets/ding.wav')
-const NotificationSection = ({permissionEnum, request, remove}) => {
+const NotificationSection = ({ permissionEnum, request, remove }) => {
   // null: loading, {enabled: false}: no notification, {enabled:true}: has notification
   const [notification, toggleNotification] = React.useState(null)
   React.useEffect(() => {
     browser.getItem(['notification'], (data) => {
-      toggleNotification(data.notification ? data.notification : {enabled: false, gameId: undefined, status: undefined});
+      toggleNotification(
+        data.notification
+          ? data.notification
+          : { enabled: false, gameId: undefined, status: undefined }
+      )
     })
   }, [])
 
@@ -121,16 +125,16 @@ const NotificationSection = ({permissionEnum, request, remove}) => {
       checked={notification?.quarters}
       text="Send notifications when quarter and Halftime starts"
       onChange={(e) => {
-        const enabled = e.target.checked;
+        const enabled = e.target.checked
         toggleNotification({
           ...notification,
-          quarters: enabled
+          quarters: enabled,
         })
         browser.setItem({
           notification: {
             ...notification,
-            quarters: enabled
-          }
+            quarters: enabled,
+          },
         })
       }}
     />
@@ -169,8 +173,7 @@ const NotificationSection = ({permissionEnum, request, remove}) => {
       >
         Send an example
       </button>
-    ) : null;
-
+    ) : null
 
   return (
     <NotificationWrapper>
@@ -179,12 +182,12 @@ const NotificationSection = ({permissionEnum, request, remove}) => {
         text="Send notification"
         onChange={() => {
           const enabled = notification?.enabled ? false : true
-          toggleNotification({...notification, enabled})
+          toggleNotification({ ...notification, enabled })
           browser.setItem({
             notification: {
               ...notification,
               enabled,
-            }
+            },
           })
         }}
       />
