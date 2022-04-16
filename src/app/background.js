@@ -1,13 +1,12 @@
 import format from 'date-fns/format'
 import addMinutes from 'date-fns/addMinutes'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import isSameMinute from 'date-fns/isSameMinute'
 import setSeconds from 'date-fns/setSeconds'
 import browser, { checkLiveGame } from './utils/browser'
 import getApiDate, { getLeagueYear } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
-import { getNickNamesByTriCode } from './utils/teams'
+import { fireNotificationIfNeeded } from './utils/notifications'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
@@ -19,7 +18,6 @@ const onClickListener = (notifId) => {
   browser.notifications.clear(notifId)
   browser.tabs.create({ url: '/index.html#/boxscores/' + notifId })
 }
-const ding = new Audio('./assets/ding.wav')
 
 const fireFavTeamNotificationIfNeeded = (games) => {
   browser.permissions.contains(
@@ -32,13 +30,12 @@ const fireFavTeamNotificationIfNeeded = (games) => {
       }
       const apiDate = getApiDate()
       const dateStr = format(apiDate, DATE_FORMAT)
-      const hasListener =
-        browser.notifications.onClicked.hasListener(onClickListener)
+      const hasListener = browser.notifications.onClicked.hasListener(onClickListener)
       if (!hasListener) {
         browser.notifications.onClicked.addListener(onClickListener)
       }
 
-      browser.getItem(['favTeam'], (data) => {
+      browser.getItem(['favTeam', 'notification'], (data) => {
         if (data && data.favTeam) {
           const favTeamGame = games.find(
             ({ home, visitor }) =>
@@ -47,30 +44,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
           )
           if (favTeamGame) {
             // check start time is somewhat close to the now() time.
-            if (
-              favTeamGame.startTimeUTC &&
-              isSameMinute(new Date(), new Date(favTeamGame.startTimeUTC))
-            ) {
-              const options = {
-                type: 'basic',
-                title: `${favTeamGame.home.nickname} vs ${favTeamGame.visitor.nickname}`,
-                message: `${getNickNamesByTriCode(
-                  data.favTeam
-                )} is about to play.`,
-                iconUrl: 'assets/png/icon-2-color-512.png',
-              }
-
-              browser.notifications.getAll((notifications) => {
-                // only fire if we have not send a notification
-                if (!notifications[favTeamGame.id]) {
-                  const id = `${favTeamGame.id}?date=${dateStr}`
-                  browser.notifications.create(id, options)
-                  if (browser.isChrome) {
-                    ding.play()
-                  }
-                }
-              })
-            }
+            fireNotificationIfNeeded(favTeamGame, data.notification, data.favTeam, dateStr)
           }
         }
       })
@@ -173,6 +147,7 @@ browser.runtime.onInstalled.addListener((details) => {
         hideZeroRow: data.hideZeroRow,
         nightMode: data.nightMode,
         spoiler: data.spoiler,
+        notification: data.notification,
       }
       browser.clear(() => {
         browser.setItem(newOptions)

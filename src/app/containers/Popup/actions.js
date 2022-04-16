@@ -129,28 +129,28 @@ const fetchRequest = async (dateStr) => {
 
 export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
-  async (dispatch, getState) => {
-    const {
-      live: { games, lastUpdate },
-      date: { date },
-    } = getState()
-    const oldDateStr = format(date, DATE_FORMAT)
-    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+    async (dispatch, getState) => {
+      const {
+        live: { games, lastUpdate },
+        date: { date },
+      } = getState()
+      const oldDateStr = format(date, DATE_FORMAT)
+      const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
 
-    // if it's different day, or force update, fetch new
-    if (oldDateStr === dateStr && !forceUpdate) {
-      const hasPendingOrLiveGame = games.find(
-        (game) => game.periodTime && game.periodTime.gameStatus !== '3'
-      )
+      // if it's different day, or force update, fetch new
+      if (oldDateStr === dateStr && !forceUpdate) {
+        const hasPendingOrLiveGame = games.find(
+          (game) => game.periodTime && game.periodTime.gameStatus !== '3'
+        )
 
-      if (!hasPendingOrLiveGame || updateDiff < 55) {
-        return
+        if (!hasPendingOrLiveGame || updateDiff < 55) {
+          return
+        }
       }
-    }
 
-    isBackground = isBackground === false ? false : oldDateStr === dateStr
-    return await fetchGames(dispatch, dateStr, callback, isBackground)
-  }
+      isBackground = isBackground === false ? false : oldDateStr === dateStr
+      return await fetchGames(dispatch, dateStr, callback, isBackground)
+    }
 
 // ------ highlights -------
 
