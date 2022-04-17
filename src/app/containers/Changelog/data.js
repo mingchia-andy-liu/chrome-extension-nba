@@ -1,5 +1,13 @@
 module.exports = [
   {
+    version: '1.5.0 Updates: (2022-04-17)',
+    updates: [
+      'Add quarter notificaitons, set up to get notified when a quarter starts',
+      'Fix playoffs text',
+      'Fix on-court status',
+    ],
+  },
+  {
     version: '1.4.18/19 Updates: (2022-03-15)',
     updates: [
       'Add beta notification options',
