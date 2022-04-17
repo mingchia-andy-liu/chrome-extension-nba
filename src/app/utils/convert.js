@@ -113,6 +113,18 @@ const getBroadcasters = (watch) => {
   }
 }
 
+const getPlayoffs = (playoffs) => {
+  if (playoffs == null || playoffs.hTeam == null || playoffs.vTeam == null) {
+    return undefined
+  }
+
+  return {
+    home_wins: playoffs.hTeam.seriesWin,
+    visitor_wins: playoffs.vTeam.seriesWin,
+  }
+}
+
+
 // for cdn
 export const convertDaily3 = (game) => {
   const {
@@ -124,6 +136,7 @@ export const convertDaily3 = (game) => {
     awayTeam: v,
     // from 2
     watch,
+    playoffs
   } = game
 
   const formatGameStatus = () => {
@@ -167,6 +180,7 @@ export const convertDaily3 = (game) => {
       gameStatus: `${gameStatus}`,
       periodValue: `${period}`,
     },
+    playoffs: getPlayoffs(playoffs),
   }
 }
 
@@ -224,17 +238,6 @@ export const convertDaily2 = (game) => {
     }
   }
 
-  const getPlayoffs = () => {
-    if (playoffs == null || playoffs.hTeam == null || playoffs.vTeam == null) {
-      return undefined
-    }
-
-    return {
-      home_wins: playoffs.hTeam.seriesWin,
-      visitor_wins: playoffs.vTeam.seriesWin,
-    }
-  }
-
   return {
     broadcasters: getBroadcasters(watch),
     home: {
@@ -258,7 +261,7 @@ export const convertDaily2 = (game) => {
       gameStatus: `${statusNum}`,
       periodValue: `${p}`,
     },
-    playoffs: getPlayoffs(),
+    playoffs: getPlayoffs(playoffs),
   }
 }
 
