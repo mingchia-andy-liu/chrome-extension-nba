@@ -115,7 +115,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
       toggleNotification(
         data.notification
           ? data.notification
-          : { enabled: false, gameId: undefined, status: undefined }
+          : { enabled: false, quarters: false, gameId: undefined, status: undefined }
       )
     })
   }, [])
@@ -123,7 +123,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
   const quartersNotify = (
     <Checkbox
       checked={notification?.quarters}
-      text="Send notifications when quarter and Halftime starts"
+      text="Send notifications when quarters starts"
       onChange={(e) => {
         const enabled = e.target.checked
         toggleNotification({
@@ -191,7 +191,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
           })
         }}
       />
-      {quartersNotify}
+      {notification?.enabled ? quartersNotify : null}
       {notification?.enabled ? grantButton : null}
       {notification?.enabled ? exampleButton : null}
     </NotificationWrapper>
