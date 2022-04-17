@@ -78,7 +78,12 @@ const renderHeaderRow = (name) => {
  * @param {*} isLive
  */
 const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
-  if (!player.on_court && hideZeroRow && player.minutes == '0' && player.seconds == '0') {
+  if (
+    !player.on_court &&
+    hideZeroRow &&
+    player.minutes == '0' &&
+    player.seconds == '0'
+  ) {
     return
   }
 

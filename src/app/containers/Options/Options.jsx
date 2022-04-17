@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import {
+import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
   HideZeroRowCheckbox,
@@ -80,7 +80,20 @@ const renderTeams = (favTeam, updateTeam) => {
         Select your favorite team:
         <select
           value={favTeam}
-          onChange={(e) => updateTeam(e.currentTarget.value)}
+          onChange={(e) => {
+            updateTeam(e.currentTarget.value)
+            browser.getItem(['notification'], (data) => {
+              if (data.notification) {
+                browser.setItem({
+                  notification: {
+                    ...data.notification,
+                    gameId: undefined,
+                    status: undefined,
+                  },
+                })
+              }
+            })
+          }}
         >
           <option value="">-</option>
           {Object.keys(teams).map((teamAbbr) => (
@@ -94,30 +107,57 @@ const renderTeams = (favTeam, updateTeam) => {
   )
 }
 const ding = new Audio('./assets/ding.wav')
-const renderNotification = (permissionEnum, request, remove) => {
-  /* only show the notification once it's loaded */
-  if (permissionEnum === -1) {
-    return null
-  }
+const NotificationSection = ({ permissionEnum, request, remove }) => {
+  // null: loading, {enabled: false}: no notification, {enabled:true}: has notification
+  const [notification, toggleNotification] = React.useState(null)
+  React.useEffect(() => {
+    browser.getItem(['notification'], (data) => {
+      toggleNotification(
+        data.notification
+          ? data.notification
+          : { enabled: false, quarters: false, gameId: undefined, status: undefined }
+      )
+    })
+  }, [])
 
-  const button =
-    permissionEnum === 1 ? (
+  const quartersNotify = (
+    <Checkbox
+      checked={notification?.quarters}
+      text="Send notifications when quarters starts"
+      onChange={(e) => {
+        const enabled = e.target.checked
+        toggleNotification({
+          ...notification,
+          quarters: enabled,
+        })
+        browser.setItem({
+          notification: {
+            ...notification,
+            quarters: enabled,
+          },
+        })
+      }}
+    />
+  )
+
+  const grantButton =
+    permissionEnum === 1 && notification?.enabled ? (
       <NotificationWrapper>
-        <label>(BETA) notification permission: </label>
+        <label>notification permission: </label>
         <button onClick={remove}>Remove permission</button>
       </NotificationWrapper>
     ) : (
       <NotificationWrapper>
         <NotificationParagraph>
-          (BETA) You can get notified when your favorite team starts a game!
+          You can get notified when your favorite team's game starts and ends!
         </NotificationParagraph>
-        <label>(BETA) notification permission: </label>
+        <label>notification permission: </label>
         <button onClick={request}>Grant Permission</button>
       </NotificationWrapper>
     )
 
   const exampleButton =
-    permissionEnum === 1 ? (
+    permissionEnum === 1 && notification?.enabled ? (
       <button
         onClick={() => {
           browser.notifications.create({
@@ -137,8 +177,23 @@ const renderNotification = (permissionEnum, request, remove) => {
 
   return (
     <NotificationWrapper>
-      {button}
-      {exampleButton}
+      <Checkbox
+        checked={notification?.enabled}
+        text="Send notification"
+        onChange={() => {
+          const enabled = notification?.enabled ? false : true
+          toggleNotification({ ...notification, enabled })
+          browser.setItem({
+            notification: {
+              ...notification,
+              enabled,
+            },
+          })
+        }}
+      />
+      {notification?.enabled ? quartersNotify : null}
+      {notification?.enabled ? grantButton : null}
+      {notification?.enabled ? exampleButton : null}
     </NotificationWrapper>
   )
 }
@@ -165,7 +220,7 @@ const Options = () => {
         permissions: ['notifications'],
       },
       (granted) => {
-        togglePermission(1)
+        togglePermission(granted ? 1 : 0)
       }
     )
   }, [])
@@ -189,11 +244,11 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
-        {renderNotification(
-          notificationPermissionEnum,
-          requestNotification,
-          removeNotification
-        )}
+        <NotificationSection
+          permissionEnum={notificationPermissionEnum}
+          request={requestNotification}
+          remove={removeNotification}
+        />
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />
