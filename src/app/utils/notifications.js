@@ -300,12 +300,10 @@ export const fireNotificationIfNeeded = (
     for (let i = order.length - 1; i >= 0; i--) {
       const o = order[i]
 
-      if (!didFire) {
-        didFire = fireMap[o](game, favTeam, dateStr)
-        if (didFire) {
-          notifiHandler = o
-          break
-        }
+      didFire = fireMap[o](game, favTeam, dateStr)
+      if (didFire) {
+        notifiHandler = o
+        break
       }
     }
   } else {
@@ -317,12 +315,10 @@ export const fireNotificationIfNeeded = (
 
     for (let i = notifiHandler; i < order.length; i++) {
       const o = order[i]
-      if (!didFire) {
-        didFire = fireMap[o](game, favTeam, dateStr)
-        if (didFire) {
-          notifiHandler = o
-          break
-        }
+      didFire = fireMap[o](game, favTeam, dateStr)
+      if (didFire) {
+        notifiHandler = o
+        break
       }
     }
   }
