@@ -65,6 +65,7 @@ const fetchRequest3 = async (dateStr) => {
       games: games.map((g) => ({
         ...g,
         watch: (games2.find((g2) => g2.gameId === g.gameId) || {}).watch,
+        playoffs: (games2.find((g2) => g2.gameId === g.gameId) || {}).playoffs,
       })),
     }
   } catch (error) {
