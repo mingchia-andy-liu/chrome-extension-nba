@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/build/assets/png/icon-2-color-128.png">
+  <img src="build/assets/png/icon-2-color-128.png">
 </p>
 
 # Basketball Box Scores Extension
@@ -34,22 +34,20 @@ Sports websites don't usually have a convenient way to find out the latest box s
 This extension is for people who just want to get the latest update but too lazy to look it up.
 
 ## Features
-1. Daily box score on the popup page
-1. Highlight Videos from YouTube
-1. Dark mode
-1. Add favorite team
-1. Playoff bracket for each season
-1. Standings
+- [x] Daily box score on the popup page
+- [x] Highlight Videos from YouTube
+- [x] Dark mode
+- [x] Add favorite team
+- [x] Playoff bracket for each season
+- [x] Standings
+- [x] Notifications
 
 ## Roadmap
-- [ ] Notifications
 - [ ] Add the ability to sort tables
 
 ---
 
 ## Dev start notes
-`/src/app`: react projects
-`build`: files of pre-release
 
 ### Prerequisite
 You need to have `npm` installed.
