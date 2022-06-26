@@ -134,9 +134,9 @@ export const fetchGamesIfNeeded =
     if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
       dispatch({
         type: types.REQUEST_SUCCESS,
-        payload: {games: []},
+        payload: { games: [] },
       })
-      return;
+      return
     }
 
     const {

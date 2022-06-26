@@ -124,7 +124,6 @@ const getPlayoffs = (playoffs) => {
   }
 }
 
-
 // for cdn
 export const convertDaily3 = (game) => {
   const {
@@ -136,7 +135,7 @@ export const convertDaily3 = (game) => {
     awayTeam: v,
     // from 2
     watch,
-    playoffs
+    playoffs,
   } = game
 
   const formatGameStatus = () => {

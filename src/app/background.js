@@ -63,8 +63,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
  * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
  */
 const liveListener = (initCheck) => {
-  if(isOffseason()) {
-    return;
+  if (isOffseason()) {
+    return
   }
 
   const apiDate = getApiDate()
