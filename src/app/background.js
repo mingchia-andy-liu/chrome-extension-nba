@@ -3,7 +3,7 @@ import addMinutes from 'date-fns/addMinutes'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import setSeconds from 'date-fns/setSeconds'
 import browser, { checkLiveGame } from './utils/browser'
-import getApiDate, { getLeagueYear } from './utils/getApiDate'
+import getApiDate, { getLeagueYear, isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
@@ -63,6 +63,10 @@ const fireFavTeamNotificationIfNeeded = (games) => {
  * @param {boolean} initCheck: if true, skip the notification because it's not from alarm source.
  */
 const liveListener = (initCheck) => {
+  if(isOffseason()) {
+    return;
+  }
+
   const apiDate = getApiDate()
   const dateStr = format(apiDate, DATE_FORMAT)
   const year = getLeagueYear(apiDate)

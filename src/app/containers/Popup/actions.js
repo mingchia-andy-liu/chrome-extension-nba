@@ -3,7 +3,7 @@ import isSameDay from 'date-fns/isSameDay'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
 import types from './types'
-import getApiDate, { getLeagueYear } from '../../utils/getApiDate'
+import getApiDate, { getLeagueYear, isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
@@ -131,6 +131,14 @@ const fetchRequest = async (dateStr) => {
 export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
   async (dispatch, getState) => {
+    if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
+      dispatch({
+        type: types.REQUEST_SUCCESS,
+        payload: {games: []},
+      })
+      return;
+    }
+
     const {
       live: { games, lastUpdate },
       date: { date },
