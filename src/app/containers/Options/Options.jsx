@@ -115,7 +115,12 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
       toggleNotification(
         data.notification
           ? data.notification
-          : { enabled: false, quarters: false, gameId: undefined, status: undefined }
+          : {
+              enabled: false,
+              quarters: false,
+              gameId: undefined,
+              status: undefined,
+            }
       )
     })
   }, [])

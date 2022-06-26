@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.5.1 Updates: (2022-04-17)',
+    updates: ['Add offseason check', 'Update max date'],
+  },
+  {
     version: '1.5.0 Updates: (2022-04-17)',
     updates: [
       'Add quarter notificaitons, set up to get notified when a quarter starts',

@@ -34,27 +34,29 @@ export const getLeagueYear = (date) => {
 }
 
 export const isOffseason = (date) => {
-  const d = date ?? new Date();
+  const d = date ?? new Date()
   // 2019-2020 season October 11, 2020 (Finals)
   // 2020-2021 season December 22, 2020
   if (getYear(d) === 2020) {
-    // between October and 
-    return isAfter(d, new Date('2020-10-12')) && isBefore(d, new Date('2020-12-21'))
+    // between October and
+    return (
+      isAfter(d, new Date('2020-10-12')) && isBefore(d, new Date('2020-12-21'))
+    )
   } else {
     // betwen july and augest
-    const month = getMonth(d);
-    const day = getDate(d);
+    const month = getMonth(d)
+    const day = getDate(d)
     console.log(month, day)
     if (isNaN(month) || isNaN(day)) {
-      return false;
+      return false
     }
 
     if (month === 8) {
-      return day < 20;
+      return day < 20
     }
     if (month === 5) {
-      return day > 20;
+      return day > 20
     }
-    return month < 8 && month > 6;
+    return month < 8 && month > 6
   }
 }
