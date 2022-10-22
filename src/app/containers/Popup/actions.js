@@ -45,7 +45,7 @@ const fetchRequest3 = async (dateStr) => {
   // only use cdn for apiDate as it's the only endpoint
   try {
     if (format(getApiDate(), DATE_FORMAT) !== dateStr) {
-      throw Error("Initial should be api date");
+      throw Error('Initial should be api date')
     }
 
     const res = await fetch(
@@ -113,20 +113,22 @@ const fetchRequest1 = async (dateStr) => {
 
 const insertAt = (str, index, text) => {
   if (index > 0) {
-    return str.substring(0, index) + text + str.substr(index);
+    return str.substring(0, index) + text + str.substr(index)
   }
 
-  return str;
+  return str
 }
 
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
   try {
-    const newDateStr = insertAt(insertAt(dateStr,4, '-'), 7, '-');
-    const res = await fetch( `https://proxy.boxscores.site?GameDate=${newDateStr}&LeagueID=00`, )
+    const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
+    const res = await fetch(
+      `https://proxy.boxscores.site?GameDate=${newDateStr}&LeagueID=00`
+    )
     const {
       scoreboard: { games, gameDate },
-    } = await res.json();
+    } = await res.json()
 
     if (gameDate.replaceAll('-', '') !== dateStr) {
       throw Error('wrong date use other endpoints')
