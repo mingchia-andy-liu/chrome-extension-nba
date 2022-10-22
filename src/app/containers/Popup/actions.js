@@ -121,7 +121,6 @@ const insertAt = (str, index, text) => {
 
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
-  // only use cdn for apiDate as it's the only endpoint
   try {
     const newDateStr = insertAt(insertAt(dateStr,4, '-'), 7, '-');
     const res = await fetch( `https://proxy.boxscores.site?GameDate=${newDateStr}&LeagueID=00`, )
@@ -133,18 +132,9 @@ const fetchRequest4 = async (dateStr) => {
       throw Error('wrong date use other endpoints')
     }
 
-    const res2 = await fetch(
-      `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
-    )
-    const { games: games2 } = await res2.json()
-
     return {
       isFallBack: 3,
-      games: games.map((g) => ({
-        ...g,
-        watch: (games2.find((g2) => g2.gameId === g.gameId) || {}).watch,
-        playoffs: (games2.find((g2) => g2.gameId === g.gameId) || {}).playoffs,
-      })),
+      games,
     }
   } catch (error) {
     return fetchRequest2(dateStr)
