@@ -44,6 +44,10 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 const fetchRequest3 = async (dateStr) => {
   // only use cdn for apiDate as it's the only endpoint
   try {
+    if (format(getApiDate(), DATE_FORMAT) !== dateStr) {
+      throw Error("Initial should be api date");
+    }
+
     const res = await fetch(
       'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
     )
@@ -69,7 +73,7 @@ const fetchRequest3 = async (dateStr) => {
       })),
     }
   } catch (error) {
-    return fetchRequest2(dateStr)
+    return fetchRequest4(dateStr)
   }
 }
 
@@ -104,6 +108,46 @@ const fetchRequest1 = async (dateStr) => {
   return {
     isFallBack: 1,
     games: g,
+  }
+}
+
+const insertAt = (str, index, text) => {
+  if (index > 0) {
+    return str.substring(0, index) + text + str.substr(index);
+  }
+
+  return str;
+}
+
+// new endpoint requires special headers.
+const fetchRequest4 = async (dateStr) => {
+  // only use cdn for apiDate as it's the only endpoint
+  try {
+    const newDateStr = insertAt(insertAt(dateStr,4, '-'), 7, '-');
+    const res = await fetch( `https://proxy.boxscores.site?GameDate=${newDateStr}&LeagueID=00`, )
+    const {
+      scoreboard: { games, gameDate },
+    } = await res.json();
+
+    if (gameDate.replaceAll('-', '') !== dateStr) {
+      throw Error('wrong date use other endpoints')
+    }
+
+    const res2 = await fetch(
+      `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
+    )
+    const { games: games2 } = await res2.json()
+
+    return {
+      isFallBack: 3,
+      games: games.map((g) => ({
+        ...g,
+        watch: (games2.find((g2) => g2.gameId === g.gameId) || {}).watch,
+        playoffs: (games2.find((g2) => g2.gameId === g.gameId) || {}).playoffs,
+      })),
+    }
+  } catch (error) {
+    return fetchRequest2(dateStr)
   }
 }
 
