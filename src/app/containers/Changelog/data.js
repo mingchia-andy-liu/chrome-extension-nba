@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.5.2 Updates: (2022-10-22)',
+    updates: ['Fix scoreboard for cards'],
+  },
+  {
     version: '1.5.1 Updates: (2022-04-17)',
     updates: ['Add offseason check', 'Update max date'],
   },
