@@ -9,7 +9,6 @@ import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
 
 const dataURL = 'https://data.nba.com/data/10s'
-const base = `${dataURL}/json/cms/noseason/game`
 const oldBase = (year, leagueSlug) =>
   `${dataURL}/v2015/json/mobile_teams/${leagueSlug}/${year}/scores/gamedetail`
 
