@@ -59,7 +59,7 @@ const pbpDecorater = (pbp) => {
   return {
     ...pbp,
     play: (pbp.play || []).map((play) => {
-      const curr = +play.home_score - +play.visitor_score
+      const curr = +play.scoreHome - +play.scoreAway
       let next
       if (curr !== 0) {
         next = (curr > 0 && prev < 0) || (curr < 0 && prev > 0) ? true : null

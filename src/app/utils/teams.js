@@ -180,8 +180,8 @@ export const getTeamNameById = (id) => {
   return name
 }
 
-export const getLogoColorByName = (name) => {
-  return LOGO_COLORS[name] || '#000000'
+export const getLogoColorByName = (name, defaultColor = '#000000') => {
+  return LOGO_COLORS[name] || defaultColor
 }
 
 export const getNickNamesByTriCode = (triCode) => {
