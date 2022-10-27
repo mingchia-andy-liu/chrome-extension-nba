@@ -61,36 +61,38 @@ const renderPBPRow = (plays, period, isDark) => {
 
   return filtered.map((play, i) => {
     const {
-      clock,
-      team_abr,
-      home_score,
-      visitor_score,
+      clock: _clock,
+      teamTricode: team_abr,
+      scoreHome: home_score,
+      scoreAway: visitor_score,
       changes,
       description: _description,
+      isFieldGoal
     } = play
-    const index = _description.indexOf(']')
-    const color = getLogoColorByName(team_abr)
-    const LOGO =
-      index !== -1 ? (
-        <Cell style={{ color: 'white', backgroundColor: color }}>
-          {team_abr}
-        </Cell>
-      ) : (
-        <Cell></Cell>
-      )
+    const color = getLogoColorByName(team_abr, null)
+    const LOGO = color == null 
+      ? <Cell />
+      : <Cell style={{ color: 'white', backgroundColor: color }}>
+      {team_abr}
+    </Cell>
+
     const SCORE =
-      index > 4 ? (
+      isFieldGoal && !_description.includes('MISS') ? (
         <ScoreCell
           changes={changes ? 1 : undefined}
           tied={home_score === visitor_score ? 1 : undefined}
         >
-          {_description.substring(5, index)}
+          {visitor_score} : {home_score}
         </ScoreCell>
       ) : (
         <Cell></Cell>
       )
 
-    const description = _description.replace(/\[.*\]/i, '').trim()
+    const description = _description;
+    let clock = _clock.substring(2).replace('M', ':').replace('S', '');
+    if (clock.endsWith('.00')) {
+      clock = clock.substring(0, clock.length - 3);
+    }
 
     return (
       <Row

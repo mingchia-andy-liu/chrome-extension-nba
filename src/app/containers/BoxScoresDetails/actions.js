@@ -9,7 +9,6 @@ import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
 
 const dataURL = 'https://data.nba.com/data/10s'
-const base = `${dataURL}/json/cms/noseason/game`
 const oldBase = (year, leagueSlug) =>
   `${dataURL}/v2015/json/mobile_teams/${leagueSlug}/${year}/scores/gamedetail`
 
@@ -43,11 +42,12 @@ const fetchBoxScore = async (dateStr, gid) => {
 
 const fetchPBP = async (dateStr, gid) => {
   try {
-    const pbp = await fetch(`${base}/${dateStr}/${gid}/pbp_all.json`)
-    const {
-      sports_content: { game: pbpData },
-    } = await pbp.json()
-    return pbpData
+    const pbp = await fetch(`https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`)
+    const { game } = await pbp.json()
+    return {
+      gameId: game.gameId,
+      play: game.actions
+    }
   } catch (error) {
     return {}
   }
