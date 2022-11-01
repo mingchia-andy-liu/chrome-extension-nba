@@ -59,10 +59,17 @@ const fetchRequest3 = async (dateStr) => {
       throw Error('wrong date use other endpoints')
     }
 
-    const res2 = await fetch(
-      `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
-    )
-    const { games: games2 } = await res2.json()
+    let games2 = [];
+
+    try {
+      const res2 = await fetch(
+        `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
+      )
+      const { games: g2 } = await res2.json()
+      games = g2;
+    } catch (e) {
+      // skip
+    } 
 
     return {
       isFallBack: 3,
