@@ -10,16 +10,13 @@ export const fetchStandings = () => async (dispatch) => {
     const {
       resultSets
     } = await res.json()
-
     const teams = resultSets[0]?.rowSet ?? [];
-    console.log(teams)
 
     dispatch({
       type: types.REQUEST_SUCCESS,
       payload: teams,
     })
   } catch (error) {
-    console.log(error)
     dispatch({ type: types.REQUEST_ERROR })
   }
 }
