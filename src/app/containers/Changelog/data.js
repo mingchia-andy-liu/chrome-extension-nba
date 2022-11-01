@@ -1,7 +1,7 @@
 module.exports = [
   {
     version: '1.5.3 Updates: (2022-10-31)',
-    updates: ['Fix lates scoreboard', 'Fix play by play', 'Fix standings'],
+    updates: ['Fix latest scoreboard', 'Fix play by play', 'Fix standings'],
   },
   {
     version: '1.5.2 Updates: (2022-10-22)',
