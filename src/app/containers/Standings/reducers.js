@@ -26,6 +26,24 @@ const conferenceExtractor = (teams, isEast) =>
       streak: `${team.isWinStreak ? team.streak : -1 * team.streak}`,
     }))
 
+const conferenceExtractorV3 = (teams, isEast) => 
+    teams
+    .filter((team) =>
+      isEast ? eastTeams.includes(team[2].toString()) : westTeams.includes(team[2].toString())
+    )
+    .map((team) => ({
+      name: team[4],
+      playoffCode: team[8],
+      win: team[13],
+      loss: team[14],
+      percentage: team[15],
+      gamesBehind: team[38],
+      homeRecord: team[18],
+      awayRecord: team[19],
+      lastTenRecord: team[20],
+      streak: team[36],
+    }))
+
 export default (state = initState, action) => {
   switch (action.type) {
     case types.REQUEST_START:
@@ -36,8 +54,8 @@ export default (state = initState, action) => {
     case types.REQUEST_SUCCESS: {
       return {
         isLoading: false,
-        east: conferenceExtractor(action.payload, true),
-        west: conferenceExtractor(action.payload, false),
+        east: conferenceExtractorV3(action.payload, true),
+        west: conferenceExtractorV3(action.payload, false),
       }
     }
     case types.REQUEST_ERROR:

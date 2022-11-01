@@ -5,19 +5,21 @@ export const fetchStandings = () => async (dispatch) => {
     dispatch({ type: types.REQUEST_START })
 
     const res = await fetch(
-      'https://stats.nba.com/stats/leaguestandingsv3?GroupBy=conf&LeagueID=00&Season=2022-23&SeasonType=Regular%20Season&Section=overall'
+      'https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/leaguestandingsv3&GroupBy=conf&LeagueID=00&Season=2022-23&SeasonType=Regular%20Season&Section=overall'
     )
     const {
-      league: {
-        standard: { teams },
-      },
+      resultSets
     } = await res.json()
+
+    const teams = resultSets[0]?.rowSet ?? [];
+    console.log(teams)
 
     dispatch({
       type: types.REQUEST_SUCCESS,
       payload: teams,
     })
   } catch (error) {
+    console.log(error)
     dispatch({ type: types.REQUEST_ERROR })
   }
 }

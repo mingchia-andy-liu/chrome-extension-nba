@@ -131,7 +131,7 @@ const fetchRequest4 = async (dateStr) => {
   try {
     const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
     const res = await fetch(
-      `https://proxy.boxscores.site?GameDate=${newDateStr}&LeagueID=00`
+      `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
     )
     const {
       scoreboard: { games, gameDate },
