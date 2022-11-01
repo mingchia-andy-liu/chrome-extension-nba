@@ -59,17 +59,17 @@ const fetchRequest3 = async (dateStr) => {
       throw Error('wrong date use other endpoints')
     }
 
-    let games2 = [];
+    let games2 = []
 
     try {
       const res2 = await fetch(
         `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
       )
       const { games: g2 } = await res2.json()
-      games = g2;
+      games = g2
     } catch (e) {
       // skip
-    } 
+    }
 
     return {
       isFallBack: 3,
@@ -173,36 +173,36 @@ const fetchRequest = async (dateStr) => {
 
 export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
-  async (dispatch, getState) => {
-    if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
-      dispatch({
-        type: types.REQUEST_SUCCESS,
-        payload: { games: [] },
-      })
-      return
-    }
-
-    const {
-      live: { games, lastUpdate },
-      date: { date },
-    } = getState()
-    const oldDateStr = format(date, DATE_FORMAT)
-    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
-
-    // if it's different day, or force update, fetch new
-    if (oldDateStr === dateStr && !forceUpdate) {
-      const hasPendingOrLiveGame = games.find(
-        (game) => game.periodTime && game.periodTime.gameStatus !== '3'
-      )
-
-      if (!hasPendingOrLiveGame || updateDiff < 55) {
+    async (dispatch, getState) => {
+      if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
+        dispatch({
+          type: types.REQUEST_SUCCESS,
+          payload: { games: [] },
+        })
         return
       }
-    }
 
-    isBackground = isBackground === false ? false : oldDateStr === dateStr
-    return await fetchGames(dispatch, dateStr, callback, isBackground)
-  }
+      const {
+        live: { games, lastUpdate },
+        date: { date },
+      } = getState()
+      const oldDateStr = format(date, DATE_FORMAT)
+      const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+
+      // if it's different day, or force update, fetch new
+      if (oldDateStr === dateStr && !forceUpdate) {
+        const hasPendingOrLiveGame = games.find(
+          (game) => game.periodTime && game.periodTime.gameStatus !== '3'
+        )
+
+        if (!hasPendingOrLiveGame || updateDiff < 55) {
+          return
+        }
+      }
+
+      isBackground = isBackground === false ? false : oldDateStr === dateStr
+      return await fetchGames(dispatch, dateStr, callback, isBackground)
+    }
 
 // ------ highlights -------
 

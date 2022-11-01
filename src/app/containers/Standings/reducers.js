@@ -8,26 +8,27 @@ const initState = {
 }
 
 // for stats.nab.com
-const conferenceExtractor = (teams, isEast) =>
-  teams
-    .filter((team) =>
-      isEast ? eastTeams.includes(team.teamId) : westTeams.includes(team.teamId)
-    )
-    .map((team) => ({
-      name: team.teamSitesOnly.teamNickname,
-      playoffCode: team.clinchedPlayoffsCode,
-      win: team.win,
-      loss: team.loss,
-      percentage: team.winPct,
-      gamesBehind: team.gamesBehind,
-      homeRecord: `${team.homeWin}-${team.homeLoss}`,
-      awayRecord: `${team.awayWin}-${team.awayLoss}`,
-      lastTenRecord: `${team.lastTenWin}-${team.lastTenLoss}`,
-      streak: `${team.isWinStreak ? team.streak : -1 * team.streak}`,
-    }))
+// const conferenceExtractor = (teams, isEast) =>
+//   teams
+//     .filter((team) =>
+//       isEast ? eastTeams.includes(team.teamId) : westTeams.includes(team.teamId)
+//     )
+//     .map((team) => ({
+//       name: team.teamSitesOnly.teamNickname,
+//       playoffCode: team.clinchedPlayoffsCode,
+//       win: team.win,
+//       loss: team.loss,
+//       percentage: team.winPct,
+//       gamesBehind: team.gamesBehind,
+//       homeRecord: `${team.homeWin}-${team.homeLoss}`,
+//       awayRecord: `${team.awayWin}-${team.awayLoss}`,
+//       lastTenRecord: `${team.lastTenWin}-${team.lastTenLoss}`,
+//       streak: `${team.isWinStreak ? team.streak : -1 * team.streak}`,
+//     }))
 
-const conferenceExtractorV3 = (teams, isEast) => 
-    teams
+// for v3
+const conferenceExtractorV3 = (teams, isEast) =>
+  teams
     .filter((team) =>
       isEast ? eastTeams.includes(team[2].toString()) : westTeams.includes(team[2].toString())
     )

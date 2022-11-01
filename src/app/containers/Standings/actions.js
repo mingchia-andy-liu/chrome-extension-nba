@@ -10,7 +10,7 @@ export const fetchStandings = () => async (dispatch) => {
     const {
       resultSets
     } = await res.json()
-    const teams = resultSets[0]?.rowSet ?? [];
+    const teams = resultSets[0]?.rowSet ?? []
 
     dispatch({
       type: types.REQUEST_SUCCESS,
