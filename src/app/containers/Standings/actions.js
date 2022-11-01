@@ -5,7 +5,7 @@ export const fetchStandings = () => async (dispatch) => {
     dispatch({ type: types.REQUEST_START })
 
     const res = await fetch(
-      'http://data.nba.net/prod/v1/current/standings_all.json'
+      'https://stats.nba.com/stats/leaguestandingsv3?GroupBy=conf&LeagueID=00&Season=2022-23&SeasonType=Regular%20Season&Section=overall'
     )
     const {
       league: {
