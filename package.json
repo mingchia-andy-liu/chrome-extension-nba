@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/mingchia-andy-liu/chrome-extension-nba#readme",
   "devDependencies": {
-    "@babel/core": "^7.18.5",
+    "@babel/core": "^7.20.2",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-proposal-object-rest-spread": "^7.19.4",
     "@babel/plugin-transform-runtime": "^7.17.0",
