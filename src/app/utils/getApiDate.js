@@ -46,7 +46,6 @@ export const isOffseason = (date) => {
     // betwen july and augest
     const month = getMonth(d)
     const day = getDate(d)
-    console.log(month, day)
     if (isNaN(month) || isNaN(day)) {
       return false
     }

@@ -3,7 +3,7 @@ import addMinutes from 'date-fns/addMinutes'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import setSeconds from 'date-fns/setSeconds'
 import browser, { checkLiveGame } from './utils/browser'
-import getApiDate, { getLeagueYear, isOffseason } from './utils/getApiDate'
+import getApiDate, { isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
@@ -67,47 +67,15 @@ const liveListener = (initCheck) => {
     return
   }
 
-  const apiDate = getApiDate()
-  const dateStr = format(apiDate, DATE_FORMAT)
-  const year = getLeagueYear(apiDate)
-
   // cdn
-  fetch(
-    'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
-  )
+  fetch('https://api.boxscores.site/v1/scoreboard/today')
     .then((res) => res.json())
-    .then(({ scoreboard: { games } }) => {
+    .then(({ games }) => {
       checkLiveGame(games, 3)
       if (!initCheck) {
         fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
       }
     })
-    // data
-    .catch((e) => {
-      // console.log(e);
-      return (
-        fetch(`http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`)
-          .then((res) => res.json())
-          .then(({ games }) => {
-            checkLiveGame(games, 2)
-            if (!initCheck) {
-              fireFavTeamNotificationIfNeeded(sanitizeGames(games, 2))
-            }
-          })
-          // old
-          .catch(() => {
-            return fetch(
-              `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
-            )
-              .then((res) => res.json())
-              .then(({ gs: { g } }) => {
-                checkLiveGame(g, 1)
-                // can't check with this endpoints because it does not have start time.
-              })
-          })
-      )
-    })
-    // final catch
     .catch((error) => {
       console.error('something went wrong...', error)
     })

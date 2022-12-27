@@ -67,14 +67,17 @@ const renderPBPRow = (plays, period, isDark) => {
       scoreAway: visitor_score,
       changes,
       description: _description,
-      isFieldGoal
+      isFieldGoal,
     } = play
     const color = getLogoColorByName(team_abr, null)
-    const LOGO = color == null 
-      ? <Cell />
-      : <Cell style={{ color: 'white', backgroundColor: color }}>
-      {team_abr}
-    </Cell>
+    const LOGO =
+      color == null ? (
+        <Cell />
+      ) : (
+        <Cell style={{ color: 'white', backgroundColor: color }}>
+          {team_abr}
+        </Cell>
+      )
 
     const SCORE =
       isFieldGoal && !_description.includes('MISS') ? (
@@ -88,10 +91,10 @@ const renderPBPRow = (plays, period, isDark) => {
         <Cell></Cell>
       )
 
-    const description = _description;
-    let clock = _clock.substring(2).replace('M', ':').replace('S', '');
+    const description = _description
+    let clock = _clock.substring(2).replace('M', ':').replace('S', '')
     if (clock.endsWith('.00')) {
-      clock = clock.substring(0, clock.length - 3);
+      clock = clock.substring(0, clock.length - 3)
     }
 
     return (

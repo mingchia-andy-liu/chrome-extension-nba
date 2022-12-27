@@ -1,9 +1,8 @@
 import format from 'date-fns/format'
-import isSameDay from 'date-fns/isSameDay'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
 import types from './types'
-import getApiDate, { getLeagueYear, isOffseason } from '../../utils/getApiDate'
+import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
@@ -43,80 +42,54 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
 
 const fetchRequest3 = async (dateStr) => {
   // only use cdn for apiDate as it's the only endpoint
-  try {
-    if (format(getApiDate(), DATE_FORMAT) !== dateStr) {
-      throw Error('Initial should be api date')
-    }
-
-    const res = await fetch(
-      'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
-    )
-    const {
-      scoreboard: { games, gameDate },
-    } = await res.json()
-
-    if (gameDate.replaceAll('-', '') !== dateStr) {
-      throw Error('wrong date use other endpoints')
-    }
-
-    let games2 = []
-
-    try {
-      const res2 = await fetch(
-        `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
-      )
-      const { games: g2 } = await res2.json()
-      games = g2
-    } catch (e) {
-      // skip
-    }
-
-    return {
-      isFallBack: 3,
-      games: games.map((g) => ({
-        ...g,
-        watch: (games2.find((g2) => g2.gameId === g.gameId) || {}).watch,
-        playoffs: (games2.find((g2) => g2.gameId === g.gameId) || {}).playoffs,
-      })),
-    }
-  } catch (error) {
+  if (format(getApiDate(), DATE_FORMAT) !== dateStr) {
     return fetchRequest4(dateStr)
   }
-}
 
-const fetchRequest2 = async (dateStr) => {
-  try {
-    const res = await fetch(
-      `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
-    )
-    const { games } = await res.json()
-
-    return {
-      isFallBack: 2,
-      games,
-    }
-  } catch (error) {
-    return fetchRequest1(dateStr)
-  }
-}
-
-const fetchRequest1 = async (dateStr) => {
-  const date = parse(dateStr, DATE_FORMAT, new Date())
-  if (!isSameDay(date, new Date())) {
-    throw new Error()
-  }
-  const year = getLeagueYear(date)
   const res = await fetch(
-    `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
+    'https://api.boxscores.site/v1/scoreboard/today'
   )
-  const {
-    gs: { g },
-  } = await res.json()
+  const { games } = await res.json()
+
   return {
-    isFallBack: 1,
-    games: g,
+    isFallBack: 3,
+    games,
   }
 }
+
+// const fetchRequest2 = async (dateStr) => {
+//   try {
+//     const res = await fetch(
+//       `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
+//     )
+//     const { games } = await res.json()
+
+//     return {
+//       isFallBack: 3,
+//       games,
+//     }
+//   } catch (error) {
+//     return fetchRequest1(dateStr)
+//   }
+// }
+
+// const fetchRequest1 = async (dateStr) => {
+//   const date = parse(dateStr, DATE_FORMAT, new Date())
+//   if (!isSameDay(date, new Date())) {
+//     throw new Error()
+//   }
+//   const year = getLeagueYear(date)
+//   const res = await fetch(
+//     `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
+//   )
+//   const {
+//     gs: { g },
+//   } = await res.json()
+//   return {
+//     isFallBack: 1,
+//     games: g,
+//   }
+// }
 
 const insertAt = (str, index, text) => {
   if (index > 0) {
@@ -128,25 +101,16 @@ const insertAt = (str, index, text) => {
 
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
-  try {
-    const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
-    const res = await fetch(
-      `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
-    )
-    const {
-      scoreboard: { games, gameDate },
-    } = await res.json()
+  const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
+  const res = await fetch(
+    // `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
+    `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
+  )
+  const { games } = await res.json()
 
-    if (gameDate.replaceAll('-', '') !== dateStr) {
-      throw Error('wrong date use other endpoints')
-    }
-
-    return {
-      isFallBack: 3,
-      games,
-    }
-  } catch (error) {
-    return fetchRequest2(dateStr)
+  return {
+    isFallBack: 3,
+    games,
   }
 }
 
@@ -173,43 +137,44 @@ const fetchRequest = async (dateStr) => {
 
 export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
-    async (dispatch, getState) => {
-      if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
-        dispatch({
-          type: types.REQUEST_SUCCESS,
-          payload: { games: [] },
-        })
+  async (dispatch, getState) => {
+    if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
+      dispatch({
+        type: types.REQUEST_SUCCESS,
+        payload: { games: [] },
+      })
+      return
+    }
+
+    const {
+      live: { games, lastUpdate },
+      date: { date },
+    } = getState()
+    const oldDateStr = format(date, DATE_FORMAT)
+    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+
+    // if it's different day, or force update, fetch new
+    if (oldDateStr === dateStr && !forceUpdate) {
+      const hasPendingOrLiveGame = games.find(
+        (game) => game.periodTime && game.periodTime.gameStatus !== '3'
+      )
+
+      if (!hasPendingOrLiveGame || updateDiff < 55) {
         return
       }
-
-      const {
-        live: { games, lastUpdate },
-        date: { date },
-      } = getState()
-      const oldDateStr = format(date, DATE_FORMAT)
-      const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
-
-      // if it's different day, or force update, fetch new
-      if (oldDateStr === dateStr && !forceUpdate) {
-        const hasPendingOrLiveGame = games.find(
-          (game) => game.periodTime && game.periodTime.gameStatus !== '3'
-        )
-
-        if (!hasPendingOrLiveGame || updateDiff < 55) {
-          return
-        }
-      }
-
-      isBackground = isBackground === false ? false : oldDateStr === dateStr
-      return await fetchGames(dispatch, dateStr, callback, isBackground)
     }
+
+    isBackground = isBackground === false ? false : oldDateStr === dateStr
+    return await fetchGames(dispatch, dateStr, callback, isBackground)
+  }
 
 // ------ highlights -------
 
 const fetchGameHighlight = async (gid) => {
-  const res = await fetch(`https://api.boxscores.site/v/${gid}`)
-  const { url } = await res.json()
-  return { [gid]: url }
+  // const res = await fetch(`https://api.boxscores.site/v/${gid}`)
+  // const { url } = await res.json()
+  // return { [gid]: url }
+  return {}
 }
 
 export const fetchGameHighlightIfNeeded = () => async (dispatch, getState) => {

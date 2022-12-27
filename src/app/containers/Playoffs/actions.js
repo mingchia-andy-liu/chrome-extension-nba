@@ -5,11 +5,9 @@ export const fetchPlayoff2 = async (dispatch) => {
     dispatch({ type: types.REQUEST_START })
 
     const res = await fetch(
-      'https://stats.nba.com/stats/playoffbracket?LeagueID=00&SeasonYear=2021&State=2'
+      'https://api.boxscores.site/v1/playoff?Season=2021'
     )
-    const {
-      bracket: { playoffBracketSeries },
-    } = await res.json()
+    const { playoffBracketSeries } = await res.json()
 
     dispatch({
       type: types.REQUEST_SUCCESS,
