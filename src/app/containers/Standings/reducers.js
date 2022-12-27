@@ -30,19 +30,21 @@ const initState = {
 const conferenceExtractorV3 = (teams, isEast) =>
   teams
     .filter((team) =>
-      isEast ? eastTeams.includes(team[2].toString()) : westTeams.includes(team[2].toString())
+      isEast
+        ? eastTeams.includes(team.TeamID.toString())
+        : westTeams.includes(team.TeamID.toString())
     )
     .map((team) => ({
-      name: team[4],
-      playoffCode: team[8],
-      win: team[13],
-      loss: team[14],
-      percentage: team[15],
-      gamesBehind: team[38],
-      homeRecord: team[18],
-      awayRecord: team[19],
-      lastTenRecord: team[20],
-      streak: team[36],
+      name: team.TeamName,
+      playoffCode: team.PlayoffRank,
+      win: team.WINS,
+      loss: team.LOSSES,
+      percentage: team.WinPCT,
+      gamesBehind: team.ConferenceGamesBack,
+      homeRecord: team.HOME,
+      awayRecord: team.ROAD,
+      lastTenRecord: team.L10,
+      streak: team.CurrentStreak,
     }))
 
 export default (state = initState, action) => {

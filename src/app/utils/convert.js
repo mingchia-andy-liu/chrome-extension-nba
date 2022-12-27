@@ -36,6 +36,37 @@ const getStats = (old, points) => {
   }
 }
 
+const getStatsProxy = (statistics) => {
+  return {
+    assists: statistics.assists,
+    blocks: statistics.blocks,
+    field_goals_attempted: statistics.fieldGoalsAttempted,
+    field_goals_made: statistics.fieldGoalsMade,
+    field_goals_percentage: toPercentage(
+      statistics.fieldGoalsMade / statistics.fieldGoalsAttempted
+    ),
+    fouls: statistics.foulsPersonal,
+    free_throws_attempted: statistics.freeThrowsAttempted,
+    free_throws_made: statistics.freeThrowsMade,
+    free_throws_percentage: toPercentage(
+      statistics.freeThrowsMade / statistics.freeThrowsAttempted
+    ),
+    points: statistics.points,
+    rebounds_defensive: statistics.reboundsDefensive,
+    rebounds_offensive: statistics.reboundsOffensive,
+    steals: statistics.steals,
+    team_fouls: statistics.foulsTeam,
+    team_rebounds: statistics.reboundsTeam,
+    team_turnovers: statistics.turnoversTeam,
+    three_pointers_attempted: statistics.threePointersAttempted,
+    three_pointers_made: statistics.threePointersMade,
+    three_pointers_percentage: toPercentage(
+      statistics.threePointersMade / statistics.threePointersAttempted
+    ),
+    turnovers: statistics.turnovers,
+  }
+}
+
 const getPlayers = (players = []) => {
   return players.map((player) => ({
     assists: player.ast,
@@ -63,6 +94,49 @@ const getPlayers = (players = []) => {
   }))
 }
 
+const getPlayersProxy = (players = []) => {
+  return players.map((player) => {
+    let [minutes, seconds] = player.statistics.minutes.split(':')
+    if (minutes !== '00') {
+      seconds = seconds.split('.')[0]
+    }
+    if (minutes === '00') {
+      minutes = '0'
+    } else {
+      minutes = minutes.replace(/^0+/, '')
+    }
+    if (seconds === '00') {
+      seconds = '0'
+    } else {
+      seconds = seconds.replace(/^0+/, '')
+    }
+    return {
+      assists: player.statistics.assists,
+      blocks: player.statistics.blocks,
+      field_goals_attempted: player.statistics.fieldGoalsAttempted,
+      field_goals_made: player.statistics.fieldGoalsMade,
+      first_name: player.firstName,
+      fouls: player.statistics.foulsPersonal,
+      free_throws_attempted: player.statistics.freeThrowsAttempted,
+      free_throws_made: player.statistics.freeThrowsMade,
+      last_name: player.familyName,
+      minutes: minutes,
+      on_court: player.oncourt ? 1 : 0,
+      person_id: player.personId,
+      plus_minus: player.statistics.plusMinusPoints,
+      points: player.statistics.points,
+      rebounds_defensive: player.statistics.reboundsDefensive,
+      rebounds_offensive: player.statistics.reboundsOffensive,
+      seconds: seconds,
+      starting_position: player.position,
+      steals: player.statistics.steals,
+      three_pointers_attempted: player.statistics.threePointersAttempted,
+      three_pointers_made: player.statistics.threePointersMade,
+      turnovers: player.statistics.turnovers,
+    }
+  })
+}
+
 const getLinescores = (stats, p) => {
   const pluck = ({
     q1,
@@ -87,6 +161,14 @@ const getLinescores = (stats, p) => {
       period_value: i.toString(),
       score: period.toString(),
     }))
+}
+
+const getLinescoresProxy = (periods) => {
+  return periods.map((period, i) => ({
+    period_name: QUARTER_NAMES[i],
+    period_value: i.toString(),
+    score: period.score,
+  }))
 }
 
 const addQuarterNames = (linescores) =>
@@ -335,6 +417,58 @@ export const convertBS = (old) => {
       players: { player: getPlayers(vls.pstsg) },
       score: vls.s,
       stats: getStats(vls.tstsg, vls.s),
+    },
+  }
+}
+
+export const convertBSProxy = (old) => {
+  const {
+    officials,
+    period,
+    gameStatusText,
+    gameClock,
+    gameStatus,
+    homeTeam,
+    awayTeam,
+  } = old
+
+  return {
+    officials: officials.map((person) => ({
+      first_name: person.firstName,
+      last_name: person.familyName,
+      person_id: person.personId,
+    })),
+    periodTime: {
+      periodValue: `${period}`,
+      periodStatus: gameStatusText,
+      gameClock: gameClock,
+      gameStatus: `${gameStatus}`,
+    },
+    home: {
+      abbreviation: homeTeam.teamTricode,
+      city: homeTeam.teamCity,
+      linescores: {
+        period: getLinescoresProxy(homeTeam.periods),
+      },
+      nickname: homeTeam.teamName,
+      players: {
+        player: getPlayersProxy(homeTeam.players),
+      },
+      score: homeTeam.score,
+      stats: getStatsProxy(homeTeam.statistics),
+    },
+    visitor: {
+      abbreviation: awayTeam.teamTricode,
+      city: awayTeam.teamCity,
+      linescores: {
+        period: getLinescoresProxy(awayTeam.periods),
+      },
+      nickname: awayTeam.teamName,
+      players: {
+        player: getPlayersProxy(awayTeam.players),
+      },
+      score: awayTeam.score,
+      stats: getStatsProxy(awayTeam.statistics),
     },
   }
 }

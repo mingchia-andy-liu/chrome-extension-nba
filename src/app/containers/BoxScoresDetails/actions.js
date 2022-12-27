@@ -4,27 +4,27 @@ import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import types from './types'
-import getAPIDate, { getLeagueYear } from '../../utils/getApiDate'
+import getAPIDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
 
-const dataURL = 'https://data.nba.com/data/10s'
-const oldBase = (year, leagueSlug) =>
-  `${dataURL}/v2015/json/mobile_teams/${leagueSlug}/${year}/scores/gamedetail`
+// const dataURL = 'https://data.nba.com/data/10s'
+// const oldBase = (year, leagueSlug) =>
+//   `${dataURL}/v2015/json/mobile_teams/${leagueSlug}/${year}/scores/gamedetail`
 
-const getLeagueSlug = (gid) => {
-  if (gid.startsWith('13')) {
-    return 'sacramento'
-  } else if (gid.startsWith('14')) {
-    return 'orlando'
-  } else if (gid.startsWith('15')) {
-    return 'vegas'
-  } else if (gid.startsWith('16')) {
-    return 'utah'
-  } else {
-    return 'nba'
-  }
-}
+// const getLeagueSlug = (gid) => {
+//   if (gid.startsWith('13')) {
+//     return 'sacramento'
+//   } else if (gid.startsWith('14')) {
+//     return 'orlando'
+//   } else if (gid.startsWith('15')) {
+//     return 'vegas'
+//   } else if (gid.startsWith('16')) {
+//     return 'utah'
+//   } else {
+//     return 'nba'
+//   }
+// }
 
 const isEmpty = (data) => Object.keys(data).length === 0
 
@@ -42,27 +42,27 @@ const fetchBoxScore = async (dateStr, gid) => {
 
 const fetchPBP = async (dateStr, gid) => {
   try {
-    const pbp = await fetch(`https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`)
-    const { game } = await pbp.json()
+    const pbp = await fetch(
+      `https://nba-api.andyliu.workers.dev/v1/playbyplay/${gid}`
+    )
+    const { gameId, actions } = await pbp.json()
     return {
-      gameId: game.gameId,
-      play: game.actions
+      gameId: gameId,
+      play: actions,
     }
   } catch (error) {
     return {}
   }
 }
 
-const fetchGameDetail = async (dateStr, gid) => {
+const fetchGameDetail = async (_, gid) => {
   try {
-    const date = parse(dateStr, DATE_FORMAT, new Date())
-    const year = getLeagueYear(date)
-    const leagueSlug = getLeagueSlug(gid)
-    const advanced = await fetch(
-      `${oldBase(year, leagueSlug)}/${gid}_gamedetail.json`
+    const response = await fetch(
+      `https://nba-api.andyliu.workers.dev/v1/boxscore/${gid}`
     )
-    const { g } = await advanced.json()
-    return g
+
+    const game = await response.json()
+    return game
   } catch (error) {
     return {}
   }
