@@ -5,7 +5,7 @@ export const fetchPlayoff2 = async (dispatch) => {
     dispatch({ type: types.REQUEST_START })
 
     const res = await fetch(
-      'https://nba-api.andyliu.workers.dev/v1/playoff?Season=2021'
+      'https://api.boxscores.site/v1/playoff?Season=2021'
     )
     const { playoffBracketSeries } = await res.json()
 

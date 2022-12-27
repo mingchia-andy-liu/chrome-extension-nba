@@ -68,7 +68,7 @@ const liveListener = (initCheck) => {
   }
 
   // cdn
-  fetch('https://nba-api.andyliu.workers.dev/v1/scoreboard/today')
+  fetch('https://api.boxscores.site/v1/scoreboard/today')
     .then((res) => res.json())
     .then(({ games }) => {
       checkLiveGame(games, 3)

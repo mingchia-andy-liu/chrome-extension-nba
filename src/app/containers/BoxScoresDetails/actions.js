@@ -43,7 +43,7 @@ const fetchBoxScore = async (dateStr, gid) => {
 const fetchPBP = async (dateStr, gid) => {
   try {
     const pbp = await fetch(
-      `https://nba-api.andyliu.workers.dev/v1/playbyplay/${gid}`
+      `https://api.boxscores.site/v1/playbyplay/${gid}`
     )
     const { gameId, actions } = await pbp.json()
     return {
@@ -58,7 +58,7 @@ const fetchPBP = async (dateStr, gid) => {
 const fetchGameDetail = async (_, gid) => {
   try {
     const response = await fetch(
-      `https://nba-api.andyliu.workers.dev/v1/boxscore/${gid}`
+      `https://api.boxscores.site/v1/boxscore/${gid}`
     )
 
     const game = await response.json()

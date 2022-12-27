@@ -47,7 +47,7 @@ const fetchRequest3 = async (dateStr) => {
   }
 
   const res = await fetch(
-    'https://nba-api.andyliu.workers.dev/v1/scoreboard/today'
+    'https://api.boxscores.site/v1/scoreboard/today'
   )
   const { games } = await res.json()
 
@@ -104,7 +104,7 @@ const fetchRequest4 = async (dateStr) => {
   const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
   const res = await fetch(
     // `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
-    `https://nba-api.andyliu.workers.dev/v1/scoreboard?GameDate=${newDateStr}`
+    `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
   )
   const { games } = await res.json()
 
