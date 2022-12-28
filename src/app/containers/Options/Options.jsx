@@ -106,7 +106,7 @@ const renderTeams = (favTeam, updateTeam) => {
     </React.Fragment>
   )
 }
-const ding = new Audio('./assets/ding.wav')
+// const ding = new Audio('./assets/ding.wav')
 const NotificationSection = ({ permissionEnum, request, remove }) => {
   // null: loading, {enabled: false}: no notification, {enabled:true}: has notification
   const [notification, toggleNotification] = React.useState(null)
@@ -172,7 +172,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
             iconUrl: 'assets/png/icon-2-color-512.png',
           })
           if (browser.isChrome) {
-            ding.play()
+            // ding.play()
           }
         }}
       >

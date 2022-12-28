@@ -2,7 +2,7 @@ import browser from './browser'
 import { getNickNamesByTriCode } from './teams'
 import isSameMinute from 'date-fns/isSameMinute'
 
-const ding = new Audio('./assets/ding.wav')
+// const ding = new Audio('./assets/ding.wav')
 const getOptions = (title, message) => ({
   type: 'basic',
   title: title,
@@ -17,7 +17,7 @@ const fireNotificationForGame = (options, gameId, dateStr, status) => {
       const id = `${gameId}?date=${dateStr}&st=${status}`
       browser.notifications.create(id, options)
       if (browser.isChrome) {
-        ding.play()
+        // ding.play()
       }
     }
   })
