@@ -193,15 +193,17 @@ if (typeof browser !== 'undefined') {
     chrome.storage.local.get(null, (obj) => callback(Object.keys(obj)))
   }
 
+  // https://developer.chrome.com/docs/extensions/reference/action/
   browserNameSpace.setBadgeText = (text) => {
-    if (chrome.browserAction.setBadgeText) {
-      chrome.browserAction.setBadgeText(text)
+    if (chrome.action.setBadgeText) {
+      chrome.action.setBadgeText(text)
     }
   }
 
+  // https://developer.chrome.com/docs/extensions/reference/action/#method-setBadgeText
   browserNameSpace.setBadgeBackgroundColor = (color) => {
-    if (chrome.browserAction.setBadgeText) {
-      chrome.browserAction.setBadgeBackgroundColor(color)
+    if (chrome.action.setBadgeText) {
+      chrome.action.setBadgeBackgroundColor(color)
     }
   }
 

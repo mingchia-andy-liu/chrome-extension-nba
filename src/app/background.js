@@ -77,7 +77,7 @@ const liveListener = (initCheck) => {
       }
     })
     .catch((error) => {
-      console.error('something went wrong...', error)
+      console.log('something went wrong...', error)
     })
 }
 
