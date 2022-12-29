@@ -67,7 +67,7 @@ const renderPBPRow = (plays, period, isDark) => {
       scoreAway: visitor_score,
       changes,
       description: _description,
-      isFieldGoal,
+      shotResult,
     } = play
     const color = getLogoColorByName(team_abr, null)
     const LOGO =
@@ -80,7 +80,7 @@ const renderPBPRow = (plays, period, isDark) => {
       )
 
     const SCORE =
-      isFieldGoal && !_description.includes('MISS') ? (
+      shotResult === 'Made' ? (
         <ScoreCell
           changes={changes ? 1 : undefined}
           tied={home_score === visitor_score ? 1 : undefined}
