@@ -46,50 +46,32 @@ const fetchRequest3 = async (dateStr) => {
     return fetchRequest4(dateStr)
   }
 
-  const res = await fetch(
-    'https://api.boxscores.site/v1/scoreboard/today'
-  )
-  const { games } = await res.json()
+  let g = [];
+  try {
+    const res = await fetch(
+      'https://api.boxscores.site/v1/scoreboard/today'
+    )
+    const { games } = await res.json()
+    g = games;
+  } catch (e) {
+    try {
+      const res = await fetch(
+        'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+      )
+      const {
+        scoreboard: { games },
+      } = await res.json()
+      
+      g = games;
+    } catch (error) {
+    }
+  }
 
   return {
     isFallBack: 3,
-    games,
+    games: g,
   }
 }
-
-// const fetchRequest2 = async (dateStr) => {
-//   try {
-//     const res = await fetch(
-//       `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
-//     )
-//     const { games } = await res.json()
-
-//     return {
-//       isFallBack: 3,
-//       games,
-//     }
-//   } catch (error) {
-//     return fetchRequest1(dateStr)
-//   }
-// }
-
-// const fetchRequest1 = async (dateStr) => {
-//   const date = parse(dateStr, DATE_FORMAT, new Date())
-//   if (!isSameDay(date, new Date())) {
-//     throw new Error()
-//   }
-//   const year = getLeagueYear(date)
-//   const res = await fetch(
-//     `https://data.nba.com/data/5s/v2015/json/mobile_teams/nba/${year}/scores/00_todays_scores.json`
-//   )
-//   const {
-//     gs: { g },
-//   } = await res.json()
-//   return {
-//     isFallBack: 1,
-//     games: g,
-//   }
-// }
 
 const insertAt = (str, index, text) => {
   if (index > 0) {
@@ -102,36 +84,29 @@ const insertAt = (str, index, text) => {
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
   const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
-  const res = await fetch(
-    // `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
-    `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
-  )
-  const { games } = await res.json()
+
+  let g = [];
+  try {
+    const res = await fetch(
+      `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
+    )
+    const { games } = await res.json()
+    g = games;
+  } catch (error) {
+    const res2 = await fetch(
+      `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
+    )
+    const { scoreboard: {games} } = await res2.json()
+    g = games
+  }
 
   return {
     isFallBack: 3,
-    games,
+    games: g
   }
 }
 
 const fetchRequest = async (dateStr) => {
-  // try {
-  //   const res = await fetch(
-  //     `https://data.nba.com/data/5s/json/cms/noseason/scoreboard/${dateStr}/games.json`
-  //   )
-  //   const {
-  //     sports_content: {
-  //       games: { game },
-  //     },
-  //   } = await res.json()
-  //   return {
-  //     games: game
-  //   }
-  // } catch (error) {
-  //   return fetchRequestFailOver(dateStr)
-  // }
-  // TODO: the above endpoint seems to be broken for extended season
-  // Review again once regular season starts
   return fetchRequest3(dateStr)
 }
 

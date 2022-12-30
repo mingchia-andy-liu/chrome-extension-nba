@@ -7,11 +7,12 @@ import getApiDate, { isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
+import { nextNearestMinutes } from './utils/time'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
-  when: setSeconds(addMinutes(Date.now(), 1), 0).valueOf(),
-  periodInMinutes: 1,
+  when: nextNearestMinutes(5, setSeconds(addMinutes(Date.now(), 1), 0).valueOf()).valueOf(),
+  periodInMinutes: 5,
 })
 
 const onClickListener = (notifId) => {
@@ -76,6 +77,18 @@ const liveListener = (initCheck) => {
         fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
       }
     })
+    .catch(() => {
+      return (
+        fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+          .then((res) => res.json())
+          .then(({ scoreboard: { games } }) => {
+            checkLiveGame(games, 3)
+            if (!initCheck) {
+              fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
+            }
+          })
+      )
+    })
     .catch((error) => {
       console.log('something went wrong...', error)
     })
@@ -85,7 +98,6 @@ const liveListener = (initCheck) => {
 liveListener(false)
 
 browser.alarms.onAlarm.addListener((alarm) => {
-  // console.log('alarm', new Date())
   // when the chrome is reopened, alarms get ran even though the time has passed
   if (differenceInSeconds(alarm.scheduledTime, Date.now()) < -10) {
     return

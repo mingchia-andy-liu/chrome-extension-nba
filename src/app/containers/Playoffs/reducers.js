@@ -39,7 +39,7 @@ export default (state = initState, action) => {
       const { version, series } = action.payload
       return {
         isLoading: false,
-        series: version === 0 ? series : series.map(normalizer),
+        series: series.map(normalizer),
       }
     }
     case types.REQUEST_ERROR:
