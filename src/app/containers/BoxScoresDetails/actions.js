@@ -42,28 +42,28 @@ const fetchBoxScore = async (dateStr, gid) => {
 
 const fetchPBP = async (dateStr, gid) => {
   try {
-    let plays = [];
-    let isProxy = true;
+    let plays = []
+    let isProxy = true
     try {
-      const pbp = await fetch(
-        `https://api.boxscores.site/v1/playbyplay/${gid}`
-      )
+      const pbp = await fetch(`https://api.boxscores.site/v1/playbyplay/${gid}`)
       const { actions } = await pbp.json()
-      plays = actions;
+      plays = actions
     } catch (error) {
       const pbp = await fetch(
         `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
       )
-      const { game: {actions} } = await pbp.json()
-      plays = actions;
-      isProxy = false;
+      const {
+        game: { actions },
+      } = await pbp.json()
+      plays = actions
+      isProxy = false
     }
     return {
       isProxy,
       game: {
         gameId: gid,
         play: plays,
-      }
+      },
     }
   } catch (error) {
     return {}
@@ -72,22 +72,22 @@ const fetchPBP = async (dateStr, gid) => {
 
 const fetchGameDetail = async (_, gid) => {
   try {
-    let g = {};
-    let isProxy = true;
+    let g = {}
+    let isProxy = true
 
     try {
       const response = await fetch(
         `https://api.boxscores.site/v1/boxscore/${gid}`
       )
       const game = await response.json()
-      g = game;
+      g = game
     } catch (error) {
       const bs = await fetch(
         `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`
       )
-      const {game} = await bs.json()
-      g = game;
-      isProxy = false;
+      const { game } = await bs.json()
+      g = game
+      isProxy = false
     }
 
     return {
@@ -113,7 +113,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
     ])
 
     if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
-      throw Error('one of them box score data is bad');
+      throw Error('one of them box score data is bad')
     }
 
     dispatch({
@@ -122,7 +122,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
         boxScoreData: boxScoreData.game || {},
         gid,
         pbpData: pbpData.game || {},
-        isProxy: pbpData.isProxy && boxScoreData.isProxy
+        isProxy: pbpData.isProxy && boxScoreData.isProxy,
       },
     })
   } catch (error) {

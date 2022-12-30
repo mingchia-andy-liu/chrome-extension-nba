@@ -46,13 +46,11 @@ const fetchRequest3 = async (dateStr) => {
     return fetchRequest4(dateStr)
   }
 
-  let g = [];
+  let g = []
   try {
-    const res = await fetch(
-      'https://api.boxscores.site/v1/scoreboard/today'
-    )
+    const res = await fetch('https://api.boxscores.site/v1/scoreboard/today')
     const { games } = await res.json()
-    g = games;
+    g = games
   } catch (e) {
     try {
       const res = await fetch(
@@ -61,10 +59,9 @@ const fetchRequest3 = async (dateStr) => {
       const {
         scoreboard: { games },
       } = await res.json()
-      
-      g = games;
-    } catch (error) {
-    }
+
+      g = games
+    } catch (error) {}
   }
 
   return {
@@ -85,24 +82,26 @@ const insertAt = (str, index, text) => {
 const fetchRequest4 = async (dateStr) => {
   const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
 
-  let g = [];
+  let g = []
   try {
     const res = await fetch(
       `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
     )
     const { games } = await res.json()
-    g = games;
+    g = games
   } catch (error) {
     const res2 = await fetch(
       `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
     )
-    const { scoreboard: {games} } = await res2.json()
+    const {
+      scoreboard: { games },
+    } = await res2.json()
     g = games
   }
 
   return {
     isFallBack: 3,
-    games: g
+    games: g,
   }
 }
 

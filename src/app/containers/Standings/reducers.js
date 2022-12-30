@@ -29,7 +29,9 @@ const initState = {
 const conferenceExtractorV3 = (teams, isEast) =>
   teams
     .filter((team) =>
-      isEast ? eastTeams.includes(team[2].toString()) : westTeams.includes(team[2].toString())
+      isEast
+        ? eastTeams.includes(team[2].toString())
+        : westTeams.includes(team[2].toString())
     )
     .map((team) => ({
       name: team[4],
@@ -66,7 +68,9 @@ const conferenceExtractorV3Proxy = (teams, isEast) =>
     }))
 
 const extractor = (teams, isEast, isProxy) => {
-  return isProxy ? conferenceExtractorV3Proxy(teams, isEast) : conferenceExtractorV3(teams, isEast);
+  return isProxy
+    ? conferenceExtractorV3Proxy(teams, isEast)
+    : conferenceExtractorV3(teams, isEast)
 }
 
 export default (state = initState, action) => {

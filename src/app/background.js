@@ -11,7 +11,10 @@ import { nextNearestMinutes } from './utils/time'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
-  when: nextNearestMinutes(5, setSeconds(addMinutes(Date.now(), 1), 0).valueOf()).valueOf(),
+  when: nextNearestMinutes(
+    5,
+    setSeconds(addMinutes(Date.now(), 1), 0).valueOf()
+  ).valueOf(),
   periodInMinutes: 5,
 })
 
@@ -78,16 +81,16 @@ const liveListener = (initCheck) => {
       }
     })
     .catch(() => {
-      return (
-        fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
-          .then((res) => res.json())
-          .then(({ scoreboard: { games } }) => {
-            checkLiveGame(games, 3)
-            if (!initCheck) {
-              fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
-            }
-          })
+      return fetch(
+        'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
       )
+        .then((res) => res.json())
+        .then(({ scoreboard: { games } }) => {
+          checkLiveGame(games, 3)
+          if (!initCheck) {
+            fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
+          }
+        })
     })
     .catch((error) => {
       console.log('something went wrong...', error)

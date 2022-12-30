@@ -96,7 +96,7 @@ export default (state = initState, action) => {
         isLoading: true,
       }
     case types.REQUEST_SUCCESS: {
-      const { boxScoreData, gid, pbpData, isProxy } = action.payload
+      const { boxScoreData, gid, pbpData } = action.payload
       return {
         ...state,
         bsData: sanitizeBS(convertBSProxy(boxScoreData)),
@@ -104,8 +104,6 @@ export default (state = initState, action) => {
         isLoading: false,
         pbpData: pbpDecorater(pbpData),
         teamStats: {
-          // home: isProxy ? teamStatsConverterProxy(boxScoreData.homeTeam.statistics) : teamStatsConverter(team.hls),
-          // visitor: isProxy ? teamStatsConverterProxy(boxScoreData.awayTeam.statistics) : teamStatsConverter(team.vls),
           home: teamStatsConverterProxy(boxScoreData.homeTeam.statistics),
           visitor: teamStatsConverterProxy(boxScoreData.awayTeam.statistics),
           extra: {

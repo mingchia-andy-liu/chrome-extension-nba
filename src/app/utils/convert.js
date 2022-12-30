@@ -94,23 +94,21 @@ const getPlayers = (players = []) => {
   }))
 }
 
-const minuteStringRegex = /^(PT)?(\d{1,3})M(\d{1,2})\.(\d{1,2})S$/;
+const minuteStringRegex = /^(PT)?(\d{1,3})M(\d{1,2})\.(\d{1,2})S$/
 const formatMinutes = (minute) => {
-  let minutes;
-  let seconds;
+  let minutes
+  let seconds
   if (minuteStringRegex.test(minute)) {
-    const groups = minute.match(minuteStringRegex);
+    const groups = minute.match(minuteStringRegex)
     if (groups == null) {
-      throw new Error(
-        'Unexpected minute string. Cannot parse time.' + minutesString,
-      );
+      throw new Error('Unexpected minute string. Cannot parse time: ' + minute)
     }
-    minutes = groups[2];
+    minutes = groups[2]
     seconds = groups[3] + (groups[4] === '00' ? '' : '.' + groups[4])
   } else {
-    [minutes, seconds] = minute.split(':')
+    ;[minutes, seconds] = minute.split(':')
   }
-  
+
   if (minutes !== '00') {
     seconds = seconds.split('.')[0]
   }
@@ -124,7 +122,7 @@ const formatMinutes = (minute) => {
   } else {
     seconds = +seconds
   }
-  
+
   return {
     minutes,
     seconds,
@@ -133,7 +131,7 @@ const formatMinutes = (minute) => {
 
 const getPlayersProxy = (players = []) => {
   return players.map((player) => {
-    let {minutes, seconds} = formatMinutes(player.statistics.minutes)
+    const { minutes, seconds } = formatMinutes(player.statistics.minutes)
     return {
       assists: player.statistics.assists,
       blocks: player.statistics.blocks,

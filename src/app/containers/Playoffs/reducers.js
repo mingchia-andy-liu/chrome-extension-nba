@@ -36,7 +36,7 @@ export default (state = initState, action) => {
         isLoading: true,
       }
     case types.REQUEST_SUCCESS: {
-      const { version, series } = action.payload
+      const { series } = action.payload
       return {
         isLoading: false,
         series: series.map(normalizer),
