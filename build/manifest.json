@@ -25,8 +25,7 @@
       "alarms",
       "*://*.nba.com/",
       "*://*.nba.net/",
-      "*://*.boxscores.site/",
-      "*://*.workers.dev/"
+      "*://*.boxscores.site/"
   ],
   "optional_permissions": [
       "notifications"
