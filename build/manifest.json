@@ -1,33 +1,32 @@
 {
-  "manifest_version": 2,
-  "name": "Basketball Box Scores",
-  "description": "The best NBA browser extension with box scores, standings, highlights and more!",
-  "version": "1.5.3",
-  "icons": {
-      "16": "assets/png/icon-2-color-16.png",
-      "48": "assets/png/icon-2-color-48.png",
-      "128": "assets/png/icon-2-color-128.png"
-  },
-  "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-          "48": "assets/png/icon-2-color-48.png"
-      }
-  },
-  "background": {
-      "scripts": [
-          "background.min.js"
-      ],
-      "persistent": true
-  },
-  "permissions": [
-      "storage",
-      "alarms",
-      "*://*.nba.com/",
-      "*://*.nba.net/",
-      "*://*.boxscores.site/"
-  ],
-  "optional_permissions": [
-      "notifications"
-  ]
+    "manifest_version": 3,
+    "name": "Basketball Box Scores",
+    "description": "The best NBA browser extension with box scores, standings, highlights and more!",
+    "version": "1.5.3",
+    "icons": {
+        "16": "assets/png/icon-2-color-16.png",
+        "48": "assets/png/icon-2-color-48.png",
+        "128": "assets/png/icon-2-color-128.png"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "48": "assets/png/icon-2-color-48.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.min.js"
+    },
+    "permissions": [
+        "storage",
+        "alarms"
+    ],
+    "optional_permissions": [
+        "notifications"
+    ],
+    "host_permissions": [
+        "*://*.nba.com/",
+        "*://*.nba.net/",
+        "*://*.boxscores.site/"
+    ]
 }
