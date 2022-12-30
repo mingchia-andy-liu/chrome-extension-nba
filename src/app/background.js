@@ -12,10 +12,10 @@ import { nextNearestMinutes } from './utils/time'
 // tracks any live game in the background
 browser.alarms.create('minute', {
   when: nextNearestMinutes(
-    5,
+    2,
     setSeconds(addMinutes(Date.now(), 1), 0).valueOf()
   ).valueOf(),
-  periodInMinutes: 5,
+  periodInMinutes: 2,
 })
 
 const onClickListener = (notifId) => {

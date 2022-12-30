@@ -17,7 +17,7 @@
     "lint:js": "eslint src/app && prettier --check src/app",
     "start:dev": "NODE_ENV=development webpack-dev-server --open",
     "start": "webpack-dev-server --open",
-    "webpack:bg": "webpack --config bg.webpack.config.js",
+    "webpack:bg": "NODE_ENV=production webpack --config bg.webpack.config.js",
     "webpack:dev": "NODE_ENV=development webpack --progress --color",
     "webpack:popup": "NODE_ENV=production webpack --progress --color --config popup.webpack.config.js",
     "webpack": "NODE_ENV=production webpack --progress --color",
