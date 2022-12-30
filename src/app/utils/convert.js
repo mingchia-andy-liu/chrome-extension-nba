@@ -94,22 +94,44 @@ const getPlayers = (players = []) => {
   }))
 }
 
+const minuteStringRegex = /^(PT)?(\d{1,3})M(\d{1,2})\.(\d{1,2})S$/
+const formatMinutes = (minute) => {
+  let minutes
+  let seconds
+  if (minuteStringRegex.test(minute)) {
+    const groups = minute.match(minuteStringRegex)
+    if (groups == null) {
+      throw new Error('Unexpected minute string. Cannot parse time: ' + minute)
+    }
+    minutes = groups[2]
+    seconds = groups[3] + (groups[4] === '00' ? '' : '.' + groups[4])
+  } else {
+    ;[minutes, seconds] = minute.split(':')
+  }
+
+  if (minutes !== '00') {
+    seconds = seconds.split('.')[0]
+  }
+  if (minutes === '00') {
+    minutes = 0
+  } else {
+    minutes = +minutes
+  }
+  if (seconds === '00') {
+    seconds = 0
+  } else {
+    seconds = +seconds
+  }
+
+  return {
+    minutes,
+    seconds,
+  }
+}
+
 const getPlayersProxy = (players = []) => {
   return players.map((player) => {
-    let [minutes, seconds] = player.statistics.minutes.split(':')
-    if (minutes !== '00') {
-      seconds = seconds.split('.')[0]
-    }
-    if (minutes === '00') {
-      minutes = '0'
-    } else {
-      minutes = minutes.replace(/^0+/, '')
-    }
-    if (seconds === '00') {
-      seconds = '0'
-    } else {
-      seconds = seconds.replace(/^0+/, '')
-    }
+    const { minutes, seconds } = formatMinutes(player.statistics.minutes)
     return {
       assists: player.statistics.assists,
       blocks: player.statistics.blocks,
@@ -121,7 +143,7 @@ const getPlayersProxy = (players = []) => {
       free_throws_made: player.statistics.freeThrowsMade,
       last_name: player.familyName,
       minutes: minutes,
-      on_court: player.oncourt ? 1 : 0,
+      on_court: player.oncourt === true || player.oncourt === '1' ? 1 : 0,
       person_id: player.personId,
       plus_minus: player.statistics.plusMinusPoints,
       points: player.statistics.points,

@@ -97,13 +97,11 @@ export default (state = initState, action) => {
       }
     case types.REQUEST_SUCCESS: {
       const { boxScoreData, gid, pbpData } = action.payload
-      // const team = teamStatsExtrator(boxScoreData)
       return {
         ...state,
         bsData: sanitizeBS(convertBSProxy(boxScoreData)),
         gid,
         isLoading: false,
-        // pbpData: pbpData,
         pbpData: pbpDecorater(pbpData),
         teamStats: {
           home: teamStatsConverterProxy(boxScoreData.homeTeam.statistics),
