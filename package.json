@@ -70,7 +70,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.2",
     "react-flatpickr": "^3.10.11",
-    "react-redux": "^7.2.8",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",
     "redux": "^4.2.0",
