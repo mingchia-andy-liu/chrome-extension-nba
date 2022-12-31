@@ -67,6 +67,8 @@ export const formatGames = (games) => {
   }))
 }
 
+const statusTextRegex =
+  /^([OT|Q][0-9]{1,2}) [0-9]{1,2}:[0-9]{1,2}(\.[0-9]{1,3})?$/
 /**
  * Migrated from boxscore.js. Formats game status with clock or match status
  * @param {string} clock
@@ -110,6 +112,9 @@ export const formatClock = (clock, status, totalPeriod) => {
     }
     return status
   } else if (+totalPeriod === 0) {
+    return status
+  } else if (statusTextRegex.test(status)) {
+    // already formatted
     return status
   }
   return clock

@@ -7,7 +7,6 @@ import getApiDate, { isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
-import { nextNearestMinutes } from './utils/time'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
