@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.5.4 Updates: (2022-12-30)',
+    updates: ['Update to manifest v3', 'Notification Audio is not supported in v3 for Chrome', 'Update endpoints'],
+  },
+  {
     version: '1.5.3 Updates: (2022-10-31)',
     updates: ['Fix latest scoreboard', 'Fix play by play', 'Fix standings'],
   },
