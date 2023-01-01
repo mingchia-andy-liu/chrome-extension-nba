@@ -84,7 +84,7 @@ export const formatClock = (clock, status, totalPeriod) => {
     // PPD mean postponed
     return 'Postponed'
   } else if (
-    (status.includes('Start') || status.includes('End')) &&
+    (status.startsWith('Start') || status.startsWith('End')) &&
     status.includes('of')
   ) {
     // Start/End of 1st Qtr/OT
@@ -96,6 +96,12 @@ export const formatClock = (clock, status, totalPeriod) => {
     } else {
       return status
     }
+  } else if (
+    (status.startsWith('Start') || status.startsWith('End')) &&
+    !status.includes('of')
+  ) {
+    // Start/End Q/OT1
+    return status
   } else if (status && status.includes('Qtr') && status.includes('of')) {
     // game started being played over regular time
     return 'Q' + status.charAt(0) + ' ' + clock
