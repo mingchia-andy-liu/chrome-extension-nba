@@ -6,7 +6,7 @@ import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import PlayoffColumn from '../../components/PlayoffColumn'
-import * as actions from './actions'
+import { fetchPlayoffs } from './slice'
 import { westSelector, eastSelector, finalSelector } from './selector'
 
 const ColumnWrapper = styled.div`
@@ -31,9 +31,9 @@ const renderContent = ({ isLoading, west, east, final }) => {
   )
 }
 
-const Playoffs = ({ fetchPlayoff, isLoading, west, east, final }) => {
+const Playoffs = ({ fetchPlayoff, isLoading, west, east, final, dispatch }) => {
   React.useEffect(() => {
-    fetchPlayoff()
+    dispatch(fetchPlayoffs())
     document.title = 'Box Scores | Playoffs'
   }, [])
 
@@ -68,4 +68,4 @@ const mapStateToProps = ({ playoff: { isLoading, series } }) => ({
   final: finalSelector(series),
 })
 
-export default connect(mapStateToProps, actions)(Playoffs)
+export default connect(mapStateToProps)(Playoffs)
