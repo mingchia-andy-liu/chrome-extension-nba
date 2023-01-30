@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
-import * as actions from './actions'
 import { mediaQuery } from '../../styles'
+import { fetchStandings } from './slice'
 
 const Cell = styled.td`
   width: 10vw;
@@ -142,9 +142,9 @@ const renderContent = (east, west, isLoading) => {
   )
 }
 
-const Standings = ({ fetchStandings, east, west, isLoading }) => {
+const Standings = ({ east, west, isLoading, dispatch }) => {
   React.useEffect(() => {
-    fetchStandings()
+    dispatch(fetchStandings())
     document.title = 'Box Scores | Standings'
   }, [])
 
@@ -158,7 +158,6 @@ const Standings = ({ fetchStandings, east, west, isLoading }) => {
 
 Standings.propTypes = {
   east: PropTypes.array.isRequired,
-  fetchStandings: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   west: PropTypes.array.isRequired,
 }
@@ -169,4 +168,4 @@ const mapStateToProps = ({ standings: { east, west, isLoading } }) => ({
   west,
 })
 
-export default connect(mapStateToProps, actions)(Standings)
+export default connect(mapStateToProps)(Standings)
