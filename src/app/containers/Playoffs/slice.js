@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { getLeagueYear } from '../../utils/getApiDate'
 
 const normalizer = (serie) => ({
@@ -48,7 +48,7 @@ const playoffSlice = createSlice({
 
 const { fetchPlayoffsPending, fetchPlayoffsFulfilled, fetchPlayoffsRejected } = playoffSlice.actions
 
-export const fetchPlayoffs = () => async (dispatch) => {
+export const fetchPlayoffs = () => async (dispatch, getState) => {
   dispatch(fetchPlayoffsPending())
   try {
     const year = getLeagueYear(new Date())
