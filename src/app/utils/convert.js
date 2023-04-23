@@ -240,7 +240,7 @@ export const convertDaily3 = (game) => {
     // from 2
     watch,
     playoffs,
-    seriesText
+    seriesText,
   } = game
 
   const formatGameStatus = () => {
@@ -285,7 +285,7 @@ export const convertDaily3 = (game) => {
       periodValue: `${period}`,
     },
     playoffs: getPlayoffs(playoffs),
-    seriesText: seriesText
+    seriesText: seriesText,
   }
 }
 

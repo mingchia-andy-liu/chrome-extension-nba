@@ -1,9 +1,7 @@
 module.exports = [
   {
     version: '1.5.5 Updates: (2023-04-23)',
-    updates: [
-      'Fix series text'
-    ],
+    updates: ['Fix series text'],
   },
   {
     version: '1.5.4 Updates: (2022-12-30)',
