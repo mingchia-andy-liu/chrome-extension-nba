@@ -114,6 +114,7 @@ const MatchInfo = ({
   periodTime: { periodStatus, gameClock, gameStatus, periodValue },
   playoffs,
   urls,
+  seriesText
 }) => {
   let series = ''
   if (playoffs) {
@@ -127,7 +128,9 @@ const MatchInfo = ({
         series = `Series tied ${homeWins}-${visitorWins}`
       }
     }
-  }
+  } else if (seriesText) (
+    series = seriesText
+  )
 
   return (
     <ThemeConsumer>
