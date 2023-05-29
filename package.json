@@ -45,7 +45,7 @@
     "addons-linter": "^5.21.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.5",
-    "css-loader": "^6.7.1",
+    "css-loader": "^6.8.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
