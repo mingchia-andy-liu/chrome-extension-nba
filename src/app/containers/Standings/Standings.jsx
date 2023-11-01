@@ -111,31 +111,34 @@ const renderContent = (east, west, isLoading) => {
           <strong>x</strong> - Clinched Playoff Berth
         </ListItem>
         <ListItem>
-          <strong>o</strong> - Eliminated from Playoff contention
-        </ListItem>
-        <ListItem>
-          <strong>nw</strong> - Clinched Northwest Division
-        </ListItem>
-        <ListItem>
-          <strong>c</strong> - Clinched Central Division
-        </ListItem>
-        <ListItem>
-          <strong>p</strong> - Clinched Pacific Division
-        </ListItem>
-        <ListItem>
-          <strong>se</strong> - Clinched Southeast Division
+          <strong>o</strong> - Eliminated from Playoffs contention
         </ListItem>
         <ListItem>
           <strong>e</strong> - Clinched Eastern Conference
         </ListItem>
         <ListItem>
-          <strong>sw</strong> - Clinched Southwest Division
-        </ListItem>
-        <ListItem>
           <strong>w</strong> - Clinched Western Conference
         </ListItem>
         <ListItem>
+          <strong>nw</strong> - Clinched Northwest Division
+        </ListItem>
+        <ListItem>
+          <strong>p</strong> - Clinched Pacific Division
+        </ListItem>
+        <ListItem>
+          <strong>sw</strong> - Clinched Southwest Division
+        </ListItem>
+        <ListItem>
           <strong>a</strong> - Clinched Atlantic Division
+        </ListItem>
+        <ListItem>
+          <strong>c</strong> - Clinched Central Division
+        </ListItem>
+        <ListItem>
+          <strong>se</strong> - Clinched Southeast Division
+        </ListItem>
+        <ListItem>
+          <strong>pi</strong> - Clinched Play-In
         </ListItem>
       </List>
     </React.Fragment>

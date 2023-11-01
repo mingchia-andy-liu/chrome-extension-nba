@@ -35,7 +35,7 @@ const conferenceExtractorV3 = (teams, isEast) =>
     )
     .map((team) => ({
       name: team[4],
-      playoffCode: team[8],
+      playoffCode: team[9],
       win: team[13],
       loss: team[14],
       percentage: team[15],
