@@ -211,7 +211,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
       </StatsCell>
       <StatsCell
         dark={isDark ? 1 : undefined}
-        winning={+steals >= 5 ? 1 : undefined}
+        winning={+blocks >= 5 ? 1 : undefined}
       >
         {blocks}
       </StatsCell>
