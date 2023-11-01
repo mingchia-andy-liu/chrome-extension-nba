@@ -1,4 +1,3 @@
-import format from 'date-fns/format'
 import types from './types'
 import { getLeagueYear } from '../../utils/getApiDate'
 
@@ -7,8 +6,8 @@ export const fetchStandings = () => async (dispatch) => {
     dispatch({ type: types.REQUEST_START })
 
     const year = getLeagueYear(new Date())
-    const nextYear = (year + 1) % 100;
-    const season = `${year}-${nextYear}`;
+    const nextYear = (year + 1) % 100
+    const season = `${year}-${nextYear}`
 
     let data = []
     let isProxy = true
