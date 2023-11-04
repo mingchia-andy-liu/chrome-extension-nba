@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.5.6 Updates: (2023-04-23)',
+    updates: ['Update standings season', 'Fix start of date issue', 'Fix boxscores highlights'],
+  },
+  {
     version: '1.5.5 Updates: (2023-04-23)',
     updates: ['Fix series text'],
   },
@@ -26,7 +30,7 @@ module.exports = [
   {
     version: '1.5.0 Updates: (2022-04-17)',
     updates: [
-      'Add quarter notificaitons, set up to get notified when a quarter starts',
+      'Add quarter notifications, set up to get notified when a quarter starts',
       'Fix playoffs text',
       'Fix on-court status',
     ],
