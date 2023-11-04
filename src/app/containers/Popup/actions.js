@@ -46,6 +46,8 @@ const fetchRequest3 = async (dateStr) => {
     return fetchRequest4(dateStr)
   }
 
+  let apiGameDate = null;
+
   let g = []
   try {
     const res = await fetch('https://api.boxscores.site/v1/scoreboard/today')
@@ -57,11 +59,19 @@ const fetchRequest3 = async (dateStr) => {
         'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
       )
       const {
-        scoreboard: { games },
+        scoreboard: { games, gameDate },
       } = await res.json()
+
+      apiGameDate = gameDate.replaceAll('-', '')
 
       g = games
     } catch (error) {}
+  }
+
+  // if the return response is not the same as API date, then response must be the previous date
+  // but we should actually be fetching the new date, use 4 for per date.
+  if (apiGameDate !== null && apiGameDate !== dateStr) {
+    return fetchRequest4(dateStr)
   }
 
   return {
