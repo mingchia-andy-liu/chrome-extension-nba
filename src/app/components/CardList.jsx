@@ -19,8 +19,18 @@ const Wrapper = styled.div`
     `}
 `
 
-const generateCards = (games, selected, favTeam, broadcast, rest) => {
+const generateCards = (games, selected, options, rest) => {
+  const {team: favTeam, chronological, broadcast} = options;
   const g = [...games]
+  console.log('g', g);
+  if (chronological) {
+    g.sort((a, b) => {
+      if (a.date < b.date) { return -1; }
+      if (a.date > b.date) { return 1; }
+      return 0;
+    })
+  }
+
   const favTeamIndex = g.findIndex(
     ({ home, visitor }) =>
       home.abbreviation === favTeam || visitor.abbreviation === favTeam
@@ -92,9 +102,9 @@ const CardList = ({
 
   return (
     <SidebarConsumer>
-      {({ state: { broadcast, team } }) => (
+      {({ state: { broadcast, team, chronological } }) => (
         <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
-          {generateCards(games, selected, team, broadcast, rest)}
+          {generateCards(games, selected, {team, broadcast, chronological}, rest)}
         </Wrapper>
       )}
     </SidebarConsumer>

@@ -168,4 +168,15 @@ export const BroadcastCheckbox = () => (
   </SidebarConsumer>
 )
 
+export const ChronologicalCheckbox = () => (
+  <SidebarConsumer>
+    {({ state: { chronological }, actions: { updateChronological } }) => (
+      <Checkbox
+        checked={chronological === true}
+        text="Sort by chronological for games"
+        onChange={updateChronological}
+      />
+    )}
+  </SidebarConsumer>
+)
 export default Checkbox

@@ -16,7 +16,6 @@ export class SettingsProvider extends React.Component {
     browser.getItem(['spoiler'], (data) => {
       this.setState({
         spoiler: data.spoiler ? data.spoiler : false,
-        team: data.favTeam ? data.favTeam : '',
       })
     })
   }
