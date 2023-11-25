@@ -46,7 +46,7 @@ const fetchRequest3 = async (dateStr) => {
     return fetchRequest4(dateStr)
   }
 
-  let apiGameDate = null;
+  let apiGameDate = null
 
   let g = []
   try {

@@ -1,7 +1,11 @@
 module.exports = [
   {
     version: '1.5.6 Updates: (2023-11-04)',
-    updates: ['Update standings season', 'Fix start of date issue', 'Fix boxscores highlights'],
+    updates: [
+      'Update standings season',
+      'Fix start of date issue',
+      'Fix boxscores highlights',
+    ],
   },
   {
     version: '1.5.5 Updates: (2023-04-23)',

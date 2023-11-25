@@ -20,14 +20,18 @@ const Wrapper = styled.div`
 `
 
 const generateCards = (games, selected, options, rest) => {
-  const {team: favTeam, chronological, broadcast} = options;
+  const { team: favTeam, chronological, broadcast } = options
   const g = [...games]
-  console.log('g', g);
+
   if (chronological) {
     g.sort((a, b) => {
-      if (a.date < b.date) { return -1; }
-      if (a.date > b.date) { return 1; }
-      return 0;
+      if (a.date < b.date) {
+        return -1
+      }
+      if (a.date > b.date) {
+        return 1
+      }
+      return 0
     })
   }
 
@@ -104,7 +108,12 @@ const CardList = ({
     <SidebarConsumer>
       {({ state: { broadcast, team, chronological } }) => (
         <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
-          {generateCards(games, selected, {team, broadcast, chronological}, rest)}
+          {generateCards(
+            games,
+            selected,
+            { team, broadcast, chronological },
+            rest
+          )}
         </Wrapper>
       )}
     </SidebarConsumer>

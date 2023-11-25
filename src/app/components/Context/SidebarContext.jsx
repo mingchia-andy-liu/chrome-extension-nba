@@ -39,9 +39,12 @@ export class SidebarProvider extends React.Component {
   }
 
   updateChronological = () => {
-    this.setState({ chronological: !this.state.chronological }, () => {
-      browser.setItem({ chronological: this.state.chronological })
-    })
+    this.setState(
+      (preState) => ({ chronological: !preState.chronological }),
+      () => {
+        browser.setItem({ chronological: this.state.chronological })
+      }
+    )
   }
 
   render() {
