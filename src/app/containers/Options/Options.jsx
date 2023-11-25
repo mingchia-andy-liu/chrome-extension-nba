@@ -8,6 +8,7 @@ import Checkbox, {
   NoSpoilerCheckbox,
   HideZeroRowCheckbox,
   DarkModeCheckbox,
+  ChronologicalCheckbox,
 } from '../../components/Checkbox'
 import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
 import browser from '../../utils/browser'
@@ -258,6 +259,7 @@ const Options = () => {
         <HideZeroRowCheckbox />
         <BroadcastCheckbox />
         <NoSpoilerCheckbox />
+        <ChronologicalCheckbox />
       </ButtonsWrapper>
     )
   })

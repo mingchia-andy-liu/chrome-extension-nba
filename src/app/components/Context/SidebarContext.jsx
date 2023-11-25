@@ -12,12 +12,14 @@ export class SidebarProvider extends React.Component {
     this.state = {
       broadcast: false,
       team: '',
+      chronological: false,
     }
 
-    browser.getItem(['favTeam', 'broadcast'], (data) => {
+    browser.getItem(['favTeam', 'broadcast', 'chronological'], (data) => {
       this.setState({
         broadcast: data.broadcast ? data.broadcast : false,
         team: data.favTeam ? data.favTeam : '',
+        chronological: data.chronological ? data.chronological : false,
       })
     })
   }
@@ -36,6 +38,15 @@ export class SidebarProvider extends React.Component {
     })
   }
 
+  updateChronological = () => {
+    this.setState(
+      (preState) => ({ chronological: !preState.chronological }),
+      () => {
+        browser.setItem({ chronological: this.state.chronological })
+      }
+    )
+  }
+
   render() {
     return (
       <Context.Provider
@@ -44,6 +55,7 @@ export class SidebarProvider extends React.Component {
           actions: {
             updateBroadcast: this.updateBroadcast,
             updateTeam: this.updateFavouriteTeam,
+            updateChronological: this.updateChronological,
           },
         }}
       >
