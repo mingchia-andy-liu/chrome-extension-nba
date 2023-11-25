@@ -12,11 +12,12 @@ const initState = {
   teamStats: {},
 }
 
-const sanitizeBS = ({ home, visitor, officials, periodTime }) => ({
+const sanitizeBS = ({ home, visitor, officials, periodTime, arena }) => ({
   home,
   visitor,
   periodTime,
   officials: officials || [],
+  arena: arena,
 })
 
 // const teamStatsConverter = (data) => {

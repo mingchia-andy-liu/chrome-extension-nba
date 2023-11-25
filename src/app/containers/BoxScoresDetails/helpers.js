@@ -46,7 +46,7 @@ export const renderTitle = (bsData) => {
 }
 
 export const renderSummary = (bsData, teamStats) => {
-  const { officials, home, visitor } = bsData
+  const { officials, home, visitor, arena } = bsData
   const { extra } = teamStats
   return (
     <OverviewWrapper>
@@ -54,13 +54,22 @@ export const renderSummary = (bsData, teamStats) => {
       <Summary home={home} visitor={visitor} extra={extra} />
       <br />
       <Row>
-        <Subtitle>OFFICIALS: </Subtitle>
+        <Subtitle>
+          <b>Officials</b>:{' '}
+        </Subtitle>
         {officials.map(({ person_id, first_name, last_name }, i) => (
           <Subtitle key={person_id}>
             {first_name} {last_name}
             {i !== officials.length - 1 && ','}
           </Subtitle>
         ))}
+      </Row>
+      <Row>
+        {arena && (
+          <Subtitle>
+            <b>Arena</b>: {arena.name}, {arena.city}{' '}
+          </Subtitle>
+        )}
       </Row>
     </OverviewWrapper>
   )

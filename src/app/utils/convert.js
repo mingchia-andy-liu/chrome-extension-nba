@@ -454,6 +454,7 @@ export const convertBSProxy = (old) => {
     gameStatus,
     homeTeam,
     awayTeam,
+    arena,
   } = old
 
   return {
@@ -462,6 +463,12 @@ export const convertBSProxy = (old) => {
       last_name: person.familyName,
       person_id: person.personId,
     })),
+    arena: arena
+      ? {
+          name: arena.arenaName,
+          city: arena.arenaCity,
+        }
+      : null,
     periodTime: {
       periodValue: `${period}`,
       periodStatus: gameStatusText,
