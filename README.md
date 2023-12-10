@@ -1,5 +1,30 @@
 <p align="center">
   <img src="build/assets/png/icon-2-color-128.png">
+  <br>
+  Chrome Web Store:
+  <br>
+  <a href="https://chromewebstore.google.com/detail/basketball-box-scores/mfmkedeaebcckihpinmhkadoagdbifaa">
+    <img src="https://img.shields.io/chrome-web-store/v/mfmkedeaebcckihpinmhkadoagdbifaa?label=version" alt="Chrome web store version">
+  </a>
+  <a href="https://chromewebstore.google.com/detail/basketball-box-scores/mfmkedeaebcckihpinmhkadoagdbifaa">
+    <img src="https://img.shields.io/chrome-web-store/stars/mfmkedeaebcckihpinmhkadoagdbifaa?label=rating" alt="Chrome web store rating">
+  </a>
+  <a href="https://chromewebstore.google.com/detail/basketball-box-scores/mfmkedeaebcckihpinmhkadoagdbifaa">
+    <img src="https://img.shields.io/chrome-web-store/users/mfmkedeaebcckihpinmhkadoagdbifaa?label=users" alt="Chrome web store users">
+  </a>
+  <br>
+  Firefox:
+  <br>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores">
+    <img src="https://img.shields.io/amo/v/basketball-box-scores?label=version" alt="Firefox version">
+  </a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores">
+    <img src="https://img.shields.io/amo/stars/basketball-box-scores?label=rating" alt="Firefox rating">
+    </a>
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores">
+    <img src="https://img.shields.io/amo/users/basketball-box-scores?label=users" alt="Firefox users">
+  </a>
+  <br>
 </p>
 
 # Basketball Box Scores Extension
