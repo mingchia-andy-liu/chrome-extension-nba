@@ -29,7 +29,7 @@ const FavoritePlayersDropdown = ({ existingPlayers, updateFavPlayers }) => {
     const selectedName = selectedOption
     if (!selectedOption || !allowedPlayersMap.get(selectedName)) {
       setErrorMessage(
-        'Please select a name from the dropdown or type a valid name.'
+        'Please select a player from the dropdown or type a valid name.'
       )
       return
     }
@@ -39,7 +39,7 @@ const FavoritePlayersDropdown = ({ existingPlayers, updateFavPlayers }) => {
         (p) => getName(p).toLowerCase() === selectedName.toLowerCase()
       ) > -1
     ) {
-      setErrorMessage('Name already exists in the list.')
+      setErrorMessage('Player already exists in the list.')
       return
     }
 
