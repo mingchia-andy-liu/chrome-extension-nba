@@ -150,8 +150,8 @@ const renderPlayerRow = (
       key={name + i}
       style={{
         backgroundColor: doubles
-          ? rowBGColor(doubles, isDark, isFav)
-          : getOddRowColor(i, isDark, isFav),
+          ? rowBGColor(doubles, isDark)
+          : getOddRowColor(i, isDark),
       }}
       title={doubles && getDoublesText(doubles)}
       dark={isDark}
