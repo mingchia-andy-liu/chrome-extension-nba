@@ -133,6 +133,7 @@ const getPlayersProxy = (players = []) => {
   return players.map((player) => {
     const { minutes, seconds } = formatMinutes(player.statistics.minutes)
     return {
+      personId: player.personId,
       assists: player.statistics.assists,
       blocks: player.statistics.blocks,
       field_goals_attempted: player.statistics.fieldGoalsAttempted,

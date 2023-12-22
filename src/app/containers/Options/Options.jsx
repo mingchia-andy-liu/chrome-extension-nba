@@ -12,8 +12,9 @@ import Checkbox, {
 } from '../../components/Checkbox'
 import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
 import browser from '../../utils/browser'
-
 import { teams } from '../../utils/teams'
+import FavoritePlayersForm from '../../components/FavoritePlayers'
+import { players } from '../../utils/players'
 
 const RouterLink = styled(Link)`
   padding: 0 5px;
@@ -260,6 +261,7 @@ const Options = () => {
         <BroadcastCheckbox />
         <NoSpoilerCheckbox />
         <ChronologicalCheckbox />
+        <FavoritePlayersForm availablePlayers={players} />
       </ButtonsWrapper>
     )
   })
