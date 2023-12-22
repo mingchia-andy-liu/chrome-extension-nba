@@ -41,6 +41,26 @@ const PlayerName = styled(Cell)`
   padding-left: 5px;
 `
 
+const RowWrapperWithFavorite = styled(RowWrapper)`
+  position: relative;
+
+  &::before {
+    ${(props) =>
+      props.fav &&
+      `
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            border-top-left-radius: 3px;
+            border-top: 10px solid gold;
+            border-left: 5px solid gold;
+            border-right: 10px solid transparent;
+            border-bottom: 5px solid transparent;
+        `}
+  }
+`
+
 const renderHeaderRow = (name) => {
   const headers = [
     'MIN',
@@ -77,7 +97,13 @@ const renderHeaderRow = (name) => {
  * @param {*} player
  * @param {*} isLive
  */
-const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
+const renderPlayerRow = (
+  player,
+  isLive,
+  i,
+  isDark,
+  { hideZeroRow, favPlayers }
+) => {
   if (
     !player.on_court &&
     hideZeroRow &&
@@ -111,14 +137,16 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
     turnovers,
     fouls,
     plus_minus,
+    personId,
   } = player
 
   const fgp = toPercentage(+field_goals_made / +field_goals_attempted)
   const tpp = toPercentage(+three_pointers_made / +three_pointers_attempted)
   const ftp = toPercentage(+free_throws_made / +free_throws_attempted)
+  const isFav = favPlayers.find((p) => p.PERSON_ID === personId)
 
   return (
-    <RowWrapper
+    <RowWrapperWithFavorite
       key={name + i}
       style={{
         backgroundColor: doubles
@@ -127,6 +155,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
       }}
       title={doubles && getDoublesText(doubles)}
       dark={isDark}
+      fav={isFav}
     >
       <PlayerName>
         {name}
@@ -228,7 +257,7 @@ const renderPlayerRow = (player, isLive, i, isDark, hideZeroRow) => {
         {fouls}
       </StatsCell>
       <Cell>{plus_minus}</Cell>
-    </RowWrapper>
+    </RowWrapperWithFavorite>
   )
 }
 
@@ -242,16 +271,22 @@ const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
       <ThemeConsumer>
         {({ state: { dark } }) => (
           <BoxScoreConsumer>
-            {({ state: { hideZeroRow } }) => (
+            {({ state: { hideZeroRow, favPlayers } }) => (
               <Table>
                 <tbody>
                   {renderHeaderRow(vta)}
                   {vps.map((player, i) =>
-                    renderPlayerRow(player, isLive, i, dark, hideZeroRow)
+                    renderPlayerRow(player, isLive, i, dark, {
+                      hideZeroRow,
+                      favPlayers,
+                    })
                   )}
                   {renderHeaderRow(hta)}
                   {hps.map((player, i) =>
-                    renderPlayerRow(player, isLive, i, dark, hideZeroRow)
+                    renderPlayerRow(player, isLive, i, dark, {
+                      hideZeroRow,
+                      favPlayers,
+                    })
                   )}
                 </tbody>
               </Table>

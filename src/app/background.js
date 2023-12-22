@@ -137,6 +137,7 @@ browser.runtime.onInstalled.addListener((details) => {
         nightMode: data.nightMode,
         spoiler: data.spoiler,
         notification: data.notification,
+        favPlayers: data.favPlayers,
       }
       browser.clear(() => {
         browser.setItem(newOptions)

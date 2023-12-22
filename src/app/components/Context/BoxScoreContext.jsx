@@ -11,11 +11,13 @@ export class BoxScoreProvider extends React.Component {
 
     this.state = {
       hideZeroRow: false,
+      favPlayers: [],
     }
 
-    browser.getItem(['hideZeroRow'], (data) => {
+    browser.getItem(['hideZeroRow', 'favPlayers'], (data) => {
       this.setState({
         hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
+        favPlayers: data.favPlayers ? JSON.parse(data.favPlayers) : [],
       })
     })
   }
@@ -28,6 +30,13 @@ export class BoxScoreProvider extends React.Component {
     })
   }
 
+  updateFavPlayers = (players) => {
+    this.setState({ favPlayers: players }, () => {
+      // Storage only supports storing and retrieving strings.
+      browser.setItem({ favPlayers: JSON.stringify(players) })
+    })
+  }
+
   render() {
     return (
       <Context.Provider
@@ -35,6 +44,7 @@ export class BoxScoreProvider extends React.Component {
           state: this.state,
           actions: {
             updateHideZeroRow: this.updateHideZeroRow,
+            updateFavPlayers: this.updateFavPlayers,
           },
         }}
       >
