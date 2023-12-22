@@ -1,5 +1,14 @@
 module.exports = [
   {
+    version: '1.6.0 Updates: (2023-12-22)',
+    updates: [
+      'Add an option for adding favorite player',
+      'Add an option for sorting games chronologically',
+      'Add arena information',
+      'Available in Edge',
+    ],
+  },
+  {
     version: '1.5.6 Updates: (2023-11-04)',
     updates: [
       'Update standings season',
