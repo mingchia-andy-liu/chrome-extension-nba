@@ -35,6 +35,7 @@ The best NBA browser extension!
 
 - [Chrome](https://chrome.google.com/webstore/detail/box-scores/mfmkedeaebcckihpinmhkadoagdbifaa)
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/basketball-box-scores)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/basketball-box-scores/jfjpbnfbngccdnnbaiggbphfbmciiokg)
 
 ## Screenshots
 <details close>
@@ -63,6 +64,7 @@ This extension is for people who just want to get the latest update but too lazy
 - [x] Highlight Videos from YouTube
 - [x] Dark mode
 - [x] Add favorite team
+- [x] Add favorite players
 - [x] Playoff bracket for each season
 - [x] Standings
 - [x] Notifications
