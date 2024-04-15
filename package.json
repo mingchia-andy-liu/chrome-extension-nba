@@ -40,7 +40,7 @@
     "@babel/plugin-transform-runtime": "^7.23.6",
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-react": "^7.16.7",
-    "@babel/runtime": "^7.17.9",
+    "@babel/runtime": "^7.24.4",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "addons-linter": "^6.19.0",
     "babel-eslint": "^10.1.0",
