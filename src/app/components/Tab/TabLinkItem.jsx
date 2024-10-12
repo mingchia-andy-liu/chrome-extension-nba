@@ -20,8 +20,8 @@ const Link = styled(RouterLink)`
           ? '#92CBF7'
           : '#81D3FA'
         : props.dark
-        ? '#2963FF'
-        : '#046fdb'};
+          ? '#2963FF'
+          : '#046fdb'};
 
   &:hover {
     font-weight: 400;
