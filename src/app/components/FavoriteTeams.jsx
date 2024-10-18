@@ -32,14 +32,12 @@ const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
       return
     }
 
-    if (existingTeams.findIndex( (p) => p === selectedTeam.toLowerCase() ) > -1 ) {
+    if (existingTeams.findIndex((p) => p === selectedTeam) > -1 ) {
       setErrorMessage('Team already exists in the list.')
       return
     }
 
     const newTeams = [...existingTeams, selectedTeam]
-
-    console.log(newTeams)
 
     updateFavouriteTeams(newTeams)
     setNewTeam('')
