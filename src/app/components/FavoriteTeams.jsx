@@ -13,6 +13,10 @@ const Input = styled.input`
 `
 
 const teamNames = Object.values(teams);
+const teamNameToAbbrMap = Object.keys(teams).reduce((reversed, key) => {
+  reversed[teams[key]] = key;
+  return reversed;
+}, {});
 
 const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
   const [newTeam, setNewTeam] = useState('')
@@ -20,7 +24,7 @@ const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const addTeam = () => {
-    const selectedTeam = selectedOption
+    const selectedTeam = teamNameToAbbrMap[selectedOption]
     if (!selectedOption) {
       setErrorMessage(
         'Please select a team from the dropdown.'
@@ -28,23 +32,25 @@ const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
       return
     }
 
-    if ( existingTeams.findIndex( (p) => p === selectedTeam.toLowerCase() ) > -1 ) {
+    if (existingTeams.findIndex( (p) => p === selectedTeam.toLowerCase() ) > -1 ) {
       setErrorMessage('Team already exists in the list.')
       return
     }
 
-    const newPlayers = [...existingTeams, selectedTeam]
+    const newTeams = [...existingTeams, selectedTeam]
 
-    updateFavouriteTeams(newPlayers)
+    console.log(newTeams)
+
+    updateFavouriteTeams(newTeams)
     setNewTeam('')
     setErrorMessage('')
     setSelectedOption('')
   }
 
   const deleteTeam = (index) => {
-    const updatedPlayers = [...existingTeams]
-    updatedPlayers.splice(index, 1)
-    updateFavouriteTeams(updatedPlayers)
+    const updatedTeams = [...existingTeams]
+    updatedTeams.splice(index, 1)
+    updateFavouriteTeams(updatedTeams)
   }
 
   const handleInputChange = (e) => {
@@ -73,7 +79,7 @@ const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
       <ul>
         {existingTeams.map((team, index) => (
           <ListItem key={index}>
-            {team}
+            {teams[team]}
             <button
               onClick={() => deleteTeam(index)}
               style={{ marginLeft: '10px' }}

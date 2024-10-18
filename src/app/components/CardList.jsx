@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 `
 
 const generateCards = (games, selected, options, rest) => {
-  const { team: favTeam, chronological, broadcast } = options
+  const { teams: favTeams, chronological, broadcast } = options
   const g = [...games]
 
   if (chronological) {
@@ -33,26 +33,23 @@ const generateCards = (games, selected, options, rest) => {
       }
       return 0
     })
+  } else {
+    for (let i = favTeams.length - 1; i >= 0; i--) {
+      const favTeamAbbr = favTeams[i];
+      const index = g.findIndex(
+        ({ home, visitor }) =>
+          home.abbreviation === favTeamAbbr || visitor.abbreviation === favTeamAbbr
+      )
+  
+      if (index > -1) {
+          const [favGame] = g.splice(index, 1);
+          g.unshift(favGame);
+      }
+    }
   }
 
-  const favTeamIndex = g.findIndex(
-    ({ home, visitor }) =>
-      home.abbreviation === favTeam || visitor.abbreviation === favTeam
-  )
-  const favTeamMatch = g[favTeamIndex]
-  if (favTeamIndex >= 0) {
-    g.splice(favTeamIndex, 1)
-  }
   return (
     <Fragment>
-      {favTeamMatch && (
-        <MatchCard
-          selected={favTeamMatch.id === selected}
-          showBroadcast={broadcast}
-          {...favTeamMatch}
-          {...rest}
-        />
-      )}
       {g.map((game, index) => (
         <MatchCard
           selected={game.id === selected}
@@ -106,12 +103,12 @@ const CardList = ({
 
   return (
     <SidebarConsumer>
-      {({ state: { broadcast, team, chronological } }) => (
+      {({ state: { broadcast, teams, chronological } }) => (
         <Wrapper isPopup={isPopup} isSidebar={isSidebar}>
           {generateCards(
             games,
             selected,
-            { team, broadcast, chronological },
+            { teams, broadcast, chronological },
             rest
           )}
         </Wrapper>

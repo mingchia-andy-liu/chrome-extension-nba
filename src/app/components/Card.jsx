@@ -71,13 +71,13 @@ const MatchCard = ({
     <ThemeConsumer>
       {({ state: { dark } }) => (
         <SidebarConsumer>
-          {({ state: { team } }) => (
+          {({ state: { teams } }) => (
             <Wrapper
               dark={dark}
               onClick={onClick}
               data-id={id}
               selected={selected}
-              fav={team === vta || team === hta}
+              fav={teams.includes(vta) || teams.includes(hta)}
             >
               <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} />
               <MatchInfo
