@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
+import FavoriteTeamsForm from '../../components/FavoriteTeams';
 import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
@@ -251,6 +252,7 @@ const Options = () => {
       <ButtonsWrapper>
         {renderHeader()}
         {renderTeams(team, updateTeam)}
+        <FavoriteTeamsForm />
         <NotificationSection
           permissionEnum={notificationPermissionEnum}
           request={requestNotification}
