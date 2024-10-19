@@ -40,8 +40,8 @@ const fireFavTeamNotificationIfNeeded = (games) => {
         if (data && data.favTeams && Array.isArray(data.favTeams)) {
           games.forEach(
             (game) => {
-              if (data.favTeams.includes(game.home.abbreviation) 
-                  || data.favTeams.includes(game.visitor.abbreviation)) {
+              if (data.favTeams.includes(game.home.abbreviation) ||
+                  data.favTeams.includes(game.visitor.abbreviation)) {
                 // check start time is somewhat close to the now() time.
                 const [didFire, status] = fireNotificationIfNeeded(
                   game,
@@ -76,7 +76,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
           notification: {
             ...data.notification,
           }
-        });
+        })
       })
     }
   )
@@ -159,16 +159,19 @@ browser.runtime.onInstalled.addListener((details) => {
         favTeam: data.favTeam, // TODO: remove this unused options
         favTeams: data.favTeams != null
           ? data.favTeams
-          : data.favTeam != null 
-            ? [data.favTeam] : [],
+          : data.favTeam != null
+            ? [data.favTeam]
+            : [],
         hideZeroRow: data.hideZeroRow,
         nightMode: data.nightMode,
         spoiler: data.spoiler,
-        notification: data.notification ? {
-          enabled: data.notification.enabled,
-          quarters: data.notification.quarters,
-          games: data.notification.games ? data.notification.games : {}
-        } : null,
+        notification: data.notification
+          ? {
+              enabled: data.notification.enabled,
+              quarters: data.notification.quarters,
+              games: data.notification.games ? data.notification.games : {}
+            }
+          : null,
         favPlayers: data.favPlayers,
       }
       browser.clear(() => {

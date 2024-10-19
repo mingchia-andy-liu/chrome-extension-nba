@@ -11,15 +11,13 @@ export class SidebarProvider extends React.Component {
 
     this.state = {
       broadcast: false,
-      team: '',
       teams: [],
       chronological: false,
     }
 
-    browser.getItem(['favTeam', 'favTeams', 'broadcast', 'chronological'], (data) => {
+    browser.getItem(['favTeams', 'broadcast', 'chronological'], (data) => {
       this.setState({
         broadcast: data.broadcast ? data.broadcast : false,
-        team: data.favTeam ? data.favTeam : '',
         teams: data.favTeams ? data.favTeams : [],
         chronological: data.chronological ? data.chronological : false,
       })
@@ -62,7 +60,6 @@ export class SidebarProvider extends React.Component {
           state: this.state,
           actions: {
             updateBroadcast: this.updateBroadcast,
-            updateTeam: this.updateFavouriteTeam,
             updateFavouriteTeams: this.updateFavouriteTeams,
             updateChronological: this.updateChronological,
           },
