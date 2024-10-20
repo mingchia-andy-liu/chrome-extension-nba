@@ -12,11 +12,11 @@ const Input = styled.input`
   width: 15rem;
 `
 
-const teamNames = Object.values(teams);
+const teamNames = Object.values(teams)
 const teamNameToAbbrMap = Object.keys(teams).reduce((reversed, key) => {
-  reversed[teams[key]] = key;
-  return reversed;
-}, {});
+  reversed[teams[key]] = key
+  return reversed
+}, {})
 
 const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
   const [newTeam, setNewTeam] = useState('')
@@ -26,13 +26,11 @@ const FavoriteTeamsDropdown = ({ existingTeams, updateFavouriteTeams }) => {
   const addTeam = () => {
     const selectedTeam = teamNameToAbbrMap[selectedOption]
     if (!selectedOption) {
-      setErrorMessage(
-        'Please select a team from the dropdown.'
-      )
+      setErrorMessage('Please select a team from the dropdown.')
       return
     }
 
-    if (existingTeams.findIndex((p) => p === selectedTeam) > -1 ) {
+    if (existingTeams.findIndex((p) => p === selectedTeam) > -1) {
       setErrorMessage('Team already exists in the list.')
       return
     }

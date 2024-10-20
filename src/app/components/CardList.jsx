@@ -35,15 +35,16 @@ const generateCards = (games, selected, options, rest) => {
     })
   } else {
     for (let i = favTeams.length - 1; i >= 0; i--) {
-      const favTeamAbbr = favTeams[i];
+      const favTeamAbbr = favTeams[i]
       const index = g.findIndex(
         ({ home, visitor }) =>
-          home.abbreviation === favTeamAbbr || visitor.abbreviation === favTeamAbbr
+          home.abbreviation === favTeamAbbr ||
+          visitor.abbreviation === favTeamAbbr
       )
-  
+
       if (index > -1) {
-          const [favGame] = g.splice(index, 1);
-          g.unshift(favGame);
+        const [favGame] = g.splice(index, 1)
+        g.unshift(favGame)
       }
     }
   }
