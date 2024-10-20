@@ -38,28 +38,28 @@ const fireFavTeamNotificationIfNeeded = (games) => {
 
       browser.getItem(['favTeams', 'notification'], (data) => {
         if (data && data.favTeams && Array.isArray(data.favTeams)) {
-          games.forEach(
-            (game) => {
-              if (data.favTeams.includes(game.home.abbreviation) ||
-                  data.favTeams.includes(game.visitor.abbreviation)) {
-                // check start time is somewhat close to the now() time.
-                const [didFire, status] = fireNotificationIfNeeded(
-                  game,
-                  data.notification,
-                  data.favTeams,
-                  dateStr
-                )
+          games.forEach((game) => {
+            if (
+              data.favTeams.includes(game.home.abbreviation) ||
+              data.favTeams.includes(game.visitor.abbreviation)
+            ) {
+              // check start time is somewhat close to the now() time.
+              const [didFire, status] = fireNotificationIfNeeded(
+                game,
+                data.notification,
+                data.favTeams,
+                dateStr
+              )
 
-                if (didFire) {
-                  // update individual game
-                  data.notification.games[game.id] = {
-                    status: status,
-                    timestamp: Date.now()
-                  }
+              if (didFire) {
+                // update individual game
+                data.notification.games[game.id] = {
+                  status: status,
+                  timestamp: Date.now(),
                 }
               }
             }
-          )
+          })
         }
 
         if (data.notification != null && data.notification.games != null) {
@@ -75,7 +75,7 @@ const fireFavTeamNotificationIfNeeded = (games) => {
         browser.setItem({
           notification: {
             ...data.notification,
-          }
+          },
         })
       })
     }
@@ -157,11 +157,12 @@ browser.runtime.onInstalled.addListener((details) => {
       const newOptions = {
         broadcast: data.broadcast,
         favTeam: data.favTeam, // TODO: remove this unused options
-        favTeams: data.favTeams != null
-          ? data.favTeams
-          : data.favTeam != null
-            ? [data.favTeam]
-            : [],
+        favTeams:
+          data.favTeams != null
+            ? data.favTeams
+            : data.favTeam != null
+              ? [data.favTeam]
+              : [],
         hideZeroRow: data.hideZeroRow,
         nightMode: data.nightMode,
         spoiler: data.spoiler,
@@ -169,7 +170,7 @@ browser.runtime.onInstalled.addListener((details) => {
           ? {
               enabled: data.notification.enabled,
               quarters: data.notification.quarters,
-              games: data.notification.games ? data.notification.games : {}
+              games: data.notification.games ? data.notification.games : {},
             }
           : null,
         favPlayers: data.favPlayers,

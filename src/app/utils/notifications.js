@@ -1,5 +1,4 @@
 import browser from './browser'
-import { getNickNamesByTriCode } from './teams'
 import isSameMinute from 'date-fns/isSameMinute'
 
 // const ding = new Audio('./assets/ding.wav')
@@ -262,7 +261,7 @@ const fireMap = {
     if (game.periodTime.gameStatus === '3') {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        'Your favorite team\'s game has ened.'
+        "Your favorite team's game has ened."
       )
       fireNotificationForGame(options, game.id, dateStr, 1000)
       return true
@@ -287,7 +286,9 @@ export const fireNotificationIfNeeded = (
   }
 
   const status =
-    notification && notification.games && notification.games[game.id] != null ? notification.games[game.id].status : undefined
+    notification && notification.games && notification.games[game.id] != null
+      ? notification.games[game.id].status
+      : undefined
 
   let didFire = false
   let notifiHandler = null

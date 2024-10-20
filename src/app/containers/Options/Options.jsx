@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
-import FavoriteTeamsForm from '../../components/FavoriteTeams';
+import FavoriteTeamsForm from '../../components/FavoriteTeams'
 import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
@@ -87,7 +87,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
           : {
               enabled: false,
               quarters: false,
-              games: {}
+              games: {},
             }
       )
     })
