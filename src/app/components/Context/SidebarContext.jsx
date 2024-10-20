@@ -32,12 +32,6 @@ export class SidebarProvider extends React.Component {
     })
   }
 
-  updateFavouriteTeam = (team) => {
-    this.setState({ team }, () => {
-      browser.setItem({ favTeam: this.state.team })
-    })
-  }
-
   updateFavouriteTeams = (teams) => {
     this.setState({ teams }, () => {
       browser.setItem({ favTeams: this.state.teams })
