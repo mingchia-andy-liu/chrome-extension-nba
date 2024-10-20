@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
+import FavoriteTeamsForm from '../../components/FavoriteTeams';
 import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
@@ -12,7 +13,6 @@ import Checkbox, {
 } from '../../components/Checkbox'
 import { ThemeConsumer, SidebarConsumer } from '../../components/Context'
 import browser from '../../utils/browser'
-import { teams } from '../../utils/teams'
 import FavoritePlayersForm from '../../components/FavoritePlayers'
 import { players } from '../../utils/players'
 
@@ -75,39 +75,6 @@ const renderHeader = () => {
   )
 }
 
-const renderTeams = (favTeam, updateTeam) => {
-  return (
-    <React.Fragment>
-      <label>
-        Select your favorite team:
-        <select
-          value={favTeam}
-          onChange={(e) => {
-            updateTeam(e.currentTarget.value)
-            browser.getItem(['notification'], (data) => {
-              if (data.notification) {
-                browser.setItem({
-                  notification: {
-                    ...data.notification,
-                    gameId: undefined,
-                    status: undefined,
-                  },
-                })
-              }
-            })
-          }}
-        >
-          <option value="">-</option>
-          {Object.keys(teams).map((teamAbbr) => (
-            <option key={teamAbbr} value={teamAbbr}>
-              {teams[teamAbbr]}
-            </option>
-          ))}
-        </select>
-      </label>
-    </React.Fragment>
-  )
-}
 // const ding = new Audio('./assets/ding.wav')
 const NotificationSection = ({ permissionEnum, request, remove }) => {
   // null: loading, {enabled: false}: no notification, {enabled:true}: has notification
@@ -120,8 +87,7 @@ const NotificationSection = ({ permissionEnum, request, remove }) => {
           : {
               enabled: false,
               quarters: false,
-              gameId: undefined,
-              status: undefined,
+              games: {}
             }
       )
     })
@@ -250,7 +216,7 @@ const Options = () => {
     return (
       <ButtonsWrapper>
         {renderHeader()}
-        {renderTeams(team, updateTeam)}
+        <FavoriteTeamsForm />
         <NotificationSection
           permissionEnum={notificationPermissionEnum}
           request={requestNotification}

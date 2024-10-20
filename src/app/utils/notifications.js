@@ -44,7 +44,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} @ ${game.home.nickname}`,
-        `${getNickNamesByTriCode(favTeam)} is about to play.`
+        'Your favorite team is about to play.'
       )
       fireNotificationForGame(options, game.id, dateStr, 1)
       return true
@@ -58,7 +58,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 1st Quarter.`
+        'Your favorite team is starting 1st Quarter.'
       )
       fireNotificationForGame(options, game.id, dateStr, 10)
       return true
@@ -72,7 +72,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 2nd Quarter.`
+        'Your favorite team is starting 2nd Quarter.'
       )
       fireNotificationForGame(options, game.id, dateStr, 20)
       return true
@@ -83,7 +83,7 @@ const fireMap = {
     if (game.periodTime.periodStatus === 'Halftime') {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is at halftime.`
+        'Your favorite team is at halftime.'
       )
       fireNotificationForGame(options, game.id, dateStr, 30)
       return true
@@ -97,7 +97,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 3rd Quarter.`
+        'Your favorite team is starting 3rd Quarter.'
       )
       fireNotificationForGame(options, game.id, dateStr, 40)
       return true
@@ -111,7 +111,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 4th Quarter.`
+        'Your favorite team is starting 4th Quarter.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -125,7 +125,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 1st OT.`
+        'Your favorite team is starting 1st OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -139,7 +139,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 2nd OT.`
+        'Your favorite team is starting 2nd OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -153,7 +153,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 3rd OT.`
+        'Your favorite team is starting 3rd OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -167,7 +167,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 4th OT.`
+        'Your favorite team is starting 4th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -181,7 +181,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 5th OT.`
+        'Your favorite team is starting 5th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -195,7 +195,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 6th OT.`
+        'Your favorite team is starting 6th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -209,7 +209,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 7th OT.`
+        'Your favorite team is starting 7th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -223,7 +223,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 8th OT.`
+        'Your favorite team is starting 8th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -237,7 +237,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 9th Quarter.`
+        'Your favorite team is starting 9th Quarter.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -251,7 +251,7 @@ const fireMap = {
     ) {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)} is starting 10th OT.`
+        'Your favorite team is starting 10th OT.'
       )
       fireNotificationForGame(options, game.id, dateStr, 50)
       return true
@@ -262,7 +262,7 @@ const fireMap = {
     if (game.periodTime.gameStatus === '3') {
       const options = getOptions(
         `${game.visitor.nickname} ${game.visitor.score} @ ${game.home.nickname} ${game.home.score}`,
-        `${getNickNamesByTriCode(favTeam)}'s game has ened.`
+        'Your favorite team\'s game has ened.'
       )
       fireNotificationForGame(options, game.id, dateStr, 1000)
       return true
@@ -279,16 +279,15 @@ const simpleOrder = [1, 1000]
 export const fireNotificationIfNeeded = (
   game,
   notification,
-  favTeam,
+  favTeams,
   dateStr
 ) => {
   if (notification == null || !notification.enabled) {
     return
   }
 
-  const gameId = notification ? notification.gameId : undefined
   const status =
-    notification && game.id === gameId ? notification.status : undefined
+    notification && notification.games && notification.games[game.id] != null ? notification.games[game.id].status : undefined
 
   let didFire = false
   let notifiHandler = null
@@ -300,7 +299,7 @@ export const fireNotificationIfNeeded = (
     for (let i = order.length - 1; i >= 0; i--) {
       const o = order[i]
 
-      didFire = fireMap[o](game, favTeam, dateStr)
+      didFire = fireMap[o](game, favTeams, dateStr)
       if (didFire) {
         notifiHandler = o
         break
@@ -310,12 +309,12 @@ export const fireNotificationIfNeeded = (
     notifiHandler = order.findIndex((value) => status < value)
     // all fired
     if (notifiHandler === -1) {
-      return
+      return [false, -1]
     }
 
     for (let i = notifiHandler; i < order.length; i++) {
       const o = order[i]
-      didFire = fireMap[o](game, favTeam, dateStr)
+      didFire = fireMap[o](game, favTeams, dateStr)
       if (didFire) {
         notifiHandler = o
         break
@@ -323,13 +322,5 @@ export const fireNotificationIfNeeded = (
     }
   }
 
-  if (didFire) {
-    browser.setItem({
-      notification: {
-        ...notification,
-        gameId: game.id,
-        status: notifiHandler,
-      },
-    })
-  }
+  return [didFire, notifiHandler]
 }

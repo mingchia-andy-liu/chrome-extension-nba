@@ -105,6 +105,7 @@ typings/
 # End of https://www.gitignore.io/api/sass,node,macos,visualstudiocode
 
 build/*.js
+build/*.js.map
 # webpack artifacts
 build/*.txt
 dist/
