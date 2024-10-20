@@ -1,5 +1,13 @@
 module.exports = [
   {
+    version: '1.6.2 Updates: (2023-12-22)',
+    updates: [
+      'Update favorite team option to support multiple teams',
+      'Update player list for 2024/2025',
+      'Fix chronologically to be honored with favorite teams',
+    ],
+  },
+  {
     version: '1.6.0/1.6.1 Updates: (2023-12-22)',
     updates: [
       'Add an option for adding favorite player',
