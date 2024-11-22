@@ -263,8 +263,7 @@ export const convertDaily3 = (game) => {
   // gameClock is a new field
   const clock =
     gameClock && gameClock.trim() != ''
-      ? 'new' +
-        `${
+      ? `${
           period <= 4 ? 'Q' + period : 'OT' + (period - 4)
         } ${formatMinutesWithPadding(formatMinutes(gameClock.trim()))}`
       : gameStatusText
