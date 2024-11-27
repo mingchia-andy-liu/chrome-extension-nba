@@ -3,7 +3,10 @@ import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { getUserTimeZoneId } from './time'
-import { toPercentage } from './common'
+import {
+  toPercentage,
+  formatMinutes as formatMinutesWithPadding,
+} from './common'
 import { QUARTER_NAMES } from './constant'
 import { getNickNamesByTriCode } from '../utils/teams'
 import getApiDate from './getApiDate'
@@ -235,6 +238,7 @@ export const convertDaily3 = (game) => {
     gameTimeUTC,
     gameStatus,
     gameStatusText,
+    gameClock,
     period,
     homeTeam: h,
     awayTeam: v,
@@ -255,6 +259,14 @@ export const convertDaily3 = (game) => {
 
     return gameStatusText
   }
+
+  // gameClock is a new field
+  const clock =
+    gameClock && gameClock.trim() != ''
+      ? `${
+          period <= 4 ? 'Q' + period : 'OT' + (period - 4)
+        } ${formatMinutesWithPadding(formatMinutes(gameClock.trim()))}`
+      : gameStatusText
 
   const addQuarterNames = (linescores) =>
     linescores.map((ls, i) => ({
@@ -281,7 +293,7 @@ export const convertDaily3 = (game) => {
     },
     periodTime: {
       periodStatus: formatGameStatus(),
-      gameClock: gameStatusText,
+      gameClock: clock,
       gameStatus: `${gameStatus}`,
       periodValue: `${period}`,
     },
