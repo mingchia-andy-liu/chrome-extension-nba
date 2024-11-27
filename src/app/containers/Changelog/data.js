@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.6.3 Updates: (2024-11-26)',
+    updates: ['Fix game clock status text in card'],
+  },
+  {
     version: '1.6.2 Updates: (2024-10-20)',
     updates: [
       'Update favorite team option to support multiple teams',
