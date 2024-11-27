@@ -1,6 +1,6 @@
 module.exports = [
   {
-    version: '1.6.2 Updates: (2023-12-22)',
+    version: '1.6.2 Updates: (2024-10-20)',
     updates: [
       'Update favorite team option to support multiple teams',
       'Update player list for 2024/2025',
