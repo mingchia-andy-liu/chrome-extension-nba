@@ -16,7 +16,7 @@ const Wrapper = styled.div`
     position: relative;
   min-height: 90px;
   width: 100%;
-  padding: 2px 5px;
+  padding: 5px;
   margin-bottom: 15px;
   font-size: calc(17px + 0.1vw);
   background-color: ${(props) =>
@@ -64,8 +64,8 @@ const MatchCard = ({
   showBroadcast,
   ...rest
 }) => {
-  const { abbreviation: hta, nickname: htn, score: hs } = home
-  const { abbreviation: vta, nickname: vtn, score: vs } = visitor
+  const { abbreviation: hta, nickname: htn, score: hs, wins: hw, losses: hl } = home
+  const { abbreviation: vta, nickname: vtn, score: vs, wins: vw, losses: vl } = visitor
 
   return (
     <ThemeConsumer>
@@ -79,7 +79,7 @@ const MatchCard = ({
               selected={selected}
               fav={teams.includes(vta) || teams.includes(hta)}
             >
-              <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} />
+              <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} wins={vw} losses={vl} />
               <MatchInfo
                 id={id}
                 home={home}
@@ -87,7 +87,7 @@ const MatchCard = ({
                 broadcasters={showBroadcast ? broadcasters : undefined}
                 {...rest}
               />
-              <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} />
+              <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} wins={hw} losses={hl} />
             </Wrapper>
           )}
         </SidebarConsumer>
