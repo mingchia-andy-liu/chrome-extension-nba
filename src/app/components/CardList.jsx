@@ -7,7 +7,7 @@ import { SidebarConsumer } from './Context'
 import browser from '../utils/browser'
 
 const Wrapper = styled.div`
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   display: grid;
   gap: 0.75rem;
 

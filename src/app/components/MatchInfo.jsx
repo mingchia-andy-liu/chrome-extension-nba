@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Theme } from '../styles'
@@ -11,6 +11,21 @@ const Wrapper = styled.div`
 
   & > * {
     margin-top: 5px;
+  }
+`
+const Button = styled.button`
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: ${(props) => (props.dark ? 'black' : 'transparent')};
+  border: 1px solid rgb(168, 199, 250);
+  color: ${(props) => (props.dark ? 'rgb(168, 199, 250)' : 'rgb(11, 87, 208)')};
+  padding: 1px 8px;
+  outline-width: 0px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${(props) =>
+      props.dark ? '#38393b' : 'rgb(197, 217, 215)'};
   }
 `
 
@@ -115,7 +130,9 @@ const MatchInfo = ({
   playoffs,
   urls,
   seriesText,
+  showReveal = true,
 }) => {
+  const [reveal, setReveal] = useState(!showReveal)
   let series = ''
   if (playoffs) {
     const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
@@ -136,12 +153,36 @@ const MatchInfo = ({
         <SettingsConsumer>
           {({ state: { spoiler } }) => (
             <Wrapper>
-              {renderScores(dark, spoiler, gameStatus, home, visitor)}
+              {renderScores(
+                dark,
+                spoiler && !reveal,
+                gameStatus,
+                home,
+                visitor
+              )}
               {renderAt(gameStatus)}
-              <div>
-                {renderStatusAndClock(periodStatus, gameClock, periodValue)}
-              </div>
-              {!spoiler && series && <div>{series}</div>}
+              {(!spoiler || reveal) && (
+                <div>
+                  {' '}
+                  {renderStatusAndClock(
+                    periodStatus,
+                    gameClock,
+                    periodValue
+                  )}{' '}
+                </div>
+              )}
+              {(!spoiler || reveal) && series && <div>{series}</div>}
+              {spoiler && !reveal && showReveal && (
+                <Button
+                  dark={dark}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setReveal(!reveal)
+                  }}
+                >
+                  Reveal
+                </Button>
+              )}
               {broadcasters != null &&
                 renderBroadcasters(broadcasters, gameStatus)}
               {renderHighlight(id, urls, dark)}
@@ -180,6 +221,8 @@ MatchInfo.propTypes = {
     visitor_wins: PropTypes.string,
   }),
   urls: PropTypes.object,
+  // whether or not to have the reveal button. In box score detail page, do not show it.
+  showReveal: PropTypes.bool,
 }
 
 MatchInfo.defaultProps = {

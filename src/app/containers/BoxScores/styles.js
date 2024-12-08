@@ -4,7 +4,7 @@ import { mediaQuery } from '../../styles'
 export const Wrapper = styled.div`
   display: grid;
   grid-template-areas: 'sidebar content';
-  grid-template-columns: minmax(350px, 27%) 1fr;
+  grid-template-columns: minmax(400px, 27%) 1fr;
   grid-gap: 1em 1em;
   padding: 10px 0;
 

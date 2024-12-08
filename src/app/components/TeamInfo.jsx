@@ -50,7 +50,9 @@ const TeamInfo = ({ ta, tn, winning, large, wins, losses }) => {
           </TeamLogo>
           <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
           {wins && losses && (
-            <TeamRecord>{wins}-{losses}</TeamRecord>
+            <TeamRecord>
+              {wins}-{losses}
+            </TeamRecord>
           )}
         </TeamInfoWrapper>
       )}
