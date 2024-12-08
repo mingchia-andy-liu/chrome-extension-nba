@@ -7,13 +7,14 @@ import { SidebarConsumer } from './Context'
 import browser from '../utils/browser'
 
 const Wrapper = styled.div`
-  display: block;
-  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  display: grid;
+  gap: 0.75rem;
 
   ${mediaQuery`
         min-height: 100px;
         padding: 0 5px 10px 5px;
-        ${(props) => props.isPopup && 'max-height: 350px;'}
+        ${(props) => props.isPopup && 'max-height: 370px;'}
         ${(props) => props.isSidebar && 'max-height: 250px;'}
         overflow-y: scroll;
     `}
