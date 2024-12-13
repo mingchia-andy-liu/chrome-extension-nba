@@ -11,13 +11,11 @@ import { SidebarConsumer, ThemeConsumer } from '../components/Context'
 const Wrapper = styled.div`
   ${RowCSS}
   ${JustifyCenter}
-    ${AlignCenter}
-    ${Shadow}
-    position: relative;
+  ${AlignCenter}
+  ${Shadow}
+  position: relative;
   min-height: 90px;
-  width: 100%;
   padding: 5px;
-  margin-bottom: 15px;
   font-size: calc(17px + 0.1vw);
   background-color: ${(props) =>
     props.dark ? Theme.dark.blockBackground : '#f9f9f9'};
@@ -32,10 +30,6 @@ const Wrapper = styled.div`
 
   border: ${(props) =>
     props.selected ? '2px solid rgb(30, 90, 250)' : '2px solid transparent'};
-
-  &:last-child {
-    margin-bottom: 0px;
-  }
 
   &::before {
     ${(props) =>
@@ -64,8 +58,20 @@ const MatchCard = ({
   showBroadcast,
   ...rest
 }) => {
-  const { abbreviation: hta, nickname: htn, score: hs, wins: hw, losses: hl } = home
-  const { abbreviation: vta, nickname: vtn, score: vs, wins: vw, losses: vl } = visitor
+  const {
+    abbreviation: hta,
+    nickname: htn,
+    score: hs,
+    wins: hw,
+    losses: hl,
+  } = home
+  const {
+    abbreviation: vta,
+    nickname: vtn,
+    score: vs,
+    wins: vw,
+    losses: vl,
+  } = visitor
 
   return (
     <ThemeConsumer>
@@ -79,7 +85,13 @@ const MatchCard = ({
               selected={selected}
               fav={teams.includes(vta) || teams.includes(hta)}
             >
-              <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} wins={vw} losses={vl} />
+              <TeamInfo
+                ta={vta}
+                tn={vtn}
+                winning={isWinning(vs, hs)}
+                wins={vw}
+                losses={vl}
+              />
               <MatchInfo
                 id={id}
                 home={home}
@@ -87,7 +99,13 @@ const MatchCard = ({
                 broadcasters={showBroadcast ? broadcasters : undefined}
                 {...rest}
               />
-              <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} wins={hw} losses={hl} />
+              <TeamInfo
+                ta={hta}
+                tn={htn}
+                winning={isWinning(hs, vs)}
+                wins={hw}
+                losses={hl}
+              />
             </Wrapper>
           )}
         </SidebarConsumer>

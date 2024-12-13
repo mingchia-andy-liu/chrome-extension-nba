@@ -284,7 +284,7 @@ export const convertDaily3 = (game) => {
       nickname: getNickNamesByTriCode(h.teamTricode),
       score: `${h.score}`,
       wins: h?.wins,
-      losses: h?.losses
+      losses: h?.losses,
     },
     visitor: {
       abbreviation: v.teamTricode,
@@ -293,7 +293,7 @@ export const convertDaily3 = (game) => {
       nickname: getNickNamesByTriCode(v.teamTricode),
       score: `${v.score}`,
       wins: v?.wins,
-      losses: v?.losses
+      losses: v?.losses,
     },
     periodTime: {
       periodStatus: formatGameStatus(),

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 import Overlay from '../../components/Overlay'
@@ -24,6 +25,23 @@ import {
 } from './helpers'
 import { DATE_FORMAT } from '../../utils/constant'
 
+const Button = styled.button`
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: ${(props) => (props.dark ? 'black' : 'transparent')};
+  border: 1px solid rgb(168, 199, 250);
+  color: ${(props) => (props.dark ? 'rgb(168, 199, 250)' : 'rgb(11, 87, 208)')};
+  padding: 1px 8px;
+  margin-bottom: 16px;
+  outline-width: 0px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${(props) =>
+      props.dark ? '#38393b' : 'rgb(197, 217, 215)'};
+  }
+`
+
 const BoxScoresDetails = ({
   bs: { bsData, pbpData, teamStats, isLoading },
   id,
@@ -44,6 +62,7 @@ const BoxScoresDetails = ({
     (spoiler, dark) => {
       // Route expects a function for component prop
       const contentComponent = () => {
+        const [reveal, setReveal] = useState(false)
         if (
           !bsData ||
           Object.keys(bsData).length === 0 ||
@@ -51,9 +70,20 @@ const BoxScoresDetails = ({
         ) {
           return <Overlay text={'Game has not started'} />
         } else {
-          if (spoiler) {
+          if (spoiler && !reveal) {
             return (
               <Overlay text="Turn off no spoiler">
+                {spoiler && !reveal && (
+                  <Button
+                    dark={dark}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setReveal(!reveal)
+                    }}
+                  >
+                    Reveal
+                  </Button>
+                )}
                 <NoSpoilerCheckbox />
               </Overlay>
             )
