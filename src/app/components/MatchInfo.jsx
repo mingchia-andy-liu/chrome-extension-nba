@@ -158,8 +158,8 @@ const MatchInfo = ({
                 visitor
               )}
               {renderAt(gameStatus)}
-              {/* no spoiler is on && (either game has not start OR it has starts and the reveal has been clicked) */}
-              {spoiler && (gameStatus == 1 || (gameStatus != 1 && reveal)) && (
+              {/* either game has not start OR it has starts and the reveal has been clicked */}
+              {(gameStatus == 1 || (gameStatus != 1 && (reveal || !spoiler))) && (
                 <div>
                   {renderStatusAndClock(
                     periodStatus,

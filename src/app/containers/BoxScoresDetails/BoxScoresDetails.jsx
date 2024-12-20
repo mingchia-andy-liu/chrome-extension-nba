@@ -73,17 +73,15 @@ const BoxScoresDetails = ({
           if (spoiler && !reveal) {
             return (
               <Overlay text="Turn off no spoiler">
-                {spoiler && !reveal && (
-                  <Button
-                    dark={dark}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setReveal(!reveal)
-                    }}
-                  >
-                    Reveal
-                  </Button>
-                )}
+                <Button
+                  dark={dark}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setReveal(!reveal)
+                  }}
+                >
+                  Reveal
+                </Button>
                 <NoSpoilerCheckbox />
               </Overlay>
             )
