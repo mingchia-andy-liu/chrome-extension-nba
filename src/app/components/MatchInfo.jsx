@@ -46,11 +46,7 @@ const SubText = styled.div`
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   if (gameStatus !== '1') {
     if (spoiler) {
-      return (
-        <Row>
-          <TeamScore> --- </TeamScore>-<TeamScore> --- </TeamScore>
-        </Row>
-      )
+      return renderAt('1')
     }
     return (
       <Row>
@@ -161,18 +157,20 @@ const MatchInfo = ({
                 visitor
               )}
               {renderAt(gameStatus)}
-              {(!spoiler || reveal) && (
+              {/* no spoiler is on && (either game has not start OR it has starts and the reveal has been clicked) */}
+              {spoiler && (gameStatus == 1 || (gameStatus != 1 && reveal)) && (
                 <div>
-                  {' '}
                   {renderStatusAndClock(
                     periodStatus,
                     gameClock,
                     periodValue
-                  )}{' '}
+                  )}
                 </div>
               )}
+              {/* no spoiler is off || revel has been clicked */}
               {(!spoiler || reveal) && series && <div>{series}</div>}
-              {spoiler && !reveal && showReveal && (
+              {/* in cards && game has started && no spoiler is on && revel has not been clicked */}
+              {showReveal && gameStatus != 1 && spoiler && !reveal && (
                 <Button
                   dark={dark}
                   onClick={(e) => {
@@ -183,8 +181,7 @@ const MatchInfo = ({
                   Reveal
                 </Button>
               )}
-              {broadcasters != null &&
-                renderBroadcasters(broadcasters, gameStatus)}
+              {broadcasters != null && renderBroadcasters(broadcasters, gameStatus)}
               {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
