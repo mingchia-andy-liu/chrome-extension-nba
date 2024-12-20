@@ -46,6 +46,7 @@ const SubText = styled.div`
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   if (gameStatus !== '1') {
     if (spoiler) {
+      // mock the game has not start symbol
       return renderAt('1')
     }
     return (
