@@ -8,6 +8,7 @@ import data from './data.js'
 const Wrapper = styled.div`
   ${ColumnCSS}
   padding: 0 20%;
+  font-size: calc(24px + 0.1vw);
   ${mediaQuery`
         padding: 0 10px;
     `}
