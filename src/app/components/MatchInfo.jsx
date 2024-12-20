@@ -128,8 +128,9 @@ const MatchInfo = ({
   urls,
   seriesText,
   showReveal = true,
+  reveal,
+  setReveal,
 }) => {
-  const [reveal, setReveal] = useState(!showReveal)
   let series = ''
   if (playoffs) {
     const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
@@ -219,6 +220,8 @@ MatchInfo.propTypes = {
   urls: PropTypes.object,
   // whether or not to have the reveal button. In box score detail page, do not show it.
   showReveal: PropTypes.bool,
+  reveal: PropTypes.bool,
+  setReveal: PropTypes.func,
 }
 
 MatchInfo.defaultProps = {

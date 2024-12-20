@@ -21,14 +21,20 @@ import {
 } from './styles'
 import TeamLeaderCol from '../../components/Scores/TeamLeaderCol'
 
-export const renderTitle = (bsData) => {
+export const renderTitle = (bsData, reveal) => {
   const { home, visitor, periodTime } = bsData
   const { abbreviation: hta, nickname: htn, score: hs } = home
   const { abbreviation: vta, nickname: vtn, score: vs } = visitor
 
   return (
     <Title justifyCenter={true} alignCenter={true}>
-      <TeamInfo ta={vta} tn={vtn} winning={isWinning(vs, hs)} large={true} />
+      <TeamInfo
+        ta={vta}
+        tn={vtn}
+        winning={isWinning(vs, hs)}
+        large={true}
+        reveal={reveal}
+      />
       <MatchInfo
         home={{
           ...home,
@@ -40,8 +46,15 @@ export const renderTitle = (bsData) => {
         }}
         periodTime={periodTime}
         showReveal={false}
+        reveal={reveal}
       />
-      <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} large={true} />
+      <TeamInfo
+        ta={hta}
+        tn={htn}
+        winning={isWinning(hs, vs)}
+        large={true}
+        reveal={reveal}
+      />
     </Title>
   )
 }

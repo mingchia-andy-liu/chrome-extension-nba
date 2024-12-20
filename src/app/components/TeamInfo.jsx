@@ -40,15 +40,21 @@ const TeamRecord = styled.div`
   opacity: 0.9;
 `
 
-const TeamInfo = ({ ta, tn, winning, large, wins, losses }) => {
+const TeamInfo = ({ ta, tn, winning, large, wins, losses, reveal }) => {
   return (
     <SettingsConsumer>
       {({ state: { spoiler } }) => (
         <TeamInfoWrapper>
-          <TeamLogo winning={spoiler ? true : winning} team={ta} large={large}>
+          <TeamLogo
+            winning={spoiler && !reveal ? true : winning}
+            team={ta}
+            large={large}
+          >
             {ta}
           </TeamLogo>
-          <TeamName winning={spoiler ? true : winning}>{tn}</TeamName>
+          <TeamName winning={spoiler && !reveal ? true : winning}>
+            {tn}
+          </TeamName>
           {wins && losses && (
             <TeamRecord>
               {wins}-{losses}
@@ -67,6 +73,7 @@ TeamInfo.propTypes = {
   large: PropTypes.bool,
   wins: PropTypes.number,
   losses: PropTypes.number,
+  reveal: PropTypes.bool,
 }
 
 TeamInfo.defaultProps = {

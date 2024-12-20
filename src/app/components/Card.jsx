@@ -72,6 +72,7 @@ const MatchCard = ({
     wins: vw,
     losses: vl,
   } = visitor
+  const [reveal, setReveal] = React.useState(false)
 
   return (
     <ThemeConsumer>
@@ -91,12 +92,15 @@ const MatchCard = ({
                 winning={isWinning(vs, hs)}
                 wins={vw}
                 losses={vl}
+                reveal={reveal}
               />
               <MatchInfo
                 id={id}
                 home={home}
                 visitor={visitor}
                 broadcasters={showBroadcast ? broadcasters : undefined}
+                reveal={reveal}
+                setReveal={setReveal}
                 {...rest}
               />
               <TeamInfo
@@ -105,6 +109,7 @@ const MatchCard = ({
                 winning={isWinning(hs, vs)}
                 wins={hw}
                 losses={hl}
+                reveal={reveal}
               />
             </Wrapper>
           )}

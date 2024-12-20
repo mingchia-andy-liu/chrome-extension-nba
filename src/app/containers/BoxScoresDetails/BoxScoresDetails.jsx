@@ -96,7 +96,7 @@ const BoxScoresDetails = ({
               <br />
               {tabIndex === 0 && (
                 <React.Fragment>
-                  {renderTitle(bsData)}
+                  {renderTitle(bsData, reveal)}
                   {renderSummary(bsData, teamStats)}
                   {bsData.periodTime &&
                     bsData.periodTime.gameStatus === '3' &&
