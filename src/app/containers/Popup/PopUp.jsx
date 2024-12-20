@@ -21,7 +21,7 @@ import browser from '../../utils/browser'
 const Wrapper = styled(Column)`
   padding: 10px;
   width: 100%;
-  min-width: 370px;
+  min-width: 450px;
 `
 
 const PopUp = ({

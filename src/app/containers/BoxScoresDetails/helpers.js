@@ -39,6 +39,7 @@ export const renderTitle = (bsData) => {
           score: `${visitor.score}`,
         }}
         periodTime={periodTime}
+        showReveal={false}
       />
       <TeamInfo ta={hta} tn={htn} winning={isWinning(hs, vs)} large={true} />
     </Title>

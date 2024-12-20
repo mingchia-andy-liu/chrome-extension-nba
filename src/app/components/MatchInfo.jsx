@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Theme } from '../styles'
@@ -11,6 +11,21 @@ const Wrapper = styled.div`
 
   & > * {
     margin-top: 5px;
+  }
+`
+const Button = styled.button`
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: ${(props) => (props.dark ? 'black' : 'transparent')};
+  border: 1px solid rgb(168, 199, 250);
+  color: ${(props) => (props.dark ? 'rgb(168, 199, 250)' : 'rgb(11, 87, 208)')};
+  padding: 1px 8px;
+  outline-width: 0px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${(props) =>
+      props.dark ? '#38393b' : 'rgb(197, 217, 215)'};
   }
 `
 
@@ -31,11 +46,8 @@ const SubText = styled.div`
 const renderScores = (dark, spoiler, gameStatus, home, visitor) => {
   if (gameStatus !== '1') {
     if (spoiler) {
-      return (
-        <Row>
-          <TeamScore> --- </TeamScore>-<TeamScore> --- </TeamScore>
-        </Row>
-      )
+      // mock the game has not start symbol
+      return renderAt('1')
     }
     return (
       <Row>
@@ -115,7 +127,9 @@ const MatchInfo = ({
   playoffs,
   urls,
   seriesText,
+  showReveal = true,
 }) => {
+  const [reveal, setReveal] = useState(!showReveal)
   let series = ''
   if (playoffs) {
     const { home_wins: homeWins, visitor_wins: visitorWins } = playoffs
@@ -136,14 +150,39 @@ const MatchInfo = ({
         <SettingsConsumer>
           {({ state: { spoiler } }) => (
             <Wrapper>
-              {renderScores(dark, spoiler, gameStatus, home, visitor)}
+              {renderScores(
+                dark,
+                spoiler && !reveal,
+                gameStatus,
+                home,
+                visitor
+              )}
               {renderAt(gameStatus)}
-              <div>
-                {renderStatusAndClock(periodStatus, gameClock, periodValue)}
-              </div>
-              {!spoiler && series && <div>{series}</div>}
-              {broadcasters != null &&
-                renderBroadcasters(broadcasters, gameStatus)}
+              {/* either game has not start OR it has starts and the reveal has been clicked */}
+              {(gameStatus == 1 || (gameStatus != 1 && (reveal || !spoiler))) && (
+                <div>
+                  {renderStatusAndClock(
+                    periodStatus,
+                    gameClock,
+                    periodValue
+                  )}
+                </div>
+              )}
+              {/* no spoiler is off || revel has been clicked */}
+              {(!spoiler || reveal) && series && <div>{series}</div>}
+              {/* in cards && game has started && no spoiler is on && revel has not been clicked */}
+              {showReveal && gameStatus != 1 && spoiler && !reveal && (
+                <Button
+                  dark={dark}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setReveal(!reveal)
+                  }}
+                >
+                  Reveal
+                </Button>
+              )}
+              {broadcasters != null && renderBroadcasters(broadcasters, gameStatus)}
               {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
@@ -180,6 +219,8 @@ MatchInfo.propTypes = {
     visitor_wins: PropTypes.string,
   }),
   urls: PropTypes.object,
+  // whether or not to have the reveal button. In box score detail page, do not show it.
+  showReveal: PropTypes.bool,
 }
 
 MatchInfo.defaultProps = {
