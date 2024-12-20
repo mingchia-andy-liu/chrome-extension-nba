@@ -17,7 +17,7 @@ module.exports = [
       'Add an option for adding favorite player',
       'Add an option for sorting games chronologically',
       'Add arena information',
-      'Available in Edge (coming soon)',
+      'Available in Edge',
     ],
   },
   {
