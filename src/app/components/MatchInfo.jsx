@@ -159,13 +159,10 @@ const MatchInfo = ({
               )}
               {renderAt(gameStatus)}
               {/* either game has not start OR it has starts and the reveal has been clicked */}
-              {(gameStatus == 1 || (gameStatus != 1 && (reveal || !spoiler))) && (
+              {(gameStatus == 1 ||
+                (gameStatus != 1 && (reveal || !spoiler))) && (
                 <div>
-                  {renderStatusAndClock(
-                    periodStatus,
-                    gameClock,
-                    periodValue
-                  )}
+                  {renderStatusAndClock(periodStatus, gameClock, periodValue)}
                 </div>
               )}
               {/* no spoiler is off || revel has been clicked */}
@@ -182,7 +179,8 @@ const MatchInfo = ({
                   Reveal
                 </Button>
               )}
-              {broadcasters != null && renderBroadcasters(broadcasters, gameStatus)}
+              {broadcasters != null &&
+                renderBroadcasters(broadcasters, gameStatus)}
               {renderHighlight(id, urls, dark)}
             </Wrapper>
           )}
