@@ -1,6 +1,6 @@
 module.exports = [
   {
-    version: '1.6.4 Updates: (2025-01-09)',
+    version: '1.6.4/5 Updates: (2025-01-09)',
     updates: [
       'Add team records to cards',
       'Add a reveal button for no spoiler as a temporary way to view the scores',
