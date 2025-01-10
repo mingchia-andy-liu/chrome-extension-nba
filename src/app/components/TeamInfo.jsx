@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { getLogoColorByName, TEAM_ID } from '../utils/teams'
 import { SettingsConsumer } from './Context'
 import TeamLogo from './TeamLogo'
 
