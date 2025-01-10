@@ -14,7 +14,6 @@ import {
 export const Content = styled.div`
   ${Shadow}
   grid-area: content;
-  overflow-y: scroll !important;
   padding: 10px;
   border-radius: 5px;
   background-color: ${(props) =>

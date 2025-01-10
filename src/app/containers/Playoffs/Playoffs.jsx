@@ -17,7 +17,7 @@ const ColumnWrapper = styled.div`
 const renderContent = ({ isLoading, west, east, final }) => {
   if (isLoading) return <Loader />
   return (
-    <React.Fragment>
+    <div style={{ margin: '0 5%' }}>
       <ColumnWrapper>
         <PlayoffColumn title="RD1" series={west.first} />
         <PlayoffColumn title="RD2" series={west.second} />
@@ -27,7 +27,7 @@ const renderContent = ({ isLoading, west, east, final }) => {
         <PlayoffColumn title="RD2" series={east.second} />
         <PlayoffColumn title="RD1" series={east.first} />
       </ColumnWrapper>
-    </React.Fragment>
+    </div>
   )
 }
 

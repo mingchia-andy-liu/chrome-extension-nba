@@ -17,8 +17,8 @@ const HeaderWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   grid-area: content;
-  overflow-y: scroll !important;
   padding: 0 10px;
+  margin: 0 5%;
 `
 
 const Header = ({ children }) => {

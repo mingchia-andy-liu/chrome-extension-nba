@@ -64,6 +64,7 @@ const MatchCard = ({
     score: hs,
     wins: hw,
     losses: hl,
+    id: hid,
   } = home
   const {
     abbreviation: vta,
@@ -71,6 +72,7 @@ const MatchCard = ({
     score: vs,
     wins: vw,
     losses: vl,
+    id: vid,
   } = visitor
   const [reveal, setReveal] = React.useState(false)
 
@@ -87,6 +89,7 @@ const MatchCard = ({
               fav={teams.includes(vta) || teams.includes(hta)}
             >
               <TeamInfo
+                tid={`${vid}`}
                 ta={vta}
                 tn={vtn}
                 winning={isWinning(vs, hs)}
@@ -104,6 +107,7 @@ const MatchCard = ({
                 {...rest}
               />
               <TeamInfo
+                tid={`${hid}`}
                 ta={hta}
                 tn={htn}
                 winning={isWinning(hs, vs)}

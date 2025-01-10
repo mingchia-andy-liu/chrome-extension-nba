@@ -1,25 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { getLogoColorByName } from '../utils/teams'
 import { SettingsConsumer } from './Context'
-
-export const TeamLogo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: ${(props) => (props.large ? '65px' : '45px')};
-  min-height: ${(props) => (props.large ? '65px' : '45px')};
-  color: white;
-  border-radius: 50%;
-  font-size: ${(props) => (props.large ? 'calc(20px + 0.3vw)' : 'inherit')};
-
-  background-color: ${(props) =>
-    props.team ? getLogoColorByName(props.team) : '#000000'};
-
-  opacity: ${(props) => (props.winning ? '1' : '0.4')};
-`
+import TeamLogo from './TeamLogo'
 
 const TeamName = styled.div`
   text-align: center;
@@ -40,20 +23,21 @@ const TeamRecord = styled.div`
   opacity: 0.9;
 `
 
-const TeamInfo = ({ ta, tn, winning, large, wins, losses, reveal }) => {
+const TeamInfo = ({ tid, ta, tn, winning, large, wins, losses, reveal }) => {
   return (
     <SettingsConsumer>
       {({ state: { spoiler } }) => (
         <TeamInfoWrapper>
           <TeamLogo
-            winning={spoiler && !reveal ? true : winning}
-            team={ta}
+            spoiler={spoiler}
+            winning={winning}
+            ta={ta}
+            tn={tid}
             large={large}
-          >
-            {ta}
-          </TeamLogo>
+            reveal={reveal}
+          />
           <TeamName winning={spoiler && !reveal ? true : winning}>
-            {tn}
+            {tn || 'TBD'}
           </TeamName>
           {wins != null && losses != null && (
             <TeamRecord>
@@ -67,6 +51,7 @@ const TeamInfo = ({ ta, tn, winning, large, wins, losses, reveal }) => {
 }
 
 TeamInfo.propTypes = {
+  tid: PropTypes.string.isRequired,
   ta: PropTypes.string.isRequired,
   tn: PropTypes.string.isRequired,
   winning: PropTypes.bool,

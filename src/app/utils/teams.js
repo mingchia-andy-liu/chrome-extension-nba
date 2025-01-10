@@ -184,8 +184,8 @@ export const getLogoColorByName = (name, defaultColor = '#000000') => {
   return LOGO_COLORS[name] || defaultColor
 }
 
-export const getNickNamesByTriCode = (triCode) => {
-  return shortNames[triCode] || triCode
+export const getNickNamesByTriCode = (triCode, defaultValue = undefined) => {
+  return shortNames[triCode] || defaultValue || triCode
 }
 
 export const getLogoColorById = (id) => {
@@ -197,4 +197,20 @@ export const getLogoColorById = (id) => {
     }
   })
   return getLogoColorByName(name)
+}
+
+export const getAbbreviationById = (id) => {
+  let abbr = ''
+  id = typeof id === 'number' ? id.toString() : id
+  Object.keys(TEAM_ID).forEach((key) => {
+    if (TEAM_ID[key] === id) {
+      abbr = key
+    }
+  })
+
+  if (abbr === '') {
+    return 'TBD'
+  }
+
+  return abbr
 }
