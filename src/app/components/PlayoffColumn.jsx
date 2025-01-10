@@ -1,8 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { getTeamNameById, getLogoColorById } from '../utils/teams'
+import {
+  getTeamNameById,
+  getLogoColorById,
+  getNickNamesByTriCode,
+  getAbbreviationById,
+} from '../utils/teams'
 import { mediaQuery } from '../styles'
+import TeamLogo from './TeamLogo'
 
 const StyledSerieColumn = styled.div`
   width: 15%;
@@ -51,10 +57,13 @@ const StyledSeries = styled.div`
 
 const SerieTeamRow = ({ teamId, seedNum, wins, isWinning }) => (
   <StyledSerieTeamRow winning={isWinning} color={getLogoColorById(teamId)}>
-    <div>
-      {getTeamNameById(teamId)}
-      {seedNum ? `(${seedNum})` : ''}
-    </div>
+    {teamId && (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+        <TeamLogo tn={teamId} ta={getAbbreviationById(teamId)} />
+        <span>{getNickNamesByTriCode(getTeamNameById(teamId))}</span>
+        {seedNum ? `(${seedNum})` : ''}
+      </div>
+    )}
     <div>{wins}</div>
   </StyledSerieTeamRow>
 )

@@ -23,12 +23,13 @@ import TeamLeaderCol from '../../components/Scores/TeamLeaderCol'
 
 export const renderTitle = (bsData, reveal) => {
   const { home, visitor, periodTime } = bsData
-  const { abbreviation: hta, nickname: htn, score: hs } = home
-  const { abbreviation: vta, nickname: vtn, score: vs } = visitor
+  const { abbreviation: hta, nickname: htn, score: hs, id: hid } = home
+  const { abbreviation: vta, nickname: vtn, score: vs, id: vid } = visitor
 
   return (
     <Title justifyCenter={true} alignCenter={true}>
       <TeamInfo
+        tid={`${vid}`}
         ta={vta}
         tn={vtn}
         winning={isWinning(vs, hs)}
@@ -49,6 +50,7 @@ export const renderTitle = (bsData, reveal) => {
         reveal={reveal}
       />
       <TeamInfo
+        tid={`${hid}`}
         ta={hta}
         tn={htn}
         winning={isWinning(hs, vs)}

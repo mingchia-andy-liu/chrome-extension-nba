@@ -278,19 +278,21 @@ export const convertDaily3 = (game) => {
   return {
     broadcasters: getBroadcasters(watch),
     home: {
+      id: h.teamId,
       abbreviation: h.teamTricode,
       city: h.teamCity,
       linescores: { period: addQuarterNames(h.periods) },
-      nickname: getNickNamesByTriCode(h.teamTricode),
+      nickname: getNickNamesByTriCode(h.teamTricode, h.teamName),
       score: `${h.score}`,
       wins: h?.wins,
       losses: h?.losses,
     },
     visitor: {
+      id: v.teamId,
       abbreviation: v.teamTricode,
       city: v.teamCity,
       linescores: { period: addQuarterNames(v.periods) },
-      nickname: getNickNamesByTriCode(v.teamTricode),
+      nickname: getNickNamesByTriCode(v.teamTricode, v.teamName),
       score: `${v.score}`,
       wins: v?.wins,
       losses: v?.losses,
@@ -493,6 +495,7 @@ export const convertBSProxy = (old) => {
       gameStatus: `${gameStatus}`,
     },
     home: {
+      id: homeTeam.teamId,
       abbreviation: homeTeam.teamTricode,
       city: homeTeam.teamCity,
       linescores: {
@@ -506,6 +509,7 @@ export const convertBSProxy = (old) => {
       stats: getStatsProxy(homeTeam.statistics),
     },
     visitor: {
+      id: awayTeam.teamId,
       abbreviation: awayTeam.teamTricode,
       city: awayTeam.teamCity,
       linescores: {

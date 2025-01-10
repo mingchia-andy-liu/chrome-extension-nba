@@ -8,15 +8,16 @@ import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import * as actions from './actions'
 import { mediaQuery } from '../../styles'
+import TeamLogo from '../../components/TeamLogo'
+import { getAbbreviationById } from '../../utils/teams'
 
 const Cell = styled.td`
   width: 10vw;
-  height: 1.8em !important;
   text-align: center;
   vertical-align: middle;
   ${mediaQuery`width: 20vw;`}
   border: 1px solid #bebebe;
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.5rem;
 `
 
 const NonMainCell = styled(Cell)`
@@ -85,7 +86,10 @@ const renderConference = (team, i, dark) => {
           {team.playoffCode && `- ${team.playoffCode}`}
         </div>
       </Cell>
-      <Cell>{team.name}</Cell>
+      <Cell style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+        <TeamLogo tn={`${team.id}`} ta={getAbbreviationById(team.id)} />
+        <span>{team.name}</span>
+      </Cell>
       <Cell>{team.win}</Cell>
       <Cell>{team.loss}</Cell>
       <Cell>{Math.round(team.percentage * 100)}%</Cell>
@@ -126,7 +130,7 @@ const renderContent = (east, west, isLoading) => {
   return (
     <ThemeConsumer>
       {({ state: { dark } }) => (
-        <div style={{ margin: '0 8%' }}>
+        <div style={{ margin: '0 5%' }}>
           <h3>East</h3>
           <table style={{ borderCollapse: 'collapse' }}>
             <tbody>
