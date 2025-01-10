@@ -1,5 +1,14 @@
 module.exports = [
   {
+    version: '1.6.4 Updates: (2025-01-09)',
+    updates: [
+      'Add team records to cards',
+      'Add a reveal button for no spoiler as a temporary way to view the scores',
+      'Update standings to include logos and playin and playoff seedings',
+      'Update overall layout',
+    ],
+  },
+  {
     version: '1.6.3 Updates: (2024-11-26)',
     updates: ['Fix game clock status text in card'],
   },
