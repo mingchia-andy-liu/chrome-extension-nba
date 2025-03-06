@@ -1,5 +1,12 @@
 module.exports = [
   {
+    version: '1.6.6 Updates: (2025-03-05)',
+    updates: [
+      'Add more PDD use cases',
+      'Fix time duration parsing',
+    ],
+  },
+  {
     version: '1.6.4/5 Updates: (2025-01-09)',
     updates: [
       'Add team records to cards',
