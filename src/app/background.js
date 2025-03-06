@@ -92,7 +92,9 @@ const liveListener = (initCheck) => {
   }
 
   // cdn
-  fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+  fetch(
+    'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+  )
     .then((res) => res.json())
     .then(({ scoreboard: { games } }) => {
       checkLiveGame(games, 3)
@@ -102,7 +104,9 @@ const liveListener = (initCheck) => {
     })
     .catch((error) => {
       console.log('something went wrong...', error)
-      return fetch('https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+      return fetch(
+        'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+      )
         .then((res) => res.json())
         .then(({ scoreboard: { games } }) => {
           checkLiveGame(games, 3)

@@ -50,7 +50,9 @@ const fetchRequest3 = async (dateStr) => {
 
   let g = []
   try {
-    const res = await fetch('https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+    const res = await fetch(
+      'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+    )
     const {
       scoreboard: { games, gameDate },
     } = await res.json()
@@ -60,7 +62,9 @@ const fetchRequest3 = async (dateStr) => {
     g = games
   } catch (e) {
     try {
-      const res = await fetch('https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+      const res = await fetch(
+        'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+      )
       const {
         scoreboard: { games, gameDate },
       } = await res.json()
