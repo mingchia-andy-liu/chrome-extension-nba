@@ -80,7 +80,7 @@ export const formatClock = (clock, status, totalPeriod) => {
   } else if (status.includes('Halftime') || status.includes('Tipoff')) {
     // game started, clock stopped
     return status
-  } else if (status === 'PPD') {
+  } else if (status === 'PPD' || clock === 'PPD') {
     // PPD mean postponed
     return 'Postponed'
   } else if (

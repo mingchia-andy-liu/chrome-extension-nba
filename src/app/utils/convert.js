@@ -97,7 +97,7 @@ const getPlayers = (players = []) => {
   }))
 }
 
-const minuteStringRegex = /^(PT)?(\d{1,3})M(\d{1,2})\.(\d{1,2})S$/
+const minuteStringRegex = /^(PT)?(\d+)M(\d+)\.(\d+)S$/
 const formatMinutes = (minute) => {
   let minutes
   let seconds
