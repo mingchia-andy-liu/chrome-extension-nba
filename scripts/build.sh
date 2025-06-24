@@ -4,6 +4,8 @@ set -e
 
 rm -rf node_modules
 
+git stash -u
+
 # install
 npm install
 
@@ -18,5 +20,8 @@ npm run webpack:popup
 # build the release zip
 npm run build
 
+git stash pop
+
 # validate the zip
 ./node_modules/addons-linter/bin/addons-linter dist/$(ls dist | grep -x basketball.*\.zip) --self-hosted
+
