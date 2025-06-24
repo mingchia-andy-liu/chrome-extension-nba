@@ -1,6 +1,6 @@
 module.exports = [
   {
-    version: '1.6.7 Updates: (2025-06-2)',
+    version: '1.6.7/8 Updates: (2025-06-2)',
     updates: [
       'Fix the off-season detection',
     ],
