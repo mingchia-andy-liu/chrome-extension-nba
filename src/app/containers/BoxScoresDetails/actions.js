@@ -44,20 +44,14 @@ const fetchPBP = async (dateStr, gid) => {
   try {
     let plays = []
     let isProxy = true
-    try {
-      const pbp = await fetch(`https://api.boxscores.site/v1/playbyplay/${gid}`)
-      const { actions } = await pbp.json()
-      plays = actions
-    } catch (error) {
-      const pbp = await fetch(
-        `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
-      )
-      const {
-        game: { actions },
-      } = await pbp.json()
-      plays = actions
-      isProxy = false
-    }
+    const pbp = await fetch(
+      `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
+    )
+    const {
+      game: { actions },
+    } = await pbp.json()
+    plays = actions
+    isProxy = false
     return {
       isProxy,
       game: {
