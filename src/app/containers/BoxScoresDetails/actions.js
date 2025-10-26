@@ -69,20 +69,12 @@ const fetchGameDetail = async (_, gid) => {
     let g = {}
     let isProxy = true
 
-    try {
-      const response = await fetch(
-        `https://api.boxscores.site/v1/boxscore/${gid}`
-      )
-      const game = await response.json()
-      g = game
-    } catch (error) {
       const bs = await fetch(
         `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`
       )
       const { game } = await bs.json()
       g = game
       isProxy = false
-    }
 
     return {
       isProxy,
