@@ -2,7 +2,7 @@ import { utcToZonedTime } from 'date-fns-tz'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import { getUserTimeZoneId } from './time'
-import { convertDaily, convertDaily2, convertDaily3 } from './convert'
+import { convertDaily, convertDaily2, convertDaily3, convertDaily5 } from './convert'
 import getApiDate from './getApiDate'
 
 /**
@@ -45,6 +45,21 @@ import getApiDate from './getApiDate'
       score: string
     }
  */
+
+
+const sanitizeGameFallBack5 = (game) => ({
+  // gives home, visitor
+  ...convertDaily5(game.cardData),
+  id: game.cardData.gameId,
+  date: game.cardData.gameTimeEastern,
+  time: game.cardData.gameTimeEastern,
+  state: game.cardData.gameStatus,
+  arena: {
+    name: '',
+    city: '',
+  },
+  startTimeUTC: game.cardData.gameTimeUtc,
+})
 
 // for https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json
 /**
@@ -253,6 +268,8 @@ export const sanitizeGames = (games, isFallBack = 0) => {
       return sanitizeGameFallBack2(game)
     } else if (isFallBack === 3) {
       return sanitizeGameFallBack3(game)
+    } else if (isFallBack === 5) {
+      return sanitizeGameFallBack5(game);
     } else {
       return sanitizeGame(game)
     }

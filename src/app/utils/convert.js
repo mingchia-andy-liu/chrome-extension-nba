@@ -232,6 +232,78 @@ const getPlayoffs = (playoffs) => {
   }
 }
 
+// core-api
+export const convertDaily5 = (game) => {
+  const {
+    gameTimeUtc,
+    gameStatus,
+    gameStatusText,
+    gameClock,
+    period,
+    homeTeam: h,
+    awayTeam: v,
+    broadcasters,
+    playoffs,
+    seriesText,
+  } = game
+
+  const formatGameStatus = () => {
+    if (gameStatus === 1) {
+      return format(utcToZonedTime(gameTimeUtc, getUserTimeZoneId()), 'hh:mm a')
+    }
+
+    if (gameStatusText === 'Half') {
+      return 'Halftime'
+    }
+
+    return gameStatusText
+  }
+
+  const clock =
+    gameClock && gameClock.trim() != ''
+      ? `${
+          period <= 4 ? 'Q' + period : 'OT' + (period - 4)
+        } ${formatMinutesWithPadding(formatMinutes(gameClock.trim()))}`
+      : gameStatusText
+
+  const addQuarterNames = (linescores) =>
+    linescores.map((ls, i) => ({
+      period_name: QUARTER_NAMES[i],
+      period_value: i.toString(),
+      score: ls.score,
+    }))
+
+  return {
+    broadcasters: [],
+    home: {
+      id: h.teamId,
+      abbreviation: h.teamTricode,
+      linescores: { period: addQuarterNames(h.periods) },
+      nickname: getNickNamesByTriCode(h.teamTricode, h.teamName),
+      score: `${h.score}`,
+      wins: h?.wins,
+      losses: h?.losses,
+    },
+    visitor: {
+      id: v.teamId,
+      abbreviation: v.teamTricode,
+      linescores: { period: addQuarterNames(v.periods) },
+      nickname: getNickNamesByTriCode(v.teamTricode, v.teamName),
+      score: `${v.score}`,
+      wins: v?.wins,
+      losses: v?.losses,
+    },
+    periodTime: {
+      periodStatus: formatGameStatus(),
+      gameClock: clock,
+      gameStatus: `${gameStatus}`,
+      periodValue: `${period}`,
+    },
+    playoffs: getPlayoffs(playoffs),
+    seriesText: seriesText,
+  }
+}
+
 // for cdn
 export const convertDaily3 = (game) => {
   const {
@@ -280,7 +352,6 @@ export const convertDaily3 = (game) => {
     home: {
       id: h.teamId,
       abbreviation: h.teamTricode,
-      city: h.teamCity,
       linescores: { period: addQuarterNames(h.periods) },
       nickname: getNickNamesByTriCode(h.teamTricode, h.teamName),
       score: `${h.score}`,

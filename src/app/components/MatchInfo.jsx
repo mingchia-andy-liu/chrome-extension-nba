@@ -196,13 +196,13 @@ MatchInfo.propTypes = {
   broadcasters: PropTypes.array,
   home: PropTypes.shape({
     abbreviation: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
+    city: PropTypes.string,
     score: PropTypes.string,
     nickname: PropTypes.string.isRequired,
   }).isRequired,
   visitor: PropTypes.shape({
     abbreviation: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
+    city: PropTypes.string,
     score: PropTypes.string,
     nickname: PropTypes.string.isRequired,
   }).isRequired,

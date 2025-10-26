@@ -34,6 +34,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     }
     if (callback) callback(newGames)
   } catch (error) {
+    // debug log here.
     // if any of the fetch requests fail, set the state to error
     if (callback) callback([])
     dispatch({ type: types.REQUEST_ERROR })
@@ -97,28 +98,33 @@ const insertAt = (str, index, text) => {
 
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
-  const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
+  // const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
+  // try {
+  //   const res2 = await fetch(
+  //     `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
+  //   )
+  //   const {
+  //     scoreboard: { games },
+  //   } = await res2.json()
+  //   g = games
+  // } catch (error) {
+    return fetchRequest5(dateStr);
+  // }
+  // return {
+  //   isFallBack: 3,
+  //   games: g,
+  // }
+}
 
-  let g = []
-  try {
-    const res = await fetch(
-      `https://api.boxscores.site/v1/scoreboard?GameDate=${newDateStr}`
-    )
-    const { games } = await res.json()
-    g = games
-  } catch (error) {
-    const res2 = await fetch(
-      `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
-    )
-    const {
-      scoreboard: { games },
-    } = await res2.json()
-    g = games
-  }
-
+const fetchRequest5 = async (dateStr) => {
+  const slashDateStr = format(parse(dateStr, DATE_FORMAT, new Date()), 'MM/dd/yyyy');
+  const res = await fetch(
+    `https://proxy.boxscores.site/?apiUrl=core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
+  )
+  const { cards } = await res.json()
   return {
-    isFallBack: 3,
-    games: g,
+    isFallBack: 5,
+    games: cards,
   }
 }
 
