@@ -39,7 +39,7 @@ const TeamInfo = ({ tid, ta, tn, winning, large, wins, losses, reveal }) => {
           <TeamName winning={spoiler && !reveal ? true : winning}>
             {tn || 'TBD'}
           </TeamName>
-          {wins != null && losses != null && (
+          {(!spoiler || reveal) && wins != null && losses != null && (
             <TeamRecord>
               {wins}-{losses}
             </TeamRecord>
