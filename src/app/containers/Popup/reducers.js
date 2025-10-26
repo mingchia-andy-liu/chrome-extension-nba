@@ -29,6 +29,7 @@ export default (state = initState, action) => {
           urls: state.urls,
         }
       } catch (error) {
+        // debug log here
         return {
           games: [],
           hasError: true,
