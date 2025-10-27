@@ -11,21 +11,13 @@ export const fetchStandings = () => async (dispatch) => {
 
     let data = []
     let isProxy = true
-    try {
-      const res = await fetch(
-        `https://api.boxscores.site/v1/standings?LeagueID=00&Season=${season}`
-      )
-      const teams = await res.json()
-      data = teams
-    } catch (error) {
-      const res = await fetch(
-        `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/leaguestandingsv3&GroupBy=conf&LeagueID=00&Season=${season}&SeasonType=Regular%20Season&Section=overall`
-      )
-      const { resultSets } = await res.json()
-      const teams = resultSets[0]?.rowSet ?? []
-      data = teams
-      isProxy = false
-    }
+    const res = await fetch(
+      `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/leaguestandingsv3&GroupBy=conf&LeagueID=00&Season=${season}&SeasonType=Regular%20Season&Section=overall`
+    )
+    const { resultSets } = await res.json()
+    const teams = resultSets[0]?.rowSet ?? []
+    data = teams
+    isProxy = false
 
     dispatch({
       type: types.REQUEST_SUCCESS,
