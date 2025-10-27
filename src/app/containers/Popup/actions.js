@@ -88,14 +88,6 @@ const fetchRequest3 = async (dateStr) => {
   }
 }
 
-const insertAt = (str, index, text) => {
-  if (index > 0) {
-    return str.substring(0, index) + text + str.substr(index)
-  }
-
-  return str
-}
-
 // new endpoint requires special headers.
 const fetchRequest4 = async (dateStr) => {
   // const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
@@ -108,7 +100,7 @@ const fetchRequest4 = async (dateStr) => {
   //   } = await res2.json()
   //   g = games
   // } catch (error) {
-    return fetchRequest5(dateStr);
+  return fetchRequest5(dateStr)
   // }
   // return {
   //   isFallBack: 3,
@@ -117,7 +109,7 @@ const fetchRequest4 = async (dateStr) => {
 }
 
 const fetchRequest5 = async (dateStr) => {
-  const slashDateStr = format(parse(dateStr, DATE_FORMAT, new Date()), 'MM/dd/yyyy');
+  const slashDateStr = format(parse(dateStr, DATE_FORMAT, new Date()), 'MM/dd/yyyy')
   const res = await fetch(
     `https://proxy.boxscores.site/?apiUrl=core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
   )
@@ -134,36 +126,36 @@ const fetchRequest = async (dateStr) => {
 
 export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
-  async (dispatch, getState) => {
-    if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
-      dispatch({
-        type: types.REQUEST_SUCCESS,
-        payload: { games: [] },
-      })
-      return
-    }
-
-    const {
-      live: { games, lastUpdate },
-      date: { date },
-    } = getState()
-    const oldDateStr = format(date, DATE_FORMAT)
-    const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
-
-    // if it's different day, or force update, fetch new
-    if (oldDateStr === dateStr && !forceUpdate) {
-      const hasPendingOrLiveGame = games.find(
-        (game) => game.periodTime && game.periodTime.gameStatus !== '3'
-      )
-
-      if (!hasPendingOrLiveGame || updateDiff < 55) {
+    async (dispatch, getState) => {
+      if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
+        dispatch({
+          type: types.REQUEST_SUCCESS,
+          payload: { games: [] },
+        })
         return
       }
-    }
 
-    isBackground = isBackground === false ? false : oldDateStr === dateStr
-    return await fetchGames(dispatch, dateStr, callback, isBackground)
-  }
+      const {
+        live: { games, lastUpdate },
+        date: { date },
+      } = getState()
+      const oldDateStr = format(date, DATE_FORMAT)
+      const updateDiff = differenceInSeconds(Date.now(), lastUpdate)
+
+      // if it's different day, or force update, fetch new
+      if (oldDateStr === dateStr && !forceUpdate) {
+        const hasPendingOrLiveGame = games.find(
+          (game) => game.periodTime && game.periodTime.gameStatus !== '3'
+        )
+
+        if (!hasPendingOrLiveGame || updateDiff < 55) {
+          return
+        }
+      }
+
+      isBackground = isBackground === false ? false : oldDateStr === dateStr
+      return await fetchGames(dispatch, dateStr, callback, isBackground)
+    }
 
 // ------ highlights -------
 

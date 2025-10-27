@@ -242,7 +242,7 @@ export const convertDaily5 = (game) => {
     period,
     homeTeam: h,
     awayTeam: v,
-    broadcasters,
+    // broadcasters,
     playoffs,
     seriesText,
   } = game
@@ -471,9 +471,9 @@ export const convertDaily = (game) => {
       periodStatus:
         st == 1 && isStatusValidDate
           ? format(
-              utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
-              'hh:mm a'
-            )
+            utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
+            'hh:mm a'
+          )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

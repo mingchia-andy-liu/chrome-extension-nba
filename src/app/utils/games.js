@@ -46,7 +46,6 @@ import getApiDate from './getApiDate'
     }
  */
 
-
 const sanitizeGameFallBack5 = (game) => ({
   // gives home, visitor
   ...convertDaily5(game.cardData),
@@ -232,16 +231,16 @@ const sanitizeGame = (game) => ({
     periodStatus:
       game.period_time.game_status === '1'
         ? format(
-            utcToZonedTime(
-              parse(
+          utcToZonedTime(
+            parse(
                 `${game.date}${game.time}`,
                 'yyyyMMddhhmm',
                 getApiDate()
-              ).toISOString(),
-              getUserTimeZoneId()
-            ),
-            'hh:mm a'
-          )
+            ).toISOString(),
+            getUserTimeZoneId()
+          ),
+          'hh:mm a'
+        )
         : game.period_time.period_status,
     gameClock: game.period_time.game_clock,
     gameStatus: game.period_time.game_status,
@@ -269,7 +268,7 @@ export const sanitizeGames = (games, isFallBack = 0) => {
     } else if (isFallBack === 3) {
       return sanitizeGameFallBack3(game)
     } else if (isFallBack === 5) {
-      return sanitizeGameFallBack5(game);
+      return sanitizeGameFallBack5(game)
     } else {
       return sanitizeGame(game)
     }
