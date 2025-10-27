@@ -1,6 +1,14 @@
 module.exports = [
   {
-    version: '1.6.7/8 Updates: (2025-06-2)',
+    version: '1.6.9 Updates: (2025-10-26)',
+    updates: [
+      'Fix games and standings endpoints with proxy',
+      'Add hiding the team record when no spoiler is on',
+      'Update 25-26 players list'
+    ],
+  },
+  {
+    version: '1.6.7/8 Updates: (2025-06-02)',
     updates: ['Fix the off-season detection'],
   },
   {
