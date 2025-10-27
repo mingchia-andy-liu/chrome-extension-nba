@@ -4,7 +4,7 @@ module.exports = [
     updates: [
       'Fix games and standings endpoints with proxy',
       'Add hiding the team record when no spoiler is on',
-      'Update 25-26 players list'
+      'Update 25-26 players list',
     ],
   },
   {
