@@ -38,6 +38,7 @@ const Sidebar = ({
   history,
   location,
   live,
+  dispatchChangeDate,
 }) => {
   const [gameId, toggleGameId] = React.useState(id || '')
   const dateStr = format(date, DATE_FORMAT)
