@@ -38,6 +38,7 @@ const Sidebar = ({
   history,
   location,
   live,
+  dispatchChangeDate,
 }) => {
   const [gameId, toggleGameId] = React.useState(id || '')
   const dateStr = format(date, DATE_FORMAT)
@@ -54,7 +55,9 @@ const Sidebar = ({
     if (!isSameDay(prevDate, gameDateObj) || !isSameDay(date, gameDateObj)) {
       prevCountRef.current = gameDateObj
 
-      dispatchChangeDate(gameDateObj)
+      const result = dispatchChangeDate(gameDateObj);
+      console.log('result', result);
+      result
         .then(() => {
           if (location.search !== '') {
             history.push({
