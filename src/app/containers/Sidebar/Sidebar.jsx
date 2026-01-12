@@ -4,8 +4,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
+import startOfDay from 'date-fns/startOfDay'
 import DatePicker from '../DatePicker'
 import CardList from '../../components/CardList'
 import {
@@ -13,6 +15,7 @@ import {
   NoSpoilerCheckbox,
   BroadcastCheckbox,
 } from '../../components/Checkbox'
+import { getDateFromQuery } from '../../utils/common'
 import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
 import {
@@ -37,18 +40,37 @@ const Sidebar = ({
   live,
 }) => {
   const [gameId, toggleGameId] = React.useState(id || '')
+  const dateStr = format(date, DATE_FORMAT)
+  const queryDate = getDateFromQuery(location)
 
-  // useRef for prevProps.
+  // useRef for prevProps. Used for calendar or initial render
   // set it after the fetch effect
   const prevCountRef = React.useRef()
   React.useEffect(() => {
+    const gameDate = queryDate == null ? dateStr : queryDate
+    const gameDateObj = parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
+
     const prevDate = prevCountRef.current
-    if (!isSameDay(date, prevDate)) {
-      // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
-        fetchGameHighlightIfNeeded
-      )
-      prevCountRef.current = date
+    if (!isSameDay(prevDate, gameDateObj) || !isSameDay(date, gameDateObj)) {
+      prevCountRef.current = gameDateObj
+
+      dispatchChangeDate(gameDateObj)
+        .then(() => {
+          if (location.search !== '') {
+            history.push({
+              search: '',
+            })
+          }
+        })
+        .then(() => {
+          fetchGamesIfNeeded(
+            format(gameDateObj, DATE_FORMAT),
+            null,
+            true,
+            false
+          )
+        })
+        .then(fetchGameHighlightIfNeeded)
     }
   }, [date, fetchGamesIfNeeded, fetchGameHighlightIfNeeded])
 

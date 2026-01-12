@@ -108,6 +108,8 @@ const fetchRequest4 = async (dateStr) => {
   // }
 }
 
+// const sleep = async (t = 1000) => new Promise((res, rej) => setTimeout(res, t));
+
 const fetchRequest5 = async (dateStr) => {
   const slashDateStr = format(
     parse(dateStr, DATE_FORMAT, new Date()),
@@ -117,6 +119,9 @@ const fetchRequest5 = async (dateStr) => {
     `https://proxy.boxscores.site/?apiUrl=core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
   )
   const { cards } = await res.json()
+
+  // await sleep();
+
   return {
     isFallBack: 5,
     games: cards,

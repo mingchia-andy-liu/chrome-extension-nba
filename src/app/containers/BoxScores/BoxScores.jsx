@@ -1,44 +1,16 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import parse from 'date-fns/parse'
-import format from 'date-fns/format'
-import isSameDay from 'date-fns/isSameDay'
-import startOfDay from 'date-fns/startOfDay'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Sidebar from '../Sidebar'
 import BoxScoresDetails from '../BoxScoresDetails'
 import { Wrapper } from './styles'
-import { getDateFromQuery } from '../../utils/common'
-import { DATE_FORMAT } from '../../utils/constant'
-import { dispatchChangeDate } from '../DatePicker/actions'
 
-const BoxScores = ({
-  date: { date },
-  location,
-  history,
-  match,
-  dispatchChangeDate,
-}) => {
-  const dateStr = format(date, DATE_FORMAT)
-  const queryDate = getDateFromQuery(location)
-
+const BoxScores = ({ date: { date }, match }) => {
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
-    const gameDate = queryDate == null ? dateStr : queryDate
-    const gameDateObj = parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
-    if (!isSameDay(date, gameDateObj)) {
-      dispatchChangeDate(gameDateObj).then(() => {
-        if (location.search !== '') {
-          history.push({
-            search: '',
-          })
-        }
-      })
-    }
   }, [])
 
   const id = React.useMemo(() => {
@@ -75,22 +47,10 @@ BoxScores.propTypes = {
       id: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  dispatchChangeDate: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ date }) => ({
   date,
 })
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      dispatchChangeDate,
-    },
-    dispatch
-  )
-}
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(BoxScores)
-)
+export default withRouter(connect(mapStateToProps)(BoxScores))
