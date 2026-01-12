@@ -55,9 +55,7 @@ const Sidebar = ({
     if (!isSameDay(prevDate, gameDateObj) || !isSameDay(date, gameDateObj)) {
       prevCountRef.current = gameDateObj
 
-      const result = dispatchChangeDate(gameDateObj);
-      console.log('result', result);
-      result
+      dispatchChangeDate(gameDateObj)
         .then(() => {
           if (location.search !== '') {
             history.push({
