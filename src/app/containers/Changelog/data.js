@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.6.1 Updates: (2026-01-11)',
+    updates: ['Fix race condition on selected game date'],
+  },
+  {
     version: '1.6.9 Updates: (2025-10-26)',
     updates: [
       'Fix games and standings endpoints with proxy',
