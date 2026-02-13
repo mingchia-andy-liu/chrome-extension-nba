@@ -1,6 +1,10 @@
 module.exports = [
   {
-    version: '1.6.1 Updates: (2026-01-11)',
+    version: '1.6.11 Updates: (2026-02-13)',
+    updates: ['Fix TBD games'],
+  },
+  {
+    version: '1.6.10 Updates: (2026-01-11)',
     updates: ['Fix race condition on selected game date'],
   },
   {
