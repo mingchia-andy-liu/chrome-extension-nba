@@ -275,24 +275,44 @@ export const convertDaily5 = (game) => {
 
   return {
     broadcasters: [],
-    home: {
-      id: h.teamId,
-      abbreviation: h.teamTricode,
-      linescores: { period: addQuarterNames(h.periods) },
-      nickname: getNickNamesByTriCode(h.teamTricode, h.teamName),
-      score: `${h.score}`,
-      wins: h?.wins,
-      losses: h?.losses,
-    },
-    visitor: {
-      id: v.teamId,
-      abbreviation: v.teamTricode,
-      linescores: { period: addQuarterNames(v.periods) },
-      nickname: getNickNamesByTriCode(v.teamTricode, v.teamName),
-      score: `${v.score}`,
-      wins: v?.wins,
-      losses: v?.losses,
-    },
+    home: h
+      ? {
+          id: h.teamId,
+          abbreviation: h.teamTricode,
+          linescores: { period: addQuarterNames(h.periods) },
+          nickname: getNickNamesByTriCode(h.teamTricode, h.teamName),
+          score: `${h.score}`,
+          wins: h?.wins,
+          losses: h?.losses,
+        }
+      : {
+          id: 'TBD',
+          abbreviation: 'TBD',
+          linescores: { period: [] },
+          nickname: 'TBD',
+          score: '0',
+          wins: 0,
+          losses: 0,
+        },
+    visitor: v
+      ? {
+          id: v.teamId,
+          abbreviation: v.teamTricode,
+          linescores: { period: addQuarterNames(v.periods) },
+          nickname: getNickNamesByTriCode(v.teamTricode, v.teamName),
+          score: `${v.score}`,
+          wins: v?.wins,
+          losses: v?.losses,
+        }
+      : {
+          id: 'TBD',
+          abbreviation: 'TBD',
+          linescores: { period: [] },
+          nickname: 'TBD',
+          score: '0',
+          wins: 0,
+          losses: 0,
+        },
     periodTime: {
       periodStatus: formatGameStatus(),
       gameClock: clock,
