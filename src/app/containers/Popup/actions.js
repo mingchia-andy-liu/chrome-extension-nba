@@ -4,7 +4,7 @@ import parse from 'date-fns/parse'
 import types from './types'
 import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
-import { default as browser, checkLiveGame } from '../../utils/browser'
+import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
 
 /**
