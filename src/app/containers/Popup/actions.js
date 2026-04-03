@@ -4,7 +4,7 @@ import parse from 'date-fns/parse'
 import types from './types'
 import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
-import { checkLiveGame } from '../../utils/browser'
+import { default as browser, checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
 
 /**
@@ -34,7 +34,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     }
     if (callback) callback(newGames)
   } catch (error) {
-    // debug log here.
+    // debug log here
     // if any of the fetch requests fail, set the state to error
     if (callback) callback([])
     dispatch({ type: types.REQUEST_ERROR })

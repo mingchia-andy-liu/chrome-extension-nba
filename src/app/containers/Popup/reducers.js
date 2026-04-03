@@ -39,7 +39,8 @@ export default (state = initState, action) => {
         }
       }
     }
-    case types.REQUEST_ERROR:
+    case types.REQUEST_ERROR: {
+      // debug log here
       return {
         games: [],
         hasError: true,
@@ -47,6 +48,7 @@ export default (state = initState, action) => {
         lastUpdate: new Date(0),
         urls: state.urls,
       }
+    }
     case types.UPDATE_VID: {
       const urls = action.payload
       return {
