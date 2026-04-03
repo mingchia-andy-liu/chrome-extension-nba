@@ -34,7 +34,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     }
     if (callback) callback(newGames)
   } catch (error) {
-    // debug log here.
+    // debug log here
     // if any of the fetch requests fail, set the state to error
     if (callback) callback([])
     dispatch({ type: types.REQUEST_ERROR })

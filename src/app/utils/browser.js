@@ -1,7 +1,7 @@
 const noop = () => {}
 const browserNameSpace = {}
 
-if (typeof browser !== 'undefined') {
+if (typeof browser !== 'undefined' && typeof browser.runtime?.getBrowserInfo === 'function') {
   // Firefox
   browserNameSpace.isFirefox = true
   browserNameSpace.runtime = {
@@ -57,13 +57,13 @@ if (typeof browser !== 'undefined') {
   }
 
   browserNameSpace.setBadgeText = (text) => {
-    if (browser.browserAction.setBadgeText) {
+    if (browser.browserAction && browser.browserAction.setBadgeText) {
       browser.browserAction.setBadgeText(text)
     }
   }
 
   browserNameSpace.setBadgeBackgroundColor = (color) => {
-    if (browser.browserAction.setBadgeText) {
+    if (browser.browserAction && browser.browserAction.setBadgeBackgroundColor) {
       browser.browserAction.setBadgeBackgroundColor(color)
     }
   }
@@ -195,14 +195,14 @@ if (typeof browser !== 'undefined') {
 
   // https://developer.chrome.com/docs/extensions/reference/action/
   browserNameSpace.setBadgeText = (text) => {
-    if (chrome.action.setBadgeText) {
+    if (chrome.action && chrome.action.setBadgeText) {
       chrome.action.setBadgeText(text)
     }
   }
 
   // https://developer.chrome.com/docs/extensions/reference/action/#method-setBadgeText
   browserNameSpace.setBadgeBackgroundColor = (color) => {
-    if (chrome.action.setBadgeText) {
+    if (chrome.action && chrome.action.setBadgeBackgroundColor) {
       chrome.action.setBadgeBackgroundColor(color)
     }
   }
