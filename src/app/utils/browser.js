@@ -1,7 +1,10 @@
 const noop = () => {}
 const browserNameSpace = {}
 
-if (typeof browser !== 'undefined' && typeof browser.runtime?.getBrowserInfo === 'function') {
+if (
+  typeof browser !== 'undefined' &&
+  typeof browser.runtime?.getBrowserInfo === 'function'
+) {
   // Firefox
   browserNameSpace.isFirefox = true
   browserNameSpace.runtime = {
@@ -63,7 +66,10 @@ if (typeof browser !== 'undefined' && typeof browser.runtime?.getBrowserInfo ===
   }
 
   browserNameSpace.setBadgeBackgroundColor = (color) => {
-    if (browser.browserAction && browser.browserAction.setBadgeBackgroundColor) {
+    if (
+      browser.browserAction &&
+      browser.browserAction.setBadgeBackgroundColor
+    ) {
       browser.browserAction.setBadgeBackgroundColor(color)
     }
   }
