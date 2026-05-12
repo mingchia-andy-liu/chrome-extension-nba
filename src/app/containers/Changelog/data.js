@@ -1,5 +1,9 @@
 module.exports = [
   {
+    version: '1.6.13 Updates: (2026-05-11)',
+    updates: ['Fix boxscores details'],
+  },
+  {
     version: '1.6.12 Updates: (2026-04-03)',
     updates: ['Fix daily games'],
   },
