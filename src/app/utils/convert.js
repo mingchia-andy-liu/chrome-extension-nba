@@ -6,6 +6,7 @@ import { getUserTimeZoneId } from './time'
 import {
   toPercentage,
   formatMinutes as formatMinutesWithPadding,
+  getYahooFantasyPoints,
 } from './common'
 import { QUARTER_NAMES } from './constant'
 import { getNickNamesByTriCode } from '../utils/teams'
@@ -86,6 +87,14 @@ const getPlayers = (players = []) => {
     person_id: player.pid,
     plus_minus: player.pm,
     points: player.pts,
+    fantasy_points: getYahooFantasyPoints({
+      points: player.pts,
+      rebounds: +player.dreb + +player.oreb,
+      assists: player.ast,
+      steals: player.stl,
+      blocks: player.blk,
+      turnovers: player.tov,
+    }),
     rebounds_defensive: player.dreb,
     rebounds_offensive: player.oreb,
     seconds: player.sec,
@@ -151,6 +160,16 @@ const getPlayersProxy = (players = []) => {
       person_id: player.personId,
       plus_minus: player.statistics.plusMinusPoints,
       points: player.statistics.points,
+      fantasy_points: getYahooFantasyPoints({
+        points: player.statistics.points,
+        rebounds:
+          +player.statistics.reboundsDefensive +
+          +player.statistics.reboundsOffensive,
+        assists: player.statistics.assists,
+        steals: player.statistics.steals,
+        blocks: player.statistics.blocks,
+        turnovers: player.statistics.turnovers,
+      }),
       rebounds_defensive: player.statistics.reboundsDefensive,
       rebounds_offensive: player.statistics.reboundsOffensive,
       seconds: seconds,
@@ -491,9 +510,9 @@ export const convertDaily = (game) => {
       periodStatus:
         st == 1 && isStatusValidDate
           ? format(
-              utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
-              'hh:mm a'
-            )
+            utcToZonedTime(gameTime.toISOString(), getUserTimeZoneId()),
+            'hh:mm a'
+          )
           : stt,
       gameClock: cl || '',
       gameStatus: `${st}`,

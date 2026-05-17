@@ -32,6 +32,30 @@ export const hasDoubles = (player) => {
 }
 
 /**
+ * Yahoo default H2H points scoring for basketball.
+ * @param {obj} player
+ */
+export const getYahooFantasyPoints = (player) => {
+  const points = +player.points || 0
+  const rebounds = +player.rebounds || 0
+  const assists = +player.assists || 0
+  const steals = +player.steals || 0
+  const blocks = +player.blocks || 0
+  const turnovers = +player.turnovers || 0
+
+  return Number(
+    (
+      points +
+      rebounds * 1.2 +
+      assists * 1.5 +
+      steals * 3 +
+      blocks * 3 -
+      turnovers
+    ).toFixed(1)
+  )
+}
+
+/**
  * Get `alt` text for the double doubles
  * @param {string} doubles
  */
