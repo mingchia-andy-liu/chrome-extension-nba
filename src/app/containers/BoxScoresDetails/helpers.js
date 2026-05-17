@@ -114,10 +114,12 @@ export const renderPlayerStats = (bsData) => {
   const {
     home: {
       abbreviation: hta,
+      stats: hts,
       players: { player: homePlayers },
     },
     visitor: {
       abbreviation: vta,
+      stats: vts,
       players: { player: visitorPlayers },
     },
     periodTime: { gameStatus },
@@ -127,8 +129,10 @@ export const renderPlayerStats = (bsData) => {
     <PlayerStats
       hta={hta}
       hps={homePlayers || []}
+      hts={hts || {}}
       vta={vta}
       vps={visitorPlayers || []}
+      vts={vts || {}}
       isLive={gameStatus === '2'}
     />
   )
