@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {
   Cell,
   HeaderCell,
+  Row,
   rowBGColor,
   RowHeaderCell,
   RowWrapper,
@@ -24,6 +25,10 @@ const Wrapper = styled.div`
   width: 100%;
 `
 
+const PlayerTable = styled(Table)`
+  margin-bottom: 16px;
+`
+
 const OnCourt = styled.img`
   width: 20px;
   height: 20px;
@@ -34,7 +39,8 @@ const PlayerName = styled(Cell)`
   flex-direction: row;
   text-align: left;
   align-items: center;
-  border-right: 1px solid hsl(0, 0%, 95%);
+  border-right: ${(props) =>
+    props.spacer ? 'none' : '1px solid hsl(0, 0%, 95%)'};
   width: 10vw;
   min-width: 120px;
   overflow-y: hidden;
@@ -89,6 +95,116 @@ const renderHeaderRow = (name) => {
         <HeaderCell key={`stats-${element}-${name}`}>{element}</HeaderCell>
       ))}
     </RowWrapper>
+  )
+}
+
+const renderTeamStatsHeaderRow = (name) => {
+  const headers = [
+    'PTS',
+    'FGM-A',
+    'FG%',
+    '3PM-A',
+    '3P%',
+    'FTM-A',
+    'FT%',
+    'OREB',
+    'DREB',
+    'REB/T-REB',
+    'AST',
+    'STL',
+    'BLK',
+    'TOV',
+    'PF/TF',
+  ]
+
+  return (
+    <Row>
+      <PlayerName spacer />
+      <HeaderCell>{'MIN'}</HeaderCell>
+      {headers.map((element) => (
+        <HeaderCell key={`team-stats-${element}-${name}`}>{element}</HeaderCell>
+      ))}
+      <Cell />
+    </Row>
+  )
+}
+
+const renderTeamStatsRow = (team, isDark) => {
+  return (
+    <Row>
+      <PlayerName spacer />
+      <Cell>240</Cell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.points >= 100 ? 1 : undefined}
+      >
+        {team.points}
+      </StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.field_goals_percentage >= 50 ? 1 : undefined}
+        losing={team.field_goals_percentage <= 30 ? 1 : undefined}
+      >{`${team.field_goals_made}-${team.field_goals_attempted}`}</StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.field_goals_percentage >= 50 ? 1 : undefined}
+        losing={team.field_goals_percentage <= 30 ? 1 : undefined}
+      >
+        {team.field_goals_percentage}%
+      </StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.three_pointers_percentage >= 50 ? 1 : undefined}
+        losing={team.three_pointers_percentage <= 30 ? 1 : undefined}
+      >{`${team.three_pointers_made}-${team.three_pointers_attempted}`}</StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.three_pointers_percentage >= 50 ? 1 : undefined}
+        losing={team.three_pointers_percentage <= 30 ? 1 : undefined}
+      >
+        {team.three_pointers_percentage}%
+      </StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.free_throws_percentage >= 90 ? 1 : undefined}
+        losing={team.free_throws_percentage <= 60 ? 1 : undefined}
+      >{`${team.free_throws_made}-${team.free_throws_attempted}`}</StatsCell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={team.free_throws_percentage >= 90 ? 1 : undefined}
+        losing={team.free_throws_percentage <= 60 ? 1 : undefined}
+      >
+        {team.free_throws_percentage}%
+      </StatsCell>
+      <Cell>{team.rebounds_offensive}</Cell>
+      <Cell>{team.rebounds_defensive}</Cell>
+      <Cell>
+        {team.rebounds_defensive + team.rebounds_offensive}
+        {team.team_rebounds > 0 && ` (${team.team_rebounds})`}
+      </Cell>
+      <Cell>{team.assists}</Cell>
+      <Cell>{team.steals}</Cell>
+      <Cell>{team.blocks}</Cell>
+      <Cell>{team.turnovers}</Cell>
+      <Cell>
+        {team.fouls}
+        {team.team_fouls > 0 && ` (${team.team_fouls})`}
+      </Cell>
+      <Cell />
+    </Row>
+  )
+}
+
+const renderTeamStats = (team, name, isDark) => {
+  if (Object.keys(team).length === 0) {
+    return null
+  }
+
+  return (
+    <React.Fragment>
+      {renderTeamStatsHeaderRow(name)}
+      {renderTeamStatsRow(team, isDark)}
+    </React.Fragment>
   )
 }
 
@@ -261,7 +377,7 @@ const renderPlayerRow = (
   )
 }
 
-const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
+const PlayerStats = ({ hps, vps, hta, vta, hts, vts, isLive }) => {
   if (hps.length === 0 || vps.length === 0) {
     return <Wrapper>No Player Data Available</Wrapper>
   }
@@ -272,24 +388,32 @@ const PlayerStats = ({ hps, vps, hta, vta, isLive }) => {
         {({ state: { dark } }) => (
           <BoxScoreConsumer>
             {({ state: { hideZeroRow, favPlayers } }) => (
-              <Table>
-                <tbody>
-                  {renderHeaderRow(vta)}
-                  {vps.map((player, i) =>
-                    renderPlayerRow(player, isLive, i, dark, {
-                      hideZeroRow,
-                      favPlayers,
-                    })
-                  )}
-                  {renderHeaderRow(hta)}
-                  {hps.map((player, i) =>
-                    renderPlayerRow(player, isLive, i, dark, {
-                      hideZeroRow,
-                      favPlayers,
-                    })
-                  )}
-                </tbody>
-              </Table>
+              <React.Fragment>
+                <PlayerTable>
+                  <tbody>
+                    {renderHeaderRow(vta)}
+                    {vps.map((player, i) =>
+                      renderPlayerRow(player, isLive, i, dark, {
+                        hideZeroRow,
+                        favPlayers,
+                      })
+                    )}
+                    {renderTeamStats(vts, vta, dark)}
+                  </tbody>
+                </PlayerTable>
+                <PlayerTable>
+                  <tbody>
+                    {renderHeaderRow(hta)}
+                    {hps.map((player, i) =>
+                      renderPlayerRow(player, isLive, i, dark, {
+                        hideZeroRow,
+                        favPlayers,
+                      })
+                    )}
+                    {renderTeamStats(hts, hta, dark)}
+                  </tbody>
+                </PlayerTable>
+              </React.Fragment>
             )}
           </BoxScoreConsumer>
         )}
@@ -303,10 +427,14 @@ PlayerStats.propTypes = {
   vps: PropTypes.array.isRequired,
   hta: PropTypes.string.isRequired,
   vta: PropTypes.string.isRequired,
+  hts: PropTypes.object,
+  vts: PropTypes.object,
   isLive: PropTypes.bool,
 }
 
 PlayerStats.defaultProps = {
+  hts: {},
+  vts: {},
   isLive: false,
 }
 
