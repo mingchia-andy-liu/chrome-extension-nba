@@ -86,6 +86,7 @@ const renderHeaderRow = (name) => {
     'TOV',
     'PF',
     '+/-',
+    'FPS',
   ]
 
   return (
@@ -239,6 +240,7 @@ const renderPlayerRow = (
     starting_position,
     on_court,
     points,
+    fantasy_points,
     field_goals_made,
     field_goals_attempted,
     three_pointers_made,
@@ -373,6 +375,13 @@ const renderPlayerRow = (
         {fouls}
       </StatsCell>
       <Cell>{plus_minus}</Cell>
+      <StatsCell
+        dark={isDark ? 1 : undefined}
+        winning={+fantasy_points >= 40 ? 1 : undefined}
+        losing={+fantasy_points < 0 ? 1 : undefined}
+      >
+        {fantasy_points}
+      </StatsCell>
     </RowWrapperWithFavorite>
   )
 }
