@@ -135,12 +135,7 @@ const renderTeamStatsRow = (team, isDark) => {
     <Row>
       <PlayerName spacer />
       <Cell>240</Cell>
-      <StatsCell
-        dark={isDark ? 1 : undefined}
-        winning={team.points >= 100 ? 1 : undefined}
-      >
-        {team.points}
-      </StatsCell>
+      <StatsCell dark={isDark ? 1 : undefined}>{team.points}</StatsCell>
       <StatsCell
         dark={isDark ? 1 : undefined}
         winning={team.field_goals_percentage >= 50 ? 1 : undefined}
