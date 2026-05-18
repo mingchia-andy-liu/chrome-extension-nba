@@ -110,7 +110,7 @@ const renderTeamStatsHeaderRow = (name) => {
     'FT%',
     'OREB',
     'DREB',
-    'REB/T-REB',
+    'REB/TREB',
     'AST',
     'STL',
     'BLK',
