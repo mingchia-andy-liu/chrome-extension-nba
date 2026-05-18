@@ -12,6 +12,8 @@ import { westSelector, eastSelector, finalSelector } from './selector'
 const ColumnWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  gap: 40px; /* Space for connecting lines */
 `
 
 const renderContent = ({ isLoading, west, east, final }) => {
@@ -19,13 +21,13 @@ const renderContent = ({ isLoading, west, east, final }) => {
   return (
     <div style={{ margin: '0 5%' }}>
       <ColumnWrapper>
-        <PlayoffColumn title="RD1" series={west.first} />
-        <PlayoffColumn title="RD2" series={west.second} />
-        <PlayoffColumn title="WCF" series={west.final} />
-        <PlayoffColumn title="FIN" series={final} />
-        <PlayoffColumn title="ECF" series={east.final} />
-        <PlayoffColumn title="RD2" series={east.second} />
-        <PlayoffColumn title="RD1" series={east.first} />
+        <PlayoffColumn title="RD1" series={west.first} side="left" />
+        <PlayoffColumn title="RD2" series={west.second} side="left" />
+        <PlayoffColumn title="WCF" series={west.final} side="left" />
+        <PlayoffColumn title="FIN" series={final} side="center" />
+        <PlayoffColumn title="ECF" series={east.final} side="right" />
+        <PlayoffColumn title="RD2" series={east.second} side="right" />
+        <PlayoffColumn title="RD1" series={east.first} side="right" />
       </ColumnWrapper>
     </div>
   )
