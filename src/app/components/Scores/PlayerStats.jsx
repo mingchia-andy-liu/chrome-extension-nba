@@ -110,7 +110,7 @@ const renderTeamStatsHeaderRow = (name) => {
     'FT%',
     'OREB',
     'DREB',
-    'REB/T-REB',
+    'REB/TREB',
     'AST',
     'STL',
     'BLK',
@@ -130,11 +130,15 @@ const renderTeamStatsHeaderRow = (name) => {
   )
 }
 
-const renderTeamStatsRow = (team, isDark) => {
+const renderTeamStatsRow = (team, isDark, players) => {
+  const totalMinutes = players.reduce(
+    (acc, p) => acc + (+p.minutes || 0) + (+p.seconds || 0) / 60,
+    0
+  )
   return (
     <Row>
       <PlayerName spacer />
-      <Cell>240</Cell>
+      <Cell>{Math.round(totalMinutes)}</Cell>
       <StatsCell dark={isDark ? 1 : undefined}>{team.points}</StatsCell>
       <StatsCell
         dark={isDark ? 1 : undefined}
@@ -191,7 +195,7 @@ const renderTeamStatsRow = (team, isDark) => {
   )
 }
 
-const renderTeamStats = (team, name, isDark) => {
+const renderTeamStats = (team, name, isDark, players) => {
   if (Object.keys(team).length === 0) {
     return null
   }
@@ -199,7 +203,7 @@ const renderTeamStats = (team, name, isDark) => {
   return (
     <React.Fragment>
       {renderTeamStatsHeaderRow(name)}
-      {renderTeamStatsRow(team, isDark)}
+      {renderTeamStatsRow(team, isDark, players)}
     </React.Fragment>
   )
 }
@@ -402,7 +406,7 @@ const PlayerStats = ({ hps, vps, hta, vta, hts, vts, isLive }) => {
                         favPlayers,
                       })
                     )}
-                    {renderTeamStats(vts, vta, dark)}
+                    {renderTeamStats(vts, vta, dark, vps)}
                   </tbody>
                 </PlayerTable>
                 <PlayerTable>
@@ -414,7 +418,7 @@ const PlayerStats = ({ hps, vps, hta, vta, hts, vts, isLive }) => {
                         favPlayers,
                       })
                     )}
-                    {renderTeamStats(hts, hta, dark)}
+                    {renderTeamStats(hts, hta, dark, hps)}
                   </tbody>
                 </PlayerTable>
               </React.Fragment>
