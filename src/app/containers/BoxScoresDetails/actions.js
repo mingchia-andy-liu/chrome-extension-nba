@@ -56,7 +56,7 @@ const fetchPBP = async (dateStr, gid) => {
         play: plays,
       },
     }
-  } catch (err2) {
+  } catch (error) {
     return {}
   }
 }
@@ -75,7 +75,7 @@ const fetchGameDetail = async (_, gid) => {
       isProxy,
       game: g,
     }
-  } catch (err2) {
+  } catch (error) {
     return {}
   }
 }

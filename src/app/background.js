@@ -92,7 +92,9 @@ const liveListener = (initCheck) => {
   }
 
   // cdn
-  fetch('https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json')
+  fetch(
+    'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+  )
     .then((res) => res.json())
     .then(({ scoreboard: { games } }) => {
       checkLiveGame(games, 3)
