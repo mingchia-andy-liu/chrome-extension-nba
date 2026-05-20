@@ -42,16 +42,13 @@ const fetchBoxScore = async (dateStr, gid) => {
 
 const fetchPBP = async (dateStr, gid) => {
   try {
-    let plays = []
-    let isProxy = true
     const pbp = await fetch(
-      `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
+      `https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
     )
-    const {
-      game: { actions },
-    } = await pbp.json()
-    plays = actions
-    isProxy = false
+    const json = await pbp.json()
+    const actions = json?.game?.actions
+    const plays = actions
+    const isProxy = false
     return {
       isProxy,
       game: {
@@ -60,60 +57,26 @@ const fetchPBP = async (dateStr, gid) => {
       },
     }
   } catch (error) {
-    try {
-      const pbp = await fetch(
-        `https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
-      )
-      const json = await pbp.json()
-      const actions = json?.game?.actions
-      const plays = actions
-      const isProxy = false
-      return {
-        isProxy,
-        game: {
-          gameId: gid,
-          play: plays,
-        },
-      }
-    } catch (err2) {
-      return {}
-    }
+    return {}
   }
 }
 
 const fetchGameDetail = async (_, gid) => {
   try {
-    let g = {}
-    let isProxy = true
-
     const bs = await fetch(
-      `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`
+      `https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`
     )
-    const { game } = await bs.json()
-    g = game
-    isProxy = false
+    const json = await bs.json()
+    const game = json.game
+    const g = game
+    const isProxy = false
 
     return {
       isProxy,
       game: g,
     }
   } catch (error) {
-    try {
-      const bs = await fetch(
-        `https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`
-      )
-      const json = await bs.json()
-      const game = json.game
-      const g = game
-      const isProxy = false
-
-      return {
-        isProxy,
-        game: g,
-      }
-    } catch (err2) {
-      return {}
-    }
+    return {}
   }
 }
 

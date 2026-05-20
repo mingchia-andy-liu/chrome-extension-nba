@@ -93,7 +93,7 @@ const liveListener = (initCheck) => {
 
   // cdn
   fetch(
-    'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+    'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
   )
     .then((res) => res.json())
     .then(({ scoreboard: { games } }) => {
@@ -103,20 +103,7 @@ const liveListener = (initCheck) => {
       }
     })
     .catch((error) => {
-      console.log('something went wrong...', error)
-      return fetch(
-        'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
-      )
-        .then((res) => res.json())
-        .then(({ scoreboard: { games } }) => {
-          checkLiveGame(games, 3)
-          if (!initCheck) {
-            fireFavTeamNotificationIfNeeded(sanitizeGames(games, 3))
-          }
-        })
-        .catch((error) => {
-          console.log('something went wrong from proxy...', error)
-        })
+      console.log('something went wrong from proxy...', error)
     })
 }
 
