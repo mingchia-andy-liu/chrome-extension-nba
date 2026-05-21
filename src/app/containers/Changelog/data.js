@@ -1,5 +1,13 @@
 module.exports = [
   {
+    version: '1.6.14 Updates: (2026-05-19)',
+    updates: [
+      'Update playoff graph',
+      'Add team stats in player tab',
+      'Add fantasy points',
+    ],
+  },
+  {
     version: '1.6.13 Updates: (2026-05-11)',
     updates: ['Fix boxscores details'],
   },
