@@ -1,4 +1,29 @@
 const path = require('path')
+const fs = require('fs')
+const { RawSource } = require('webpack').sources
+
+const buildDir = process.env.BUILD_DIR || path.resolve(__dirname, 'build')
+const manifestName = process.env.BUILD_MANIFEST || 'manifest.json'
+
+const manifestPlugin = {
+  apply(compiler) {
+    compiler.hooks.thisCompilation.tap('ManifestPlugin', (compilation) => {
+      compilation.hooks.processAssets.tap(
+        {
+          name: 'ManifestPlugin',
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+        },
+        () => {
+          const manifest = fs.readFileSync(
+            path.resolve(__dirname, 'build', manifestName),
+            'utf8'
+          )
+          compilation.emitAsset('manifest.json', new RawSource(manifest))
+        }
+      )
+    })
+  },
+}
 
 const webpackConfig = {
   entry: [
@@ -6,7 +31,7 @@ const webpackConfig = {
   ],
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'build'),
+    path: buildDir,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -28,7 +53,8 @@ const webpackConfig = {
         ],
       }
     ],
-  }
+  },
+  plugins: [manifestPlugin],
 }
 
 if (process.env.NODE_ENV === 'production') {

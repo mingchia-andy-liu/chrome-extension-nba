@@ -80,13 +80,14 @@ This extension is for people who just want to get the latest update but too lazy
 You need to have `npm` installed.
 
 ### Running locally
-- Run `./build.sh`. A new zip should be created under the `/dist`
+- Run `npm run build:chrome` or `npm run build:firefox` to create a browser-specific zip under `/dist`.
+- Run `npm run build:all` to build both browser targets.
 
 **Firefox**
-- Load the zip file into Firefox
+- Load `dist/firefox/basketball-box-scores-firefox.zip` into Firefox
 
 **Chrome** (Chrome cannot load zip as extension locally)
-- Load the `build` folder into Chrome
+- Build the default bundles with `npm run webpack`, `npm run webpack:bg`, and `npm run webpack:popup`, then load the `build` folder into Chrome.
 
 #### Third party packages
 * `react-flatpickr`

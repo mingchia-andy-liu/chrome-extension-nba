@@ -1,12 +1,14 @@
 const path = require('path')
 
+const buildDir = process.env.BUILD_DIR || path.resolve(__dirname, 'build')
+
 const webpackConfig = {
   entry: [
     path.resolve(__dirname, 'src', 'app', 'popup', 'popup.jsx')
   ],
   output: {
     filename: 'popup.js',
-    path: path.resolve(__dirname, 'build'),
+    path: buildDir,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
