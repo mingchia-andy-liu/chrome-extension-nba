@@ -14,7 +14,7 @@
     "build": "web-ext build --overwrite-dest",
     "build:chrome": "node scripts/build.js chrome",
     "build:firefox": "node scripts/build.js firefox",
-    "build:all": "npm run build:chrome && npm run build:firefox",
+    "build:all": "pnpm run build:chrome && pnpm run build:firefox",
     "lint:js:fix": "eslint src/app --fix && prettier --write src/app --loglevel=silent",
     "lint:js": "eslint src/app && prettier --check src/app",
     "start:dev": "NODE_ENV=development webpack-dev-server --open",
@@ -26,6 +26,7 @@
     "test": "jest"
   },
   "license": "MIT",
+  "packageManager": "pnpm@11.20.0",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -43,6 +44,8 @@
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-react": "^7.16.7",
     "@babel/runtime": "^7.24.8",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^12.1.5",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "addons-linter": "^6.19.0",
     "babel-eslint": "^10.1.0",
@@ -58,6 +61,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "jest": "^29.7.0",
     "jest-date-mock": "^1.0.8",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.1.1",
     "prop-types": "^15.8.1",
     "style-loader": "^3.3.1",
