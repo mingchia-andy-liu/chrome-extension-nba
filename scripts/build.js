@@ -38,7 +38,16 @@ const copyStaticFiles = () => {
   })
 }
 
+const ALLOWED_BINARIES = new Set([
+  path.join(root, 'node_modules', '.bin', 'webpack'),
+  path.join(root, 'node_modules', '.bin', 'web-ext'),
+])
+
 const run = (command, args) => {
+  if (!ALLOWED_BINARIES.has(command)) {
+    throw new Error(`Refusing to execute unapproved command: ${command}`)
+  }
+
   const result = spawnSync(command, args, {
     cwd: root,
     env: {
@@ -49,6 +58,7 @@ const run = (command, args) => {
       NODE_ENV: 'production',
     },
     stdio: 'inherit',
+    shell: false,
   })
 
   if (result.error) throw result.error
