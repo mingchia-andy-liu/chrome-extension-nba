@@ -15,9 +15,17 @@ export class BoxScoreProvider extends React.Component {
     }
 
     browser.getItem(['hideZeroRow', 'favPlayers'], (data) => {
+      let favPlayers = []
+      try {
+        const storedPlayers = JSON.parse(data.favPlayers)
+        favPlayers = Array.isArray(storedPlayers) ? storedPlayers : []
+      } catch (error) {
+        favPlayers = []
+      }
+
       this.setState({
         hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
-        favPlayers: data.favPlayers ? JSON.parse(data.favPlayers) : [],
+        favPlayers,
       })
     })
   }
