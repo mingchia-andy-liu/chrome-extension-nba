@@ -154,13 +154,10 @@ export const formatClock = (clock, status, totalPeriod) => {
  * Format Box score table's player minutes.
  */
 export const formatMinutes = ({ minutes, seconds }) => {
-  if (minutes < 10 || minutes.length === 1) {
-    minutes = `0${minutes}`
-  }
-  if (seconds < 10 || seconds.length === 1) {
-    seconds = `0${seconds}`
-  }
-  return `${minutes}:${seconds}`
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+    2,
+    '0'
+  )}`
 }
 
 /**

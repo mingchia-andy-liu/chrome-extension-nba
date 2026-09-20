@@ -484,7 +484,7 @@ export const convertDaily2 = (game) => {
     visitor: {
       abbreviation: v.triCode,
       city: '',
-      linescores: { period: addQuarterNames(h.linescore) },
+      linescores: { period: addQuarterNames(v.linescore) },
       nickname: getNickNamesByTriCode(v.triCode),
       score: v.score,
     },
