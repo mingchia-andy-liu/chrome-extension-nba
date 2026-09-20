@@ -77,17 +77,18 @@ This extension is for people who just want to get the latest update but too lazy
 ## Dev start notes
 
 ### Prerequisite
-You need to have `npm` installed.
+You need pnpm 11.20.0 or later. Enable the version pinned by this repository
+with `corepack enable`, then install dependencies with `pnpm install`.
 
 ### Running locally
-- Run `npm run build:chrome` or `npm run build:firefox` to create a browser-specific zip under `/dist`.
-- Run `npm run build:all` to build both browser targets.
+- Run `pnpm run build:chrome` or `pnpm run build:firefox` to create a browser-specific zip under `/dist`.
+- Run `pnpm run build:all` to build both browser targets.
 
 **Firefox**
 - Load `dist/firefox/basketball-box-scores-firefox.zip` into Firefox
 
 **Chrome** (Chrome cannot load zip as extension locally)
-- Build the default bundles with `npm run webpack`, `npm run webpack:bg`, and `npm run webpack:popup`, then load the `build` folder into Chrome.
+- Build the default bundles with `pnpm run webpack`, `pnpm run webpack:bg`, and `pnpm run webpack:popup`, then load the `build` folder into Chrome.
 
 #### Third party packages
 * `react-flatpickr`

@@ -135,7 +135,11 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
+
+  setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
+
+  testMatch: ['<rootDir>/test/**/*.(spec|test).[jt]s?(x)'],
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
