@@ -108,6 +108,28 @@ test('normalizes v2 halftime and overtime statuses', () => {
   expect(overtime.periodTime.periodStatus).toBe('End of 1 OT')
 })
 
+test('normalizes v2 regulation end-of-period and live overtime statuses', () => {
+  const [endOfThird] = sanitizeGames(
+    [
+      fallback2Game(2, {
+        period: { current: 3, isHalftime: false, isEndOfPeriod: true },
+      }),
+    ],
+    2
+  )
+  const [liveOvertime] = sanitizeGames(
+    [
+      fallback2Game(2, {
+        period: { current: 6, isHalftime: false, isEndOfPeriod: false },
+      }),
+    ],
+    2
+  )
+
+  expect(endOfThird.periodTime.periodStatus).toBe('End of 3 Qtr')
+  expect(liveOvertime.periodTime.periodStatus).toBe('2 OT')
+})
+
 test.each(['Delayed', 'Suspended'])(
   'preserves CDN %s status with an empty clock',
   (statusText) => {
@@ -144,6 +166,52 @@ test('normalizes Half to Halftime for the CDN and game-card feeds', () => {
 
   expect(cdn.periodTime.periodStatus).toBe('Halftime')
   expect(card.periodTime.periodStatus).toBe('Halftime')
+})
+
+test('normalizes CDN overtime clocks, broadcasters, and playoff records', () => {
+  const [game] = sanitizeGames(
+    [
+      fallback3Game(2, {
+        gameClock: 'PT01M02.50S',
+        period: 5,
+        playoffs: { hTeam: { seriesWin: 3 }, vTeam: { seriesWin: 2 } },
+        watch: {
+          broadcast: {
+            broadcasters: {
+              national: [{ shortName: 'ESPN' }],
+              vTeam: [{ shortName: 'SNLA' }],
+              hTeam: [{ shortName: 'BSOK' }],
+            },
+          },
+        },
+      }),
+    ],
+    3
+  )
+
+  expect(game.periodTime.gameClock).toBe('OT1 01:02')
+  expect(game.broadcasters).toEqual([
+    { scope: 'natl', display_name: 'ESPN' },
+    { scope: 'local', display_name: 'SNLA' },
+    { scope: 'local', display_name: 'BSOK' },
+  ])
+  expect(game.playoffs).toEqual({ home_wins: 3, visitor_wins: 2 })
+})
+
+test('uses status text for whitespace clocks and incomplete playoff data', () => {
+  const [game] = sanitizeGames(
+    [
+      fallback3Game(2, {
+        gameClock: '   ',
+        gameStatusText: 'Delayed',
+        playoffs: { hTeam: { seriesWin: 1 } },
+      }),
+    ],
+    3
+  )
+
+  expect(game.periodTime.gameClock).toBe('Delayed')
+  expect(game.playoffs).toBeUndefined()
 })
 
 test('normalizes game-card TBD teams and missing playoff data', () => {
