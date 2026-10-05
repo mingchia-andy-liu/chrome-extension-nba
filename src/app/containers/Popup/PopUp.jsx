@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import format from 'date-fns/format'
@@ -27,10 +27,10 @@ const Wrapper = styled(Column)`
 const PopUp = ({
   fetchGamesIfNeeded,
   fetchGameHighlightIfNeeded,
-  history,
   date: { date },
   live,
 }) => {
+  const navigate = useNavigate()
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
   // useRef for previous selected date.
@@ -67,10 +67,10 @@ const PopUp = ({
         })
         window.close()
       } else {
-        history.push(`/boxscores/${id}`)
+        navigate(`/boxscores/${id}`)
       }
     },
-    [gameDate, isPopup]
+    [gameDate, isPopup, navigate]
   )
 
   const selectDate = React.useCallback(
@@ -116,9 +116,6 @@ PopUp.propTypes = {
   }),
   fetchGamesIfNeeded: PropTypes.func.isRequired,
   fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
 }
 
 const mapStateToProps = ({ live, date }) => ({
@@ -126,4 +123,4 @@ const mapStateToProps = ({ live, date }) => ({
   date,
 })
 
-export default withRouter(connect(mapStateToProps, actions)(PopUp))
+export default connect(mapStateToProps, actions)(PopUp)

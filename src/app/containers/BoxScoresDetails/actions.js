@@ -1,4 +1,3 @@
-import { push } from 'react-router-redux'
 import isAfter from 'date-fns/isAfter'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
@@ -112,7 +111,7 @@ const fetchLiveGameBox = async (dispatch, dateStr, gid, isBackground) => {
 }
 
 export const fetchLiveGameBoxIfNeeded =
-  (dateStr, gid, isBackground = null) =>
+  (dateStr, gid, isBackground = null, navigate) =>
   async (dispatch, getState) => {
     if (gid == null || gid === '') {
       return
@@ -143,7 +142,11 @@ export const fetchLiveGameBoxIfNeeded =
 
     const selectedGame = liveGames.find((game) => game.id === gid)
     if (!selectedGame) {
-      dispatch(push('/boxscores'))
+      if (navigate) {
+        navigate('/boxscores')
+      } else {
+        window.location.hash = '/boxscores'
+      }
       return
     }
 

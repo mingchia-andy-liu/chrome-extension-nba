@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Tab, TabLinkItem } from './Tab'
 import { noop } from '../utils/common'
 
@@ -15,7 +15,8 @@ const getDestPath = (current, dest) => {
   else return dest
 }
 
-const Header = ({ index, location: { pathname } }) => {
+const Header = ({ index }) => {
+  const { pathname } = useLocation()
   return (
     <React.Fragment>
       <Tab onTabSelect={noop} index={index} isLink={true}>
@@ -36,9 +37,6 @@ const Header = ({ index, location: { pathname } }) => {
 
 Header.propTypes = {
   index: PropTypes.number.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }),
 }
 
-export default withRouter(Header)
+export default Header

@@ -35,7 +35,7 @@ const Changelog = () => {
   return (
     <Wrapper>
       <Row alignCenter={true}>
-        <RouterLink to="options">
+        <RouterLink to="/options">
           <Arrow src="../../assets/png/arrow-left.png" />
         </RouterLink>
         <h1>Changelog</h1>
