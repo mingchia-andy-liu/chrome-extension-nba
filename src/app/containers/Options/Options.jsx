@@ -54,7 +54,7 @@ const renderHeader = () => {
     <ThemeConsumer>
       {({ state: { dark } }) => (
         <React.Fragment>
-          <RouterLink dark={dark ? 1 : undefined} to="changelog">
+          <RouterLink dark={dark ? 1 : undefined} to="/changelog">
             Changelog
           </RouterLink>
           <p>

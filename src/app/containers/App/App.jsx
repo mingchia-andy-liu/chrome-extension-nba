@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import PopUp from '../Popup'
 import BoxScores from '../BoxScores'
 import Standings from '../Standings'
@@ -23,16 +23,16 @@ const App = () => {
         <BoxScoreProvider>
           <SettingsProvider>
             <GlobalStyle />
-            <Switch>
-              <Route exact path="/popup" component={PopUp} />
-              <Route path="/boxscores/:id" component={BoxScores} />
-              <Route path="/boxscores" component={BoxScores} />
-              <Route exact path="/changelog" component={Changelog} />
-              <Route exact path="/options" component={Options} />
-              <Route exact path="/playoffs" component={Playoffs} />
-              <Route exact path="/standings" component={Standings} />
-              <Redirect path="*" to="/popup" />
-            </Switch>
+            <Routes>
+              <Route path="/popup" element={<PopUp />} />
+              <Route path="/boxscores/:id" element={<BoxScores />} />
+              <Route path="/boxscores" element={<BoxScores />} />
+              <Route path="/changelog" element={<Changelog />} />
+              <Route path="/options" element={<Options />} />
+              <Route path="/playoffs" element={<Playoffs />} />
+              <Route path="/standings" element={<Standings />} />
+              <Route path="*" element={<Navigate to="/popup" replace />} />
+            </Routes>
           </SettingsProvider>
         </BoxScoreProvider>
       </SidebarProvider>
@@ -40,4 +40,4 @@ const App = () => {
   )
 }
 
-export default withRouter(App)
+export default App

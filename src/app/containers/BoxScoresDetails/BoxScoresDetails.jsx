@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import format from 'date-fns/format'
@@ -47,92 +47,82 @@ const BoxScoresDetails = ({
   id,
   date,
   fetchLiveGameBoxIfNeeded,
+  resetLiveGameBox,
 }) => {
+  const navigate = useNavigate()
   // tab index: 0: overview 1: boxscores 2: playbyplay
   const [tabIndex, toggleIndex] = React.useState(1)
+  const [reveal, setReveal] = useState(false)
 
   React.useEffect(() => {
     const gameId = id || ''
     const dateStr = format(date, DATE_FORMAT)
-    fetchLiveGameBoxIfNeeded(dateStr, gameId, false)
+    fetchLiveGameBoxIfNeeded(dateStr, gameId, false, navigate)
     return () => resetLiveGameBox()
-  }, [])
+  }, [date, fetchLiveGameBoxIfNeeded, id, navigate, resetLiveGameBox])
 
-  const renderContent = React.useCallback(
-    (spoiler, dark) => {
-      // Route expects a function for component prop
-      const contentComponent = () => {
-        const [reveal, setReveal] = useState(false)
-        if (
-          !bsData ||
-          Object.keys(bsData).length === 0 ||
-          (bsData.periodTime && bsData.periodTime.gameStatus === '1')
-        ) {
-          return <Overlay text={'Game has not started'} />
-        } else {
-          if (spoiler && !reveal) {
-            return (
-              <Overlay text="Turn off no spoiler">
-                <Button
-                  dark={dark}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setReveal(!reveal)
-                  }}
-                >
-                  Reveal
-                </Button>
-                <NoSpoilerCheckbox />
-              </Overlay>
-            )
-          }
-          return (
-            <React.Fragment>
-              <Tab onTabSelect={toggleIndex} index={tabIndex} isLink={false}>
-                <TabItem label="Match up" />
-                <TabItem label="Box-scores" />
-                <TabItem label="Play-by-Play" />
-              </Tab>
-              <br />
-              {tabIndex === 0 && (
-                <React.Fragment>
-                  {renderTitle(bsData, reveal)}
-                  {renderSummary(bsData, teamStats)}
-                  {bsData.periodTime &&
-                    bsData.periodTime.gameStatus === '3' &&
-                    renderTeamLeader(bsData)}
-                  <h3>Team Stats</h3>
-                  {renderTeamStats(bsData)}
-                  <h4>Advanced</h4>
-                  {renderAdvancedTeamStats(teamStats, bsData)}
-                </React.Fragment>
-              )}
-              {tabIndex === 1 && (
-                <React.Fragment>
-                  <h3>Player Stats</h3>
-                  {renderHints(dark)}
-                  {renderPlayerStats(bsData)}
-                </React.Fragment>
-              )}
-              {tabIndex === 2 && (
-                <React.Fragment>
-                  <h3>Play By Play</h3>
-                  {renderPlaybyPlay(pbpData)}
-                </React.Fragment>
-              )}
-            </React.Fragment>
-          )
-        }
-      }
+  const renderContent = (spoiler, dark) => {
+    if (!id) return <Overlay />
+    if (
+      !bsData ||
+      Object.keys(bsData).length === 0 ||
+      (bsData.periodTime && bsData.periodTime.gameStatus === '1')
+    ) {
+      return <Overlay text={'Game has not started'} />
+    }
+    if (spoiler && !reveal) {
       return (
-        <Switch>
-          <Route path="/boxscores/:id" component={contentComponent} />
-          <Route path="/boxscores" component={Overlay} />
-        </Switch>
+        <Overlay text="Turn off no spoiler">
+          <Button
+            dark={dark}
+            onClick={(e) => {
+              e.stopPropagation()
+              setReveal(true)
+            }}
+          >
+            Reveal
+          </Button>
+          <NoSpoilerCheckbox />
+        </Overlay>
       )
-    },
-    [bsData, pbpData, teamStats, toggleIndex, tabIndex]
-  )
+    }
+    return (
+      <React.Fragment>
+        <Tab onTabSelect={toggleIndex} index={tabIndex} isLink={false}>
+          <TabItem label="Match up" />
+          <TabItem label="Box-scores" />
+          <TabItem label="Play-by-Play" />
+        </Tab>
+        <br />
+        {tabIndex === 0 && (
+          <React.Fragment>
+            {renderTitle(bsData, reveal)}
+            {renderSummary(bsData, teamStats)}
+            {bsData.periodTime &&
+              bsData.periodTime.gameStatus === '3' &&
+              renderTeamLeader(bsData)}
+            <h3>Team Stats</h3>
+            {renderTeamStats(bsData)}
+            <h4>Advanced</h4>
+            {renderAdvancedTeamStats(teamStats, bsData)}
+          </React.Fragment>
+        )}
+        {tabIndex === 1 && (
+          <React.Fragment>
+            <h3>Player Stats</h3>
+            {renderHints(dark)}
+            {renderPlayerStats(bsData)}
+          </React.Fragment>
+        )}
+        {tabIndex === 2 && (
+          <React.Fragment>
+            <h3>Play By Play</h3>
+            {renderPlaybyPlay(pbpData)}
+          </React.Fragment>
+        )}
+      </React.Fragment>
+    )
+  }
 
   return (
     <ThemeConsumer>

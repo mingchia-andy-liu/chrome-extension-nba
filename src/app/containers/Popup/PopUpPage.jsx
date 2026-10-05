@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
 import PopUp from './Popup'
 import {
   SidebarProvider,
@@ -23,4 +22,4 @@ const App = () => {
   )
 }
 
-export default withRouter(App)
+export default App

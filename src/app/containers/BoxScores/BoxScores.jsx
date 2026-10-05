@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
@@ -8,14 +8,11 @@ import Sidebar from '../Sidebar'
 import BoxScoresDetails from '../BoxScoresDetails'
 import { Wrapper } from './styles'
 
-const BoxScores = ({ date: { date }, match }) => {
+const BoxScores = ({ date: { date } }) => {
+  const { id = '' } = useParams()
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
   }, [])
-
-  const id = React.useMemo(() => {
-    return match.params.id || ''
-  }, [match.params.id])
 
   return (
     <Layout>
@@ -36,21 +33,10 @@ BoxScores.propTypes = {
   date: PropTypes.shape({
     date: PropTypes.object.isRequired,
   }),
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }),
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
 }
 
 const mapStateToProps = ({ date }) => ({
   date,
 })
 
-export default withRouter(connect(mapStateToProps)(BoxScores))
+export default connect(mapStateToProps)(BoxScores)

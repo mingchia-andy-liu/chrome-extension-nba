@@ -140,7 +140,8 @@ test('requests a box score and renders its loading state', () => {
   expect(fetchLiveGameBoxIfNeeded).toHaveBeenCalledWith(
     '20240101',
     '123',
-    false
+    false,
+    expect.any(Function)
   )
   expect(
     screen.getByRole('heading', { name: 'Loading...' })
