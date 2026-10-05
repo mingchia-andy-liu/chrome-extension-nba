@@ -1,6 +1,8 @@
 # These transitive packages are used without their optional install scripts.
 allowBuilds:
+  '@parcel/watcher': true
   core-js: false
   dtrace-provider: false
   spawn-sync: false
   styled-components: false
+  unrs-resolver: true
