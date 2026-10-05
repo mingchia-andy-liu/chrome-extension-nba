@@ -1,8 +1,6 @@
 const js = require('@eslint/js')
 const globals = require('globals')
-const importPlugin = require('eslint-plugin-import')
 const nPlugin = require('eslint-plugin-n')
-const promisePlugin = require('eslint-plugin-promise')
 const reactPlugin = require('eslint-plugin-react')
 const reactHooksPlugin = require('eslint-plugin-react-hooks')
 
@@ -29,9 +27,7 @@ module.exports = [
       },
     },
     plugins: {
-      import: importPlugin,
       n: nPlugin,
-      promise: promisePlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
     },
