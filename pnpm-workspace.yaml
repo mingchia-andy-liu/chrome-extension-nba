@@ -6,3 +6,6 @@ allowBuilds:
   spawn-sync: false
   styled-components: false
   unrs-resolver: true
+
+# Require packages to be available for 14 days before installation.
+minimumReleaseAge: 10080
