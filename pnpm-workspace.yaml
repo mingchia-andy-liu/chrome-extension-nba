@@ -1,6 +1,11 @@
-# These transitive packages are used without their optional install scripts.
+# Explicit install-script policy for transitive dependencies.
 allowBuilds:
+  '@parcel/watcher': true
   core-js: false
   dtrace-provider: false
   spawn-sync: false
   styled-components: false
+  unrs-resolver: true
+
+# Require packages to be available for 14 days before installation.
+minimumReleaseAge: 10080

@@ -141,6 +141,16 @@ module.exports = {
 
   testMatch: ['<rootDir>/test/**/*.(spec|test).[jt]s?(x)'],
 
+  // query-string 9 and its small dependency graph are ESM-only.
+  transformIgnorePatterns: [
+    '<rootDir>/node_modules/.pnpm/(?!(query-string|decode-uri-component|filter-obj|split-on-first)@)',
+    'node_modules/(?!.pnpm|query-string|decode-uri-component|filter-obj|split-on-first)',
+  ],
+
+  transform: {
+    '\\.[jt]sx?$': ['babel-jest', { configFile: './.babelrc' }],
+  },
+
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
 
