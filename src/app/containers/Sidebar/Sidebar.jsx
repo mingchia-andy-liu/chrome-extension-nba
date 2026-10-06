@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   grid-area: sidebar;
 `
 
-const Sidebar = ({
+export const Sidebar = ({
   date,
   id,
   fetchGamesIfNeeded,
