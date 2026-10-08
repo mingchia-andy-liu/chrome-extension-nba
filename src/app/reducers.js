@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import liveReducer from './containers/Popup/reducers'
 import boxScoresDetailsReducer from './containers/BoxScoresDetails/reducers'
 import dateReducer from './containers/DatePicker/reducers'
-import standingsReducer from './containers/Standings/reducers'
+import { apiSlice } from './api/apiSlice'
 import playoffReducer from './containers/Playoffs/reducers'
 
 export const initialState = {}
@@ -13,6 +13,6 @@ export default combineReducers({
   live: liveReducer,
   bs: boxScoresDetailsReducer,
   date: dateReducer,
-  standings: standingsReducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
   playoff: playoffReducer,
 })

@@ -1,12 +1,15 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { createAppStore } from '../support/stores'
 import Standings from '../../src/app/containers/Standings'
 import Playoffs from '../../src/app/containers/Playoffs'
 import BoxScoresDetails from '../../src/app/containers/BoxScoresDetails'
-import * as standingsActions from '../../src/app/containers/Standings/actions'
+import {
+  transformStandings,
+  useGetStandingsQuery,
+} from '../../src/app/api/apiSlice'
 import * as playoffActions from '../../src/app/containers/Playoffs/actions'
 import {
   fetchLiveGameBoxIfNeeded,
@@ -18,9 +21,13 @@ jest.mock('../../src/app/components/Context', () => ({
   ThemeConsumer: ({ children }) => children({ state: { dark: false } }),
 }))
 
-jest.mock('../../src/app/containers/Standings/actions', () => ({
-  fetchStandings: jest.fn(() => ({ type: 'TEST_FETCH_STANDINGS' })),
-}))
+jest.mock('../../src/app/api/apiSlice', () => {
+  const actual = jest.requireActual('../../src/app/api/apiSlice')
+  return {
+    ...actual,
+    useGetStandingsQuery: jest.fn(),
+  }
+})
 
 jest.mock('../../src/app/containers/Playoffs/actions', () => ({
   fetchPlayoff: jest.fn(() => ({ type: 'TEST_FETCH_PLAYOFF' })),
@@ -69,36 +76,84 @@ afterEach(() => {
 })
 
 test('requests standings and renders its loading state', () => {
-  renderView(
-    <Standings />,
-    { standings: { east: [], isLoading: true, west: [] } },
-    '/standings'
-  )
+  useGetStandingsQuery.mockReturnValue({
+    data: undefined,
+    isLoading: true,
+  })
 
-  expect(standingsActions.fetchStandings).toHaveBeenCalledTimes(1)
+  renderView(<Standings />, {}, '/standings')
+
+  expect(useGetStandingsQuery).toHaveBeenCalled()
   expect(
     screen.getByRole('heading', { name: 'Loading...' })
   ).toBeInTheDocument()
 })
 
 test('renders populated standings with ranks and team names', () => {
-  renderView(
-    <Standings />,
-    {
-      standings: {
-        east: [team('1610612738', 'Celtics')],
-        isLoading: false,
-        west: [team('1610612747', 'Lakers')],
-      },
+  useGetStandingsQuery.mockReturnValue({
+    data: {
+      east: [team('1610612738', 'Celtics')],
+      west: [team('1610612747', 'Lakers')],
     },
-    '/standings'
-  )
+    isLoading: false,
+  })
+
+  renderView(<Standings />, {}, '/standings')
 
   expect(screen.getByRole('heading', { name: 'East' })).toBeInTheDocument()
   expect(screen.getByRole('heading', { name: 'West' })).toBeInTheDocument()
   expect(screen.getAllByText('1- x')).toHaveLength(2)
   expect(screen.getByText('Celtics')).toBeInTheDocument()
   expect(screen.getByText('Lakers')).toBeInTheDocument()
+})
+
+test('renders a retryable standings error', () => {
+  const refetch = jest.fn()
+  useGetStandingsQuery.mockReturnValue({
+    data: undefined,
+    isError: true,
+    isLoading: false,
+    refetch,
+  })
+
+  renderView(<Standings />, {}, '/standings')
+
+  expect(screen.getByRole('alert')).toHaveTextContent(
+    'Unable to load standings.'
+  )
+  fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
+  expect(refetch).toHaveBeenCalledTimes(1)
+})
+
+test('transforms standings API rows by conference', () => {
+  const row = (id, name) => {
+    const values = []
+    values[2] = id
+    values[4] = name
+    values[9] = 'x'
+    values[13] = 1
+    values[14] = 0
+    values[15] = 1
+    values[18] = '1-0'
+    values[19] = '0-0'
+    values[20] = '1-0'
+    values[36] = 1
+    values[38] = '0'
+    return values
+  }
+
+  expect(
+    transformStandings({
+      resultSets: [
+        {
+          rowSet: [row('1610612738', 'Celtics'), row('1610612747', 'Lakers')],
+        },
+      ],
+    })
+  ).toMatchObject({
+    east: [{ id: '1610612738', name: 'Celtics' }],
+    west: [{ id: '1610612747', name: 'Lakers' }],
+  })
 })
 
 test('requests playoff data and renders its loading state', () => {
