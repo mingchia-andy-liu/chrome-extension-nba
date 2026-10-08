@@ -9,8 +9,11 @@ import BoxScoresDetails from '../../src/app/containers/BoxScoresDetails'
 import {
   transformStandings,
   useGetStandingsQuery,
-} from '../../src/app/api/apiSlice'
-import * as playoffActions from '../../src/app/containers/Playoffs/actions'
+} from '../../src/app/containers/Standings/api'
+import {
+  transformPlayoffs,
+  useGetPlayoffsQuery,
+} from '../../src/app/containers/Playoffs/api'
 import {
   fetchLiveGameBoxIfNeeded,
   resetLiveGameBox,
@@ -21,17 +24,21 @@ jest.mock('../../src/app/components/Context', () => ({
   ThemeConsumer: ({ children }) => children({ state: { dark: false } }),
 }))
 
-jest.mock('../../src/app/api/apiSlice', () => {
-  const actual = jest.requireActual('../../src/app/api/apiSlice')
+jest.mock('../../src/app/containers/Standings/api', () => {
+  const actual = jest.requireActual('../../src/app/containers/Standings/api')
   return {
     ...actual,
     useGetStandingsQuery: jest.fn(),
   }
 })
 
-jest.mock('../../src/app/containers/Playoffs/actions', () => ({
-  fetchPlayoff: jest.fn(() => ({ type: 'TEST_FETCH_PLAYOFF' })),
-}))
+jest.mock('../../src/app/containers/Playoffs/api', () => {
+  const actual = jest.requireActual('../../src/app/containers/Playoffs/api')
+  return {
+    ...actual,
+    useGetPlayoffsQuery: jest.fn(),
+  }
+})
 
 jest.mock('../../src/app/containers/BoxScoresDetails/actions', () => ({
   fetchLiveGameBoxIfNeeded: jest.fn(() => ({ type: 'TEST_FETCH_BOX_SCORE' })),
@@ -157,30 +164,77 @@ test('transforms standings API rows by conference', () => {
 })
 
 test('requests playoff data and renders its loading state', () => {
-  renderView(
-    <Playoffs />,
-    { playoff: { isLoading: true, series: [] } },
-    '/playoffs'
-  )
+  useGetPlayoffsQuery.mockReturnValue({ data: undefined, isLoading: true })
 
-  expect(playoffActions.fetchPlayoff).toHaveBeenCalledTimes(1)
+  renderView(<Playoffs />, {}, '/playoffs')
+
+  expect(useGetPlayoffsQuery).toHaveBeenCalled()
   expect(
     screen.getByRole('heading', { name: 'Loading...' })
   ).toBeInTheDocument()
 })
 
 test('renders bracket round labels, teams, and a series summary', () => {
-  renderView(
-    <Playoffs />,
-    { playoff: { isLoading: false, series: [series] } },
-    '/playoffs'
-  )
+  useGetPlayoffsQuery.mockReturnValue({ data: [series], isLoading: false })
+
+  renderView(<Playoffs />, {}, '/playoffs')
 
   expect(screen.getAllByRole('heading', { name: 'RD1' })).toHaveLength(2)
   expect(screen.getByRole('heading', { name: 'FIN' })).toBeInTheDocument()
   expect(screen.getByText('Warriors')).toBeInTheDocument()
   expect(screen.getByText('Lakers')).toBeInTheDocument()
   expect(screen.getByText('Lakers lead 1-0')).toBeInTheDocument()
+})
+
+test('renders a retryable playoffs error', () => {
+  const refetch = jest.fn()
+  useGetPlayoffsQuery.mockReturnValue({
+    data: undefined,
+    isError: true,
+    isLoading: false,
+    refetch,
+  })
+
+  renderView(<Playoffs />, {}, '/playoffs')
+
+  expect(screen.getByRole('alert')).toHaveTextContent('Unable to load playoffs.')
+  fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
+  expect(refetch).toHaveBeenCalledTimes(1)
+})
+
+test('transforms playoff API series for the bracket', () => {
+  expect(
+    transformPlayoffs({
+      bracket: {
+        playoffBracketSeries: [
+          {
+            highSeedId: '1610612744',
+            highSeedRank: 1,
+            highSeedSeriesWins: 4,
+            lowSeedId: '1610612747',
+            lowSeedRank: 8,
+            lowSeedSeriesWins: 1,
+            nextGameNumber: 5,
+            nextGameStatus: 2,
+            roundNumber: 1,
+            seriesConference: 'West',
+            seriesId: 'west-rd1',
+            seriesStatus: 2,
+            seriesText: 'Warriors win 4-1',
+          },
+        ],
+      },
+    })
+  ).toEqual([
+    expect.objectContaining({
+      confName: 'West',
+      isGameLive: true,
+      isSeriesCompleted: true,
+      roundNum: 1,
+      seriesId: 'west-rd1',
+      topRow: expect.objectContaining({ isSeriesWinner: true }),
+    }),
+  ])
 })
 
 test('requests a box score and renders its loading state', () => {

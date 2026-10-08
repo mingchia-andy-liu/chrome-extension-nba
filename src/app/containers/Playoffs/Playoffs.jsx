@@ -1,12 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
 import PlayoffColumn from '../../components/PlayoffColumn'
-import * as actions from './actions'
+import { useGetPlayoffsQuery } from './api'
 import { westSelector, eastSelector, finalSelector } from './selector'
 
 const ColumnWrapper = styled.div`
@@ -16,8 +14,16 @@ const ColumnWrapper = styled.div`
   gap: 40px; /* Space for connecting lines */
 `
 
-const renderContent = ({ isLoading, west, east, final }) => {
+const renderContent = ({ isLoading, isError, refetch, west, east, final }) => {
   if (isLoading) return <Loader />
+  if (isError) {
+    return (
+      <div role="alert">
+        <p>Unable to load playoffs.</p>
+        <button onClick={refetch}>Try again</button>
+      </div>
+    )
+  }
   return (
     <div style={{ margin: '0 5%' }}>
       <ColumnWrapper>
@@ -33,9 +39,18 @@ const renderContent = ({ isLoading, west, east, final }) => {
   )
 }
 
-const Playoffs = ({ fetchPlayoff, isLoading, west, east, final }) => {
+const Playoffs = () => {
+  const {
+    data: series = [],
+    isError,
+    isLoading,
+    refetch,
+  } = useGetPlayoffsQuery()
+  const west = westSelector(series)
+  const east = eastSelector(series)
+  const final = finalSelector(series)
+
   React.useEffect(() => {
-    fetchPlayoff()
     document.title = 'Box Scores | Playoffs'
   }, [])
 
@@ -43,31 +58,10 @@ const Playoffs = ({ fetchPlayoff, isLoading, west, east, final }) => {
     <Layout>
       <Layout.Header>{<Header index={2} />}</Layout.Header>
       <Layout.Content>
-        {renderContent({ isLoading, west, east, final })}
+        {renderContent({ isLoading, isError, refetch, west, east, final })}
       </Layout.Content>
     </Layout>
   )
 }
 
-Playoffs.propTypes = {
-  fetchPlayoff: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  west: PropTypes.object,
-  east: PropTypes.object,
-  final: PropTypes.any,
-}
-
-Playoffs.defaultProps = {
-  west: {},
-  east: {},
-  final: [],
-}
-
-const mapStateToProps = ({ playoff: { isLoading, series } }) => ({
-  isLoading: isLoading,
-  west: westSelector(series),
-  east: eastSelector(series),
-  final: finalSelector(series),
-})
-
-export default connect(mapStateToProps, actions)(Playoffs)
+export default Playoffs
