@@ -11,6 +11,7 @@
     "artifactsDir": "dist"
   },
   "scripts": {
+    "prebuild": "pnpm run webpack && pnpm run webpack:bg && pnpm run webpack:popup",
     "build": "web-ext build --overwrite-dest",
     "build:chrome": "node scripts/build.js chrome",
     "build:firefox": "node scripts/build.js firefox",
