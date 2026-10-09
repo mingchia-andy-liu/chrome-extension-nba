@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import parse from 'date-fns/parse'
@@ -19,10 +19,10 @@ import { getDateFromQuery } from '../../utils/common'
 import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
 import {
-  fetchGamesIfNeeded,
-  fetchGameHighlightIfNeeded,
+  fetchGamesIfNeeded as fetchGamesIfNeededAction,
+  fetchGameHighlightIfNeeded as fetchGameHighlightIfNeededAction,
 } from '../Popup/actions'
-import { dispatchChangeDate } from '../DatePicker/actions'
+import { changeDate } from '../DatePicker/dateSlice'
 
 const Wrapper = styled.div`
   grid-area: sidebar;
@@ -34,8 +34,8 @@ export const Sidebar = ({
   fetchGamesIfNeeded,
   fetchGameHighlightIfNeeded,
   live,
-  dispatchChangeDate,
 }) => {
+  const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
   const [gameId, toggleGameId] = React.useState(id || '')
@@ -53,26 +53,21 @@ export const Sidebar = ({
     if (!isSameDay(prevDate, gameDateObj) || !isSameDay(date, gameDateObj)) {
       prevCountRef.current = gameDateObj
 
-      dispatchChangeDate(gameDateObj)
-        .then(() => {
-          if (location.search !== '') {
-            navigate({ pathname: location.pathname, search: '' })
-          }
-        })
-        .then(() => {
-          fetchGamesIfNeeded(
-            format(gameDateObj, DATE_FORMAT),
-            null,
-            true,
-            false
-          )
-        })
-        .then(fetchGameHighlightIfNeeded)
+      dispatch(changeDate(gameDateObj))
+      if (location.search !== '') {
+        navigate({ pathname: location.pathname, search: '' })
+      }
+      fetchGamesIfNeeded(
+        format(gameDateObj, DATE_FORMAT),
+        null,
+        true,
+        false
+      ).then(fetchGameHighlightIfNeeded)
     }
   }, [
     date,
     dateStr,
-    dispatchChangeDate,
+    dispatch,
     fetchGamesIfNeeded,
     fetchGameHighlightIfNeeded,
     location.pathname,
@@ -83,15 +78,15 @@ export const Sidebar = ({
 
   const selectGame = React.useCallback(
     (e) => {
-      const id = e.currentTarget.dataset.id
+      const selectedId = e.currentTarget.dataset.id
       const pathname = location.pathname
 
       if (pathname.startsWith('/boxscores')) {
-        navigate(`/boxscores/${id}`, { replace: true })
+        navigate(`/boxscores/${selectedId}`, { replace: true })
       } else {
-        navigate(`/boxscores/${id}`)
+        navigate(`/boxscores/${selectedId}`)
       }
-      toggleGameId(id)
+      toggleGameId(selectedId)
     },
     [location.pathname, navigate]
   )
@@ -132,7 +127,6 @@ Sidebar.propTypes = {
 
   fetchGamesIfNeeded: PropTypes.func.isRequired,
   fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
-  dispatchChangeDate: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ live }) => ({
@@ -142,9 +136,8 @@ const mapStateToProps = ({ live }) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      fetchGamesIfNeeded,
-      dispatchChangeDate,
-      fetchGameHighlightIfNeeded,
+      fetchGamesIfNeeded: fetchGamesIfNeededAction,
+      fetchGameHighlightIfNeeded: fetchGameHighlightIfNeededAction,
     },
     dispatch
   )

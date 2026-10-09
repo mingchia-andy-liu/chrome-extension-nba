@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -17,6 +17,7 @@ import { Column, ButtonsWrapper } from '../../styles'
 import * as actions from './actions'
 import { DATE_FORMAT } from '../../utils/constant'
 import browser from '../../utils/browser'
+import { selectDate } from '../DatePicker/dateSlice'
 
 const Wrapper = styled(Column)`
   padding: 10px;
@@ -24,12 +25,8 @@ const Wrapper = styled(Column)`
   min-width: 450px;
 `
 
-const PopUp = ({
-  fetchGamesIfNeeded,
-  fetchGameHighlightIfNeeded,
-  date: { date },
-  live,
-}) => {
+const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, live }) => {
+  const date = useSelector(selectDate)
   const navigate = useNavigate()
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
@@ -73,16 +70,16 @@ const PopUp = ({
     [gameDate, isPopup, navigate]
   )
 
-  const selectDate = React.useCallback(
-    (date) => {
-      toggleGameDate(date)
+  const onDateChange = React.useCallback(
+    (newDate) => {
+      toggleGameDate(newDate)
     },
     [toggleGameDate]
   )
 
   return (
     <Wrapper>
-      <DatePicker hide={isPopup} onChange={selectDate} />
+      <DatePicker hide={isPopup} onChange={onDateChange} />
       <Links />
       <ButtonsWrapper>
         <DarkModeCheckbox />
@@ -111,16 +108,12 @@ PopUp.propTypes = {
     // { [gid]: string }
     urls: PropTypes.object.isRequired,
   }).isRequired,
-  date: PropTypes.shape({
-    date: PropTypes.object.isRequired,
-  }),
   fetchGamesIfNeeded: PropTypes.func.isRequired,
   fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ live, date }) => ({
+const mapStateToProps = ({ live }) => ({
   live,
-  date,
 })
 
 export default connect(mapStateToProps, actions)(PopUp)

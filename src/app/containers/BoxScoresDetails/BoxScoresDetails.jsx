@@ -10,8 +10,10 @@ import Loader from '../../components/Loader'
 import { Tab, TabItem } from '../../components/Tab'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
-import { fetchLiveGameBoxIfNeeded, resetLiveGameBox } from './actions'
-import { dispatchChangeDate } from '../DatePicker/actions'
+import {
+  fetchLiveGameBoxIfNeeded as fetchLiveGameBoxIfNeededAction,
+  resetLiveGameBox as resetLiveGameBoxAction,
+} from './actions'
 import { Content } from './styles'
 import {
   renderTitle,
@@ -149,8 +151,6 @@ BoxScoresDetails.propTypes = {
 
   fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
   resetLiveGameBox: PropTypes.func.isRequired,
-  dispatchChangeDate: PropTypes.func.isRequired,
-
   id: PropTypes.string.isRequired,
   date: PropTypes.object.isRequired,
 }
@@ -162,9 +162,8 @@ const mapStateToProps = ({ bs }) => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      fetchLiveGameBoxIfNeeded,
-      resetLiveGameBox,
-      dispatchChangeDate,
+      fetchLiveGameBoxIfNeeded: fetchLiveGameBoxIfNeededAction,
+      resetLiveGameBox: resetLiveGameBoxAction,
     },
     dispatch
   )

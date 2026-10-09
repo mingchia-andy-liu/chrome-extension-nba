@@ -1,9 +1,11 @@
 import React from 'react'
+import { Provider } from 'react-redux'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import App from '../../src/app/containers/App/App'
 import { Sidebar } from '../../src/app/containers/Sidebar/Sidebar'
 import { fetchLiveGameBoxIfNeeded } from '../../src/app/containers/BoxScoresDetails/actions'
+import { createAppStore } from '../support/stores'
 
 jest.mock('flatpickr/dist/flatpickr.min.css', () => ({}))
 jest.mock('../../src/app/containers/Popup', () => () => <div>Popup</div>)
@@ -91,18 +93,19 @@ test('selecting a sidebar game only changes the route', () => {
   const fetchLiveGameBox = jest.fn()
 
   render(
-    <MemoryRouter initialEntries={['/boxscores']}>
-      <Sidebar
-        date={new Date('2024-01-01T12:00:00.000Z')}
-        dispatchChangeDate={jest.fn(() => Promise.resolve())}
-        fetchGameHighlightIfNeeded={jest.fn()}
-        fetchGamesIfNeeded={jest.fn()}
-        fetchLiveGameBoxIfNeeded={fetchLiveGameBox}
-        id=""
-        live={{ games: [], hasError: false, isLoading: false, urls: {} }}
-      />
-      <Location />
-    </MemoryRouter>
+    <Provider store={createAppStore()}>
+      <MemoryRouter initialEntries={['/boxscores']}>
+        <Sidebar
+          date={new Date('2024-01-01T12:00:00.000Z')}
+          fetchGameHighlightIfNeeded={jest.fn()}
+          fetchGamesIfNeeded={jest.fn(() => Promise.resolve())}
+          fetchLiveGameBoxIfNeeded={fetchLiveGameBox}
+          id=""
+          live={{ games: [], hasError: false, isLoading: false, urls: {} }}
+        />
+        <Location />
+      </MemoryRouter>
+    </Provider>
   )
 
   fireEvent.click(screen.getByRole('button', { name: 'Select game' }))

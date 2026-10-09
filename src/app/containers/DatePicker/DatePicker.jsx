@@ -1,6 +1,5 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import Flatpickr from 'react-flatpickr'
@@ -8,7 +7,7 @@ import addDays from 'date-fns/addDays'
 import format from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isBefore from 'date-fns/isBefore'
-import { dispatchChangeDate } from './actions'
+import { changeDate, selectDate } from './dateSlice'
 import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
@@ -54,23 +53,21 @@ const Arrow = styled.img`
 const MIN_DATE = new Date('2019-09-02')
 const MAX_DATE = new Date('2099-01-01')
 
-const DatePicker = (
-  { hide, onChange, dispatchChangeDate, resetLiveGameBox, date: { date } } = {
-    hide: false,
-    onChange: noop,
-  }
-) => {
+const DatePicker = ({ hide = false, onChange = noop }) => {
+  const dispatch = useDispatch()
+  const date = useSelector(selectDate)
+
   const onClickArrow = React.useCallback(
     (offset) => {
       const currDate = addDays(date, offset)
       if (isAfter(currDate, MAX_DATE) || isBefore(currDate, MIN_DATE)) {
         return
       }
-      dispatchChangeDate(currDate)
+      dispatch(changeDate(currDate))
       onChange(format(currDate, DATE_FORMAT))
-      resetLiveGameBox()
+      dispatch(resetLiveGameBox())
     },
-    [date, dispatchChangeDate, onChange, resetLiveGameBox]
+    [date, dispatch, onChange]
   )
 
   const onClickNextDay = React.useCallback(() => {
@@ -83,11 +80,11 @@ const DatePicker = (
 
   const onDateChange = React.useCallback(
     (dates) => {
-      dispatchChangeDate(dates[0])
+      dispatch(changeDate(dates[0]))
       onChange(dates[0])
-      resetLiveGameBox()
+      dispatch(resetLiveGameBox())
     },
-    [dispatchChangeDate, onChange, resetLiveGameBox]
+    [dispatch, onChange]
   )
 
   const renderInput = () => {
@@ -134,27 +131,8 @@ const DatePicker = (
 }
 
 DatePicker.propTypes = {
-  date: PropTypes.shape({
-    date: PropTypes.object.isRequired,
-  }),
   onChange: PropTypes.func,
   hide: PropTypes.bool,
-  dispatchChangeDate: PropTypes.func.isRequired,
-  resetLiveGameBox: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ date }) => ({
-  date,
-})
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      dispatchChangeDate,
-      resetLiveGameBox,
-    },
-    dispatch
-  )
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DatePicker)
+export default DatePicker
