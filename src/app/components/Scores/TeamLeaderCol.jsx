@@ -36,19 +36,19 @@ const TeamLeaderCol = ({ points, rebounds, assists, name }) => {
   return (
     <Wrapper>
       <NameCell bg={getLogoColorByName(name)}>{name}</NameCell>
-      {points.map(({ name, value }) => (
-        <Cell key={name}>
-          {name} has {value} points
+      {points.map(({ name: playerName, value }) => (
+        <Cell key={playerName}>
+          {playerName} has {value} points
         </Cell>
       ))}
-      {rebounds.map(({ name, value }) => (
-        <Cell key={name}>
-          {name} has {value} rebounds
+      {rebounds.map(({ name: playerName, value }) => (
+        <Cell key={playerName}>
+          {playerName} has {value} rebounds
         </Cell>
       ))}
-      {assists.map(({ name, value }) => (
-        <Cell key={name}>
-          {name} has {value} assists
+      {assists.map(({ name: playerName, value }) => (
+        <Cell key={playerName}>
+          {playerName} has {value} assists
         </Cell>
       ))}
     </Wrapper>

@@ -99,9 +99,11 @@ const justify = ({
   )
 }
 
-const wrap = ({ nowrap, wrap, wrapReverse }) => {
+const wrap = ({ nowrap, wrap: flexWrap, wrapReverse }) => {
   return (
-    (nowrap && 'nowrap') || (wrap && 'wrap') || (wrapReverse && 'wrap-reverse')
+    (nowrap && 'nowrap') ||
+    (flexWrap && 'wrap') ||
+    (wrapReverse && 'wrap-reverse')
   )
 }
 

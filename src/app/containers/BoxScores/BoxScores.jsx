@@ -1,15 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Sidebar from '../Sidebar'
 import BoxScoresDetails from '../BoxScoresDetails'
 import { Wrapper } from './styles'
+import { selectDate } from '../DatePicker/dateSlice'
 
-const BoxScores = ({ date: { date } }) => {
+const BoxScores = () => {
   const { id = '' } = useParams()
+  const date = useSelector(selectDate)
   React.useEffect(() => {
     document.title = 'Box Scores | Box-scores'
   }, [])
@@ -29,14 +30,4 @@ const BoxScores = ({ date: { date } }) => {
   )
 }
 
-BoxScores.propTypes = {
-  date: PropTypes.shape({
-    date: PropTypes.object.isRequired,
-  }),
-}
-
-const mapStateToProps = ({ date }) => ({
-  date,
-})
-
-export default connect(mapStateToProps)(BoxScores)
+export default BoxScores

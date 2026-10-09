@@ -285,13 +285,6 @@ export const convertDaily5 = (game) => {
         } ${formatMinutesWithPadding(formatMinutes(gameClock.trim()))}`
       : gameStatusText
 
-  const addQuarterNames = (linescores) =>
-    linescores.map((ls, i) => ({
-      period_name: QUARTER_NAMES[i],
-      period_value: i.toString(),
-      score: ls.score,
-    }))
-
   return {
     broadcasters: [],
     home: h
@@ -378,13 +371,6 @@ export const convertDaily3 = (game) => {
           period <= 4 ? 'Q' + period : 'OT' + (period - 4)
         } ${formatMinutesWithPadding(formatMinutes(gameClock.trim()))}`
       : gameStatusText
-
-  const addQuarterNames = (linescores) =>
-    linescores.map((ls, i) => ({
-      period_name: QUARTER_NAMES[i],
-      period_value: i.toString(),
-      score: ls.score,
-    }))
 
   return {
     broadcasters: getBroadcasters(watch),

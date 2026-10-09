@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { apiSlice } from '../api/apiSlice'
 
 import liveReducer from '../containers/Popup/reducers'
-import dateReducer from '../containers/DatePicker/reducers'
+import dateReducer from '../containers/DatePicker/dateSlice'
 
 export const initialState = {}
 
