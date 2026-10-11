@@ -14,10 +14,7 @@ import {
   transformPlayoffs,
   useGetPlayoffsQuery,
 } from '../../src/app/containers/Playoffs/api'
-import {
-  fetchLiveGameBoxIfNeeded,
-  resetLiveGameBox,
-} from '../../src/app/containers/BoxScoresDetails/actions'
+import * as boxScoresDetailsSlice from '../../src/app/containers/BoxScoresDetails/boxScoresDetailsSlice'
 
 jest.mock('../../src/app/components/Context', () => ({
   SettingsConsumer: ({ children }) => children({ state: { spoiler: false } }),
@@ -40,12 +37,12 @@ jest.mock('../../src/app/containers/Playoffs/api', () => {
   }
 })
 
-jest.mock('../../src/app/containers/BoxScoresDetails/actions', () => ({
-  fetchLiveGameBoxIfNeeded: jest.fn(() => ({ type: 'TEST_FETCH_BOX_SCORE' })),
-  resetLiveGameBox: jest.fn(() => ({ type: 'TEST_RESET_BOX_SCORE' })),
-}))
-
 const defaultState = createAppStore().getState()
+const fetchLiveGameBoxIfNeeded = jest.spyOn(
+  boxScoresDetailsSlice,
+  'fetchLiveGameBoxIfNeeded'
+)
+const resetLiveGameBox = jest.spyOn(boxScoresDetailsSlice, 'resetLiveGameBox')
 
 const renderView = (view, state, path) =>
   render(

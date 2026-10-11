@@ -12,7 +12,7 @@ import { ThemeConsumer } from '../../components/Context'
 import { Theme } from '../../styles'
 import { DATE_FORMAT } from '../../utils/constant'
 import { noop } from '../../utils/common'
-import { resetLiveGameBox } from '../BoxScoresDetails/actions'
+import { resetLiveGameBox } from '../BoxScoresDetails/boxScoresDetailsSlice'
 
 const Wrapper = styled.div`
   display: flex;

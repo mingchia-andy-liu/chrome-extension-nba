@@ -1,7 +1,7 @@
 import format from 'date-fns/format'
 import browser from './browser'
 import { store } from '../store'
-import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScoresDetails/actions'
+import { fetchLiveGameBoxIfNeeded } from '../containers/BoxScoresDetails/boxScoresDetailsSlice'
 import {
   fetchGamesIfNeeded,
   fetchGameHighlightIfNeeded,

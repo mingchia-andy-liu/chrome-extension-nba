@@ -1,6 +1,9 @@
 import { convertBS, convertBSProxy } from '../../src/app/utils/convert'
-import reducer from '../../src/app/containers/BoxScoresDetails/reducers'
-import types from '../../src/app/containers/BoxScoresDetails/types'
+import reducer, {
+  fetchLiveGameBox,
+  fetchLiveGameBoxIfNeeded,
+  resetLiveGameBox,
+} from '../../src/app/containers/BoxScoresDetails/boxScoresDetailsSlice'
 import { activeBoxScore } from '../fixtures/boxScores'
 
 test('normalizes active CDN box scores, players, and zero-attempt statistics', () => {
@@ -155,21 +158,25 @@ test('normalizes the legacy box-score schema with overtime and missing officials
 })
 
 test('stores normalized box scores, supplemental team stats, and lead changes', () => {
-  const state = reducer(undefined, {
-    type: types.REQUEST_SUCCESS,
-    payload: {
-      boxScoreData: activeBoxScore(),
-      gid: '0022300001',
-      pbpData: {
-        play: [
-          { scoreAway: '0', scoreHome: '0' },
-          { scoreAway: '0', scoreHome: '2' },
-          { scoreAway: '3', scoreHome: '2' },
-          { scoreAway: '3', scoreHome: '4' },
-        ],
+  const state = reducer(
+    undefined,
+    fetchLiveGameBox.fulfilled(
+      {
+        boxScoreData: activeBoxScore(),
+        gid: '0022300001',
+        pbpData: {
+          play: [
+            { scoreAway: '0', scoreHome: '0' },
+            { scoreAway: '0', scoreHome: '2' },
+            { scoreAway: '3', scoreHome: '2' },
+            { scoreAway: '3', scoreHome: '4' },
+          ],
+        },
       },
-    },
-  })
+      'request-id',
+      { dateStr: '20240101', gid: '0022300001', isBackground: false }
+    )
+  )
 
   expect(state).toMatchObject({
     gid: '0022300001',
@@ -186,4 +193,115 @@ test('stores normalized box scores, supplemental team stats, and lead changes', 
     true,
     true,
   ])
+})
+
+test('keeps the spinner hidden for background requests and resets on rejected requests', () => {
+  const backgroundState = reducer(
+    undefined,
+    fetchLiveGameBox.pending('request-id', {
+      dateStr: '20240101',
+      gid: '0022300001',
+      isBackground: true,
+    })
+  )
+  const loadingState = reducer(
+    undefined,
+    fetchLiveGameBox.pending('request-id', {
+      dateStr: '20240101',
+      gid: '0022300001',
+      isBackground: false,
+    })
+  )
+
+  expect(backgroundState.isLoading).toBe(false)
+  expect(loadingState.isLoading).toBe(true)
+  expect(
+    reducer(
+      loadingState,
+      fetchLiveGameBox.rejected(new Error('failed'), 'request-id', {
+        dateStr: '20240101',
+        gid: '0022300001',
+        isBackground: false,
+      })
+    )
+  ).toEqual({
+    bsData: {},
+    gid: '',
+    isLoading: false,
+    pbpData: {},
+    teamStats: {},
+  })
+  expect(reducer(loadingState, resetLiveGameBox())).toEqual({
+    bsData: {},
+    gid: '',
+    isLoading: false,
+    pbpData: {},
+    teamStats: {},
+  })
+})
+
+test('dispatches the request thunk with the resolved background policy', async () => {
+  const state = {
+    bs: { bsData: {}, gid: '' },
+    date: { date: new Date('2024-01-01T12:00:00.000Z') },
+    live: {
+      games: [{ id: '0022300001' }],
+      isLoading: false,
+      lastUpdate: new Date(0),
+    },
+  }
+  const actions = []
+  const dispatch = jest.fn((action) => {
+    if (typeof action === 'function') {
+      return action(dispatch, () => state)
+    }
+    actions.push(action)
+    return action
+  })
+  const originalFetch = global.fetch
+  global.fetch = jest
+    .fn()
+    .mockResolvedValueOnce({
+      json: () => Promise.resolve({ game: { actions: [] } }),
+    })
+    .mockResolvedValueOnce({
+      json: () => Promise.resolve({ game: activeBoxScore() }),
+    })
+
+  await fetchLiveGameBoxIfNeeded(
+    '20240101',
+    '0022300001',
+    false
+  )(dispatch, () => state)
+
+  global.fetch = originalFetch
+  expect(actions.map((action) => action.type)).toEqual([
+    fetchLiveGameBox.pending.type,
+    fetchLiveGameBox.fulfilled.type,
+  ])
+  expect(actions[0].meta.arg).toEqual({
+    dateStr: '20240101',
+    gid: '0022300001',
+    isBackground: false,
+  })
+})
+
+test('does not request a recently refreshed score for the selected game', async () => {
+  const state = {
+    bs: { bsData: {}, gid: '0022300001' },
+    date: { date: new Date('2024-01-01T12:00:00.000Z') },
+    live: {
+      games: [{ id: '0022300001' }],
+      isLoading: false,
+      lastUpdate: new Date(),
+    },
+  }
+  const dispatch = jest.fn()
+
+  await fetchLiveGameBoxIfNeeded('20240101', '0022300001')(
+    dispatch,
+    () => state
+  )
+
+  expect(dispatch).not.toHaveBeenCalled()
 })

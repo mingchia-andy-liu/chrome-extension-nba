@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -11,9 +10,10 @@ import { Tab, TabItem } from '../../components/Tab'
 import { NoSpoilerCheckbox } from '../../components/Checkbox'
 import { SettingsConsumer, ThemeConsumer } from '../../components/Context'
 import {
-  fetchLiveGameBoxIfNeeded as fetchLiveGameBoxIfNeededAction,
-  resetLiveGameBox as resetLiveGameBoxAction,
-} from './actions'
+  fetchLiveGameBoxIfNeeded,
+  resetLiveGameBox,
+  selectBoxScoresDetails,
+} from './boxScoresDetailsSlice'
 import { Content } from './styles'
 import {
   renderTitle,
@@ -44,13 +44,11 @@ const Button = styled.button`
   }
 `
 
-const BoxScoresDetails = ({
-  bs: { bsData, pbpData, teamStats, isLoading },
-  id,
-  date,
-  fetchLiveGameBoxIfNeeded,
-  resetLiveGameBox,
-}) => {
+const BoxScoresDetails = ({ id, date }) => {
+  const dispatch = useDispatch()
+  const { bsData, pbpData, teamStats, isLoading } = useSelector(
+    selectBoxScoresDetails
+  )
   const navigate = useNavigate()
   // tab index: 0: overview 1: boxscores 2: playbyplay
   const [tabIndex, toggleIndex] = React.useState(1)
@@ -59,9 +57,9 @@ const BoxScoresDetails = ({
   React.useEffect(() => {
     const gameId = id || ''
     const dateStr = format(date, DATE_FORMAT)
-    fetchLiveGameBoxIfNeeded(dateStr, gameId, false, navigate)
-    return () => resetLiveGameBox()
-  }, [date, fetchLiveGameBoxIfNeeded, id, navigate, resetLiveGameBox])
+    dispatch(fetchLiveGameBoxIfNeeded(dateStr, gameId, false, navigate))
+    return () => dispatch(resetLiveGameBox())
+  }, [date, dispatch, id, navigate])
 
   const renderContent = (spoiler, dark) => {
     if (!id) return <Overlay />
@@ -142,31 +140,8 @@ const BoxScoresDetails = ({
 }
 
 BoxScoresDetails.propTypes = {
-  bs: PropTypes.shape({
-    isLoading: PropTypes.bool.isRequired,
-    bsData: PropTypes.object.isRequired,
-    pbpData: PropTypes.object.isRequired,
-    teamStats: PropTypes.object.isRequired,
-  }),
-
-  fetchLiveGameBoxIfNeeded: PropTypes.func.isRequired,
-  resetLiveGameBox: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   date: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = ({ bs }) => ({
-  bs,
-})
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      fetchLiveGameBoxIfNeeded: fetchLiveGameBoxIfNeededAction,
-      resetLiveGameBox: resetLiveGameBoxAction,
-    },
-    dispatch
-  )
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BoxScoresDetails)
+export default BoxScoresDetails
