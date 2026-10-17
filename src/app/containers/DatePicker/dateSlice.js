@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import isValid from 'date-fns/isValid'
 import getAPIDate from '../../utils/getApiDate'
 
 const dateSlice = createSlice({
@@ -8,13 +9,16 @@ const dateSlice = createSlice({
   },
   reducers: {
     changeDate: (state, action) => {
-      state.date = action.payload
+      if (isValid(action.payload)) {
+        state.date = action.payload
+      }
     },
   },
 })
 
 export const { changeDate } = dateSlice.actions
 
-export const selectDate = (state) => state.date.date
+export const selectDate = (state) =>
+  isValid(state.date.date) ? state.date.date : getAPIDate()
 
 export default dateSlice.reducer

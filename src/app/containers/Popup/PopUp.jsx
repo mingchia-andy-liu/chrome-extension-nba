@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
@@ -14,10 +13,11 @@ import {
 import DatePicker from '../../containers/DatePicker'
 import Links from '../../components/Links'
 import { Column, ButtonsWrapper } from '../../styles'
-import * as actions from './actions'
+import { fetchGamesIfNeeded, fetchGameHighlightIfNeeded } from './actions'
 import { DATE_FORMAT } from '../../utils/constant'
 import browser from '../../utils/browser'
 import { selectDate } from '../DatePicker/dateSlice'
+import { selectLive } from './liveSlice'
 
 const Wrapper = styled(Column)`
   padding: 10px;
@@ -25,22 +25,28 @@ const Wrapper = styled(Column)`
   min-width: 450px;
 `
 
-const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, live }) => {
+const PopUp = () => {
+  const dispatch = useDispatch()
   const date = useSelector(selectDate)
+  const live = useSelector(selectLive)
   const navigate = useNavigate()
   const [isPopup, togglePopup] = React.useState(false)
   const [gameDate, toggleGameDate] = React.useState(format(date, DATE_FORMAT))
   // useRef for previous selected date.
   const prevDateRef = React.useRef()
 
+  // This fetch intentionally runs only when the popup opens.
   React.useEffect(() => {
     browser.tabs.getCurrent((tab) => {
       togglePopup(!tab)
     })
     const dateStr = format(date, DATE_FORMAT)
-    fetchGamesIfNeeded(dateStr, null, true).then(fetchGameHighlightIfNeeded)
+    dispatch(fetchGamesIfNeeded(dateStr, null, true)).then(() =>
+      dispatch(fetchGameHighlightIfNeeded())
+    )
     document.title = 'Box Scores | Popup'
     prevDateRef.current = date
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // this is used to trace the toggle for different "selected" dates.
@@ -48,12 +54,12 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, live }) => {
     const prevDate = prevDateRef.current
     if (prevDate != null && !isSameDay(date, prevDate)) {
       // props is already updated date, force update.
-      fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false).then(
-        fetchGameHighlightIfNeeded
-      )
+      dispatch(
+        fetchGamesIfNeeded(format(date, DATE_FORMAT), null, true, false)
+      ).then(() => dispatch(fetchGameHighlightIfNeeded()))
       prevDateRef.current = date
     }
-  }, [date, fetchGamesIfNeeded])
+  }, [date, dispatch])
 
   const selectGame = React.useCallback(
     (e) => {
@@ -98,22 +104,4 @@ const PopUp = ({ fetchGamesIfNeeded, fetchGameHighlightIfNeeded, live }) => {
   )
 }
 
-PopUp.propTypes = {
-  live: PropTypes.shape({
-    hasError: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    games: PropTypes.array.isRequired,
-    // date
-    lastUpdate: PropTypes.object.isRequired,
-    // { [gid]: string }
-    urls: PropTypes.object.isRequired,
-  }).isRequired,
-  fetchGamesIfNeeded: PropTypes.func.isRequired,
-  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
-}
-
-const mapStateToProps = ({ live }) => ({
-  live,
-})
-
-export default connect(mapStateToProps, actions)(PopUp)
+export default PopUp

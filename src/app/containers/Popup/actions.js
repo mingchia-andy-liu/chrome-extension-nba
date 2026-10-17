@@ -1,6 +1,7 @@
 import format from 'date-fns/format'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
+import isValid from 'date-fns/isValid'
 import {
   gamesRequestFailed,
   gamesRequestStarted,
@@ -21,7 +22,14 @@ import { allSettled } from '../../utils/common'
  * @param {string} dateStr selected date in string format
  * @param {function} callback callback to see if the 'id' in the URL is valid
  */
-const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
+const fetchGames = async (
+  dispatch,
+  getState,
+  dateStr,
+  selectedDateStr,
+  callback,
+  isBackground
+) => {
   try {
     // has the UI been shown yet, if so, don't show the loading spinner
     if (!isBackground) {
@@ -29,6 +37,9 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     }
 
     const games = await fetchRequest(dateStr)
+    if (format(getState().date.date, DATE_FORMAT) !== selectedDateStr) {
+      return
+    }
     dispatch(gamesRequestSucceeded(games))
     const newGames = games.isFallBack ? games.games : games
     if (format(getApiDate(), DATE_FORMAT) === dateStr) {
@@ -38,8 +49,10 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
   } catch (error) {
     // debug log here
     // if any of the fetch requests fail, set the state to error
-    if (callback) callback([])
-    dispatch(gamesRequestFailed())
+    if (format(getState().date.date, DATE_FORMAT) === selectedDateStr) {
+      if (callback) callback([])
+      dispatch(gamesRequestFailed())
+    }
   }
 }
 
@@ -49,31 +62,41 @@ const fetchRequest3 = async (dateStr) => {
     return fetchRequest4(dateStr)
   }
 
-  let apiGameDate = null
-
-  let g = []
   try {
     const res = await fetch(
       'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
     )
-    const {
-      scoreboard: { games, gameDate },
-    } = await res.json()
+    if (!res.ok) {
+      throw new Error('CDN scoreboard request failed')
+    }
+    const data = await res.json()
+    const games = data?.scoreboard?.games
+    const gameDate = data?.scoreboard?.gameDate
+    const parsedGameDate =
+      typeof gameDate === 'string'
+        ? parse(gameDate, 'yyyy-MM-dd', new Date())
+        : null
+    const apiGameDate =
+      parsedGameDate &&
+      isValid(parsedGameDate) &&
+      format(parsedGameDate, 'yyyy-MM-dd') === gameDate
+        ? format(parsedGameDate, DATE_FORMAT)
+        : null
 
-    apiGameDate = gameDate.replaceAll('-', '')
+    if (
+      !Array.isArray(games) ||
+      apiGameDate == null ||
+      apiGameDate !== dateStr
+    ) {
+      throw new Error('Invalid CDN scoreboard response')
+    }
 
-    g = games
-  } catch (error) {}
-
-  // if the return response is not the same as API date, then response must be the previous date
-  // but we should actually be fetching the new date, use 4 for per date.
-  if (apiGameDate !== null && apiGameDate !== dateStr) {
-    return fetchRequest4(dateStr)
-  }
-
-  return {
-    isFallBack: 3,
-    games: g,
+    return {
+      isFallBack: 3,
+      games,
+    }
+  } catch (error) {
+    return fetchRequest5(dateStr)
   }
 }
 
@@ -105,7 +128,13 @@ const fetchRequest5 = async (dateStr) => {
   const res = await fetch(
     `https://proxy.boxscores.site/?apiUrl=core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
   )
+  if (!res.ok) {
+    throw new Error('Game-card request failed')
+  }
   const { cards } = await res.json()
+  if (!Array.isArray(cards)) {
+    throw new Error('Invalid game-card response')
+  }
   return {
     isFallBack: 5,
     games: cards,
@@ -143,7 +172,14 @@ export const fetchGamesIfNeeded =
     }
 
     isBackground = isBackground === false ? false : oldDateStr === dateStr
-    return await fetchGames(dispatch, dateStr, callback, isBackground)
+    return await fetchGames(
+      dispatch,
+      getState,
+      dateStr,
+      oldDateStr,
+      callback,
+      isBackground
+    )
   }
 
 // ------ highlights -------

@@ -265,17 +265,23 @@ const sanitizeGame = (game) => ({
  *  2: `http://data.nba.net/prod/v2/${dateStr}/scoreboard.json`
  */
 export const sanitizeGames = (games, isFallBack = 0) => {
-  const sanitized = games.map((game) => {
-    if (isFallBack === 1) {
-      return sanitizeGameFallBack(game)
-    } else if (isFallBack === 2) {
-      return sanitizeGameFallBack2(game)
-    } else if (isFallBack === 3) {
-      return sanitizeGameFallBack3(game)
-    } else if (isFallBack === 5) {
-      return sanitizeGameFallBack5(game)
-    } else {
+  if (!Array.isArray(games)) {
+    throw new TypeError('Games must be an array')
+  }
+  const sanitized = games.flatMap((game) => {
+    try {
+      if (isFallBack === 1) {
+        return sanitizeGameFallBack(game)
+      } else if (isFallBack === 2) {
+        return sanitizeGameFallBack2(game)
+      } else if (isFallBack === 3) {
+        return sanitizeGameFallBack3(game)
+      } else if (isFallBack === 5) {
+        return sanitizeGameFallBack5(game)
+      }
       return sanitizeGame(game)
+    } catch (error) {
+      return []
     }
   })
   const prepare = sanitized.filter(

@@ -20,3 +20,18 @@ test('installs a resettable Chrome callback API mock', () => {
   mock.restoreGlobals()
   jest.resetModules()
 })
+
+test('marks a live game from the game-card fallback feed', () => {
+  const mock = createBrowserMock()
+  mock.installChrome()
+  jest.resetModules()
+
+  const { checkLiveGame } = require('../../src/app/utils/browser')
+  checkLiveGame([{ cardData: { gameStatus: 2 } }], 5)
+
+  expect(mock.browser.action.setBadgeText).toHaveBeenCalledWith({
+    text: 'LIVE',
+  })
+  mock.restoreGlobals()
+  jest.resetModules()
+})

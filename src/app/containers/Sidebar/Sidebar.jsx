@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import parse from 'date-fns/parse'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
+import isValid from 'date-fns/isValid'
 import startOfDay from 'date-fns/startOfDay'
 import DatePicker from '../DatePicker'
 import CardList from '../../components/CardList'
@@ -19,61 +19,61 @@ import { getDateFromQuery } from '../../utils/common'
 import { DATE_FORMAT } from '../../utils/constant'
 import { ButtonsWrapper } from '../../styles'
 import {
-  fetchGamesIfNeeded as fetchGamesIfNeededAction,
-  fetchGameHighlightIfNeeded as fetchGameHighlightIfNeededAction,
+  fetchGamesIfNeeded,
+  fetchGameHighlightIfNeeded,
 } from '../Popup/actions'
-import { changeDate } from '../DatePicker/dateSlice'
+import { changeDate, selectDate } from '../DatePicker/dateSlice'
+import { selectLive } from '../Popup/liveSlice'
 
 const Wrapper = styled.div`
   grid-area: sidebar;
 `
 
-export const Sidebar = ({
-  date,
-  id,
-  fetchGamesIfNeeded,
-  fetchGameHighlightIfNeeded,
-  live,
-}) => {
+export const Sidebar = ({ id }) => {
   const dispatch = useDispatch()
+  const date = useSelector(selectDate)
+  const live = useSelector(selectLive)
   const location = useLocation()
   const navigate = useNavigate()
   const [gameId, toggleGameId] = React.useState(id || '')
   const dateStr = format(date, DATE_FORMAT)
   const queryDate = getDateFromQuery(location)
+  const parsedQueryDate =
+    typeof queryDate === 'string'
+      ? parse(queryDate, DATE_FORMAT, startOfDay(new Date()))
+      : null
+  const hasValidQueryDate =
+    parsedQueryDate &&
+    isValid(parsedQueryDate) &&
+    format(parsedQueryDate, DATE_FORMAT) === queryDate
 
   // useRef for prevProps. Used for calendar or initial render
   // set it after the fetch effect
   const prevCountRef = React.useRef()
   React.useEffect(() => {
-    const gameDate = queryDate == null ? dateStr : queryDate
-    const gameDateObj = parse(gameDate, DATE_FORMAT, startOfDay(new Date()))
+    const gameDateObj = hasValidQueryDate ? parsedQueryDate : date
 
     const prevDate = prevCountRef.current
     if (!isSameDay(prevDate, gameDateObj) || !isSameDay(date, gameDateObj)) {
       prevCountRef.current = gameDateObj
 
       dispatch(changeDate(gameDateObj))
-      if (location.search !== '') {
-        navigate({ pathname: location.pathname, search: '' })
-      }
-      fetchGamesIfNeeded(
-        format(gameDateObj, DATE_FORMAT),
-        null,
-        true,
-        false
-      ).then(fetchGameHighlightIfNeeded)
+      dispatch(
+        fetchGamesIfNeeded(format(gameDateObj, DATE_FORMAT), null, true, false)
+      ).then(() => dispatch(fetchGameHighlightIfNeeded()))
+    }
+    if (location.search !== '') {
+      navigate({ pathname: location.pathname, search: '' })
     }
   }, [
     date,
     dateStr,
     dispatch,
-    fetchGamesIfNeeded,
-    fetchGameHighlightIfNeeded,
     location.pathname,
     location.search,
     navigate,
-    queryDate,
+    hasValidQueryDate,
+    parsedQueryDate,
   ])
 
   const selectGame = React.useCallback(
@@ -122,25 +122,6 @@ export const Sidebar = ({
 
 Sidebar.propTypes = {
   id: PropTypes.string.isRequired,
-  date: PropTypes.object.isRequired,
-  live: PropTypes.object.isRequired,
-
-  fetchGamesIfNeeded: PropTypes.func.isRequired,
-  fetchGameHighlightIfNeeded: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = ({ live }) => ({
-  live,
-})
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      fetchGamesIfNeeded: fetchGamesIfNeededAction,
-      fetchGameHighlightIfNeeded: fetchGameHighlightIfNeededAction,
-    },
-    dispatch
-  )
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
+export default Sidebar

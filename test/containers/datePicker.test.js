@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { fireEvent, render, screen } from '@testing-library/react'
 import dateReducer, {
   changeDate,
+  selectDate,
 } from '../../src/app/containers/DatePicker/dateSlice'
 import DatePicker from '../../src/app/containers/DatePicker'
 import { createAppStore } from '../support/stores'
@@ -32,6 +33,16 @@ test('changes the selected date while preserving the date state shape', () => {
   const date = new Date('2024-01-15T12:00:00.000Z')
 
   expect(dateReducer(undefined, changeDate(date))).toEqual({ date })
+})
+
+test('rejects invalid date actions and safely selects a replacement for corrupted state', () => {
+  const date = new Date('2024-01-15T12:00:00.000Z')
+  const state = dateReducer({ date }, changeDate(new Date('invalid')))
+
+  expect(state).toEqual({ date })
+  expect(selectDate({ date: { date: new Date('invalid') } }).toString()).not.toBe(
+    'Invalid Date'
+  )
 })
 
 test('arrow navigation updates the selected date, notifies the caller, and resets box scores', () => {

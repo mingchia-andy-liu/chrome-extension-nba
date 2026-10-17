@@ -1,10 +1,15 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { MemoryRouter, useLocation } from 'react-router-dom'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import App from '../../src/app/containers/App/App'
+import PopUp from '../../src/app/containers/Popup/PopUp'
 import { Sidebar } from '../../src/app/containers/Sidebar/Sidebar'
 import { fetchLiveGameBoxIfNeeded } from '../../src/app/containers/BoxScoresDetails/boxScoresDetailsSlice'
+import {
+  fetchGameHighlightIfNeeded,
+  fetchGamesIfNeeded,
+} from '../../src/app/containers/Popup/actions'
 import { createAppStore } from '../support/stores'
 
 jest.mock('flatpickr/dist/flatpickr.min.css', () => ({}))
@@ -12,6 +17,7 @@ jest.mock('../../src/app/containers/Popup', () => () => <div>Popup</div>)
 jest.mock('../../src/app/containers/BoxScores', () => () => (
   <div>Box Scores</div>
 ))
+jest.mock('../../src/app/components/Links', () => () => null)
 jest.mock('../../src/app/containers/Standings', () => () => (
   <div>Standings</div>
 ))
@@ -20,6 +26,10 @@ jest.mock('../../src/app/containers/Changelog', () => () => (
   <div>Changelog</div>
 ))
 jest.mock('../../src/app/containers/Playoffs', () => () => <div>Playoffs</div>)
+jest.mock('../../src/app/containers/Popup/actions', () => ({
+  fetchGameHighlightIfNeeded: jest.fn(() => () => Promise.resolve()),
+  fetchGamesIfNeeded: jest.fn(() => () => Promise.resolve()),
+}))
 jest.mock('../../src/app/components/Context', () => ({
   BoxScoreProvider: ({ children }) => children,
   SettingsProvider: ({ children }) => children,
@@ -39,6 +49,10 @@ jest.mock('../../src/app/components/Checkbox', () => ({
 }))
 
 const Location = () => <output>{useLocation().pathname}</output>
+const LocationWithSearch = () => {
+  const location = useLocation()
+  return <output>{`${location.pathname}${location.search}`}</output>
+}
 
 const renderApp = (path) =>
   render(
@@ -71,10 +85,12 @@ test('matches box-score detail routes', () => {
 test('redirects an invalid game through the component navigator', async () => {
   const navigate = jest.fn()
 
-  await fetchLiveGameBoxIfNeeded('20240101', 'missing', false, navigate)(
-    jest.fn(),
-    () => stateWithNoGames
-  )
+  await fetchLiveGameBoxIfNeeded(
+    '20240101',
+    'missing',
+    false,
+    navigate
+  )(jest.fn(), () => stateWithNoGames)
 
   expect(navigate).toHaveBeenCalledWith('/boxscores')
 })
@@ -82,34 +98,78 @@ test('redirects an invalid game through the component navigator', async () => {
 test('redirects an invalid game through the hash fallback', async () => {
   window.location.hash = ''
 
-  await fetchLiveGameBoxIfNeeded('20240101', 'missing')(jest.fn(), () =>
-    stateWithNoGames
+  await fetchLiveGameBoxIfNeeded('20240101', 'missing')(
+    jest.fn(),
+    () => stateWithNoGames
   )
 
   expect(window.location.hash).toBe('#/boxscores')
 })
 
-test('selecting a sidebar game only changes the route', () => {
-  const fetchLiveGameBox = jest.fn()
+test('popup fetches the selected date and then its highlights from the store', async () => {
+  const store = createAppStore({
+    ...createAppStore().getState(),
+    date: { date: new Date('2024-01-01T12:00:00.000Z') },
+  })
 
   render(
-    <Provider store={createAppStore()}>
+    <Provider store={store}>
+      <MemoryRouter>
+        <PopUp />
+      </MemoryRouter>
+    </Provider>
+  )
+
+  await waitFor(() => expect(fetchGameHighlightIfNeeded).toHaveBeenCalledWith())
+  expect(fetchGamesIfNeeded).toHaveBeenCalledWith('20240101', null, true)
+  expect(document.title).toBe('Box Scores | Popup')
+})
+
+test('sidebar fetches store-selected games and selecting one only changes the route', async () => {
+  const store = createAppStore({
+    ...createAppStore().getState(),
+    date: { date: new Date('2024-01-01T12:00:00.000Z') },
+  })
+
+  render(
+    <Provider store={store}>
       <MemoryRouter initialEntries={['/boxscores']}>
-        <Sidebar
-          date={new Date('2024-01-01T12:00:00.000Z')}
-          fetchGameHighlightIfNeeded={jest.fn()}
-          fetchGamesIfNeeded={jest.fn(() => Promise.resolve())}
-          fetchLiveGameBoxIfNeeded={fetchLiveGameBox}
-          id=""
-          live={{ games: [], hasError: false, isLoading: false, urls: {} }}
-        />
+        <Sidebar id="" />
         <Location />
       </MemoryRouter>
     </Provider>
   )
 
+  await waitFor(() => expect(fetchGameHighlightIfNeeded).toHaveBeenCalledWith())
+  expect(fetchGamesIfNeeded).toHaveBeenCalledWith('20240101', null, true, false)
+
   fireEvent.click(screen.getByRole('button', { name: 'Select game' }))
 
   expect(screen.getByRole('status')).toHaveTextContent('/boxscores/123')
-  expect(fetchLiveGameBox).not.toHaveBeenCalled()
+})
+
+test('sidebar clears an invalid date query and uses the selected date', async () => {
+  const store = createAppStore({
+    ...createAppStore().getState(),
+    date: { date: new Date('2024-01-01T12:00:00.000Z') },
+  })
+
+  render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/boxscores?date=not-a-date']}>
+        <Sidebar id="" />
+        <LocationWithSearch />
+      </MemoryRouter>
+    </Provider>
+  )
+
+  await waitFor(() =>
+    expect(fetchGamesIfNeeded).toHaveBeenCalledWith(
+      '20240101',
+      null,
+      true,
+      false
+    )
+  )
+  expect(screen.getByRole('status')).toHaveTextContent('/boxscores')
 })
