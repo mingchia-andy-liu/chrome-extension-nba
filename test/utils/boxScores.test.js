@@ -240,6 +240,41 @@ test('keeps the spinner hidden for background requests and resets on rejected re
   })
 })
 
+test('rejects malformed box score responses before reducer conversion', async () => {
+  const actions = []
+  const dispatch = jest.fn((action) => {
+    actions.push(action)
+    return action
+  })
+  const originalFetch = global.fetch
+  global.fetch = jest
+    .fn()
+    .mockResolvedValueOnce({
+      json: () => Promise.resolve({ game: { actions: [] } }),
+    })
+    .mockResolvedValueOnce({ json: () => Promise.resolve({ game: {} }) })
+
+  await fetchLiveGameBox({
+    dateStr: '20240101',
+    gid: '0022300001',
+    isBackground: false,
+  })(dispatch, () => ({}))
+
+  global.fetch = originalFetch
+  expect(actions.map((action) => action.type)).toEqual([
+    fetchLiveGameBox.pending.type,
+    fetchLiveGameBox.rejected.type,
+  ])
+  expect(reducer(undefined, actions[0]).isLoading).toBe(true)
+  expect(reducer(reducer(undefined, actions[0]), actions[1])).toEqual({
+    bsData: {},
+    gid: '',
+    isLoading: false,
+    pbpData: {},
+    teamStats: {},
+  })
+})
+
 test('dispatches the request thunk with the resolved background policy', async () => {
   const state = {
     bs: { bsData: {}, gid: '' },

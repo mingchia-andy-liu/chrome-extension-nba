@@ -65,8 +65,18 @@ export const fetchLiveGameBox = createAsyncThunk(
       fetchGameDetail(dateStr, gid),
     ])
 
-    if (isEmpty(boxScoreData) && isEmpty(pbpData)) {
-      throw Error('one of them box score data is bad')
+    const game = boxScoreData.game
+    if (
+      !game ||
+      !Array.isArray(game.officials) ||
+      !Array.isArray(game.homeTeam?.periods) ||
+      !Array.isArray(game.homeTeam?.players) ||
+      !game.homeTeam.statistics ||
+      !Array.isArray(game.awayTeam?.periods) ||
+      !Array.isArray(game.awayTeam?.players) ||
+      !game.awayTeam.statistics
+    ) {
+      throw Error('box score data is invalid')
     }
 
     return {
@@ -132,8 +142,6 @@ export const selectBoxScoresDetails = (state) => state.bs
 //     return 'nba'
 //   }
 // }
-
-const isEmpty = (data) => Object.keys(data).length === 0
 
 /* new API endpoint, sometimes it does not have data. Use old one instead
 const fetchBoxScore = async (dateStr, gid) => {
