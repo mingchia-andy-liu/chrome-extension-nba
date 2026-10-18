@@ -11,23 +11,30 @@ export class BoxScoreProvider extends React.Component {
 
     this.state = {
       hideZeroRow: false,
+      showFantasyPoints: false,
       favPlayers: [],
     }
 
-    browser.getItem(['hideZeroRow', 'favPlayers'], (data) => {
-      let favPlayers = []
-      try {
-        const storedPlayers = JSON.parse(data.favPlayers)
-        favPlayers = Array.isArray(storedPlayers) ? storedPlayers : []
-      } catch (error) {
-        favPlayers = []
-      }
+    browser.getItem(
+      ['hideZeroRow', 'showFantasyPoints', 'favPlayers'],
+      (data) => {
+        let favPlayers = []
+        try {
+          const storedPlayers = JSON.parse(data.favPlayers)
+          favPlayers = Array.isArray(storedPlayers) ? storedPlayers : []
+        } catch (error) {
+          favPlayers = []
+        }
 
-      this.setState({
-        hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
-        favPlayers,
-      })
-    })
+        this.setState({
+          hideZeroRow: data.hideZeroRow ? data.hideZeroRow : false,
+          showFantasyPoints: data.showFantasyPoints
+            ? data.showFantasyPoints
+            : false,
+          favPlayers,
+        })
+      }
+    )
   }
 
   static propTypes = { children: PropTypes.node }
@@ -35,6 +42,12 @@ export class BoxScoreProvider extends React.Component {
   updateHideZeroRow = () => {
     this.setState({ hideZeroRow: !this.state.hideZeroRow }, () => {
       browser.setItem({ hideZeroRow: this.state.hideZeroRow })
+    })
+  }
+
+  updateShowFantasyPoints = () => {
+    this.setState({ showFantasyPoints: !this.state.showFantasyPoints }, () => {
+      browser.setItem({ showFantasyPoints: this.state.showFantasyPoints })
     })
   }
 
@@ -52,6 +65,7 @@ export class BoxScoreProvider extends React.Component {
           state: this.state,
           actions: {
             updateHideZeroRow: this.updateHideZeroRow,
+            updateShowFantasyPoints: this.updateShowFantasyPoints,
             updateFavPlayers: this.updateFavPlayers,
           },
         }}

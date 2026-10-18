@@ -8,6 +8,7 @@ import Checkbox, {
   BroadcastCheckbox,
   NoSpoilerCheckbox,
   HideZeroRowCheckbox,
+  FantasyPointsCheckbox,
   DarkModeCheckbox,
   ChronologicalCheckbox,
 } from '../../components/Checkbox'
@@ -224,6 +225,7 @@ const Options = () => {
         />
         <DarkModeCheckbox />
         <HideZeroRowCheckbox />
+        <FantasyPointsCheckbox />
         <BroadcastCheckbox />
         <NoSpoilerCheckbox />
         <ChronologicalCheckbox />

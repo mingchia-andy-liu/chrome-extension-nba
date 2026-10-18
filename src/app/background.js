@@ -154,6 +154,7 @@ browser.runtime.onInstalled.addListener((details) => {
               ? [data.favTeam]
               : [],
         hideZeroRow: data.hideZeroRow,
+        showFantasyPoints: data.showFantasyPoints,
         nightMode: data.nightMode,
         spoiler: data.spoiler,
         notification: data.notification
