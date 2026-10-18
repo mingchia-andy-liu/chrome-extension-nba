@@ -4,18 +4,17 @@ const path = require('path')
 const { spawnSync } = require('child_process')
 
 const target = process.argv[2]
-const targets = {
-  chrome: {
-    manifest: 'manifest.json',
-    artifacts: 'chrome',
-  },
-  firefox: {
-    manifest: 'manifest_v2.json',
-    artifacts: 'firefox',
-  },
+const targets = Object.create(null)
+targets.chrome = {
+  manifest: 'manifest.json',
+  artifacts: 'chrome',
+}
+targets.firefox = {
+  manifest: 'manifest_v2.json',
+  artifacts: 'firefox',
 }
 
-if (!targets[target]) {
+if (!Object.prototype.hasOwnProperty.call(targets, target)) {
   throw new Error('Usage: node scripts/build.js <chrome|firefox>')
 }
 
