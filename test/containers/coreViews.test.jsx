@@ -14,6 +14,7 @@ import {
   transformPlayoffs,
   useGetPlayoffsQuery,
 } from '../../src/app/containers/Playoffs/api'
+import { playoffBracket } from '../../src/app/containers/Playoffs/data'
 import * as boxScoresDetailsSlice from '../../src/app/containers/BoxScoresDetails/boxScoresDetailsSlice'
 
 jest.mock('../../src/app/components/Context', () => ({
@@ -194,44 +195,35 @@ test('renders a retryable playoffs error', () => {
 
   renderView(<Playoffs />, {}, '/playoffs')
 
-  expect(screen.getByRole('alert')).toHaveTextContent('Unable to load playoffs.')
+  expect(screen.getByRole('alert')).toHaveTextContent(
+    'Unable to load playoffs.'
+  )
   fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
   expect(refetch).toHaveBeenCalledTimes(1)
 })
 
-test('transforms playoff API series for the bracket', () => {
-  expect(
-    transformPlayoffs({
-      bracket: {
-        playoffBracketSeries: [
-          {
-            highSeedId: '1610612744',
-            highSeedRank: 1,
-            highSeedSeriesWins: 4,
-            lowSeedId: '1610612747',
-            lowSeedRank: 8,
-            lowSeedSeriesWins: 1,
-            nextGameNumber: 5,
-            nextGameStatus: 2,
-            roundNumber: 1,
-            seriesConference: 'West',
-            seriesId: 'west-rd1',
-            seriesStatus: 2,
-            seriesText: 'Warriors win 4-1',
-          },
-        ],
-      },
-    })
-  ).toEqual([
-    expect.objectContaining({
-      confName: 'West',
-      isGameLive: true,
-      isSeriesCompleted: true,
-      roundNum: 1,
-      seriesId: 'west-rd1',
-      topRow: expect.objectContaining({ isSeriesWinner: true }),
-    }),
-  ])
+test('provides the supplied completed 2025-26 playoff bracket', () => {
+  const series = transformPlayoffs(playoffBracket)
+
+  expect(series).toHaveLength(15)
+  expect(series).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        confName: 'NBA Finals',
+        roundNum: 4,
+        seriesId: '00_42025_4_0_1610612759_1610612752',
+        summaryStatusText: 'NYK wins 4-1',
+        topRow: expect.objectContaining({
+          isSeriesWinner: false,
+          teamId: 1610612759,
+        }),
+        bottomRow: expect.objectContaining({
+          isSeriesWinner: true,
+          teamId: 1610612752,
+        }),
+      }),
+    ])
+  )
 })
 
 test('requests a box score and renders its loading state', () => {
