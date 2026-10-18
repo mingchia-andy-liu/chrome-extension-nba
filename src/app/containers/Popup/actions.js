@@ -12,6 +12,7 @@ import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
+import { proxyUrl } from '../../utils/origin'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -64,7 +65,9 @@ const fetchRequest3 = async (dateStr) => {
 
   try {
     const res = await fetch(
-      'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+      proxyUrl(
+        'cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+      )
     )
     if (!res.ok) {
       throw new Error('CDN scoreboard request failed')
@@ -105,7 +108,7 @@ const fetchRequest4 = async (dateStr) => {
   // const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
   // try {
   //   const res2 = await fetch(
-  //     `https://proxy.boxscores.site?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
+  //     `stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
   //   )
   //   const {
   //     scoreboard: { games },
@@ -126,7 +129,9 @@ const fetchRequest5 = async (dateStr) => {
     'MM/dd/yyyy'
   )
   const res = await fetch(
-    `https://proxy.boxscores.site/?apiUrl=core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
+    proxyUrl(
+      `core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
+    )
   )
   if (!res.ok) {
     throw new Error('Game-card request failed')

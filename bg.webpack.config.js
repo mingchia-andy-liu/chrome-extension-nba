@@ -1,6 +1,12 @@
 const path = require('path')
+const { DefinePlugin } = require('webpack')
 
 const buildDir = process.env.BUILD_DIR || path.resolve(__dirname, 'build')
+const origin = process.env.ORIGIN
+
+if (!origin) {
+  throw new Error('ORIGIN is required to build the extension')
+}
 
 const webpackConfig = {
   entry: [
@@ -22,7 +28,12 @@ const webpackConfig = {
       },
     ],
   },
-  mode: 'production'
+  mode: 'production',
+  plugins: [
+    new DefinePlugin({
+      'process.env.ORIGIN': JSON.stringify(origin),
+    }),
+  ],
 }
 
 module.exports = webpackConfig
