@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 import liveReducer from './containers/Popup/reducers'
-import boxScoresDetailsReducer from './containers/BoxScoresDetails/reducers'
+import boxScoresDetailsReducer from './containers/BoxScoresDetails/boxScoresDetailsSlice'
 import dateReducer from './containers/DatePicker/dateSlice'
 import { apiSlice } from './api/apiSlice'
 

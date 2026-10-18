@@ -4,7 +4,7 @@ import { MemoryRouter, useLocation } from 'react-router-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import App from '../../src/app/containers/App/App'
 import { Sidebar } from '../../src/app/containers/Sidebar/Sidebar'
-import { fetchLiveGameBoxIfNeeded } from '../../src/app/containers/BoxScoresDetails/actions'
+import { fetchLiveGameBoxIfNeeded } from '../../src/app/containers/BoxScoresDetails/boxScoresDetailsSlice'
 import { createAppStore } from '../support/stores'
 
 jest.mock('flatpickr/dist/flatpickr.min.css', () => ({}))
