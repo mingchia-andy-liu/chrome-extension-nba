@@ -1,12 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { ThemeConsumer } from '../../components/Context'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Loader from '../../components/Loader'
-import * as actions from './actions'
+import { useGetStandingsQuery } from '../../api/apiSlice'
 import { mediaQuery } from '../../styles'
 import TeamLogo from '../../components/TeamLogo'
 import { getAbbreviationById } from '../../utils/teams'
@@ -124,8 +122,16 @@ const renderHeader = (conf) => {
   )
 }
 
-const renderContent = (east, west, isLoading) => {
+const renderContent = (east, west, isLoading, isError, refetch) => {
   if (isLoading) return <Loader />
+  if (isError) {
+    return (
+      <div role="alert">
+        <p>Unable to load standings.</p>
+        <button onClick={refetch}>Try again</button>
+      </div>
+    )
+  }
 
   return (
     <ThemeConsumer>
@@ -213,31 +219,26 @@ const renderContent = (east, west, isLoading) => {
   )
 }
 
-const Standings = ({ fetchStandings, east, west, isLoading }) => {
+const Standings = () => {
+  const {
+    data = { east: [], west: [] },
+    isError,
+    isLoading,
+    refetch,
+  } = useGetStandingsQuery()
+
   React.useEffect(() => {
-    fetchStandings()
     document.title = 'Box Scores | Standings'
   }, [])
 
   return (
     <Layout>
       <Layout.Header>{<Header index={1} />}</Layout.Header>
-      <Layout.Content>{renderContent(east, west, isLoading)}</Layout.Content>
+      <Layout.Content>
+        {renderContent(data.east, data.west, isLoading, isError, refetch)}
+      </Layout.Content>
     </Layout>
   )
 }
 
-Standings.propTypes = {
-  east: PropTypes.array.isRequired,
-  fetchStandings: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  west: PropTypes.array.isRequired,
-}
-
-const mapStateToProps = ({ standings: { east, west, isLoading } }) => ({
-  east,
-  isLoading,
-  west,
-})
-
-export default connect(mapStateToProps, actions)(Standings)
+export default Standings

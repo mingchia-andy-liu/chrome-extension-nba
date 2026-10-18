@@ -5,6 +5,7 @@ import appReducer, {
 import popupReducer, {
   initialState as popupInitialState,
 } from '../../src/app/popup/reducers'
+import { apiSlice } from '../../src/app/api/apiSlice'
 
 export const createAppStore = (preloadedState = appInitialState) =>
   configureStore({
@@ -12,7 +13,9 @@ export const createAppStore = (preloadedState = appInitialState) =>
     preloadedState,
     // Match the runtime stores' legacy Date-containing state.
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }),
+      getDefaultMiddleware({ serializableCheck: false }).concat(
+        apiSlice.middleware
+      ),
   })
 
 export const createPopupStore = (preloadedState = popupInitialState) =>
@@ -21,5 +24,7 @@ export const createPopupStore = (preloadedState = popupInitialState) =>
     preloadedState,
     // Match the runtime stores' legacy Date-containing state.
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }),
+      getDefaultMiddleware({ serializableCheck: false }).concat(
+        apiSlice.middleware
+      ),
   })
