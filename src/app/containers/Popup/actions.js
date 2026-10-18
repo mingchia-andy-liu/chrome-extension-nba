@@ -1,7 +1,12 @@
 import format from 'date-fns/format'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import parse from 'date-fns/parse'
-import types from './types'
+import {
+  gamesRequestFailed,
+  gamesRequestStarted,
+  gamesRequestSucceeded,
+  highlightsUpdated,
+} from './liveSlice'
 import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
@@ -20,14 +25,11 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
   try {
     // has the UI been shown yet, if so, don't show the loading spinner
     if (!isBackground) {
-      dispatch({ type: types.REQUEST_START })
+      dispatch(gamesRequestStarted())
     }
 
     const games = await fetchRequest(dateStr)
-    dispatch({
-      type: types.REQUEST_SUCCESS,
-      payload: games,
-    })
+    dispatch(gamesRequestSucceeded(games))
     const newGames = games.isFallBack ? games.games : games
     if (format(getApiDate(), DATE_FORMAT) === dateStr) {
       checkLiveGame(newGames, games.isFallBack)
@@ -37,7 +39,7 @@ const fetchGames = async (dispatch, dateStr, callback, isBackground) => {
     // debug log here
     // if any of the fetch requests fail, set the state to error
     if (callback) callback([])
-    dispatch({ type: types.REQUEST_ERROR })
+    dispatch(gamesRequestFailed())
   }
 }
 
@@ -118,10 +120,7 @@ export const fetchGamesIfNeeded =
   (dateStr, callback, forceUpdate = false, isBackground = null) =>
   async (dispatch, getState) => {
     if (isOffseason(parse(dateStr, DATE_FORMAT, new Date()))) {
-      dispatch({
-        type: types.REQUEST_SUCCESS,
-        payload: { games: [] },
-      })
+      dispatch(gamesRequestSucceeded({ games: [] }))
       return
     }
 
@@ -181,8 +180,5 @@ export const fetchGameHighlightIfNeeded = () => async (dispatch, getState) => {
       ...curr.value,
     }
   }, {})
-  dispatch({
-    type: types.UPDATE_VID,
-    payload: merged,
-  })
+  dispatch(highlightsUpdated(merged))
 }

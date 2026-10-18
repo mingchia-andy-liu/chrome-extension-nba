@@ -14,3 +14,16 @@ test.each([
   expect(store.dispatch(thunk)).toBe(name)
   expect(thunk).toHaveBeenCalledTimes(1)
 })
+
+test.each([
+  ['full-page', appStore],
+  ['popup', popupStore],
+])('%s store retains the live state shape', (name, store) => {
+  expect(store.getState().live).toEqual({
+    hasError: false,
+    isLoading: true,
+    games: [],
+    lastUpdate: new Date(0),
+    urls: {},
+  })
+})
