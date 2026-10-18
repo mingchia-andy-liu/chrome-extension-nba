@@ -310,6 +310,8 @@ export const checkLiveGame = (games, isFallBack = 0) => {
     hasLiveGame = games.find((game) => game.statusNum === 2)
   } else if (isFallBack === 3) {
     hasLiveGame = games.find((game) => game.gameStatus === 2)
+  } else if (isFallBack === 5) {
+    hasLiveGame = games.find((game) => game.cardData?.gameStatus === 2)
   } else {
     hasLiveGame = games.find(
       (game) => game && game.period_time && game.period_time.game_status === '2'

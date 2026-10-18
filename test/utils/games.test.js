@@ -52,6 +52,12 @@ test('orders live, final, then scheduled games', () => {
   ])
 })
 
+test('retains valid games when another schedule record is malformed', () => {
+  const games = sanitizeGames([primaryGame(2), null, primaryGame(3)])
+
+  expect(games.map((game) => game.id)).toEqual(['primary-2', 'primary-3'])
+})
+
 test('normalizes primary broadcasters and playoff data', () => {
   const [game] = sanitizeGames([primaryGame(2)])
 

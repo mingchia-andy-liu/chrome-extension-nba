@@ -52,4 +52,6 @@ export const {
   highlightsUpdated,
 } = liveSlice.actions
 
+export const selectLive = (state) => state.live
+
 export default liveSlice.reducer
