@@ -1,4 +1,4 @@
-import { createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import appReducer, {
   initialState as appInitialState,
 } from '../../src/app/reducers'
@@ -7,7 +7,19 @@ import popupReducer, {
 } from '../../src/app/popup/reducers'
 
 export const createAppStore = (preloadedState = appInitialState) =>
-  createStore(appReducer, preloadedState)
+  configureStore({
+    reducer: appReducer,
+    preloadedState,
+    // Match the runtime stores' legacy Date-containing state.
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }),
+  })
 
 export const createPopupStore = (preloadedState = popupInitialState) =>
-  createStore(popupReducer, preloadedState)
+  configureStore({
+    reducer: popupReducer,
+    preloadedState,
+    // Match the runtime stores' legacy Date-containing state.
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }),
+  })

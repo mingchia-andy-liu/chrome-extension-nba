@@ -1,6 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
 import reducer, { initialState } from './reducers'
 
-// Create store
-export const store = createStore(reducer, initialState, applyMiddleware(thunk))
+export const store = configureStore({
+  reducer,
+  preloadedState: initialState,
+  // Existing score and date state contains Date instances.
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
+})
