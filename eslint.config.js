@@ -43,6 +43,7 @@ module.exports = [
       eqeqeq: 'off',
       'n/no-callback-literal': 'warn',
       'no-empty': 'off',
+      'no-shadow': 'error',
       'no-unused-vars': 'off',
       'react/no-unescaped-entities': 'off',
       'react/prop-types': 'off',

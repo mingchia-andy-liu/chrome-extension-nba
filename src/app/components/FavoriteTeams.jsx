@@ -94,9 +94,12 @@ const FavoriteTeamsForm = () => {
     <>
       <h2>Favorite Teams</h2>
       <SidebarConsumer>
-        {({ state: { teams }, actions: { updateFavouriteTeams } }) => (
+        {({
+          state: { teams: favoriteTeams },
+          actions: { updateFavouriteTeams },
+        }) => (
           <FavoriteTeamsDropdown
-            existingTeams={teams}
+            existingTeams={favoriteTeams}
             updateFavouriteTeams={updateFavouriteTeams}
           />
         )}
