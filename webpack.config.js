@@ -1,9 +1,15 @@
 const path = require('path')
 const fs = require('fs')
 const { RawSource } = require('webpack').sources
+const { DefinePlugin } = require('webpack')
 
 const buildDir = process.env.BUILD_DIR || path.resolve(__dirname, 'build')
 const manifestName = process.env.BUILD_MANIFEST || 'manifest.json'
+const proxyOrigin = process.env.PROXY_ORIGIN
+
+if (!proxyOrigin) {
+  throw new Error('PROXY_ORIGIN is required to build the extension')
+}
 
 const manifestPlugin = {
   apply(compiler) {
@@ -54,7 +60,12 @@ const webpackConfig = {
       }
     ],
   },
-  plugins: [manifestPlugin],
+  plugins: [
+    manifestPlugin,
+    new DefinePlugin({
+      'process.env.PROXY_ORIGIN': JSON.stringify(proxyOrigin),
+    }),
+  ],
 }
 
 if (process.env.NODE_ENV === 'production') {

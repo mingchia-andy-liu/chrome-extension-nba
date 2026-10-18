@@ -7,6 +7,7 @@ import getApiDate, { isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
+import { proxyUrl } from './utils/proxy'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
@@ -93,7 +94,9 @@ const liveListener = (initCheck) => {
 
   // cdn
   fetch(
-    'https://proxy.boxscores.site?apiUrl=cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+    proxyUrl(
+      'cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
+    )
   )
     .then((res) => res.json())
     .then(({ scoreboard: { games } }) => {

@@ -1,6 +1,12 @@
 const path = require('path')
+const { DefinePlugin } = require('webpack')
 
 const buildDir = process.env.BUILD_DIR || path.resolve(__dirname, 'build')
+const proxyOrigin = process.env.PROXY_ORIGIN
+
+if (!proxyOrigin) {
+  throw new Error('PROXY_ORIGIN is required to build the extension')
+}
 
 const webpackConfig = {
   entry: [
@@ -22,7 +28,12 @@ const webpackConfig = {
       },
     ],
   },
-  mode: 'production'
+  mode: 'production',
+  plugins: [
+    new DefinePlugin({
+      'process.env.PROXY_ORIGIN': JSON.stringify(proxyOrigin),
+    }),
+  ],
 }
 
 module.exports = webpackConfig
