@@ -1,16 +1,15 @@
 import { apiSlice } from '../../api/apiSlice'
-import { getLeagueYear } from '../../utils/getApiDate'
+import { playoffBracket } from './data'
 
-export const transformPlayoffs = ({ bracket: { playoffBracketSeries } }) =>
-  playoffBracketSeries.map((serie) => ({
+export const transformPlayoffs = ({ bracket }) =>
+  (bracket?.playoffBracketSeries ?? []).map((serie) => ({
     roundNum: serie.roundNumber,
     confName: serie.seriesConference,
     seriesId: serie.seriesId,
-    isScheduleAvailable: true,
-    isSeriesCompleted: serie.seriesStatus !== 1,
+    isScheduleAvailable: false,
+    isSeriesCompleted: serie.seriesStatus === 3,
+    isGameLive: false,
     summaryStatusText: serie.seriesText,
-    gameNumber: serie.nextGameNumber,
-    isGameLive: serie.nextGameStatus === 2,
     topRow: {
       teamId: serie.highSeedId,
       seedNum: serie.highSeedRank,
@@ -28,11 +27,7 @@ export const transformPlayoffs = ({ bracket: { playoffBracketSeries } }) =>
 const playoffsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPlayoffs: builder.query({
-      query: () => {
-        const year = getLeagueYear(new Date())
-        return `https://stats.nba.com/stats/playoffbracket?SeasonYear=${year}&LeagueID=00&State=2`
-      },
-      transformResponse: transformPlayoffs,
+      queryFn: () => ({ data: transformPlayoffs(playoffBracket) }),
     }),
   }),
 })
