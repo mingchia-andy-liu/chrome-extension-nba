@@ -67,7 +67,7 @@ const RowWrapperWithFavorite = styled(RowWrapper)`
   }
 `
 
-const renderHeaderRow = (name) => {
+const renderHeaderRow = (name, showFantasyPoints) => {
   const headers = [
     'MIN',
     'PTS',
@@ -86,7 +86,7 @@ const renderHeaderRow = (name) => {
     'TOV',
     'PF',
     '+/-',
-    'FPS',
+    ...(showFantasyPoints ? ['FPS'] : []),
   ]
 
   return (
@@ -218,7 +218,7 @@ const renderPlayerRow = (
   isLive,
   i,
   isDark,
-  { hideZeroRow, favPlayers }
+  { hideZeroRow, showFantasyPoints, favPlayers }
 ) => {
   if (
     !player.on_court &&
@@ -374,13 +374,15 @@ const renderPlayerRow = (
         {fouls}
       </StatsCell>
       <Cell>{plus_minus}</Cell>
-      <StatsCell
-        dark={isDark ? 1 : undefined}
-        winning={+fantasy_points >= 40 ? 1 : undefined}
-        losing={+fantasy_points < 0 ? 1 : undefined}
-      >
-        {fantasy_points}
-      </StatsCell>
+      {showFantasyPoints && (
+        <StatsCell
+          dark={isDark ? 1 : undefined}
+          winning={+fantasy_points >= 40 ? 1 : undefined}
+          losing={+fantasy_points < 0 ? 1 : undefined}
+        >
+          {fantasy_points}
+        </StatsCell>
+      )}
     </RowWrapperWithFavorite>
   )
 }
@@ -395,14 +397,15 @@ const PlayerStats = ({ hps, vps, hta, vta, hts, vts, isLive }) => {
       <ThemeConsumer>
         {({ state: { dark } }) => (
           <BoxScoreConsumer>
-            {({ state: { hideZeroRow, favPlayers } }) => (
+            {({ state: { hideZeroRow, showFantasyPoints, favPlayers } }) => (
               <React.Fragment>
                 <PlayerTable>
                   <tbody>
-                    {renderHeaderRow(vta)}
+                    {renderHeaderRow(vta, showFantasyPoints)}
                     {vps.map((player, i) =>
                       renderPlayerRow(player, isLive, i, dark, {
                         hideZeroRow,
+                        showFantasyPoints,
                         favPlayers,
                       })
                     )}
@@ -411,10 +414,11 @@ const PlayerStats = ({ hps, vps, hta, vta, hts, vts, isLive }) => {
                 </PlayerTable>
                 <PlayerTable>
                   <tbody>
-                    {renderHeaderRow(hta)}
+                    {renderHeaderRow(hta, showFantasyPoints)}
                     {hps.map((player, i) =>
                       renderPlayerRow(player, isLive, i, dark, {
                         hideZeroRow,
+                        showFantasyPoints,
                         favPlayers,
                       })
                     )}

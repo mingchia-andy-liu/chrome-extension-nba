@@ -156,6 +156,21 @@ export const HideZeroRowCheckbox = () => (
   </BoxScoreConsumer>
 )
 
+export const FantasyPointsCheckbox = () => (
+  <BoxScoreConsumer>
+    {({
+      state: { showFantasyPoints },
+      actions: { updateShowFantasyPoints },
+    }) => (
+      <Checkbox
+        checked={showFantasyPoints === true}
+        text="Show Fantasy Points"
+        onChange={updateShowFantasyPoints}
+      />
+    )}
+  </BoxScoreConsumer>
+)
+
 export const BroadcastCheckbox = () => (
   <SidebarConsumer>
     {({ state: { broadcast }, actions: { updateBroadcast } }) => (
