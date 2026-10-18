@@ -12,7 +12,7 @@ import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
-import { proxyUrl } from '../../utils/proxy'
+import { proxyUrl } from '../../utils/origin'
 
 /**
  * Migrate from background.js `fetchGames`

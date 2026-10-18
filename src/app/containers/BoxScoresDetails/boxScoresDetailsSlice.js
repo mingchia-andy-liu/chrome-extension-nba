@@ -7,7 +7,7 @@ import { convertBSProxy } from '../../utils/convert'
 import getAPIDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
-import { proxyUrl } from '../../utils/proxy'
+import { proxyUrl } from '../../utils/origin'
 
 const initialState = {
   bsData: {},

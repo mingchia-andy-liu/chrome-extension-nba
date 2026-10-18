@@ -7,7 +7,7 @@ import getApiDate, { isOffseason } from './utils/getApiDate'
 import { DATE_FORMAT } from './utils/constant'
 import { sanitizeGames } from './utils/games'
 import { fireNotificationIfNeeded } from './utils/notifications'
-import { proxyUrl } from './utils/proxy'
+import { proxyUrl } from './utils/origin'
 
 // tracks any live game in the background
 browser.alarms.create('minute', {
