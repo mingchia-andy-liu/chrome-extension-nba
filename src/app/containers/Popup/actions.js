@@ -108,7 +108,7 @@ const fetchRequest4 = async (dateStr) => {
   // const newDateStr = insertAt(insertAt(dateStr, 4, '-'), 7, '-')
   // try {
   //   const res2 = await fetch(
-  //     `[REDACTED_PROXY_ORIGIN]?apiUrl=stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
+  //     `stats.nba.com/stats/scoreboardv3&GameDate=${newDateStr}&LeagueID=00`
   //   )
   //   const {
   //     scoreboard: { games },
