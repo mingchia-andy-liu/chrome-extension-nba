@@ -1,5 +1,12 @@
 module.exports = [
   {
+    version: '1.6.15 Updates: (2026-10-18)',
+    updates: [
+      'Move fantasy points to an option',
+      'Update players list for the new season',
+    ],
+  },
+  {
     version: '1.6.14 Updates: (2026-05-19)',
     updates: [
       'Update playoff graph',
