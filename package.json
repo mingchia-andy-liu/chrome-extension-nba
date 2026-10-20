@@ -60,7 +60,7 @@
     "style-loader": "^4.0.0",
     "web-ext": "^10.7.0",
     "webpack": "^5.111.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^7.2.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
