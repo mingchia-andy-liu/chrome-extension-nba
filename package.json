@@ -11,11 +11,12 @@
     "artifactsDir": "dist"
   },
   "scripts": {
-    "prebuild": "pnpm run webpack && pnpm run webpack:bg && pnpm run webpack:popup",
+    "prebuild": "pnpm run build:bundles",
     "build": "web-ext build --overwrite-dest",
-    "build:chrome": "node scripts/build.js chrome",
-    "build:firefox": "node scripts/build.js firefox",
-    "build:all": "pnpm run build:chrome && pnpm run build:firefox",
+    "build:bundles": "pnpm run webpack && pnpm run webpack:bg && pnpm run webpack:popup",
+    "build:chrome": "pnpm run build:bundles && node scripts/build.js chrome",
+    "build:firefox": "pnpm run build:bundles && node scripts/build.js firefox",
+    "build:all": "pnpm run build:bundles && node scripts/build.js chrome && node scripts/build.js firefox",
     "lint:js:fix": "eslint src/app --fix && prettier --write src/app --loglevel=silent",
     "lint:js": "eslint src/app && prettier --check src/app",
     "webpack:bg": "NODE_ENV=production webpack --config bg.webpack.config.js",

@@ -7,7 +7,7 @@ import { convertBSProxy } from '../../utils/convert'
 import getAPIDate from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { waitUntilFinish } from '../../utils/common'
-import { proxyUrl } from '../../utils/origin'
+import { fetchFromOrigin, proxyUrl } from '../../utils/origin'
 
 const initialState = {
   bsData: {},
@@ -158,7 +158,7 @@ const fetchBoxScore = async (dateStr, gid) => {
 
 const fetchPBP = async (dateStr, gid) => {
   try {
-    const pbp = await fetch(
+    const pbp = await fetchFromOrigin(
       proxyUrl(
         `cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gid}.json`
       )
@@ -178,7 +178,7 @@ const fetchPBP = async (dateStr, gid) => {
 
 const fetchGameDetail = async (_, gid) => {
   try {
-    const bs = await fetch(
+    const bs = await fetchFromOrigin(
       proxyUrl(`cdn.nba.com/static/json/liveData/boxscore/boxscore_${gid}.json`)
     )
     const json = await bs.json()
