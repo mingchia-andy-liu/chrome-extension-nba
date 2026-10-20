@@ -12,7 +12,7 @@ import getApiDate, { isOffseason } from '../../utils/getApiDate'
 import { DATE_FORMAT } from '../../utils/constant'
 import { checkLiveGame } from '../../utils/browser'
 import { allSettled } from '../../utils/common'
-import { proxyUrl } from '../../utils/origin'
+import { fetchFromOrigin, proxyUrl } from '../../utils/origin'
 
 /**
  * Migrate from background.js `fetchGames`
@@ -64,7 +64,7 @@ const fetchRequest3 = async (dateStr) => {
   }
 
   try {
-    const res = await fetch(
+    const res = await fetchFromOrigin(
       proxyUrl(
         'cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
       )
@@ -128,7 +128,7 @@ const fetchRequest5 = async (dateStr) => {
     parse(dateStr, DATE_FORMAT, new Date()),
     'MM/dd/yyyy'
   )
-  const res = await fetch(
+  const res = await fetchFromOrigin(
     proxyUrl(
       `core-api.nba.com/cp/api/v1.9/feeds/gamecardfeed&gamedate=${slashDateStr}`
     )
