@@ -21,6 +21,11 @@ if (
         browser.runtime.onUpdateAvailable.addListener(callback)
       },
     },
+    onStartup: {
+      addListener: (callback) => {
+        browser.runtime.onStartup.addListener(callback)
+      },
+    },
     reload: () => {
       browser.runtime.reload()
     },
@@ -161,6 +166,11 @@ if (
         chrome.runtime.onUpdateAvailable.addListener(callback)
       },
     },
+    onStartup: {
+      addListener: (callback) => {
+        chrome.runtime.onStartup.addListener(callback)
+      },
+    },
     reload: () => {
       chrome.runtime.reload()
     },
@@ -282,6 +292,11 @@ if (
 } else {
   browserNameSpace.isFirefox = false
   browserNameSpace.isChrome = false
+  browserNameSpace.runtime = {
+    onInstalled: { addListener: noop },
+    onStartup: { addListener: noop },
+    onUpdateAvailable: { addListener: noop },
+  }
   browserNameSpace.alarms = {
     create: noop,
     onAlarm: { addListener: noop },

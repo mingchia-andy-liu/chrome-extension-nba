@@ -110,8 +110,8 @@ const liveListener = (initCheck) => {
     })
 }
 
-// immediately search for live game
-liveListener(false)
+const isBackgroundPollTime = (scheduledTime) =>
+  new Date(scheduledTime).getMinutes() % 30 === 0
 
 browser.alarms.onAlarm.addListener((alarm) => {
   // when the chrome is reopened, alarms get ran even though the time has passed
@@ -119,9 +119,13 @@ browser.alarms.onAlarm.addListener((alarm) => {
     return
   }
 
-  if (alarm.name === 'minute') {
+  if (alarm.name === 'minute' && isBackgroundPollTime(alarm.scheduledTime)) {
     liveListener(false)
   }
+})
+
+browser.runtime.onStartup.addListener(() => {
+  liveListener(true)
 })
 
 // this will reload the background explicitly to trigger an update as soon as possible if available
