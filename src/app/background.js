@@ -111,7 +111,7 @@ const liveListener = (initCheck) => {
 }
 
 const isBackgroundPollTime = (scheduledTime) =>
-  new Date(scheduledTime).getMinutes() % 30 === 0
+  new Date(scheduledTime).getMinutes() % 15 === 0
 
 browser.alarms.onAlarm.addListener((alarm) => {
   // when the chrome is reopened, alarms get ran even though the time has passed
